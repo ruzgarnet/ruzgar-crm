@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have emailed your password reset link!',
-    'throttled' => 'Please wait before retrying.',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that email address.",
+    'reset'     => 'Parolanız başarıyla sıfırlandı!',
+    'sent'      => 'Parola sıfırlama bileti e-posta ile gönderildi!',
+    'throttled' => 'Lütfen tekrar denemeden önce bekleyin.',
+    'token'     => 'Parola sıfırlama bileti geçersiz.',
+    'user'      => 'Bu e-posta adresi ile kayıtlı bir üye bulunmuyor.',
 
 ];
