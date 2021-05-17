@@ -147,8 +147,8 @@ return [
     */
 
     'attributes' => [
-        'username' => 'Kullanıcı Adı',
-        'email' => 'E-Posta Adresi',
+        'username' => 'Kullanıcı adı',
+        'email' => 'E-Posta adresi',
         'password' => 'Şifre'
     ],
 

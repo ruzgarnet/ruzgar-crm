@@ -12,7 +12,8 @@
                 <div class="form-group">
                     <label for="inputUsername">@lang('fields.username')</label>
                     <input type="text" name="username" id="inputUsername"
-                        class="form-control @error('username') is-invalid @enderror" autofocus value="{{ old('username') }}">
+                        class="form-control @error('username') is-invalid @enderror" autofocus
+                        value="{{ old('username') }}">
                     @error('username')
                         <div class="invalid-feedback">
                             {{ $message }}
