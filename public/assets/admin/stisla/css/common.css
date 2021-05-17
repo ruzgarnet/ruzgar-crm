@@ -1,0 +1,16 @@
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+[type="submit"]:disabled {
+    cursor: wait;
+}
+
+select:not(:disabled),
+input[type="radio"]:not(:disabled) + label,
+input[type="checkbox"]:not(:disabled) + label,
+.custom-control-input:not(:disabled) + .custom-control-label,
+.custom-switch-input:not(:disabled) ~ .custom-switch-indicator,
+.custom-switch-input:not(:disabled) ~ .custom-switch-description {
+    cursor: pointer;
+}
