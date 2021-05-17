@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('login', [App\Http\Controllers\Admin\AuthController::class, "showLoginForm"])->name('login');
-    Route::post('login', [App\Http\Controllers\Admin\AuthController::class, "login"])->name('login.post');
+Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(function () {
+    Route::get('/login', [App\Http\Controllers\Admin\AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [App\Http\Controllers\Admin\AuthController::class, 'login'])->name('login.post');
+    Route::post('/logout', [App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/', [App\Http\Controllers\Admin\MainController::class, "index"])->name('admin.dashboard');
+    Route::get('/', [App\Http\Controllers\Admin\MainController::class, 'index'])->name('dashboard');
 });
