@@ -10,5 +10,5 @@ use Illuminate\Http\Request;
  */
 class AdminController extends Controller
 {
-    //
+    use ViewAttributes;
 }
