@@ -8,6 +8,12 @@ $(function () {
             action = form.attr("action"),
             formData = new FormData(this);
 
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+
         $.ajax(action, {
             type: "POST",
             enctype: "multipart/form-data",
@@ -46,11 +52,11 @@ $(function () {
                     });
                 }
 
-				if (result.redirect) {
-					setTimeout(function () {
-						location.href(result.redirect);
-					}, 3000);
-				}
+                if (result.redirect) {
+                    setTimeout(function () {
+                        location.href(result.redirect);
+                    }, 3000);
+                }
             },
             complete: function (xhr, status) {
                 form.find("[type='submit']").prop("disabled", false);
