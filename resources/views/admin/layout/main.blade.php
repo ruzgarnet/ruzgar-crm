@@ -67,6 +67,8 @@
         </div>
     </div>
 
+    @stack('modal')
+
     <script src="/assets/admin/vendor/jquery/jquery-3.6.0.min.js"></script>
     <script src="/assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/admin/vendor/jquery/jquery.nicescroll.min.js"></script>

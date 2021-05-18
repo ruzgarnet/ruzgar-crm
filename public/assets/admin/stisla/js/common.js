@@ -52,6 +52,16 @@ $(function () {
                     });
                 }
 
+                if (result.deleted) {
+                    let modal = $("#deleteModal");
+
+                    modal.find("#deleteForm").prop("action", "");
+                    modal.modal("hide");
+                    $("table")
+                        .find("tr[data-id='" + result.deleted + "']")
+                        .remove();
+                }
+
                 if (result.redirect) {
                     setTimeout(function () {
                         location.replace(result.redirect);
@@ -109,5 +119,14 @@ $(function () {
                 district.prop("disabled", false);
             },
         });
+    });
+
+    $(document).on("click", ".delete-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            modal = $("#deleteModal");
+
+        modal.find("#deleteForm").prop("action", action);
+        modal.modal("show");
     });
 });
