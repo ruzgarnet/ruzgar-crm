@@ -1,5 +1,5 @@
-.form-group:last-child {
-    margin-bottom: 0;
+.form.card .card-body {
+    padding-bottom: 5px;
 }
 
 [type="submit"]:disabled {
@@ -13,4 +13,12 @@ input[type="checkbox"]:not(:disabled) + label,
 .custom-switch-input:not(:disabled) ~ .custom-switch-indicator,
 .custom-switch-input:not(:disabled) ~ .custom-switch-description {
     cursor: pointer;
+}
+
+table .buttons a {
+    margin: 0 -5px;   
+}
+
+table .buttons a {
+    margin: 0 5px;
 }

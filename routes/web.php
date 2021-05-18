@@ -19,6 +19,13 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::post('logout', [App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('logout');
 
     Route::get('/', [App\Http\Controllers\Admin\MainController::class, 'index'])->name('dashboard');
+
+    Route::get('dealers', [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('dealers');
+    Route::get('dealer/add', [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('dealer.add');
+    Route::post('dealer/add', [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('dealer.add.post');
+    Route::get('dealer/edit/{dealer}', [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('dealer.edit');
+    Route::put('dealer/edit/{dealer}', [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('dealer.edit.put');
+    Route::delete('dealer/delete/{dealer}', [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('dealer.delete');
 });
 
 Route::get('getDistricts/{id}', [App\Http\Controllers\CityController::class, 'districts'])->name('get.district')->where('id', '[0-9]+');

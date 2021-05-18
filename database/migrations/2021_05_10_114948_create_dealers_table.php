@@ -16,24 +16,24 @@ class CreateDealersTable extends Migration
         Schema::create('dealers', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
-            $table->string('tax_number', 255);
-			$table->string('address', 255);
-			$table->foreignId('city_id');
-			$table->foreignId('district_id');
+            $table->string('tax_number', 255)->unique();
+            $table->foreignId('city_id');
+            $table->foreignId('district_id');
+            $table->string('address', 255);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
 
             $table->foreign('city_id')
-            	->references('id')
-            	->on('cities')
-            	->onUpdate('CASCADE')
-            	->onDelete('CASCADE');
-            	
+                ->references('id')
+                ->on('cities')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
+
             $table->foreign('district_id')
-            	->references('id')
-            	->on('districts')
-            	->onUpdate('CASCADE')
-            	->onDelete('CASCADE');
+                ->references('id')
+                ->on('districts')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 

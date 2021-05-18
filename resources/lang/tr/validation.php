@@ -149,7 +149,12 @@ return [
     'attributes' => [
         'username' => 'Kullanıcı adı',
         'email' => 'E-Posta adresi',
-        'password' => 'Şifre'
+        'password' => 'Şifre',
+        'name' => 'İsim',
+        'tax_number' => 'Vergi numarası',
+        'city_id' => 'İl',
+        'district_id' => 'İlçe',
+        'address' => 'Adres',
     ],
 
 ];

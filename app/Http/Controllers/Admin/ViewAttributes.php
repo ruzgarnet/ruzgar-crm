@@ -24,6 +24,21 @@ trait ViewAttributes
                 'title' => trans('titles.admin.dashboard'),
                 'route' => 'admin.dashboard',
                 'icon' => 'fas fa-home'
+            ],
+            [
+                'title' => trans('tables.dealer.title'),
+                'route' => 'admin.dealers',
+                'icon' => 'fas fa-store',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.dealers'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.dealer.add'
+                    ]
+                ]
             ]
         ];
 
