@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="/assets/admin/vendor/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/assets/admin/vendor/iziToast/css/iziToast.min.css">
 
+    @stack('style')
+
     <link rel="stylesheet" href="/assets/admin/stisla/css/style.css">
     <link rel="stylesheet" href="/assets/admin/stisla/css/components.css">
     <link rel="stylesheet" href="/assets/admin/stisla/css/common.css">
-
-    @yield('style')
 </head>
 
 <body>
@@ -72,11 +72,12 @@
     <script src="/assets/admin/vendor/jquery/jquery.nicescroll.min.js"></script>
     <script src="/assets/admin/vendor/moment/moment.min.js"></script>
     <script src="/assets/admin/vendor/iziToast/js/iziToast.min.js"></script>
+
+    @stack('script')
+
     <script src="/assets/admin/stisla/js/stisla.js"></script>
     <script src="/assets/admin/stisla/js/scripts.js"></script>
     <script src="/assets/admin/stisla/js/common.js"></script>
-
-    @yield('script')
 </body>
 
 </html>
