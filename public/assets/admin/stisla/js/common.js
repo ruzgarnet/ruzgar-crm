@@ -1,18 +1,18 @@
 "use strict";
 
 $(function () {
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
     $(document).on("submit", "form:not([data-ajax='false'])", function (event) {
         event.preventDefault();
 
         let form = $(this),
             action = form.attr("action"),
             formData = new FormData(this);
-
-        $.ajaxSetup({
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-        });
 
         $.ajax(action, {
             type: "POST",
@@ -54,7 +54,7 @@ $(function () {
 
                 if (result.redirect) {
                     setTimeout(function () {
-                        location.href(result.redirect);
+                        location.replace(result.redirect);
                     }, 3000);
                 }
             },
