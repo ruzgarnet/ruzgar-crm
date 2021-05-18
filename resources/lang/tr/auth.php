@@ -17,6 +17,7 @@ return [
     'forgot_password' => 'Şifreni mi unuttun?',
     'remember_me' => 'Beni Hatırla',
     'logout' => 'Çıkış Yap',
+    'unauthorized' => 'Yetkisiz',
     'failed'    => 'Bu kimlik bilgileri bizim kayıtlarımız ile eşleşmiyor.',
     'throttle'  => 'Çok sayıda hatalı oturum açma girişiminde bulundunuz. Lütfen :seconds saniye sonra tekrar deneyiniz.',
 
