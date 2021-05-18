@@ -69,4 +69,45 @@ $(function () {
         input.parents(".form-group").find(".invalid-feedback").remove();
         input.removeClass("is-invalid");
     });
+
+    $(document).on("input", "#slcCity", function () {
+        let city = $(this),
+            district = $("#slcDistrict");
+
+        $.ajax("/getDistricts/" + city.val(), {
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+                city.prop("disabled", true);
+                district.prop("disabled", true);
+            },
+            error: function (xhr) {
+                let response = xhr.responseJSON;
+
+                if (response.message) {
+                    iziToast.error({
+                        message: response.message,
+                        position: "topRight",
+                        timeout: 3000,
+                    });
+                }
+            },
+            success: function (districts) {
+                if (districts) {
+                    district.find("option").remove();
+                    for (let key in districts) {
+                        district.append(
+                            `<option value="${districts[key].id}">
+                                ${districts[key].name}
+                            </option>`
+                        );
+                    }
+                }
+            },
+            complete: function () {
+                city.prop("disabled", false);
+                district.prop("disabled", false);
+            },
+        });
+    });
 });
