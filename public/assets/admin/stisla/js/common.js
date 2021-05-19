@@ -43,8 +43,7 @@ $(function () {
                 if (xhr.status === 422) {
                     let response = xhr.responseJSON;
                     for (let field in response.errors) {
-                        let input = form.find("[name='" + field + "']");
-
+                        let input = form.find("[name='" + field.replace(/\.(\w*)/, '[$1]') + "']");
                         // Print invalid feedbacks
                         input.addClass("is-invalid");
                         input.parents(".form-group").append(
