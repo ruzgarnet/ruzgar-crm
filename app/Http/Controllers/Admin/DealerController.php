@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\Dealer;
+use App\Rules\AvailableDistrict;
 use App\Rules\Telephone;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -147,22 +148,13 @@ class DealerController extends Controller
             'name' => 'required|string|max:255',
             'tax_number' => 'required|string|max:255|unique:dealers,tax_number',
             'city_id' => 'required|exists:cities,id',
-            'district_id' => 'required|in:' . $this->district_ids(),
+            'district_id' => [
+                'required',
+                new AvailableDistrict('city_id')
+            ],
             'address' => 'required|string|max:255',
             'telephone' => ['required', new Telephone],
             'started_at' => 'required|date'
         ];
-    }
-
-    /**
-     * Find district ids for city
-     *
-     * @return string|null
-     */
-    private function district_ids()
-    {
-        return request()->input('city_id') ?
-            (City::find(request()->input('city_id'))->districts->pluck('id')->implode(',') ?? null)
-            : null;
     }
 }

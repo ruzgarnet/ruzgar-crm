@@ -127,6 +127,7 @@ return [
 
     'telephone' => ':attribute geçerli değildir.',
     'tcno' => ':attribute geçerli değildir.',
+    'district' => ':attribute geçersiz.',
 
     /*
     |--------------------------------------------------------------------------
