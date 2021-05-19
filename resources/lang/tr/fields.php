@@ -26,5 +26,7 @@ return [
     'genders' => [
         1 => 'Erkek',
         2 => 'Kadın'
-    ]
+    ],
+    'worker' => 'Çalışan',
+    'worker_count' => 'Çalışan Sayısı',
 ];

@@ -26,4 +26,24 @@ class Dealer extends Model
     {
         return $this->belongsTo(City::class);
     }
+
+    /**
+     * Staff relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function staffs()
+    {
+        return $this->hasMany(Staff::class);
+    }
+
+    /**
+     * Get not released staff's count
+     *
+     * @return int
+     */
+    public function getWorkerCountAttribute()
+    {
+        return $this->staffs->whereNull('released_at')->count();
+    }
 }
