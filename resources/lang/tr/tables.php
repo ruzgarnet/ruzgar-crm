@@ -22,5 +22,16 @@ return [
         'edit' => 'Bayi Düzenle',
         'delete' => 'Bayi Sil',
         'info' => 'Bayi Bilgileri',
+        'select' => 'Bayi Seçiniz'
+    ],
+
+    'staff' => [
+        'title' => 'Personeller',
+        'singular' => 'Personel',
+        'plural' => 'Personeller',
+        'add' => 'Personel Ekle',
+        'edit' => 'Personel Düzenle',
+        'delete' => 'Personel Sil',
+        'info' => 'Personel Bilgileri',
     ]
 ];

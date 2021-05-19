@@ -39,6 +39,21 @@ trait ViewAttributes
                         'route' => 'admin.dealer.add'
                     ]
                 ]
+            ],
+            [
+                'title' => trans('tables.staff.title'),
+                'route' => 'admin.staffs',
+                'icon' => 'fas fa-user-tie',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.staffs'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.staff.add'
+                    ]
+                ]
             ]
         ];
 

@@ -169,6 +169,13 @@ return [
         'ended_at' => 'Bitiş tarihi',
         'released_at' => 'Çıkış tarihi',
         'telephone' => 'Telefon numarası',
+        'dealer_id' => 'Bayi',
+        'first_name' => 'Ad',
+        'last_name' => 'Soyad',
+        'secondary_telephone' => 'İkincil telefon numarası',
+        'birthday' => 'Doğum tarihi',
+        'identification_number' => 'Kimlik numarası',
+        'gender' => 'Cinsiyet',
     ],
 
 ];

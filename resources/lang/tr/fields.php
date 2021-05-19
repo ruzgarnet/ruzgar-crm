@@ -13,4 +13,18 @@ return [
     'ended_at' => 'Bitiş Tarihi',
     'released_at' => 'Çıkış Tarihi',
     'telephone' => 'Telefon Numarası',
+	'actions' => 'İşlemler',
+    'dealer' => 'Bayi',
+    'first_name' => 'Ad',
+    'last_name' => 'Soyad',
+    'secondary_telephone' => 'İkincil Telefon Numarası',
+    'birthday' => 'Doğum Tarihi',
+    'identification_number' => 'Kimlik Numarası',
+    'gender' => 'Cinsiyet',
+    'male' => 'Erkek',
+    'female' => 'Kadın',
+    'genders' => [
+        1 => 'Erkek',
+        2 => 'Kadın'
+    ]
 ];
