@@ -160,3 +160,43 @@ $(function () {
         modal.modal("show");
     });
 });
+
+let datemasks = document.querySelectorAll(".date-mask");
+if (datemasks) {
+    datemasks.forEach(function (el) {
+        new Cleave(el, {
+            date: true,
+            datePattern: ["d", "m", "Y"],
+        });
+    });
+}
+
+let creditcards = document.querySelectorAll(".credit-card-mask");
+if (creditcards) {
+    creditcards.forEach(function (el) {
+        new Cleave(el, {
+            creditCard: true,
+        });
+    });
+}
+
+let telephones = document.querySelectorAll(".telephone-mask");
+if (telephones) {
+    telephones.forEach(function (el) {
+        new Cleave(el, {
+            phone: true,
+            phoneRegionCode: "tr",
+            prefix: "0",
+        });
+    });
+}
+
+let identifications = document.querySelectorAll(".identification-mask");
+if (identifications) {
+    identifications.forEach(function (el) {
+        new Cleave(el, {
+            blocks: [11],
+            numericOnly: true,
+        });
+    });
+}
