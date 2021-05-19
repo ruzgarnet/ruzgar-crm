@@ -21,7 +21,7 @@ class Telephone implements Rule
     /**
      * Get the validation error message.
      *
-     * @return string
+     * @return \Illuminate\Contracts\Translation\Translator|string|array|null
      */
     public function message()
     {
