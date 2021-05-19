@@ -16,9 +16,13 @@ input[type="checkbox"]:not(:disabled) + label,
 }
 
 table .buttons a {
-    margin: 0 -5px;   
+    margin: 0 -5px;
 }
 
 table .buttons a {
     margin: 0 5px;
+}
+
+.custom-select {
+    font-size: 14px;
 }

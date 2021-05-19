@@ -165,6 +165,23 @@ $(function () {
         modal.find("#deleteForm").prop("action", action);
         modal.modal("show");
     });
+
+    /**
+     * Change selected option for fix cloned selects
+     */
+    const selects = document.querySelectorAll("select");
+    if (selects) {
+        selects.forEach(function (select) {
+            select.addEventListener("change", function () {
+                for (let option in select.options) {
+                    select.options.item(option).removeAttribute("selected");
+                }
+                select.options
+                    .item(select.selectedIndex)
+                    .setAttribute("selected", true);
+            });
+        });
+    }
 });
 
 /**
