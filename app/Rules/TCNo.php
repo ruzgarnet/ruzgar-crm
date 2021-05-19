@@ -7,16 +7,6 @@ use Illuminate\Contracts\Validation\Rule;
 class TCNo implements Rule
 {
     /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Determine if the validation rule passes.
      *
      * @link  https://www.projehocam.com/php-ile-t-c-kimlik-no-dogrulama-fonksiyonu/
