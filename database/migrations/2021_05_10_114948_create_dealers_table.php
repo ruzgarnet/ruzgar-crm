@@ -20,6 +20,9 @@ class CreateDealersTable extends Migration
             $table->foreignId('city_id');
             $table->foreignId('district_id');
             $table->string('address', 255);
+            $table->string('telephone', 15);
+            $table->date('started_at');
+            $table->date('ended_at')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
 

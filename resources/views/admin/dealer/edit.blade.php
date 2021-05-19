@@ -60,6 +60,28 @@
                                     class="form-control">{{ $dealer->address }}</textarea>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="inpTelephone">@lang('fields.telephone')</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                </div>
+                                <input type="text" name="telephone" id="inpTelephone" class="form-control telephone-mask" value="0{{ $dealer->telephone }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inpStartedAt">@lang('fields.started_at')</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <input type="text" name="started_at" id="inpStartedAt" class="form-control date-mask" value="{{ convert_date($dealer->started_at, 'mask') }}">
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer text-right">
                         <button type="submit" class="btn btn-primary">Gönder</button>
@@ -69,3 +91,8 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+    <script src="/assets/admin/vendor/cleave/cleave.min.js"></script>
+    <script src="/assets/admin/vendor/cleave/addons/cleave-phone.tr.js"></script>
+@endpush

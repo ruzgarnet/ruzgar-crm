@@ -27,3 +27,30 @@ if (!function_exists('meta_title')) {
         return trans($title) . ' ' . $divider . ' ' . env('APP_NAME');
     }
 }
+
+if (!function_exists('convert_date')) {
+    /**
+     * Date converts
+     *
+     * @param string $date
+     * @param mixed $type mysql | mask
+     * @return string
+     */
+    function convert_date($date, $type = 'mysql')
+    {
+        $date = new DateTime($date);
+        switch ($type) {
+            case 'mysql':
+                return $date->format('Y-m-d');
+                break;
+
+            case 'mask':
+                return $date->format('d/m/Y');
+                break;
+
+            default:
+                return $date->format('Y-m-d');
+                break;
+        }
+    }
+}

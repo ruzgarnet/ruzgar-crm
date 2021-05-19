@@ -18,6 +18,7 @@
                                     <th scope="col">@lang('fields.name')</th>
                                     <th scope="col">@lang('fields.tax_number')</th>
                                     <th scope="col">@lang('fields.city')</th>
+                                    <th scope="col">@lang('fields.telephone')</th>
                                     <th scope="col">@lang('fields.actions')</th>
                                 </tr>
                             </thead>
@@ -28,6 +29,7 @@
                                         <td>{{ $dealer->name }}</td>
                                         <td>{{ $dealer->tax_number }}</td>
                                         <td>{{ $dealer->city->name }}</td>
+                                        <td>{{ $dealer->telephone_print }}</td>
                                         <td>
                                             <div class="buttons">
                                                 <a href="{{ route('admin.dealer.edit', $dealer) }}"

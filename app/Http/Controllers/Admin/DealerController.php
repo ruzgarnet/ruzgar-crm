@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\Dealer;
+use App\Rules\Telephone;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -147,7 +148,9 @@ class DealerController extends Controller
             'tax_number' => 'required|string|max:255|unique:dealers,tax_number',
             'city_id' => 'required|exists:cities,id',
             'district_id' => 'required|in:' . $this->district_ids(),
-            'address' => 'required|string|max:255'
+            'address' => 'required|string|max:255',
+            'telephone' => ['required', new Telephone],
+            'started_at' => 'required|date'
         ];
     }
 

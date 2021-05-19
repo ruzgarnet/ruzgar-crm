@@ -9,5 +9,8 @@ return [
     'city' => 'İl',
     'district' => 'İlçe',
     'address' => 'Adres',
-	'actions' => 'İşlemler'
+    'started_at' => 'Başlangıç Tarihi',
+    'ended_at' => 'Bitiş Tarihi',
+    'released_at' => 'Çıkış Tarihi',
+    'telephone' => 'Telefon Numarası',
 ];
