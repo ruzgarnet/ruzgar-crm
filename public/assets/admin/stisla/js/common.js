@@ -14,9 +14,15 @@ $(function () {
         // Disable submit
         event.preventDefault();
 
+        // Cloned form because we don't need change inputs value in client side
         let form = $(this),
-            action = form.attr("action"),
-            formData = new FormData(this);
+            formClone = this.cloneNode(true),
+            action = form.attr("action");
+
+        // Clear masked values cloned form
+        unMask(formClone);
+
+        let formData = new FormData(formClone);
 
         $.ajax(action, {
             type: "POST",
@@ -160,6 +166,42 @@ $(function () {
         modal.modal("show");
     });
 });
+
+/**
+ * Clear masked input for backend
+ * @param  {object} form
+ * @return {void}
+ */
+function unMask(form) {
+    form = $(form);
+    if (form.find(".date-mask").length > 0) {
+        form.find(".date-mask").each(function (index, el) {
+            let val = form.find(el).val();
+
+            if (val.length === 10) {
+                let split = val.split("/"),
+                    date = split[2] + "-" + split[1] + "-" + split[0];
+
+                form.find(el).val(date);
+            } else {
+                form.find(el).val("");
+            }
+        });
+    }
+
+    if (form.find(".telephone-mask").length > 0) {
+        form.find(".telephone-mask").each(function (index, el) {
+            let val = form.find(el).val();
+
+            if (val.length === 14) {
+                val = val.replace(/(^0)*\D*/g, "");
+                form.find(el).val(val);
+            } else {
+                form.find(el).val("");
+            }
+        });
+    }
+}
 
 let datemasks = document.querySelectorAll(".date-mask");
 if (datemasks) {
