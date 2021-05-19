@@ -9,7 +9,7 @@
                 @method('put')
                 <div class="card form">
                     <div class="card-header">
-                        <h4>@lang('tables.staff.add')</h4>
+                        <h4>@lang('tables.staff.edit') [{{ $staff->id }}]</h4>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
