@@ -91,6 +91,12 @@ $(function () {
      */
     $(document).on("input", ".is-invalid", function () {
         let input = $(this);
+        // Fix, remove invalid classes for other radio inputs
+        if (input.prop("type") === "radio") {
+            $("input[name='" + input.prop("name") + "']").removeClass(
+                "is-invalid"
+            );
+        }
         input.parents(".form-group").find(".invalid-feedback").remove();
         input.removeClass("is-invalid");
     });
