@@ -7,7 +7,11 @@ $(function () {
         },
     });
 
+    /**
+     * Ajax requests
+     */
     $(document).on("submit", "form:not([data-ajax='false'])", function (event) {
+        // Disable submit
         event.preventDefault();
 
         let form = $(this),
@@ -22,16 +26,20 @@ $(function () {
             contentType: false,
             dataType: "json",
             beforeSend: function () {
+                // Disable submits for prevent double submits
                 form.find("[type='submit']").prop("disabled", true);
+                // Remove validation feedbacks
                 form.find(".invalid-feedback").remove();
                 form.find(".is-invalid").removeClass("is-invalid");
             },
             error: function (xhr) {
+                // 422 = validation failed
                 if (xhr.status === 422) {
                     let response = xhr.responseJSON;
                     for (let field in response.errors) {
                         let input = form.find("[name='" + field + "']");
 
+                        // Print invalid feedbacks
                         input.addClass("is-invalid");
                         input.parents(".form-group").append(
                             `<div class="invalid-feedback d-block">
@@ -42,6 +50,7 @@ $(function () {
                 }
             },
             success: function (result, status, xhr) {
+                // Init toastr
                 if (result.toastr) {
                     let toastr = result.toastr;
                     iziToast[toastr.type]({
@@ -52,6 +61,7 @@ $(function () {
                     });
                 }
 
+                // If data deleted, remove from table and close modal
                 if (result.deleted) {
                     let modal = $("#deleteModal");
 
@@ -62,6 +72,7 @@ $(function () {
                         .remove();
                 }
 
+                // If response has redirect, fly me to moon
                 if (result.redirect) {
                     setTimeout(function () {
                         location.replace(result.redirect);
@@ -69,17 +80,24 @@ $(function () {
                 }
             },
             complete: function (xhr, status) {
+                // Remove disabled submits
                 form.find("[type='submit']").prop("disabled", false);
             },
         });
     });
 
+    /**
+     * Remove changed input's invalid feedback
+     */
     $(document).on("input", ".is-invalid", function () {
         let input = $(this);
         input.parents(".form-group").find(".invalid-feedback").remove();
         input.removeClass("is-invalid");
     });
 
+    /**
+     * Fill district options dynamically
+     */
     $(document).on("input", "#slcCity", function () {
         let city = $(this),
             district = $("#slcDistrict");
@@ -88,12 +106,14 @@ $(function () {
             type: "GET",
             dataType: "json",
             beforeSend: function () {
+                // Disable for bugs
                 city.prop("disabled", true);
                 district.prop("disabled", true);
             },
             error: function (xhr) {
                 let response = xhr.responseJSON;
 
+                // If response has error message alert
                 if (response.message) {
                     iziToast.error({
                         message: response.message,
@@ -115,12 +135,16 @@ $(function () {
                 }
             },
             complete: function () {
+                // Remove disableds
                 city.prop("disabled", false);
                 district.prop("disabled", false);
             },
         });
     });
 
+    /**
+     * Open delete modal and change form action
+     */
     $(document).on("click", ".delete-modal-btn", function () {
         let button = $(this),
             action = button.data("action"),
