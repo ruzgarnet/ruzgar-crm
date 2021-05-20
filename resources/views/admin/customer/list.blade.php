@@ -34,7 +34,7 @@
                                             </span>
                                         </td>
                                         <td>{{ $customer->full_name }}</td>
-                                        <td>{{ $customer->telephone_print }}</td>
+                                        <td data-filter="0{{ $customer->telephone }}">{{ $customer->telephone_print }}</td>
                                         <td>{{ $customer->info->city->name }}</td>
                                         <td>
                                             <div class="buttons">
