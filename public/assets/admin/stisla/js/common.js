@@ -106,14 +106,6 @@ $(function () {
 
                     row.find(".approve-modal-btn").remove();
                 }
-
-                // 'approve' => [
-                //      'id'
-                //     'type' => 2,
-                //     'title' => trans('tables.customer.types.2'),
-                //     'table' => 'customer',
-                //     'column' => 'customer-type'
-                // ]
             },
             complete: function (xhr, status) {
                 // Remove disabled submits

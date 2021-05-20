@@ -21,7 +21,7 @@ class CustomerInfo extends Model
      *
      * @var array
      */
-    protected $guarded = ['customer_no', 'reference_code', 'payment_code', 'type'];
+    protected $guarded = [];
 
     /**
      * Customer main relationship

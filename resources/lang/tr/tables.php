@@ -45,9 +45,7 @@ return [
         'info' => 'Müşteri Bilgileri',
         'types' => [
             1 => 'Önkayıt',
-            2 => 'Onaylı',
-            3 => 'Müşteri',
-            4 => 'İptal'
+            2 => 'Onaylanmış'
         ]
     ]
 ];
