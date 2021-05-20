@@ -28,6 +28,16 @@ class Dealer extends Model
     }
 
     /**
+     * District relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    /**
      * Staff relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
