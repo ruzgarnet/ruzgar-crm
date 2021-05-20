@@ -43,7 +43,9 @@ $(function () {
                 if (xhr.status === 422) {
                     let response = xhr.responseJSON;
                     for (let field in response.errors) {
-                        let input = form.find("[name='" + field.replace(/\.(\w*)/, '[$1]') + "']");
+                        let input = form.find(
+                            "[name='" + field.replace(/\.(\w*)/, "[$1]") + "']"
+                        );
                         // Print invalid feedbacks
                         input.addClass("is-invalid");
                         input.parents(".form-group").append(
@@ -72,6 +74,7 @@ $(function () {
 
                     modal.find("#deleteForm").prop("action", "");
                     modal.modal("hide");
+
                     $("table")
                         .find("tr[data-id='" + result.deleted + "']")
                         .remove();
@@ -83,6 +86,34 @@ $(function () {
                         location.replace(result.redirect);
                     }, 3000);
                 }
+
+                if (result.approve) {
+                    let approve = result.approve,
+                        modal = $(".approve-modal");
+
+                    modal.find("form").prop("action", "");
+                    modal.modal("hide");
+
+                    let row = $("tr[data-id='" + approve.id + "']");
+
+                    row.find("." + approve.column)
+                        .removeClass()
+                        .addClass([
+                            approve.column,
+                            approve.column + "-" + approve.type,
+                        ])
+                        .text(approve.title);
+
+                    row.find(".approve-modal-btn").remove();
+                }
+
+                // 'approve' => [
+                //      'id'
+                //     'type' => 2,
+                //     'title' => trans('tables.customer.types.2'),
+                //     'table' => 'customer',
+                //     'column' => 'customer-type'
+                // ]
             },
             complete: function (xhr, status) {
                 // Remove disabled submits
@@ -181,6 +212,15 @@ $(function () {
             });
         });
     }
+
+    $(document).on("click", ".approve-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            modal = $(button.data("modal"));
+
+        modal.find("form").prop("action", action);
+        modal.modal("show");
+    });
 });
 
 /**

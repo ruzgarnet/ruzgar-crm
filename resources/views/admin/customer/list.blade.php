@@ -42,6 +42,14 @@
                                                     class="btn btn-primary" title="@lang('titles.edit')">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
+
+                                                @if ($customer->type === 1)
+                                                    <button type="button" class="btn btn-success approve-modal-btn"
+                                                        data-action="{{ route('admin.customer.approve.post', $customer) }}"
+                                                        data-modal="#approveCustomerModal" title="@lang('titles.approve')">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -74,4 +82,8 @@
         })
 
     </script>
+@endpush
+
+@push('modal')
+    @include('admin.modals.approve-customer')
 @endpush

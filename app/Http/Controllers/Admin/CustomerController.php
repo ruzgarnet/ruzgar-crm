@@ -157,4 +157,40 @@ class CustomerController extends Controller
             ]
         ];
     }
+
+    /**
+     * Update customer's type to approve
+     *
+     * @param  \App\Models\Customer  $customer
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function approve(Customer $customer)
+    {
+        if ($customer) {
+            $customer->type = 2;
+            if ($customer->save()) {
+                return response()->json([
+                    'toastr' => [
+                        'type' => 'success',
+                        'title' => trans('response.title.approve.customer'),
+                        'message' => trans('response.approve.customer.success')
+                    ],
+                    'approve' => [
+                        'id' => $customer->id,
+                        'type' => 2,
+                        'title' => trans('tables.customer.types.2'),
+                        'column' => 'customer-type'
+                    ]
+                ]);
+            }
+        }
+
+        return response()->json([
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.approve.customer'),
+                'message' => trans('response.approve.customer.error')
+            ]
+        ]);
+    }
 }

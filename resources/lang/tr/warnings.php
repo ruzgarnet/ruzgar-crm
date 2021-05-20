@@ -1,5 +1,8 @@
 <?php
 
 return [
-    'delete' => 'Silinen veriler geri getirilemez ve bu veriyle bağlantılı verilerde silinir. Lütfen veriyi silmeden önce tekrar düşünün.'
+    'delete' => 'Silinen veriler geri getirilemez ve bu veriyle bağlantılı verilerde silinir. Lütfen veriyi silmeden önce tekrar düşünün.',
+    'approve' => [
+        'customer' => 'Müşterinin kaydını onaylamak istediğinize emin misiniz?'
+    ]
 ];

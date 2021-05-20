@@ -3,7 +3,10 @@
 return [
     'title' => [
         'success' => 'Başarılı',
-        'error' => 'Başarısız'
+        'error' => 'Başarısız',
+        'approve' => [
+            'customer' => 'Müşteri Onayı'
+        ]
     ],
 
     'insert' => [
@@ -19,5 +22,12 @@ return [
     'delete' => [
         'success' => 'Veri başarıyla silindi.',
         'error' => 'Veri silinirken hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
+    ],
+
+    'approve' => [
+        'customer' => [
+            'success' => 'Müşteri kaydı başarıyla onaylandı.',
+            'error' => 'Müşteri kaydı onaylanırken hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
+        ]
     ]
 ];

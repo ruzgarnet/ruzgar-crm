@@ -10,8 +10,12 @@ return [
     'edit' => 'Düzenle',
     'delete' => 'Sil',
     'cancel' => 'İptal',
+    'approve' => 'Onayla',
 
     'actions' => [
-        'delete' => 'Silme İşlemi'
+        'delete' => 'Silme İşlemi',
+        'approve' => [
+            'customer' => 'Müşteri Onayı'
+        ]
     ]
 ];
