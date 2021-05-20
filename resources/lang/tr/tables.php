@@ -47,5 +47,15 @@ return [
             1 => 'Önkayıt',
             2 => 'Onaylanmış'
         ]
+    ],
+
+    'contract_type' => [
+        'title' => 'Sözleşme Tipleri',
+        'singular' => 'Sözleşme Tipi',
+        'plural' => 'Sözleşme Tipleri',
+        'add' => 'Sözleşme Tipi Ekle',
+        'edit' => 'Sözleşme Tipi Düzenle',
+        'delete' => 'Sözleşme Tipi Sil',
+        'info' => 'Sözleşme Tipi Bilgileri'
     ]
 ];

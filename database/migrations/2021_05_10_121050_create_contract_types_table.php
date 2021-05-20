@@ -17,9 +17,8 @@ class CreateContractTypesTable extends Migration
             $table->id();
             $table->string('key')->unique()->nullable()->default(null);
             $table->string('title');
-            $table->string('content');
-            $table->json('options');
-            $table->boolean('ready')->default(false);
+            $table->string('view');
+            $table->json('options')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
         });

@@ -30,4 +30,8 @@ return [
     'worker' => 'Çalışan',
     'worker_count' => 'Çalışan Sayısı',
     'data_type' => 'Kayıt Tipi',
+    'key' => 'Anahtar',
+    'title' => 'Başlık',
+    'view' => 'View',
+    'options' => 'Seçenekler',
 ];

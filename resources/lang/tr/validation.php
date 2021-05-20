@@ -177,6 +177,10 @@ return [
         'birthday' => 'Doğum tarihi',
         'identification_number' => 'Kimlik numarası',
         'gender' => 'Cinsiyet',
+        'key' => 'Anahtar',
+        'title' => 'Başlık',
+        'view' => 'View',
+        'options' => 'Seçenekler',
     ],
 
 ];
