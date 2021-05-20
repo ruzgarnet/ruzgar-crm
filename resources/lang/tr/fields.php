@@ -29,4 +29,5 @@ return [
     ],
     'worker' => 'Çalışan',
     'worker_count' => 'Çalışan Sayısı',
+    'data_type' => 'Kayıt Tipi',
 ];

@@ -33,5 +33,21 @@ return [
         'edit' => 'Personel Düzenle',
         'delete' => 'Personel Sil',
         'info' => 'Personel Bilgileri',
+    ],
+
+    'customer' => [
+        'title' => 'Müşteriler',
+        'singular' => 'Müşteri',
+        'plural' => 'Müşteriler',
+        'add' => 'Müşteri Ekle',
+        'edit' => 'Müşteri Düzenle',
+        'delete' => 'Müşteri Sil',
+        'info' => 'Müşteri Bilgileri',
+        'types' => [
+            1 => 'Önkayıt',
+            2 => 'Onaylı',
+            3 => 'Müşteri',
+            4 => 'İptal'
+        ]
     ]
 ];

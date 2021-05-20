@@ -54,6 +54,21 @@ trait ViewAttributes
                         'route' => 'admin.staff.add'
                     ]
                 ]
+            ],
+            [
+                'title' => trans('tables.customer.title'),
+                'route' => 'admin.customers',
+                'icon' => 'fas fa-users',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.customers'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.customer.add'
+                    ]
+                ]
             ]
         ];
 

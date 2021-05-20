@@ -26,3 +26,23 @@ table .buttons a {
 .custom-select {
     font-size: 14px;
 }
+
+.customer-type {
+    font-size: 0.9em;
+    color: #ffffff;
+}
+.customer-type-1 {
+    color: var(--warning);
+}
+.customer-type-2 {
+    color: var(--primary);
+}
+
+.customer-badge-1 {
+    background-color: var(--warning);
+    color: #ffffff;
+}
+.customer-badge-2 {
+    background-color: var(--primary);
+    color: #ffffff;
+}
