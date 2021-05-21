@@ -213,6 +213,36 @@ $(function () {
         modal.find("form").prop("action", action);
         modal.modal("show");
     });
+
+    $(document).on("input", ".slug-to-input", function () {
+        let input = $(this),
+            slug = $("#" + input.data("slug")),
+            val = slugify(input.val(), { lower: true });
+
+        slug.val(val);
+    });
+
+    $(document).on("input", ".slug-input", function () {
+        let input = $(this),
+            val = input.val();
+
+        if (
+            !(
+                val.charAt(val.length - 1) === "-" &&
+                val.charAt(val.length - 2) !== "-"
+            )
+        ) {
+            input.val(slugify(val, { lower: true }));
+        }
+    });
+
+    let editors = document.querySelectorAll(".txt-editor");
+    if (editors) {
+        editors.forEach(function (el) {
+            CKEDITOR.replace(el);
+        });
+        CKEDITOR.dtd.$removeEmpty["span"] = false;
+    }
 });
 
 /**
