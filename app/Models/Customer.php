@@ -125,12 +125,13 @@ class Customer extends Model
         do {
             $rand = rand(1000, 9999) . rand(1000, 9999) . rand(100, 999);
             $input = ['rand' => $rand];
-            if (Validator::make($input, $rule)->passes()) {
+            $validator = Validator::make($input, $rule);
+            if (!$validator->fails()) {
                 $pass = true;
             } else {
                 $pass = false;
             }
-        } while ($pass === true);
+        } while ($pass !== true);
 
         return $rand;
     }
@@ -147,14 +148,15 @@ class Customer extends Model
         $rand = '';
         $rule = ['rand' => 'unique:customers,reference_code'];
         do {
-            $rand = (string)Str::of(Str::random(6))->upper();
+            $rand = 'R-' . (string)Str::of(Str::random(6))->upper();
             $input = ['rand' => $rand];
-            if (Validator::make($input, $rule)->passes()) {
+            $validator = Validator::make($input, $rule);
+            if (!$validator->fails()) {
                 $pass = true;
             } else {
                 $pass = false;
             }
-        } while ($pass === true);
+        } while ($pass !== true);
 
         return $rand;
     }
