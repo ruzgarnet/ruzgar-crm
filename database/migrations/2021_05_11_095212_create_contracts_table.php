@@ -31,16 +31,16 @@ class CreateContractsTable extends Migration
 				->on('contract_types')
 				->onUpdate('CASCADE')
 				->onDelete('CASCADE');
-				
+
             $table->foreign('customer_id')
             	->references('id')
             	->on('customers')
             	->onUpdate('CASCADE')
             	->onDelete('CASCADE');
-            	
+
             $table->foreign('staff_id')
             	->references('id')
-            	->on('staffs')
+            	->on('staff')
             	->onUpdate('CASCADE')
             	->onDelete('CASCADE');
 

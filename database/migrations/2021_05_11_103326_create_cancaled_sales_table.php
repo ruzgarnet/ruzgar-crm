@@ -29,7 +29,7 @@ class CreateCancaledSalesTable extends Migration
 
 			$table->foreign('staff_id')
 				->references('id')
-				->on('staffs')
+				->on('staff')
 				->onUpdate('CASCADE')
 				->onDelete('CASCADE');
         });

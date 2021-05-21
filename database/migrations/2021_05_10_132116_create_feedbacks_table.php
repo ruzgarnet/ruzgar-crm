@@ -31,10 +31,10 @@ class CreateFeedbacksTable extends Migration
             	->on('customers')
             	->onUpdate('CASCADE')
             	->onDelete('CASCADE');
-            	
+
             $table->foreign('staff_id')
             	->references('id')
-            	->on('staffs')
+            	->on('staff')
             	->onUpdate('CASCADE')
             	->onDelete('CASCADE');
         });
