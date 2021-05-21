@@ -35,17 +35,16 @@ class ContractTypeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ContractType  $contractType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, ContractType $contractType)
+    public function store(Request $request)
     {
         $validated = $request->validate($this->rules());
 
         $validated['key'] = (string)Str::of($validated['key'])->slug();
         $validated['view'] = (string)Str::of($validated['view'])->slug();
 
-        if ($contractType->create($validated)) {
+        if (ContractType::create($validated)) {
             return response()->json([
                 'toastr' => [
                     'type' => 'success',

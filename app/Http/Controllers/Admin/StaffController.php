@@ -17,9 +17,9 @@ class StaffController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(Staff $staff)
+    public function index()
     {
-        return view('admin.staff.list', ['staffs' => $staff->all()]);
+        return view('admin.staff.list', ['staffs' => Staff::all()]);
     }
 
     /**
@@ -36,14 +36,13 @@ class StaffController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Staff  $staff
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, Staff $staff)
+    public function store(Request $request)
     {
         $validated = $request->validate($this->rules());
 
-        if ($staff->create($validated)) {
+        if (Staff::create($validated)) {
             return response()->json([
                 'toastr' => [
                     'type' => 'success',

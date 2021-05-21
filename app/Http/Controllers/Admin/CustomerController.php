@@ -16,12 +16,11 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(Customer $customer)
+    public function index()
     {
-        return view('admin.customer.list', ['customers' => $customer->all()]);
+        return view('admin.customer.list', ['customers' => Customer::all()]);
     }
 
     /**
@@ -38,14 +37,13 @@ class CustomerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, Customer $customer)
+    public function store(Request $request)
     {
         $validated = $request->validate($this->rules());
 
-        if ($customer->add_data($validated)) {
+        if (Customer::add_data($validated)) {
             return response()->json([
                 'toastr' => [
                     'type' => 'success',

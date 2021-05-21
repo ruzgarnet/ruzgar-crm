@@ -29,7 +29,7 @@ class Customer extends Model
      * @param array $data
      * @return boolean
      */
-    public function add_data(array $data)
+    public static function add_data(array $data)
     {
         $main = [
             'identification_number' => $data['identification_number'],
@@ -37,8 +37,8 @@ class Customer extends Model
             'last_name' => $data['last_name'],
             'telephone' => $data['telephone'],
             'email' => $data['email'],
-            'customer_no' => $this->generateCustomerNo(),
-            'reference_code' => $this->generateReferenceCode()
+            'customer_no' => self::generateCustomerNo(),
+            'reference_code' => self::generateReferenceCode()
         ];
 
         $info = [
@@ -55,7 +55,7 @@ class Customer extends Model
         DB::beginTransaction();
 
         try {
-            $customer = $this->create($main);
+            $customer = self::create($main);
             CustomerInfo::insert(
                 $info + ['customer_id' => $customer->id]
             );
@@ -116,7 +116,7 @@ class Customer extends Model
      *
      * @return string
      */
-    private function generateCustomerNo()
+    private static function generateCustomerNo()
     {
         // Control for unique
         $pass = false;
@@ -141,7 +141,7 @@ class Customer extends Model
      *
      * @return string
      */
-    private function generateReferenceCode()
+    private static function generateReferenceCode()
     {
         // Control for unique
         $pass = false;

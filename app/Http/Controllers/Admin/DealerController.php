@@ -15,12 +15,11 @@ class DealerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Models\Dealer $dealer
      * @return \Illuminate\View\View
      */
-    public function index(Dealer $dealer)
+    public function index()
     {
-        return view('admin.dealer.list', ['dealers' => $dealer->all()]);
+        return view('admin.dealer.list', ['dealers' => Dealer::all()]);
     }
 
     /**
@@ -37,14 +36,13 @@ class DealerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Dealer $dealer
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, Dealer $dealer)
+    public function store(Request $request)
     {
         $validated = $request->validate($this->rules());
 
-        if ($dealer->create($validated)) {
+        if (Dealer::create($validated)) {
             return response()->json([
                 'toastr' => [
                     'type' => 'success',
