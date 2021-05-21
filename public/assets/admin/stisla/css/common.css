@@ -46,3 +46,8 @@ table .buttons a {
     background-color: var(--primary);
     color: #ffffff;
 }
+
+textarea.form-control:not(.form-control-sm):not(.form-control-lg) {
+    height: auto;
+    min-height: 42px;
+}
