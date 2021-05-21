@@ -136,7 +136,7 @@
                         </div>
                     </div>
                     <div class="card-footer text-right">
-                        <button type="submit" class="btn btn-primary">Gönder</button>
+                        <button type="submit" class="btn btn-primary">@lang('fields.send')</button>
                     </div>
                 </div>
             </form>

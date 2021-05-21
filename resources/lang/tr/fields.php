@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'send' => 'Gönder',
     'username' => 'Kullanıcı Adı',
     'email' => 'E-Posta Adresi',
     'password' => 'Şifre',
