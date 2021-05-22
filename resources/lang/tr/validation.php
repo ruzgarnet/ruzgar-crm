@@ -181,6 +181,14 @@ return [
         'title' => 'Başlık',
         'view' => 'View',
         'options' => 'Seçenekler',
+        'contract_type_id' => 'Sözleşme tipi',
+        'type' => 'Kayıt tipi',
+		'parent_id' => 'Üst kategori',
+        'slug' => 'Slug',
+        'content' => 'İçerik',
+        'meta_title' => 'Meta Başlığı',
+        'meta_keywords' => 'Meta Anahtar Kelimeleri',
+        'meta_description' => 'Meta Açıklması',
     ],
 
 ];

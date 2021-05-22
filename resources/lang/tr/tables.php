@@ -56,6 +56,22 @@ return [
         'add' => 'Sözleşme Tipi Ekle',
         'edit' => 'Sözleşme Tipi Düzenle',
         'delete' => 'Sözleşme Tipi Sil',
-        'info' => 'Sözleşme Tipi Bilgileri'
+        'info' => 'Sözleşme Tipi Bilgileri',
+        'select' => 'Sözleşme Tipi Seç',
+    ],
+
+    'category' => [
+        'title' => 'Kategoriler',
+        'singular' => 'Kategori',
+        'plural' => 'Kategoriler',
+        'add' => 'Kategori Ekle',
+        'edit' => 'Kategori Düzenle',
+        'delete' => 'Kategori Sil',
+        'info' => 'Kategori Bilgileri',
+        'types' => [
+            1 => 'Ürün',
+            2 => 'Hizmet'
+        ],
+        'select_type' => 'Kategori Tipini Seç'
     ]
 ];

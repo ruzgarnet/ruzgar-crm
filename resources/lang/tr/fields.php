@@ -35,4 +35,15 @@ return [
     'title' => 'Başlık',
     'view' => 'View',
     'options' => 'Seçenekler',
+    'contract_type' => 'Sözleşme Tipi',
+    'category_type' => 'Kategori Tipi',
+    'none' => 'Yok',
+    'parent_category' => 'Üst Kategori',
+    'content' => 'İçerik',
+    'slug' => 'Slug',
+    'meta' => [
+        'title' => 'Meta Başlığı',
+        'keywords' => 'Meta Anahtar Kelimeleri',
+        'description' => 'Meta Açıklaması'
+    ],
 ];

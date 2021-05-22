@@ -69,6 +69,21 @@ trait ViewAttributes
                         'route' => 'admin.customer.add'
                     ]
                 ]
+            ],
+            [
+                'title' => trans('tables.category.title'),
+                'route' => 'admin.categories',
+                'icon' => 'fas fa-box-open',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.categories'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.category.add'
+                    ]
+                ]
             ]
         ];
 
