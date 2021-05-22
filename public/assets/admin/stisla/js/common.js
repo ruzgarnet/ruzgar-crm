@@ -215,33 +215,55 @@ $(function () {
     });
 
     $(document).on("input", ".slug-to-input", function () {
-        let input = $(this),
-            slug = $("#" + input.data("slug")),
-            val = slugify(input.val(), { lower: true });
+        if (typeof slugify === "function") {
+            let input = $(this),
+                slug = $("#" + input.data("slug")),
+                val = slugify(input.val(), { lower: true });
 
-        slug.val(val);
+            slug.val(val);
+        }
     });
 
     $(document).on("input", ".slug-input", function () {
-        let input = $(this),
-            val = input.val();
+        if (typeof slugify === "function") {
+            let input = $(this),
+                val = input.val();
 
-        if (
-            !(
-                val.charAt(val.length - 1) === "-" &&
-                val.charAt(val.length - 2) !== "-"
-            )
-        ) {
-            input.val(slugify(val, { lower: true }));
+            if (
+                !(
+                    val.charAt(val.length - 1) === "-" &&
+                    val.charAt(val.length - 2) !== "-"
+                ) &&
+                !(
+                    val.charAt(val.length - 1) === " " &&
+                    val.charAt(val.length - 2) !== " "
+                )
+            ) {
+                input.val(slugify(val, { lower: true }));
+            }
         }
     });
 
     let editors = document.querySelectorAll(".txt-editor");
-    if (editors) {
+    if (editors && typeof CKEDITOR === "object") {
         editors.forEach(function (el) {
             CKEDITOR.replace(el);
         });
         CKEDITOR.dtd.$removeEmpty["span"] = false;
+    }
+
+    if (typeof $.fn.select2 === "function") {
+        $(".selectpicker").select2({ lang: "tr" });
+        $(".selectpicker").on("change", function (e) {
+            let select = this;
+
+            for (let option in select.options) {
+                select.options.item(option).removeAttribute("selected");
+            }
+            select.options
+                .item(select.selectedIndex)
+                .setAttribute("selected", true);
+        });
     }
 });
 
@@ -282,7 +304,7 @@ function unMask(form) {
 }
 
 let datemasks = document.querySelectorAll(".date-mask");
-if (datemasks) {
+if (datemasks && typeof Cleave === "object") {
     datemasks.forEach(function (el) {
         new Cleave(el, {
             date: true,
@@ -292,7 +314,7 @@ if (datemasks) {
 }
 
 let creditcards = document.querySelectorAll(".credit-card-mask");
-if (creditcards) {
+if (creditcards && typeof Cleave === "object") {
     creditcards.forEach(function (el) {
         new Cleave(el, {
             creditCard: true,
@@ -301,7 +323,7 @@ if (creditcards) {
 }
 
 let telephones = document.querySelectorAll(".telephone-mask");
-if (telephones) {
+if (telephones && typeof Cleave === "object") {
     telephones.forEach(function (el) {
         new Cleave(el, {
             phone: true,
@@ -312,7 +334,7 @@ if (telephones) {
 }
 
 let identifications = document.querySelectorAll(".identification-mask");
-if (identifications) {
+if (identifications && typeof Cleave === "object") {
     identifications.forEach(function (el) {
         new Cleave(el, {
             blocks: [11],
