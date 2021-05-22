@@ -226,6 +226,9 @@ $(function () {
                 val = slugify(input.val(), { lower: true });
 
             slug.val(val);
+            if (slug.hasClass("is-invalid")) {
+                slug.trigger("input");
+            }
         }
     });
 
