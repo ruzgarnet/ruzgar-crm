@@ -59,6 +59,7 @@ class CategoryController extends Controller
 
         if (Category::create($validated)) {
             return response()->json([
+                'success' => true,
                 'toastr' => [
                     'type' => 'success',
                     'title' => trans('response.title.success'),
@@ -69,6 +70,7 @@ class CategoryController extends Controller
         }
 
         return response()->json([
+            'error' => true,
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.error'),
@@ -121,6 +123,7 @@ class CategoryController extends Controller
 
         if ($category->update($validated)) {
             return response()->json([
+                'success' => true,
                 'toastr' => [
                     'type' => 'success',
                     'title' => trans('response.title.success'),
@@ -131,6 +134,7 @@ class CategoryController extends Controller
         }
 
         return response()->json([
+            'error' => true,
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.error'),

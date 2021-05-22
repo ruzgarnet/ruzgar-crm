@@ -45,6 +45,7 @@ class CustomerController extends Controller
 
         if (Customer::add_data($validated)) {
             return response()->json([
+                'success' => true,
                 'toastr' => [
                     'type' => 'success',
                     'title' => trans('response.title.success'),
@@ -55,6 +56,7 @@ class CustomerController extends Controller
         }
 
         return response()->json([
+            'error' => true,
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.error'),
@@ -95,6 +97,7 @@ class CustomerController extends Controller
 
         if ($customer->update_data($validated)) {
             return response()->json([
+                'success' => true,
                 'toastr' => [
                     'type' => 'success',
                     'title' => trans('response.title.success'),
@@ -105,6 +108,7 @@ class CustomerController extends Controller
         }
 
         return response()->json([
+            'error' => true,
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.error'),
@@ -168,6 +172,7 @@ class CustomerController extends Controller
             $customer->type = 2;
             if ($customer->save()) {
                 return response()->json([
+                    'success' => true,
                     'toastr' => [
                         'type' => 'success',
                         'title' => trans('response.title.approve.customer'),
@@ -184,6 +189,7 @@ class CustomerController extends Controller
         }
 
         return response()->json([
+            'error' => true,
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.approve.customer'),

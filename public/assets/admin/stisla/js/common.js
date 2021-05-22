@@ -55,8 +55,16 @@ $(function () {
                         );
                     }
                 }
+
+                // Remove disabled submits
+                form.find("[type='submit']").prop("disabled", false);
             },
             success: function (result, status, xhr) {
+                // Remove disabled submits
+                if (!result.success || result.repeatable) {
+                    form.find("[type='submit']").prop("disabled", false);
+                }
+
                 // Init toastr
                 if (result.toastr) {
                     let toastr = result.toastr;
@@ -87,6 +95,7 @@ $(function () {
                     }, 3000);
                 }
 
+                // If response has approve, change fields from table
                 if (result.approve) {
                     let approve = result.approve,
                         modal = $(".approve-modal");
@@ -106,10 +115,6 @@ $(function () {
 
                     row.find(".approve-modal-btn").remove();
                 }
-            },
-            complete: function (xhr, status) {
-                // Remove disabled submits
-                form.find("[type='submit']").prop("disabled", false);
             },
         });
     });
