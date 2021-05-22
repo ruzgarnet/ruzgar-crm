@@ -232,7 +232,8 @@ $(function () {
     $(document).on("input", ".slug-input", function () {
         if (typeof slugify === "function") {
             let input = $(this),
-                val = input.val();
+                val = input.val(),
+                lowerCase = input.data("lower") === "off" ? false : true;
 
             if (
                 !(
@@ -244,7 +245,7 @@ $(function () {
                     val.charAt(val.length - 2) !== " "
                 )
             ) {
-                input.val(slugify(val, { lower: true }));
+                input.val(slugify(val, { lower: lowerCase }));
             }
         }
     });
