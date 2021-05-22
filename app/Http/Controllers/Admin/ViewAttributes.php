@@ -88,7 +88,7 @@ trait ViewAttributes
             [
                 'title' => trans('tables.product.title'),
                 'route' => 'admin.products',
-                'icon' => 'fas fa-box-open',
+                'icon' => 'fas fa-shopping-cart',
                 'submenu' => [
                     [
                         'title' => trans('titles.list'),

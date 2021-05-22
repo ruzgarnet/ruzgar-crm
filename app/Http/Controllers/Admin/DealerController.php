@@ -44,6 +44,7 @@ class DealerController extends Controller
 
         if (Dealer::create($validated)) {
             return response()->json([
+                'success' => true,
                 'toastr' => [
                     'type' => 'success',
                     'title' => trans('response.title.success'),
@@ -54,6 +55,7 @@ class DealerController extends Controller
         }
 
         return response()->json([
+            'error' => true,
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.error'),
@@ -88,6 +90,7 @@ class DealerController extends Controller
 
         if ($dealer->update($validated)) {
             return response()->json([
+                'success' => true,
                 'toastr' => [
                     'type' => 'success',
                     'title' => trans('response.title.success'),
@@ -98,6 +101,7 @@ class DealerController extends Controller
         }
 
         return response()->json([
+            'error' => true,
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.error'),

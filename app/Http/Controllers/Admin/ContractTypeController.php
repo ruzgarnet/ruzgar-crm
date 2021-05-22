@@ -46,6 +46,7 @@ class ContractTypeController extends Controller
 
         if (ContractType::create($validated)) {
             return response()->json([
+                'success' => true,
                 'toastr' => [
                     'type' => 'success',
                     'title' => trans('response.title.success'),
@@ -56,6 +57,7 @@ class ContractTypeController extends Controller
         }
 
         return response()->json([
+            'error' => true,
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.error'),
@@ -92,6 +94,7 @@ class ContractTypeController extends Controller
 
         if ($contractType->update($validated)) {
             return response()->json([
+                'success' => true,
                 'toastr' => [
                     'type' => 'success',
                     'title' => trans('response.title.success'),
@@ -102,6 +105,7 @@ class ContractTypeController extends Controller
         }
 
         return response()->json([
+            'error' => true,
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.error'),

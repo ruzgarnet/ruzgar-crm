@@ -72,7 +72,12 @@ return [
             1 => 'Ürün',
             2 => 'Hizmet'
         ],
-        'select_type' => 'Kategori Tipini Seç'
+        'status' => [
+            1 => 'Aktif',
+            2 => 'Kapalı'
+        ],
+        'select_type' => 'Kategori Tipini Seç',
+        'select' => 'Kategori Seç'
     ],
 
     'product' => [
@@ -83,7 +88,11 @@ return [
         'edit' => 'Ürün Düzenle',
         'delete' => 'Ürün Sil',
         'info' => 'Ürün Bilgileri',
-        'select' => 'Ürün Seçiniz'
+        'select' => 'Ürün Seçiniz',
+        'status' => [
+            1 => 'Aktif',
+            2 => 'Kapalı'
+        ]
     ],
 
     'message' => [
