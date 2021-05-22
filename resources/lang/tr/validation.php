@@ -194,7 +194,9 @@ return [
         'content' => 'İçerik',
         'meta_title' => 'Meta Başlığı',
         'meta_keywords' => 'Meta Anahtar Kelimeleri',
-        'meta_description' => 'Meta Açıklması',
+        'meta_description' => 'Meta Açıklaması',
+        'category_id' => 'Kategori',
+        'model' => 'Model',
     ],
 
 ];

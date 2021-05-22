@@ -18,7 +18,6 @@
                                     <th scope="col">@lang('fields.name')</th>
                                     <th scope="col">@lang('fields.slug')</th>
                                     <th scope="col">@lang('fields.price')</th>
-                                    <th scope="col">@lang('fields.meta.title')</th>
                                     <th scope="col">@lang('fields.actions')</th>
                                 </tr>
                             </thead>
@@ -28,8 +27,7 @@
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $product->name }}</td>
                                         <td>{{ $product->slug }}</td>
-                                        <td>{{ $product->price }}</td>
-                                        <td>{{ $product->meta_title }}</td>
+                                        <td>{{ $product->price_print }}</td>
                                         <td>
                                             <div class="buttons">
                                                 <a href="{{ route('admin.product.edit', $product) }}"

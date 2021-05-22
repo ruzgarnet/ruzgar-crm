@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Attributes\PriceAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, PriceAttribute;
 
     /**
      * All fields fillable
@@ -16,5 +17,18 @@ class Product extends Model
      */
     protected $guarded = [];
 
-    
+    /**
+     * Get product status id's
+     * For titles use language files => tables.{table_name|model_name}.status.{status_id}
+     * 1 => Active
+     * 2 => Disabled
+     *
+     * @param bool $implode
+     * @return array
+     */
+    public static function getStatus($implode = false)
+    {
+        $data = [1];
+        return $implode ? implode(',', $data) : $data;
+    }
 }

@@ -88,5 +88,10 @@ return [
         'edit' => 'Ürün Düzenle',
         'delete' => 'Ürün Sil',
         'info' => 'Ürün Bilgileri',
+        'select' => 'Ürün Seçiniz',
+        'status' => [
+            1 => 'Aktif',
+            2 => 'Kapalı'
+        ]
     ]
 ];
