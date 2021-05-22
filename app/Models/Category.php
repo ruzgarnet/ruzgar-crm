@@ -35,6 +35,7 @@ class Category extends Model
      * Get category status id's
      * For titles use language files => tables.{table_name|model_name}.status.{status_id}
      * 1 => Active
+     * 2 => Disabled
      *
      * @param bool $implode
      * @return array
