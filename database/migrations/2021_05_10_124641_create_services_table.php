@@ -15,7 +15,9 @@ class CreateServicesTable extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id');
             $table->string('name', 255);
+            $table->string('model', 255)->unique();
             $table->string('slug', 255)->unique();
             $table->unsignedDecimal('price');
             $table->text('content');
@@ -24,23 +26,10 @@ class CreateServicesTable extends Migration
             $table->string('meta_keywords', 255);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
-        });
 
-        Schema::create('category_service', function (Blueprint $table) {
-        	$table->foreignId('category_id');
-        	$table->foreignId('service_id');
-
-        	$table->primary(['category_id', 'service_id']);
-
-        	$table->foreign('category_id')
+            $table->foreign('category_id')
         		->references('id')
         		->on('categories')
-        		->onUpdate('CASCADE')
-        		->onDelete('CASCADE');
-
-        	$table->foreign('service_id')
-        		->references('id')
-        		->on('services')
         		->onUpdate('CASCADE')
         		->onDelete('CASCADE');
         });
@@ -53,7 +42,6 @@ class CreateServicesTable extends Migration
      */
     public function down()
     {
-    	Schema::dropIfExists('category_service');
         Schema::dropIfExists('services');
     }
 }

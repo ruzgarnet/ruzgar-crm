@@ -17,6 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->foreignId('category_id');
             $table->string('name', 255);
+            $table->string('model', 255)->unique();
             $table->string('slug', 255)->unique();
             $table->unsignedDecimal('price');
             $table->text('content');
@@ -32,25 +33,6 @@ class CreateProductsTable extends Migration
         		->onUpdate('CASCADE')
         		->onDelete('CASCADE');
         });
-
-        Schema::create('category_product', function (Blueprint $table) {
-        	$table->foreignId('category_id');
-        	$table->foreignId('product_id');
-
-        	$table->primary(['category_id', 'product_id']);
-
-        	$table->foreign('category_id')
-        		->references('id')
-        		->on('categories')
-        		->onUpdate('CASCADE')
-        		->onDelete('CASCADE');
-
-        	$table->foreign('product_id')
-        		->references('id')
-        		->on('products')
-        		->onUpdate('CASCADE')
-        		->onDelete('CASCADE');
-        });
     }
 
     /**
@@ -60,7 +42,6 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-    	Schema::dropIfExists('category_product');
         Schema::dropIfExists('products');
     }
 }
