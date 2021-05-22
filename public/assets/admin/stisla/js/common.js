@@ -157,7 +157,7 @@ $(function () {
                     iziToast.error({
                         message: response.message,
                         position: "topRight",
-                        timeout: 3000,
+                        timeout: 2000,
                     });
                 }
             },
