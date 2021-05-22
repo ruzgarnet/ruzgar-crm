@@ -47,4 +47,5 @@ return [
         'description' => 'Meta Açıklaması'
     ],
     'price' => 'Tutar',
+    'message' => 'Mesaj'
 ];

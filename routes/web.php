@@ -58,6 +58,12 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::get('product/edit/{product}', [App\Http\Controllers\Admin\ProductController::class, 'edit'])->name('product.edit');
     Route::put('product/edit/{product}', [App\Http\Controllers\Admin\ProductController::class, 'update'])->name('product.edit.put');
     Route::delete('product/delete/{product}', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('product.delete');
-});
+
+    Route::get('messages', [App\Http\Controllers\Admin\MessageController::class, 'index'])->name('messages');
+    Route::get('message/add', [App\Http\Controllers\Admin\MessageController::class, 'create'])->name('message.add');
+    Route::post('message/add', [App\Http\Controllers\Admin\MessageController::class, 'store'])->name('message.add.post');
+    Route::get('message/edit/{message}', [App\Http\Controllers\Admin\MessageController::class, 'edit'])->name('message.edit');
+    Route::put('message/edit/{message}', [App\Http\Controllers\Admin\MessageController::class, 'update'])->name('message.edit.put');
+    Route::delete('message/delete/{message}', [App\Http\Controllers\Admin\MessageController::class, 'destroy'])->name('message.delete');});
 
 Route::get('getDistricts/{id}', [App\Http\Controllers\CityController::class, 'districts'])->name('get.district')->where('id', '[0-9]+');

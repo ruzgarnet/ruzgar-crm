@@ -84,5 +84,16 @@ return [
         'delete' => 'Ürün Sil',
         'info' => 'Ürün Bilgileri',
         'select' => 'Ürün Seçiniz'
+    ],
+
+    'message' => [
+        'title' => 'Mesajlar',
+        'singular' => 'Mesaj',
+        'plural' => 'Mesajlar',
+        'add' => 'Mesaj Ekle',
+        'edit' => 'Mesaj Düzenle',
+        'delete' => 'Mesaj Sil',
+        'info' => 'Mesaj Bilgileri',
+        'select' => 'Mesajı Seçiniz'
     ]
 ];

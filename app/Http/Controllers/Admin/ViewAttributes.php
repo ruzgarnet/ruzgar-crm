@@ -99,6 +99,21 @@ trait ViewAttributes
                         'route' => 'admin.product.add'
                     ]
                 ]
+            ],
+            [
+                'title' => trans('tables.message.title'),
+                'route' => 'admin.messages',
+                'icon' => 'fas fa-sms',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.messages'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.message.add'
+                    ]
+                ]
             ]
         ];
 
