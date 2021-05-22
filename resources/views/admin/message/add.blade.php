@@ -32,8 +32,3 @@
         </div>
     </div>
 @endsection
-
-@push('script')
-    <script src="/assets/admin/vendor/cleave/cleave.min.js"></script>
-    <script src="/assets/admin/vendor/cleave/addons/cleave-phone.tr.js"></script>
-@endpush
