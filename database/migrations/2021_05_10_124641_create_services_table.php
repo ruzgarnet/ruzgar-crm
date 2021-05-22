@@ -21,17 +21,17 @@ class CreateServicesTable extends Migration
             $table->string('slug', 255)->unique();
             $table->unsignedDecimal('price');
             $table->text('content');
-            $table->string('meta_title', 255);
-            $table->string('meta_description', 255);
-            $table->string('meta_keywords', 255);
+            $table->string('meta_title', 255)->nullable()->default(null);
+            $table->string('meta_description', 255)->nullable()->default(null);
+            $table->string('meta_keywords', 255)->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
 
             $table->foreign('category_id')
-        		->references('id')
-        		->on('categories')
-        		->onUpdate('CASCADE')
-        		->onDelete('CASCADE');
+                ->references('id')
+                ->on('categories')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 
