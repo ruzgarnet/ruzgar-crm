@@ -220,7 +220,7 @@ $(function () {
     });
 
     $(document).on("input", ".slug-to-input", function () {
-        if (typeof slugify === "function") {
+        if (typeof slugify !== "undefined") {
             let input = $(this),
                 slug = $("#" + input.data("slug")),
                 val = slugify(input.val(), { lower: true });
@@ -230,7 +230,7 @@ $(function () {
     });
 
     $(document).on("input", ".slug-input", function () {
-        if (typeof slugify === "function") {
+        if (typeof slugify !== "undefined") {
             let input = $(this),
                 val = input.val(),
                 lowerCase = input.data("lower") === "off" ? false : true;
@@ -251,14 +251,14 @@ $(function () {
     });
 
     let editors = document.querySelectorAll(".txt-editor");
-    if (editors && typeof CKEDITOR === "object") {
+    if (editors && typeof CKEDITOR !== "undefined") {
         editors.forEach(function (el) {
             CKEDITOR.replace(el);
         });
         CKEDITOR.dtd.$removeEmpty["span"] = false;
     }
 
-    if (typeof $.fn.select2 === "function") {
+    if (typeof $.fn.select2 !== "undefined") {
         $(".selectpicker").select2({ lang: "tr" });
         $(".selectpicker").on("change", function (e) {
             let select = this;
@@ -310,7 +310,7 @@ function unMask(form) {
 }
 
 let datemasks = document.querySelectorAll(".date-mask");
-if (datemasks && typeof Cleave === "object") {
+if (datemasks && typeof Cleave !== "undefined") {
     datemasks.forEach(function (el) {
         new Cleave(el, {
             date: true,
@@ -320,7 +320,7 @@ if (datemasks && typeof Cleave === "object") {
 }
 
 let creditcards = document.querySelectorAll(".credit-card-mask");
-if (creditcards && typeof Cleave === "object") {
+if (creditcards && typeof Cleave !== "undefined") {
     creditcards.forEach(function (el) {
         new Cleave(el, {
             creditCard: true,
@@ -329,7 +329,7 @@ if (creditcards && typeof Cleave === "object") {
 }
 
 let telephones = document.querySelectorAll(".telephone-mask");
-if (telephones && typeof Cleave === "object") {
+if (telephones && typeof Cleave !== "undefined") {
     telephones.forEach(function (el) {
         new Cleave(el, {
             phone: true,
@@ -340,7 +340,7 @@ if (telephones && typeof Cleave === "object") {
 }
 
 let identifications = document.querySelectorAll(".identification-mask");
-if (identifications && typeof Cleave === "object") {
+if (identifications && typeof Cleave !== "undefined") {
     identifications.forEach(function (el) {
         new Cleave(el, {
             blocks: [11],
