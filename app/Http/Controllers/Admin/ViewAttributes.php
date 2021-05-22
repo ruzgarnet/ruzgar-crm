@@ -114,6 +114,21 @@ trait ViewAttributes
                         'route' => 'admin.message.add'
                     ]
                 ]
+            ],
+            [
+                'title' => trans('tables.service.title'),
+                'route' => 'admin.services',
+                'icon' => 'fas fa-car',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.services'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.service.add'
+                    ]
+                ]
             ]
         ];
 

@@ -59,11 +59,22 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::put('product/edit/{product}', [App\Http\Controllers\Admin\ProductController::class, 'update'])->name('product.edit.put');
     Route::delete('product/delete/{product}', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('product.delete');
 
+    // Message Routes
     Route::get('messages', [App\Http\Controllers\Admin\MessageController::class, 'index'])->name('messages');
     Route::get('message/add', [App\Http\Controllers\Admin\MessageController::class, 'create'])->name('message.add');
     Route::post('message/add', [App\Http\Controllers\Admin\MessageController::class, 'store'])->name('message.add.post');
     Route::get('message/edit/{message}', [App\Http\Controllers\Admin\MessageController::class, 'edit'])->name('message.edit');
     Route::put('message/edit/{message}', [App\Http\Controllers\Admin\MessageController::class, 'update'])->name('message.edit.put');
-    Route::delete('message/delete/{message}', [App\Http\Controllers\Admin\MessageController::class, 'destroy'])->name('message.delete');});
+    Route::delete('message/delete/{message}', [App\Http\Controllers\Admin\MessageController::class, 'destroy'])->name('message.delete');
+
+    // Service Routes
+    Route::get('services', [App\Http\Controllers\Admin\ServiceController::class, 'index'])->name('services');
+    Route::get('service/add', [App\Http\Controllers\Admin\ServiceController::class, 'create'])->name('service.add');
+    Route::post('service/add', [App\Http\Controllers\Admin\ServiceController::class, 'store'])->name('service.add.post');
+    Route::get('service/edit/{service}', [App\Http\Controllers\Admin\ServiceController::class, 'edit'])->name('service.edit');
+    Route::put('service/edit/{service}', [App\Http\Controllers\Admin\ServiceController::class, 'update'])->name('service.edit.put');
+    Route::delete('service/delete/{service}', [App\Http\Controllers\Admin\ServiceController::class, 'destroy'])->name('service.delete');
+
+});
 
 Route::get('getDistricts/{id}', [App\Http\Controllers\CityController::class, 'districts'])->name('get.district')->where('id', '[0-9]+');

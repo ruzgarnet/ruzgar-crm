@@ -104,5 +104,16 @@ return [
         'delete' => 'Mesaj Sil',
         'info' => 'Mesaj Bilgileri',
         'select' => 'Mesajı Seçiniz'
+    ],
+
+    'service' => [
+        'title' => 'Servisler',
+        'singular' => 'Servis',
+        'plural' => 'Servisler',
+        'add' => 'Servis Ekle',
+        'edit' => 'Servis Düzenle',
+        'delete' => 'Servis Sil',
+        'info' => 'Servis Bilgileri',
+        'select' => 'Servisi Seçiniz'
     ]
 ];
