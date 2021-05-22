@@ -2,6 +2,9 @@
 
 namespace App\Models\Attributes;
 
+/**
+ * telephone_print attribute
+ */
 trait PhoneAttribute
 {
     /**

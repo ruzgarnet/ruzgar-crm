@@ -2,6 +2,9 @@
 
 namespace App\Models\Attributes;
 
+/**
+ * identification_secret attribute
+ */
 trait IdentificationSecretAttribute
 {
     /**

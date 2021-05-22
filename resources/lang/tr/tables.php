@@ -1,19 +1,24 @@
 <?php
 
 return [
+    // City Fields
     'city' => [
         'title' => 'İl',
         'singular' => 'İl',
         'plural' => 'İller',
         'select' => 'İl Seçiniz'
     ],
+    // City Fields End
 
+    // District Fields
     'district' => [
         'title' => 'İlçe',
         'singular' => 'İlçe',
         'plural' => 'İlçeler'
     ],
+    // District Fields End
 
+    // Dealer Fields
     'dealer' => [
         'title' => 'Bayiler',
         'singular' => 'Bayi',
@@ -24,7 +29,9 @@ return [
         'info' => 'Bayi Bilgileri',
         'select' => 'Bayi Seçiniz'
     ],
+    // Dealer Fields End
 
+    // Staff Fields
     'staff' => [
         'title' => 'Personeller',
         'singular' => 'Personel',
@@ -34,7 +41,9 @@ return [
         'delete' => 'Personel Sil',
         'info' => 'Personel Bilgileri',
     ],
+    // Staff Fields End
 
+    // Customer Fields
     'customer' => [
         'title' => 'Müşteriler',
         'singular' => 'Müşteri',
@@ -48,7 +57,9 @@ return [
             2 => 'Onaylanmış'
         ]
     ],
+    // Customer Fields End
 
+    // Contract Type Fields
     'contract_type' => [
         'title' => 'Sözleşme Tipleri',
         'singular' => 'Sözleşme Tipi',
@@ -59,7 +70,9 @@ return [
         'info' => 'Sözleşme Tipi Bilgileri',
         'select' => 'Sözleşme Tipi Seç',
     ],
+    // Contract Type Fields End
 
+    // Category Fields
     'category' => [
         'title' => 'Kategoriler',
         'singular' => 'Kategori',
@@ -79,7 +92,9 @@ return [
         'select_type' => 'Kategori Tipini Seç',
         'select' => 'Kategori Seç'
     ],
+    // Category Fields End
 
+    // Product Fields
     'product' => [
         'title' => 'Ürünler',
         'singular' => 'Ürün',
@@ -94,7 +109,26 @@ return [
             2 => 'Kapalı'
         ]
     ],
+    // Product Fields End
 
+    // Service Fields
+    'service' => [
+        'title' => 'Hizmetler',
+        'singular' => 'Hizmet',
+        'plural' => 'Hizmetler',
+        'add' => 'Hizmet Ekle',
+        'edit' => 'Hizmet Düzenle',
+        'delete' => 'Hizmet Sil',
+        'info' => 'Hizmet Bilgileri',
+        'select' => 'Hizmet Seçiniz',
+        'status' => [
+            1 => 'Aktif',
+            2 => 'Kapalı'
+        ]
+    ],
+    // Service Fields End
+
+    // Message Fields
     'message' => [
         'title' => 'Mesajlar',
         'singular' => 'Mesaj',
@@ -105,15 +139,5 @@ return [
         'info' => 'Mesaj Bilgileri',
         'select' => 'Mesajı Seçiniz'
     ],
-
-    'service' => [
-        'title' => 'Servisler',
-        'singular' => 'Servis',
-        'plural' => 'Servisler',
-        'add' => 'Servis Ekle',
-        'edit' => 'Servis Düzenle',
-        'delete' => 'Servis Sil',
-        'info' => 'Servis Bilgileri',
-        'select' => 'Servisi Seçiniz'
-    ]
+    // Message Fields End
 ];

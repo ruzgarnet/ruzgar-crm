@@ -1,53 +1,76 @@
 <?php
 
 return [
+    // Global Attributes
     'send' => 'Gönder',
-    'username' => 'Kullanıcı Adı',
-    'email' => 'E-Posta Adresi',
-    'password' => 'Şifre',
+    'actions' => 'İşlemler',
+    'none' => 'Yok',
+    // Global Attributes End
+
+    // Identity Attributes
     'name' => 'İsim',
-    'tax_number' => 'Vergi Numarası',
-    'city' => 'İl',
-    'district' => 'İlçe',
-    'address' => 'Adres',
-    'started_at' => 'Başlangıç Tarihi',
-    'ended_at' => 'Bitiş Tarihi',
-    'released_at' => 'Çıkış Tarihi',
-    'telephone' => 'Telefon Numarası',
-	'actions' => 'İşlemler',
-    'dealer' => 'Bayi',
     'first_name' => 'Ad',
     'last_name' => 'Soyad',
-    'secondary_telephone' => 'İkincil Telefon Numarası',
-    'birthday' => 'Doğum Tarihi',
     'identification_number' => 'Kimlik Numarası',
     'gender' => 'Cinsiyet',
-    'male' => 'Erkek',
-    'female' => 'Kadın',
     'genders' => [
         1 => 'Erkek',
         2 => 'Kadın'
     ],
-    'worker' => 'Çalışan',
-    'worker_count' => 'Çalışan Sayısı',
-    'data_type' => 'Kayıt Tipi',
-    'key' => 'Anahtar',
+    'male' => 'Erkek',
+    'female' => 'Kadın',
+    'telephone' => 'Telefon Numarası',
+    'secondary_telephone' => 'İkincil Telefon Numarası',
+    'birthday' => 'Doğum Tarihi',
+    'city' => 'İl',
+    'district' => 'İlçe',
+    'address' => 'Adres',
+    // Identity Attributes End
+
+    // Name Attributes
     'title' => 'Başlık',
-    'view' => 'View',
-    'options' => 'Seçenekler',
-    'contract_type' => 'Sözleşme Tipi',
-    'category_type' => 'Kategori Tipi',
-    'none' => 'Yok',
-    'parent_category' => 'Üst Kategori',
+    'price' => 'Tutar',
+    'message' => 'Mesaj',
+    'category' => 'Kategori',
+    'model' => 'Model',
     'content' => 'İçerik',
+    'options' => 'Seçenekler',
+    'data_type' => 'Kayıt Tipi',
+    // Name Attributes End
+
+    // Auth|User Attributes
+    'username' => 'Kullanıcı Adı',
+    'email' => 'E-Posta Adresi',
+    'password' => 'Şifre',
+    // Auth|User Attributes End
+
+    // Date Attributes
+    'started_at' => 'Başlangıç Tarihi',
+    'ended_at' => 'Bitiş Tarihi',
+    'released_at' => 'Çıkış Tarihi',
+    // Date Attributes End
+
+    // Meta Attributes
     'slug' => 'Slug',
     'meta' => [
         'title' => 'Meta Başlığı',
         'keywords' => 'Meta Anahtar Kelimeleri',
         'description' => 'Meta Açıklaması'
     ],
-    'price' => 'Tutar',
-    'message' => 'Mesaj',
-    'category' => 'Kategori',
-    'model' => 'Model',
+    'key' => 'Anahtar',
+    'view' => 'View',
+    // Meta Attributes End
+
+    // Dealer Attributes
+    'tax_number' => 'Vergi Numarası',
+    'dealer' => 'Bayi',
+    'worker' => 'Çalışan',
+    'worker_count' => 'Çalışan Sayısı',
+    // Dealer Attributes End
+
+    // Category|Product|Service Attributes
+    'parent_category' => 'Üst Kategori',
+    'contract_type' => 'Sözleşme Tipi',
+    'category_type' => 'Kategori Tipi',
+    // Category|Product|Service Attributes
 ];

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
 
 /**
- * Admin controller for global methods
+ * View attributes for admin
  */
 trait ViewAttributes
 {
@@ -17,14 +17,21 @@ trait ViewAttributes
     public static function sideNav()
     {
         $data = [
+            // Header Fields
             [
                 'header' =>  trans('titles.admin.dashboard')
             ],
+            // Header Field End
+
+            // Admin Fields
             [
                 'title' => trans('titles.admin.dashboard'),
                 'route' => 'admin.dashboard',
                 'icon' => 'fas fa-home'
             ],
+            // Admin Field End
+
+            // Dealer Fields
             [
                 'title' => trans('tables.dealer.title'),
                 'route' => 'admin.dealers',
@@ -40,6 +47,9 @@ trait ViewAttributes
                     ]
                 ]
             ],
+            // Dealer Field End
+
+            // Staff Fields
             [
                 'title' => trans('tables.staff.title'),
                 'route' => 'admin.staffs',
@@ -55,6 +65,9 @@ trait ViewAttributes
                     ]
                 ]
             ],
+            // Staff Field End
+
+            // Customer Fields
             [
                 'title' => trans('tables.customer.title'),
                 'route' => 'admin.customers',
@@ -70,6 +83,9 @@ trait ViewAttributes
                     ]
                 ]
             ],
+            // Customer Field End
+
+            // Category Fields
             [
                 'title' => trans('tables.category.title'),
                 'route' => 'admin.categories',
@@ -85,6 +101,9 @@ trait ViewAttributes
                     ]
                 ]
             ],
+            // Category Field End
+
+            // Product Fields
             [
                 'title' => trans('tables.product.title'),
                 'route' => 'admin.products',
@@ -100,6 +119,27 @@ trait ViewAttributes
                     ]
                 ]
             ],
+            // Product Field End
+
+            // Service Fields
+            [
+                'title' => trans('tables.service.title'),
+                'route' => 'admin.services',
+                'icon' => 'fas fa-box',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.services'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.service.add'
+                    ]
+                ]
+            ],
+            // Service Field End
+
+            // Message Fields
             [
                 'title' => trans('tables.message.title'),
                 'route' => 'admin.messages',
@@ -114,24 +154,12 @@ trait ViewAttributes
                         'route' => 'admin.message.add'
                     ]
                 ]
-            ],
-            [
-                'title' => trans('tables.service.title'),
-                'route' => 'admin.services',
-                'icon' => 'fas fa-car',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.services'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.service.add'
-                    ]
-                ]
             ]
+            // Message Field End
+
         ];
 
+        // Find active routes for view
         $route = Route::currentRouteName();
 
         foreach ($data as $key => $item) {

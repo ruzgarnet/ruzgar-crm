@@ -2,6 +2,9 @@
 
 namespace App\Models\Attributes;
 
+/**
+ * full_name attribute
+ */
 trait FullNameAttribute
 {
     /**

@@ -2,6 +2,9 @@
 
 namespace App\Models\Attributes;
 
+/**
+ * price_print attribute
+ */
 trait PriceAttribute
 {
     /**
