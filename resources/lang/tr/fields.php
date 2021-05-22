@@ -35,16 +35,6 @@ return [
     'title' => 'Başlık',
     'view' => 'View',
     'options' => 'Seçenekler',
-<<<<<<< HEAD
-    'slug' => 'Slug',
-    'price' => 'Tutar',
-    'content' => 'İçerik',
-    'meta' => [
-        'title' => 'Meta Başlık',
-        'keywords' => 'Meta Anahtar Kelimeler',
-        'description' => 'Meta Açıklama'
-    ]
-=======
     'contract_type' => 'Sözleşme Tipi',
     'category_type' => 'Kategori Tipi',
     'none' => 'Yok',
@@ -56,5 +46,5 @@ return [
         'keywords' => 'Meta Anahtar Kelimeleri',
         'description' => 'Meta Açıklaması'
     ],
->>>>>>> 1586c165f2ee595bd1c30df2ec993f68759631c6
+    'price' => 'Tutar',
 ];

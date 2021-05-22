@@ -56,20 +56,6 @@ return [
         'add' => 'Sözleşme Tipi Ekle',
         'edit' => 'Sözleşme Tipi Düzenle',
         'delete' => 'Sözleşme Tipi Sil',
-<<<<<<< HEAD
-        'info' => 'Sözleşme Tipi Bilgileri'
-    ],
-
-    'product' => [
-        'title' => 'Ürünler',
-        'singular' => 'Ürün',
-        'plural' => 'Ürünler',
-        'add' => 'Ürün Ekle',
-        'edit' => 'Ürün Düzenle',
-        'delete' => 'Ürün Sil',
-        'info' => 'Ürün Bilgileri',
-        'select' => 'Ürün Seçiniz'
-=======
         'info' => 'Sözleşme Tipi Bilgileri',
         'select' => 'Sözleşme Tipi Seç',
     ],
@@ -87,6 +73,16 @@ return [
             2 => 'Hizmet'
         ],
         'select_type' => 'Kategori Tipini Seç'
->>>>>>> 1586c165f2ee595bd1c30df2ec993f68759631c6
+    ],
+
+    'product' => [
+        'title' => 'Ürünler',
+        'singular' => 'Ürün',
+        'plural' => 'Ürünler',
+        'add' => 'Ürün Ekle',
+        'edit' => 'Ürün Düzenle',
+        'delete' => 'Ürün Sil',
+        'info' => 'Ürün Bilgileri',
+        'select' => 'Ürün Seçiniz'
     ]
 ];
