@@ -71,6 +71,7 @@ trait ViewAttributes
                 ]
             ],
             [
+<<<<<<< HEAD
                 'title' => trans('tables.product.title'),
                 'route' => 'admin.products',
                 'icon' => 'fas fa-shopping-cart',
@@ -82,6 +83,19 @@ trait ViewAttributes
                     [
                         'title' => trans('titles.add'),
                         'route' => 'admin.product.add'
+=======
+                'title' => trans('tables.category.title'),
+                'route' => 'admin.categories',
+                'icon' => 'fas fa-box-open',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.categories'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.category.add'
+>>>>>>> 1586c165f2ee595bd1c30df2ec993f68759631c6
                     ]
                 ]
             ]

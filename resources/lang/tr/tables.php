@@ -56,6 +56,7 @@ return [
         'add' => 'Sözleşme Tipi Ekle',
         'edit' => 'Sözleşme Tipi Düzenle',
         'delete' => 'Sözleşme Tipi Sil',
+<<<<<<< HEAD
         'info' => 'Sözleşme Tipi Bilgileri'
     ],
 
@@ -68,5 +69,24 @@ return [
         'delete' => 'Ürün Sil',
         'info' => 'Ürün Bilgileri',
         'select' => 'Ürün Seçiniz'
+=======
+        'info' => 'Sözleşme Tipi Bilgileri',
+        'select' => 'Sözleşme Tipi Seç',
+    ],
+
+    'category' => [
+        'title' => 'Kategoriler',
+        'singular' => 'Kategori',
+        'plural' => 'Kategoriler',
+        'add' => 'Kategori Ekle',
+        'edit' => 'Kategori Düzenle',
+        'delete' => 'Kategori Sil',
+        'info' => 'Kategori Bilgileri',
+        'types' => [
+            1 => 'Ürün',
+            2 => 'Hizmet'
+        ],
+        'select_type' => 'Kategori Tipini Seç'
+>>>>>>> 1586c165f2ee595bd1c30df2ec993f68759631c6
     ]
 ];

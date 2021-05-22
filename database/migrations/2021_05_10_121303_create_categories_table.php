@@ -16,12 +16,13 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('contract_type_id');
-            $table->unsignedTinyInteger('type')->default(0);
+            $table->unsignedTinyInteger('type');
             $table->string('key', 255)->unique()->nullable()->default(null);
             $table->foreignId('parent_id')->nullable()->default(null);
             $table->string('name', 255);
             $table->string('slug', 255)->unique();
             $table->text('content');
+            $table->unsignedTinyInteger('status')->default(1);
             $table->string('meta_title', 255);
             $table->string('meta_description', 255);
             $table->string('meta_keywords', 255);

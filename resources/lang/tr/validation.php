@@ -181,12 +181,23 @@ return [
         'title' => 'Başlık',
         'view' => 'View',
         'options' => 'Seçenekler',
+<<<<<<< HEAD
         'slug' => 'Slug',
         'content' => 'İçerik',
         'price' => 'Tutar',
         'meta_title' => 'Meta başlığı',
         'meta_description' => 'Meta açıklaması',
         'meta_keywords' => 'Meta anahtar kelimeleri'
+=======
+        'contract_type_id' => 'Sözleşme tipi',
+        'type' => 'Kayıt tipi',
+		'parent_id' => 'Üst kategori',
+        'slug' => 'Slug',
+        'content' => 'İçerik',
+        'meta_title' => 'Meta Başlığı',
+        'meta_keywords' => 'Meta Anahtar Kelimeleri',
+        'meta_description' => 'Meta Açıklması',
+>>>>>>> 1586c165f2ee595bd1c30df2ec993f68759631c6
     ],
 
 ];
