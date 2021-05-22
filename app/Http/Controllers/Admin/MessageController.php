@@ -77,11 +77,36 @@ class MessageController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Message  $message
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Message $message)
     {
-        // TODO update resource
+        $rules = $this->rules();
+
+        $rules['key']['unique'] = Rule::unique('messages', 'key')->ignore($message->id);
+
+        $validated = $request->validate($rules);
+
+        if ($message->update($validated)) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.edit.success')
+                ],
+                'redirect' => relative_route('admin.messages')
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.edit.error')
+            ]
+        ]);
     }
 
     /**
