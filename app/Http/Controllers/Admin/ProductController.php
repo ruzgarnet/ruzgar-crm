@@ -29,7 +29,7 @@ class ProductController extends Controller
     public function create()
     {
         return view('admin.product.add', [
-            'categories' => Category::where('status', 1)->get()
+            'categories' => Category::where('status', 1)->where('type', 1)->get()
         ]);
     }
 
@@ -79,7 +79,7 @@ class ProductController extends Controller
     {
         return view('admin.product.edit', [
             'product' => $product,
-            'categories' => Category::where('status', 1)->get()
+            'categories' => Category::where('status', 1)->where('type', 1)->get()
         ]);
     }
 
@@ -88,7 +88,7 @@ class ProductController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Product $product)
     {
@@ -136,7 +136,7 @@ class ProductController extends Controller
             'category_id' => [
                 'required',
                 Rule::exists('categories', 'id')->where(function ($query) {
-                    return $query->where('status', 1);
+                    return $query->where('status', 1)->where('type', 1);
                 })
             ],
             'name' => 'required|string|max:255',
