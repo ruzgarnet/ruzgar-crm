@@ -15,6 +15,7 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id');
             $table->string('name', 255);
             $table->string('slug', 255)->unique();
             $table->unsignedDecimal('price');
@@ -24,6 +25,12 @@ class CreateProductsTable extends Migration
             $table->string('meta_keywords', 255);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
+
+            $table->foreign('category_id')
+        		->references('id')
+        		->on('categories')
+        		->onUpdate('CASCADE')
+        		->onDelete('CASCADE');
         });
 
         Schema::create('category_product', function (Blueprint $table) {
