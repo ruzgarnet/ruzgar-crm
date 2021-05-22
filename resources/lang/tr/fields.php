@@ -35,4 +35,12 @@ return [
     'title' => 'Başlık',
     'view' => 'View',
     'options' => 'Seçenekler',
+    'slug' => 'Slug',
+    'price' => 'Tutar',
+    'content' => 'İçerik',
+    'meta' => [
+        'title' => 'Meta Başlık',
+        'keywords' => 'Meta Anahtar Kelimeler',
+        'description' => 'Meta Açıklama'
+    ]
 ];

@@ -57,5 +57,16 @@ return [
         'edit' => 'Sözleşme Tipi Düzenle',
         'delete' => 'Sözleşme Tipi Sil',
         'info' => 'Sözleşme Tipi Bilgileri'
+    ],
+
+    'product' => [
+        'title' => 'Ürünler',
+        'singular' => 'Ürün',
+        'plural' => 'Ürünler',
+        'add' => 'Ürün Ekle',
+        'edit' => 'Ürün Düzenle',
+        'delete' => 'Ürün Sil',
+        'info' => 'Ürün Bilgileri',
+        'select' => 'Ürün Seçiniz'
     ]
 ];

@@ -181,6 +181,12 @@ return [
         'title' => 'Başlık',
         'view' => 'View',
         'options' => 'Seçenekler',
+        'slug' => 'Slug',
+        'content' => 'İçerik',
+        'price' => 'Tutar',
+        'meta_title' => 'Meta başlığı',
+        'meta_description' => 'Meta açıklaması',
+        'meta_keywords' => 'Meta anahtar kelimeleri'
     ],
 
 ];
