@@ -1,72 +1,64 @@
 @extends('admin.layout.main')
 
-@section('title', meta_title('tables.category.add'))
+@section('title', meta_title('tables.service.add'))
 
 @section('content')
     <div class="row">
         <div class="col-12">
-            <form method="POST" action="{{ relative_route('admin.category.add.post') }}">
+            <form method="POST" action="{{ relative_route('admin.service.add.post') }}">
                 <div class="card form">
                     <div class="card-header">
-                        <h4>@lang('tables.category.add')</h4>
+                        <h4>@lang('tables.service.add')</h4>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="slcContractType">@lang('fields.contract_type')</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-file-contract"></i>
-                                    </div>
-                                </div>
-                                <select name="contract_type_id" id="slcContractType" class="custom-select">
-                                    <option disabled selected>@lang('tables.contract_type.select')</option>
-                                    @foreach ($contractTypes as $type)
-                                        <option value="{{ $type->id }}">{{ $type->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="slcType">@lang('fields.data_type')</label>
-                            <select name="type" id="slcType" class="custom-select">
-                                <option disabled selected>@lang('tables.category.select_type')</option>
-                                @foreach ($types as $type)
-                                    <option value="{{ $type }}">@lang("tables.category.types.{$type}")</option>
+                            <label for="slcCategory">@lang('fields.category')</label>
+                            <select name="category_id" id="slcCategory" class="custom-select selectpicker">
+                                <option selected disabled>@lang('tables.category.select')</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="slcParentCategory">@lang('fields.parent_category')</label>
-                            <select name="parent_id" id="slcParentCategory" class="custom-select selectpicker">
-                                <option value="" selected>@lang('fields.none')</option>
-                                @foreach ($categories as $row)
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach
-                            </select>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inpName">@lang('fields.name')</label>
+                                    <input type="text" name="name" id="inpName" class="form-control slug-to-input"
+                                        data-slug="inpSlug">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inpSlug">@lang('fields.slug')</label>
+                                    <input type="text" name="slug" id="inpSlug" class="form-control slug-input">
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="inpKey">@lang('fields.key')</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-key"></i>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inpModel">@lang('fields.model')</label>
+                                    <input type="text" name="model" id="inpModel" class="form-control slug-input"
+                                        data-lower="off">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inpPrice">@lang('fields.price')</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₺</div>
+                                        </div>
+                                        <input type="number" name="price" id="inpPrice" class="form-control money-input"
+                                            min="0" step=".01">
                                     </div>
                                 </div>
-                                <input type="text" name="key" id="inpKey" class="form-control slug-input">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inpName">@lang('fields.name')</label>
-                            <input type="text" name="name" id="inpName" class="form-control slug-to-input" data-slug="inpSlug">
-                        </div>
-                        <div class="form-group">
-                            <label for="inpSlug">@lang('fields.slug')</label>
-                            <input type="text" name="slug" id="inpSlug" class="form-control slug-input">
-                        </div>
-                        <div class="form-group">
-                            <label>@lang('fields.content')</label>
-                            <textarea name="content" id="txtContent" class="form-control txt-editor" rows="3"></textarea>
+                            <label for="txtContent">@lang('fields.content')</label>
+                            <textarea name="content" id="txtContent" rows="3" class="form-control txt-editor"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="inpMetaTitle">@lang('fields.meta.title')</label>
@@ -78,7 +70,8 @@
                         </div>
                         <div class="form-group">
                             <label for="txtMetaDescription">@lang('fields.meta.description')</label>
-                            <textarea name="meta_description" id="txtMetaDescription" rows="3" class="form-control"></textarea>
+                            <textarea name="meta_description" id="txtMetaDescription" class="form-control"
+                                rows="3"></textarea>
                         </div>
                     </div>
                     <div class="card-footer text-right">
@@ -98,4 +91,5 @@
     <script src="/assets/admin/vendor/ckeditor/ckeditor.js"></script>
     <script src="/assets/admin/vendor/slugify/slugify.js"></script>
     <script src="/assets/admin/vendor/select2/js/select2.min.js"></script>
+    <script src="/assets/admin/vendor/cleave/cleave.min.js"></script>
 @endpush
