@@ -17,6 +17,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">@lang('fields.username')</th>
                                     <th scope="col">@lang('fields.email')</th>
+                                    <th scope="col">@lang('fields.staff')</th>
                                     <th scope="col">@lang('fields.actions')</th>
                                 </tr>
                             </thead>
@@ -26,6 +27,7 @@
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $user->username }}</td>
                                         <td>{{ $user->email }}</td>
+                                        <td>{{ $user->staff->full_name }}</td>
                                         <td>
                                             <div class="buttons">
                                                 <a href="{{ route('admin.user.edit', $user) }}"

@@ -27,4 +27,14 @@ class Staff extends Model
     {
         return $this->belongsTo(Dealer::class);
     }
+
+     /**
+     * User relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
