@@ -13,10 +13,11 @@
                 @else
                     @isset($nav['submenu'])
                         <li class="nav-item dropdown @if ($nav['active']===true) active @endif">
-                            <a href="{{ route($nav['route']) }}" class="nav-link has-dropdown">
+                            <a href="{{ isset($nav['route']) ? route($nav['route']) : '#' }}" class="nav-link has-dropdown">
                                 <i class="{{ $nav['icon'] }}"></i>
                                 <span>{{ $nav['title'] }}</span>
                             </a>
+
                             <ul class="dropdown-menu">
                                 @foreach ($nav['submenu'] as $subnav)
                                     <li @if ($subnav['active'] === true) class="active" @endif>

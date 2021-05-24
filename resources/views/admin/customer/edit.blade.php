@@ -10,7 +10,15 @@
                 <div class="card form">
                     <div class="card-header justify-content-between">
                         <h4>@lang('tables.customer.edit') [{{ $customer->id }}]</h4>
-                        <span class="badge customer-badge-{{$customer->type}} badge-sm">@lang("tables.customer.types.{$customer->type}")</span>
+
+                        <div class="ml-auto mr-3">
+                            <span class="badge customer-badge-{{$customer->type}} badge-sm">@lang("tables.customer.types.{$customer->type}")</span>
+                        </div>
+
+                        <div class="card-header-buttons">
+                            <a href="{{ route('admin.customers') }}" class="btn btn-primary"><i
+                                    class="fas fa-sm fa-list-ul"></i> @lang('tables.customer.title')</a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">

@@ -5,9 +5,14 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div class="card">
+            <div class="card list">
                 <div class="card-header">
                     <h4>@lang('tables.contract_type.title')</h4>
+
+                    <div class="card-header-buttons">
+                        <a href="{{ route('admin.contract.type.add') }}" class="btn btn-primary"><i
+                                class="fas fa-sm fa-plus"></i> @lang('tables.contract_type.add')</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

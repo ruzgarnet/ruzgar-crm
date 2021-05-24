@@ -10,6 +10,11 @@
                 <div class="card form">
                     <div class="card-header">
                         <h4>@lang('tables.user.edit') [{{ $user->id }}]</h4>
+
+                        <div class="card-header-buttons">
+                            <a href="{{ route('admin.users') }}" class="btn btn-primary"><i
+                                    class="fas fa-sm fa-list-ul"></i> @lang('tables.user.title')</a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

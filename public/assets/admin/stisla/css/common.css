@@ -2,6 +2,26 @@
     padding-bottom: 5px;
 }
 
+.form.card .card-header,
+.list.card .card-header {
+    justify-content: space-between;
+}
+
+.card-header-buttons {
+    margin: 0 -7.5px;
+}
+
+.card-header-buttons > * {
+    margin: 0 7.5px;
+}
+
+.fas.fa-sm,
+.far.fa-sm,
+.fab.fa-sm,
+.fal.fa-sm {
+    font-size: 0.875em;
+}
+
 [type="submit"]:disabled {
     cursor: wait;
 }

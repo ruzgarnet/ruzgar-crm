@@ -9,6 +9,11 @@
                 <div class="card form">
                     <div class="card-header">
                         <h4>@lang('tables.product.add')</h4>
+
+                        <div class="card-header-buttons">
+                            <a href="{{ route('admin.products') }}" class="btn btn-primary"><i
+                                    class="fas fa-sm fa-list-ul"></i> @lang('tables.product.title')</a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

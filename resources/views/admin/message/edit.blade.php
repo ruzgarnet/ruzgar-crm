@@ -10,6 +10,11 @@
                 <div class="card form">
                     <div class="card-header">
                         <h4>@lang('tables.message.edit') [{{ $message->id }}]</h4>
+
+                        <div class="card-header-buttons">
+                            <a href="{{ route('admin.messages') }}" class="btn btn-primary"><i
+                                    class="fas fa-sm fa-list-ul"></i> @lang('tables.message.title')</a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
