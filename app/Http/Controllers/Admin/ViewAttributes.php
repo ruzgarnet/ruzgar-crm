@@ -17,12 +17,6 @@ trait ViewAttributes
     public static function sideNav()
     {
         $data = [
-            // Header Fields
-            [
-                'header' =>  trans('titles.admin.dashboard')
-            ],
-            // Header Field End
-
             // Admin Fields
             [
                 'title' => trans('titles.admin.dashboard'),
@@ -31,164 +25,110 @@ trait ViewAttributes
             ],
             // Admin Field End
 
-            // Dealer Fields
+            // Product and Service Header
             [
-                'title' => trans('tables.dealer.title'),
-                'route' => 'admin.dealers',
-                'icon' => 'fas fa-store',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.dealers'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.dealer.add'
-                    ]
-                ]
+                'header' =>  trans('titles.customers_and_orders')
             ],
-            // Dealer Field End
-
-            // Staff Fields
-            [
-                'title' => trans('tables.staff.title'),
-                'route' => 'admin.staffs',
-                'icon' => 'fas fa-user-tie',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.staffs'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.staff.add'
-                    ]
-                ]
-            ],
-            // Staff Field End
-
-            // User Fields
-            [
-                'title' => trans('tables.user.title'),
-                'route' => 'admin.users',
-                'icon' => 'fas fa-user',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.users'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.user.add'
-                    ]
-                ]
-            ],
-            // User Field End
+            // Product and Service Header End
 
             // Customer Fields
             [
                 'title' => trans('tables.customer.title'),
                 'route' => 'admin.customers',
                 'icon' => 'fas fa-users',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.customers'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.customer.add'
-                    ]
+                'actions' => [
+                    'add' => 'admin.customer.add'
                 ]
             ],
             // Customer Field End
 
-            // Contract Type Fields
+            // Company Header
+            [
+                'header' =>  trans('titles.company.title')
+            ],
+            // Company Header End
+
+            // Company Fields
+            [
+                'title' => trans('tables.dealer.title'),
+                'route' => 'admin.dealers',
+                'icon' => 'fas fa-store',
+                'actions' => [
+                    'add' => 'admin.dealer.add'
+                ]
+            ],
+            [
+                'title' => trans('tables.staff.title'),
+                'route' => 'admin.staffs',
+                'icon' => 'fas fa-user-tie',
+                'actions' => [
+                    'add' => 'admin.staff.add'
+                ]
+            ],
+            [
+                'title' => trans('tables.user.title'),
+                'route' => 'admin.users',
+                'icon' => 'fas fa-user',
+                'actions' => [
+                    'add' => 'admin.user.add'
+                ]
+            ],
+            // Company Field End
+
+            // Product and Service Header
+            [
+                'header' =>  trans('titles.product_and_services')
+            ],
+            // Product and Service Header End
+
+            // Product Fields
             [
                 'title' => trans('tables.contract_type.title'),
                 'route' => 'admin.contract.types',
                 'icon' => 'fas fa-file-signature',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.contract.types'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.contract.type.add'
-                    ]
+                'actions' => [
+                    'add' => 'admin.contract.type.add'
                 ]
             ],
-            // Contract Type Field End
-
-            // Category Fields
             [
                 'title' => trans('tables.category.title'),
                 'route' => 'admin.categories',
-                'icon' => 'fas fa-box-open',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.categories'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.category.add'
-                    ]
+                'icon' => 'fas fa-archive',
+                'actions' => [
+                    'add' => 'admin.category.add'
                 ]
             ],
-            // Category Field End
-
-            // Product Fields
             [
                 'title' => trans('tables.product.title'),
                 'route' => 'admin.products',
-                'icon' => 'fas fa-shopping-cart',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.products'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.product.add'
-                    ]
+                'icon' => 'fas fa-boxes',
+                'actions' => [
+                    'add' => 'admin.product.add'
                 ]
             ],
-            // Product Field End
-
-            // Service Fields
             [
                 'title' => trans('tables.service.title'),
                 'route' => 'admin.services',
-                'icon' => 'fas fa-box',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.services'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.service.add'
-                    ]
+                'icon' => 'fas fa-ethernet',
+                'actions' => [
+                    'add' => 'admin.service.add'
                 ]
             ],
-            // Service Field End
+            // Product Fields End
+
+            // Product and Service Header
+            [
+                'header' =>  trans('titles.other')
+            ],
+            // Product and Service Header End
 
             // Message Fields
             [
                 'title' => trans('tables.message.title'),
                 'route' => 'admin.messages',
                 'icon' => 'fas fa-sms',
-                'submenu' => [
-                    [
-                        'title' => trans('titles.list'),
-                        'route' => 'admin.messages'
-                    ],
-                    [
-                        'title' => trans('titles.add'),
-                        'route' => 'admin.message.add'
-                    ]
+                'actions' => [
+                    'add' => 'admin.message.add'
                 ]
             ]
             // Message Field End
