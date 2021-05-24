@@ -107,7 +107,7 @@
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
-                                        <i class="fas fa-calendar"></i>
+                                        <i class="fas fa-birthday-cake"></i>
                                     </div>
                                 </div>
                                 <input type="text" name="birthday" id="inpBirthday" class="form-control date-mask">
@@ -122,6 +122,17 @@
                                     </div>
                                 </div>
                                 <textarea name="address" id="txtAddress" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inpStartedAt">@lang('fields.started_at')</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <input type="text" name="started_at" id="inpStartedAt" class="form-control date-mask">
                             </div>
                         </div>
                     </div>

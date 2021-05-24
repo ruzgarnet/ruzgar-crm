@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Mutator;
 use App\Models\Dealer;
 use App\Models\Staff;
 use App\Rules\TCNo;
@@ -90,6 +91,8 @@ class StaffController extends Controller
         $rules['secondary_telephone']['unique']    = Rule::unique('staff', 'secondary_telephone')->ignore($staff->id);
         $rules['identification_number']['unique']  = Rule::unique('staff', 'identification_number')->ignore($staff->id);
 
+        $rules['released_at']  = 'nullable|date';
+
         $validated = $request->validate($rules);
 
         if ($staff->update($validated)) {
@@ -126,7 +129,6 @@ class StaffController extends Controller
             'last_name' => 'required|max:63',
             'birthday' => 'required|date',
             'address' => 'required|max:255',
-
             'identification_number' => [
                 'required',
                 new TCNo,
@@ -146,7 +148,8 @@ class StaffController extends Controller
                 'required',
                 new Telephone,
                 'unique' => Rule::unique('staff', 'secondary_telephone')
-            ]
+            ],
+            'started_at' => 'required|date'
         ];
     }
 }

@@ -115,7 +115,7 @@
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
-                                        <i class="fas fa-calendar"></i>
+                                        <i class="fas fa-birthday-cake"></i>
                                     </div>
                                 </div>
                                 <input type="text" name="birthday" id="inpBirthday" class="form-control date-mask"
@@ -132,6 +132,30 @@
                                 </div>
                                 <textarea name="address" id="txtAddress"
                                     class="form-control">{{ $staff->address }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inpStartedAt">@lang('fields.started_at')</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <input type="text" name="started_at" id="inpStartedAt" class="form-control date-mask"
+                                    value="{{ convert_date($staff->started_at, 'mask') }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inpReleasedAt">@lang('fields.released_at')</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <input type="text" name="released_at" id="inpReleasedAt" class="form-control date-mask"
+                                    value="{{ $staff->released_at ? convert_date($staff->released_at, 'mask') : '' }}">
                             </div>
                         </div>
                     </div>
