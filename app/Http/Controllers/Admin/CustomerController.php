@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Mutator;
 use App\Models\City;
 use App\Models\Customer;
 use App\Rules\AvailableDistrict;
@@ -41,6 +42,19 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->input('telephone')) {
+            $request->merge([
+                'telephone' => Mutator::phone($request->input('telephone'))
+            ]);
+        }
+
+        if ($request->input('secondary_telephone')) {
+            $request->merge([
+                'secondary_telephone' => Mutator::phone($request->input('secondary_telephone'))
+            ]);
+        }
+
+
         $validated = $request->validate($this->rules());
 
         if (Customer::add_data($validated)) {
@@ -85,6 +99,18 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
+        if ($request->input('telephone')) {
+            $request->merge([
+                'telephone' => Mutator::phone($request->input('telephone'))
+            ]);
+        }
+
+        if ($request->input('secondary_telephone')) {
+            $request->merge([
+                'secondary_telephone' => Mutator::phone($request->input('secondary_telephone'))
+            ]);
+        }
+
         $rules = $this->rules();
 
         // Ignored uniques

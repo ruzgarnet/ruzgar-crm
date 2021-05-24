@@ -41,6 +41,18 @@ class StaffController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->input('telephone')) {
+            $request->merge([
+                'telephone' => Mutator::phone($request->input('telephone'))
+            ]);
+        }
+
+        if ($request->input('secondary_telephone')) {
+            $request->merge([
+                'secondary_telephone' => Mutator::phone($request->input('secondary_telephone'))
+            ]);
+        }
+
         $validated = $request->validate($this->rules());
 
         if (Staff::create($validated)) {
@@ -83,6 +95,18 @@ class StaffController extends Controller
      */
     public function update(Request $request, Staff $staff)
     {
+        if ($request->input('telephone')) {
+            $request->merge([
+                'telephone' => Mutator::phone($request->input('telephone'))
+            ]);
+        }
+
+        if ($request->input('secondary_telephone')) {
+            $request->merge([
+                'secondary_telephone' => Mutator::phone($request->input('secondary_telephone'))
+            ]);
+        }
+
         $rules = $this->rules();
 
         // Ignored uniques
