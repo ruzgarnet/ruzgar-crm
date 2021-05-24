@@ -166,7 +166,7 @@ return [
         'city_id' => 'İl',
         'district_id' => 'İlçe',
         'address' => 'Adres',
-        'started_at' => 'Başlangıç tarihi',
+        'started_at' => 'Başlama tarihi',
         'ended_at' => 'Bitiş tarihi',
         'released_at' => 'Çıkış tarihi',
         'telephone' => 'Telefon numarası',

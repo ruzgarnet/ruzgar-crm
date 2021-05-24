@@ -45,7 +45,7 @@ return [
     // Auth|User Attributes End
 
     // Date Attributes
-    'started_at' => 'Başlangıç Tarihi',
+    'started_at' => 'Başlama Tarihi',
     'ended_at' => 'Bitiş Tarihi',
     'released_at' => 'Çıkış Tarihi',
     // Date Attributes End

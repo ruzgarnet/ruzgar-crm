@@ -43,6 +43,18 @@ return [
     ],
     // Staff Fields End
 
+    // User Fields
+    'user' => [
+        'title' => 'Kullanıcılar',
+        'singular' => 'Kullanıcı',
+        'plural' => 'Kullanıcılar',
+        'add' => 'Kullanıcı Ekle',
+        'edit' => 'Kullanıcı Düzenle',
+        'delete' => 'Kullanıcı Sil',
+        'info' => 'Kullanıcı Bilgileri',
+    ],
+    // User Fields End
+
     // Customer Fields
     'customer' => [
         'title' => 'Müşteriler',
