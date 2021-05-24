@@ -67,6 +67,24 @@ trait ViewAttributes
             ],
             // Staff Field End
 
+            // User Fields
+            [
+                'title' => trans('tables.user.title'),
+                'route' => 'admin.users',
+                'icon' => 'fas fa-user',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.users'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.user.add'
+                    ]
+                ]
+            ],
+            // User Field End
+
             // Customer Fields
             [
                 'title' => trans('tables.customer.title'),

@@ -36,6 +36,7 @@ return [
     'content' => 'İçerik',
     'options' => 'Seçenekler',
     'data_type' => 'Kayıt Tipi',
+    'staff' => 'Personel',
     // Name Attributes End
 
     // Auth|User Attributes

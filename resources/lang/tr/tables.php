@@ -40,6 +40,7 @@ return [
         'edit' => 'Personel Düzenle',
         'delete' => 'Personel Sil',
         'info' => 'Personel Bilgileri',
+        'select' => 'Personel Seç',
     ],
     // Staff Fields End
 

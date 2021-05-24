@@ -198,6 +198,7 @@ return [
         'message' => 'Mesaj',
         'category_id' => 'Kategori',
         'model' => 'Model',
+        'staff_id' => 'Personel',
     ],
 
 ];

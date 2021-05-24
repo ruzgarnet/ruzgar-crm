@@ -40,6 +40,15 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::put('staff/edit/{staff}', [App\Http\Controllers\Admin\StaffController::class, 'update'])->name('staff.edit.put');
     // Staff Routes End
 
+    // User Routes
+    Route::get('users', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('users');
+    Route::get('user/add', [App\Http\Controllers\Admin\UserController::class, 'create'])->name('user.add');
+    Route::post('user/add', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('user.add.post');
+    Route::get('user/edit/{user}', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('user.edit');
+    Route::put('user/edit/{user}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('user.edit.put');
+    Route::delete('user/delete/{user}', [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('user.delete');
+    // User Routes End
+
     //  Customer Routes
     Route::get('customers', [App\Http\Controllers\Admin\CustomerController::class, 'index'])->name('customers');
     Route::get('customer/add', [App\Http\Controllers\Admin\CustomerController::class, 'create'])->name('customer.add');
