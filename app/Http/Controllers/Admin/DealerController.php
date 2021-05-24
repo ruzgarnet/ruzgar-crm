@@ -111,35 +111,6 @@ class DealerController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Dealer  $dealer
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy(Dealer $dealer)
-    {
-        $id = $dealer->id;
-        if ($dealer->delete()) {
-            return response()->json([
-                'toastr' => [
-                    'type' => 'success',
-                    'title' => trans('response.title.success'),
-                    'message' => trans('response.delete.success')
-                ],
-                'deleted' => $id
-            ]);
-        }
-
-        return response()->json([
-            'toastr' => [
-                'type' => 'error',
-                'title' => trans('response.title.error'),
-                'message' => trans('response.delete.error')
-            ]
-        ]);
-    }
-
-    /**
      * Rules for validation
      *
      * @return array

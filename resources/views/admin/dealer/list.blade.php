@@ -38,9 +38,6 @@
                                                     class="btn btn-primary" title="@lang('titles.edit')">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-danger delete-modal-btn" data-action="{{ relative_route('admin.dealer.delete', $dealer) }}" title="@lang('titles.delete')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -73,8 +70,4 @@
         })
 
     </script>
-@endpush
-
-@push('modal')
-    @include('admin.modals.delete')
 @endpush

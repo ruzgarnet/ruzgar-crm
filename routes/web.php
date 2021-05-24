@@ -30,7 +30,6 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::post('dealer/add', [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('dealer.add.post');
     Route::get('dealer/edit/{dealer}', [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('dealer.edit');
     Route::put('dealer/edit/{dealer}', [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('dealer.edit.put');
-    Route::delete('dealer/delete/{dealer}', [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('dealer.delete');
     // Dealer Routes End
 
     // Staff Routes
