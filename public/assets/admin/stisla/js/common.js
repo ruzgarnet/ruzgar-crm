@@ -302,8 +302,10 @@ function unMask(form) {
         form.find(".telephone-mask").each(function (index, el) {
             let val = form.find(el).val();
 
-            if (val.length === 14) {
-                val = val.replace(/(^0)*\D*/g, "");
+            if (val.length >= 10) {
+                val = val.replace(/\D/g, "");
+                val = val.replace(/[\+90|0]?([1-9][0-9]{9})/g, "$1");
+
                 form.find(el).val(val);
             } else {
                 form.find(el).val("");
