@@ -25,7 +25,7 @@ class CreateStaffTable extends Migration
             $table->string('secondary_telephone', 15)->nullable()->default(null);
             $table->date('birthday');
             $table->string('address', 255);
-            $table->date('started_at')->useCurrent();
+            $table->date('started_at');
             $table->date('released_at')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
