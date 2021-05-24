@@ -85,6 +85,24 @@ trait ViewAttributes
             ],
             // Customer Field End
 
+            // Contract Type Fields
+            [
+                'title' => trans('tables.contract_type.title'),
+                'route' => 'admin.contract.types',
+                'icon' => 'fas fa-file-signature',
+                'submenu' => [
+                    [
+                        'title' => trans('titles.list'),
+                        'route' => 'admin.contract.types'
+                    ],
+                    [
+                        'title' => trans('titles.add'),
+                        'route' => 'admin.contract.type.add'
+                    ]
+                ]
+            ],
+            // Contract Type Field End
+
             // Category Fields
             [
                 'title' => trans('tables.category.title'),
