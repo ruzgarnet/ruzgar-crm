@@ -67,7 +67,3 @@
 
     </script>
 @endpush
-
-@push('modal')
-    @include('admin.modals.delete')
-@endpush
