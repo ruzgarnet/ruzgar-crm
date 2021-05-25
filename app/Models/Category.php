@@ -17,6 +17,15 @@ class Category extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'options' => 'array'
+    ];
+
+    /**
      * Get categorytype id's
      * For titles use language files => tables.{table_name|model_name}.types.{type_id}
      * 1 => Product
