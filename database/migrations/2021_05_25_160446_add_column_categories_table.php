@@ -14,7 +14,9 @@ class AddColumnCategoriesTable extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->json('options')->nullable()->default(null);
+            $table->after('content', function ($table) {
+                $table->json('options')->nullable()->default(null);
+            });
         });
     }
 

@@ -14,7 +14,9 @@ class AddColumnServiceTable extends Migration
     public function up()
     {
         Schema::table('services', function (Blueprint $table) {
-            $table->unsignedTinyInteger('status')->default(1);
+            $table->after('content', function ($table) {
+                $table->unsignedTinyInteger('status')->default(1);
+            });
         });
     }
 
