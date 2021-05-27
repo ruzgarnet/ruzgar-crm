@@ -3,12 +3,12 @@
 namespace App\Models\Attributes;
 
 /**
- * price_print attribute
+ * select_print attribute
  */
 trait ProductSelectPrintAttribute
 {
     /**
-     * Return formatted price with currency for print
+     * Return formatted name and price with currency for print select option
      *
      * @return string
      */
