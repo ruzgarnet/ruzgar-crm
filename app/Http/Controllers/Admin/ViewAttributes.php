@@ -40,6 +40,14 @@ trait ViewAttributes
                     'add' => 'admin.customer.add'
                 ]
             ],
+            [
+                'title' => trans('tables.subscription.title'),
+                'route' => 'admin.subscriptions',
+                'icon' => 'fas fa-wifi',
+                'actions' => [
+                    'add' => 'admin.subscription.add'
+                ]
+            ],
             // Customer Field End
 
             // Company Header
