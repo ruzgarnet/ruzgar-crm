@@ -23,7 +23,8 @@ return [
     'actions' => [
         'delete' => 'Silme İşlemi',
         'approve' => [
-            'customer' => 'Müşteri Onayı'
+            'customer' => 'Müşteri Onayı',
+            'subscription' => 'Abonelik Onayı'
         ]
     ]
 ];

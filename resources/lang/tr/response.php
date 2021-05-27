@@ -5,7 +5,8 @@ return [
         'success' => 'Başarılı',
         'error' => 'Başarısız',
         'approve' => [
-            'customer' => 'Müşteri Onayı'
+            'customer' => 'Müşteri Onayı',
+            'subscripiton' => 'Abonelik Onayı'
         ]
     ],
 
@@ -28,6 +29,14 @@ return [
         'customer' => [
             'success' => 'Müşteri kaydı başarıyla onaylandı.',
             'error' => 'Müşteri kaydı onaylanırken hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
+        ],
+        'subscription' => [
+            'success' => 'Abonelik kaydı başarıyla onaylandı.',
+            'error' => 'Abonelik kaydı onaylanırken hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
         ]
-    ]
+    ],
+
+    'approved' => [
+        'subscription' => 'Onaylanmış aboneliği düzenleyemez veya silemezsiniz!'
+    ],
 ];

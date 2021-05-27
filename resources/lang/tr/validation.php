@@ -199,6 +199,17 @@ return [
         'category_id' => 'Kategori',
         'model' => 'Model',
         'staff_id' => 'Personel',
+        'service_id' => 'Hizmet',
+        'customer_id' => 'Müşteri',
+        'bbk_code' => 'BBK Kodu',
+        'commitment' => 'Taahhüt süresi',
+        'options' => [
+            'modem' => 'Modem',
+            'modem_serial' => 'Modem seri numarası',
+            'setup_payment' => 'Kurulum/Aktivasyon ücreti ödeme şekli',
+            'pre_payment' => 'Ön ödeme',
+            'campaing_payment' => 'Kampanya ücreti ödeme şekli'
+        ],
     ],
 
 ];

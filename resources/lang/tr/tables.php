@@ -68,7 +68,8 @@ return [
         'types' => [
             1 => 'Önkayıt',
             2 => 'Onaylanmış'
-        ]
+        ],
+        'select' => 'Müşteri Seç'
     ],
     // Customer Fields End
 
@@ -140,6 +141,19 @@ return [
         ]
     ],
     // Service Fields End
+
+    // Subscription Fields
+    'subscription' => [
+        'title' => 'Abonelikler',
+        'singular' => 'Abonelik',
+        'plural' => 'Abonelikler',
+        'add' => 'Abonelik Ekle',
+        'edit' => 'Abonelik Düzenle',
+        'delete' => 'Abonelik Sil',
+        'info' => 'Abonelik Bilgileri',
+        'select' => 'Abonelik Seçiniz',
+    ],
+    // Subscription Fields End
 
     // Message Fields
     'message' => [

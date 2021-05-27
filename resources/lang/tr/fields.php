@@ -37,6 +37,8 @@ return [
     'options' => 'Seçenekler',
     'data_type' => 'Kayıt Tipi',
     'staff' => 'Personel',
+    'service' => 'Hizmet',
+    'customer' => 'Müşteri',
     // Name Attributes End
 
     // Auth|User Attributes
@@ -49,6 +51,9 @@ return [
     'started_at' => 'Başlama Tarihi',
     'ended_at' => 'Bitiş Tarihi',
     'released_at' => 'Çıkış Tarihi',
+    'start_date' => 'Başlangıç Tarihi',
+    'end_date' => 'Bitiş Tarihi',
+    'approve_date' => 'Onay Tarihi',
     // Date Attributes End
 
     // Meta Attributes
@@ -74,4 +79,40 @@ return [
     'contract_type' => 'Sözleşme Tipi',
     'category_type' => 'Kategori Tipi',
     // Category|Product|Service Attributes
+
+    // Subscription Attributes
+    'bbk_code' => 'BBK Kodu',
+    'payment_type' => 'Ödeme Şekli',
+    'commitment_period' => 'Taahhüt Süresi',
+    'commitment' => 'Taahhüt',
+    'commitments' => [
+        0 => 'Taahhütsüz',
+        6 => '6 Ay',
+        12 => '12 Ay',
+        24 => '24 Ay',
+        27 => '27 Ay',
+    ],
+    "modem" => 'Modem',
+    'modem_serial' => 'Modem Seri Numarası',
+    "modems" => [
+        1 => "Yok",
+        2 => "ADSL",
+        3 => "VDSL",
+        4 => "Fiber"
+    ],
+    "setup_payment" => 'Kurulum/Aktivasyon Ücreti Ödeme Şekli',
+    "setup_payments" => [
+        1 => "Peşin",
+        2 => "İlk aya yansıt",
+        3 => "İlk iki aya yansıt",
+        4 => "İlk üç aya yansıt"
+    ],
+    "pre_payment" => "Ön ödemeli",
+    "campaing_payment" => 'Kampanya Ücreti Ödeme Şekli',
+    "campaing_payments" => [
+        1 => "Peşin",
+        2 => "İlk aya yansıt",
+        3 => "İlk iki aya yansıt",
+    ],
+    // Subscription Attributes
 ];
