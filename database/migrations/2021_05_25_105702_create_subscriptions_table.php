@@ -21,7 +21,7 @@ class CreateSubscriptionsTable extends Migration
             $table->unsignedTinyInteger('time');
             $table->date('start_date');
             $table->date('end_date');
-            $table->json('prices');
+            $table->unsignedDecimal('price');
             $table->json('options')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
