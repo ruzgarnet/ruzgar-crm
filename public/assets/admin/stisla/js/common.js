@@ -114,6 +114,12 @@ $(function () {
                         .text(approve.title);
 
                     row.find(".approve-modal-btn").remove();
+
+                    if (approve.deleteClasses) {
+                        approve.deleteClasses.forEach(function (value) {
+                            row.find("." + value).remove();
+                        });
+                    }
                 }
             },
         });
