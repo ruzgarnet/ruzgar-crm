@@ -110,10 +110,10 @@ class StaffController extends Controller
         $rules = $this->rules();
 
         // Ignored uniques
-        $rules['email']['unique']                  = Rule::unique('staff', 'email')->ignore($staff->id);
-        $rules['telephone']['unique']              = Rule::unique('staff', 'telephone')->ignore($staff->id);
-        $rules['secondary_telephone']['unique']    = Rule::unique('staff', 'secondary_telephone')->ignore($staff->id);
-        $rules['identification_number']['unique']  = Rule::unique('staff', 'identification_number')->ignore($staff->id);
+        $rules['email']['unique']                 = Rule::unique('staff', 'email')->ignore($staff->id);
+        $rules['telephone']['unique']             = Rule::unique('staff', 'telephone')->ignore($staff->id);
+        $rules['secondary_telephone']['unique']   = Rule::unique('staff', 'secondary_telephone')->ignore($staff->id);
+        $rules['identification_number']['unique'] = Rule::unique('staff', 'identification_number')->ignore($staff->id);
 
         $rules['released_at']  = 'nullable|date';
 

@@ -109,7 +109,7 @@ class ServiceController extends Controller
                 'toastr' => [
                     'type' => 'success',
                     'title' => trans('response.title.success'),
-                    'message' => trans('response.insert.success')
+                    'message' => trans('response.edit.success')
                 ],
                 'redirect' => relative_route('admin.services')
             ]);
@@ -120,7 +120,7 @@ class ServiceController extends Controller
             'toastr' => [
                 'type' => 'error',
                 'title' => trans('response.title.error'),
-                'message' => trans('response.insert.error')
+                'message' => trans('response.edit.error')
             ]
         ]);
     }

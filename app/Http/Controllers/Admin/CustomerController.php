@@ -114,10 +114,10 @@ class CustomerController extends Controller
         $rules = $this->rules();
 
         // Ignored uniques
-        $rules['email']['unique']                  = Rule::unique('customers', 'email')->ignore($customer->id);
-        $rules['telephone']['unique']              = Rule::unique('customers', 'telephone')->ignore($customer->id);
-        $rules['secondary_telephone']['unique']    = Rule::unique('customer_info', 'secondary_telephone')->ignore($customer->id);
-        $rules['identification_number']['unique']  = Rule::unique('customers', 'identification_number')->ignore($customer->id);
+        $rules['email']['unique']                 = Rule::unique('customers', 'email')->ignore($customer->id);
+        $rules['telephone']['unique']             = Rule::unique('customers', 'telephone')->ignore($customer->id);
+        $rules['secondary_telephone']['unique']   = Rule::unique('customer_info', 'secondary_telephone')->ignore($customer->id);
+        $rules['identification_number']['unique'] = Rule::unique('customers', 'identification_number')->ignore($customer->id);
 
         $validated = $request->validate($rules);
 
