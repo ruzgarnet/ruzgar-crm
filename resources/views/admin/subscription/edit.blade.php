@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <label for="slcService">@lang('fields.service')</label>
                             <select name="service_id" id="slcService" class="custom-select service-select selectpicker"
-                                v-model="service" v-selectpicker="service" v-on:change="setCategory()">
+                                v-model="service" v-selectpicker="service" v-on:change="changeService()">
                                 <option disabled value="0">@lang('tables.service.select')</option>
                                 @foreach ($services as $service)
                                     <option value="{{ $service->id }}" @if ($subscription->service_id === $service->id) selected @endif>
@@ -44,10 +44,26 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="inpBBKCode">@lang('fields.bbk_code')</label>
-                            <input type="text" name="bbk_code" id="inpBBKCode" class="form-control"
-                                value="{{ $subscription->bbk_code }}">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inpPrice">@lang('fields.price')</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₺</div>
+                                        </div>
+                                        <input type="number" v-model="price" name="price" id="inpPrice" class="form-control money-input"
+                                            min="0" step=".01">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inpBBKCode">@lang('fields.bbk_code')</label>
+                                    <input type="text" name="bbk_code" id="inpBBKCode" class="form-control"
+                                        value="{{ $subscription->bbk_code }}">
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-4">
@@ -187,6 +203,7 @@
         const app = new Vue({
             el: '#app',
             data: {
+                price: {{ $subscription->price }},
                 service: {{ $subscription->service_id }},
                 services: @json($service_props),
                 customer: {{ $subscription->customer_id }},
@@ -202,9 +219,10 @@
                 campaing_payment: {{ $subscription->options['campaing_payment'] ?? 0 }},
             },
             methods: {
-                setCategory: function() {
+                changeService: function() {
                     this.category = this.services[this.service].category;
                     this.options = this.fields[this.category];
+                    this.price = this.services[this.service].category;
 
                     if (this.hasOption('commitments')) {
                         this.duration = this.options.commitments[0].value;

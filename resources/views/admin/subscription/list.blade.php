@@ -43,7 +43,7 @@
                                             <div class="buttons">
                                                 @if ($subscription->approved_at === null)
                                                     <a href="{{ route('admin.subscription.edit', $subscription) }}"
-                                                        class="btn btn-primary" title="@lang('titles.edit')">
+                                                        class="btn btn-primary edit-row-btn" title="@lang('titles.edit')">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
 

@@ -9,7 +9,6 @@ use App\Models\Service;
 use App\Models\Subscription;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -47,7 +46,6 @@ class SubscriptionController extends Controller
         $validated = $request->validate($rules);
 
         $validated['staff_id'] = $request->user()->staff_id;
-        $validated['price'] = Service::find($request->input('service_id'))->price;
 
         if ($validated['commitment'] > 0) {
             $date = new DateTime($validated['start_date']);
@@ -201,8 +199,7 @@ class SubscriptionController extends Controller
                 ]);
             }
 
-            $subscription->approved_at = DB::raw('current_timestamp()');
-            if ($subscription->save()) {
+            if ($subscription->approve_sub()) {
                 return response()->json([
                     'success' => true,
                     'toastr' => [
@@ -215,7 +212,7 @@ class SubscriptionController extends Controller
                         'type' => 2,
                         'title' => trans('tables.subscription.types.2'),
                         'column' => 'subscription-type',
-                        'deleteClasses' => ['delete-modal-btn']
+                        'deleteClasses' => ['delete-modal-btn', 'edit-row-btn']
                     ]
                 ]);
             }
@@ -278,7 +275,7 @@ class SubscriptionController extends Controller
             ],
             'bbk_code' => 'required|string|max:255',
             'start_date' => 'required|date',
-            'price' => 'nullable|numeric'
+            'price' => 'required|numeric'
         ];
     }
 

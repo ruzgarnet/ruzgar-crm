@@ -6,7 +6,7 @@ return [
         'error' => 'Başarısız',
         'approve' => [
             'customer' => 'Müşteri Onayı',
-            'subscripiton' => 'Abonelik Onayı'
+            'subscription' => 'Abonelik Onayı'
         ]
     ],
 
