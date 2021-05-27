@@ -48,6 +48,10 @@ if (!function_exists('convert_date')) {
                 return $date->format('d/m/Y');
                 break;
 
+            case 'mask_time':
+                return $date->format('d/m/Y H:i');
+                break;
+
             default:
                 return $date->format('Y-m-d');
                 break;
