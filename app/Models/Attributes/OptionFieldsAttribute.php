@@ -15,11 +15,13 @@ trait OptionFieldsAttribute
     public function getOptionFieldsAttribute()
     {
         $data = [];
-        foreach ($this->options as $option => $values) {
-            if (is_array($values)) {
-                $data[$option] = $this->optionFields($option, $values);
-            } else {
-                $data[$option] = $values;
+        if (is_array($this->options)) {
+            foreach ($this->options as $option => $values) {
+                if (is_array($values)) {
+                    $data[$option] = $this->optionFields($option, $values);
+                } else {
+                    $data[$option] = $values;
+                }
             }
         }
         return $data;
