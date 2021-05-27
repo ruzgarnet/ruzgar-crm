@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Attributes\FullNameAttribute;
 use App\Models\Attributes\IdentificationSecretAttribute;
+use App\Models\Attributes\PersonSelectPrintAttribute;
 use App\Models\Attributes\PhoneAttribute;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,7 @@ use Illuminate\Support\Str;
 
 class Customer extends Model
 {
-    use HasFactory, IdentificationSecretAttribute, FullNameAttribute, PhoneAttribute;
+    use HasFactory, IdentificationSecretAttribute, FullNameAttribute, PhoneAttribute, PersonSelectPrintAttribute;
 
     /**
      * All fields fillable
