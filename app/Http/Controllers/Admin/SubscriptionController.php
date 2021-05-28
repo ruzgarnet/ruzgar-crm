@@ -322,12 +322,6 @@ class SubscriptionController extends Controller
                             'string',
                             'max:255'
                         ];
-                    } else {
-                        $optionRules['options.modem_serial'] = [
-                            'nullable',
-                            'string',
-                            'max:255'
-                        ];
                     }
                 } else if ($key === 'pre_payment') {
                     $optionRules['options.pre_payment'] = [
