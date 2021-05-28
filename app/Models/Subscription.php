@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Models\Attributes\PriceAttribute;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Subscription extends Model
 {
@@ -54,5 +56,37 @@ class Subscription extends Model
     public function service()
     {
         return $this->belongsTo(Service::class);
+    }
+
+    public function approve_sub()
+    {
+        DB::beginTransaction();
+
+        try {
+            $this->approved_at = DB::raw('current_timestamp()');
+
+            $data = [
+                "subscription_id" => $this->id,
+                "date" => date('Y-m-15', strtotime("+1 month")),
+                "price" => $this->price
+            ];
+            if (isset($this->options["pre_payment"]) && $this->options["pre_payment"] == 1) {
+                $data["date"] = date('Y-m-15');
+                $data["paid_at"] = DB::raw('current_timestamp()');
+                $data["type"] = 1;
+                $data["status"] = 2;
+            }
+
+            $this->save();
+            Payment::insert($data);
+
+            DB::commit();
+            $success = true;
+        } catch (Exception $e) {
+            DB::rollBack();
+            $success = false;
+        }
+
+        return $success;
     }
 }
