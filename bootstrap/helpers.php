@@ -74,3 +74,19 @@ if (!function_exists('setting')) {
         return Setting::getValue($key, $default);
     }
 }
+
+if (!function_exists('print_money')) {
+    /**
+     * Returns value's formatted money with currency
+     *
+     * @param string $price
+     * @return mixed
+     */
+    function print_money($price)
+    {
+        if (is_numeric($price)) {
+            return number_format($price, 2, ",", ".") . "₺";
+        }
+        return $price;
+    }
+}
