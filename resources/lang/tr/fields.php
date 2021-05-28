@@ -85,6 +85,7 @@ return [
     'payment_type' => 'Ödeme Şekli',
     'commitment_period' => 'Taahhüt Süresi',
     'commitment' => 'Taahhüt',
+    'commitless' => 'Taahhütsüz',
     'commitments' => [
         0 => 'Taahhütsüz',
         6 => '6 Ay',
@@ -96,11 +97,18 @@ return [
     'modem_serial' => 'Modem Seri Numarası',
     "modems" => [
         1 => "Yok",
-        2 => "ADSL",
-        3 => "VDSL",
+        2 => "ADSL (" . print_money(setting('service.modem.adsl')) . ")",
+        3 => "VDSL (" . print_money(setting('service.modem.vdsl')) . ")",
         4 => "Fiber"
     ],
-    "setup_payment" => 'Kurulum/Aktivasyon Ücreti Ödeme Şekli',
+    "modem_payment" => 'Modem Ücreti Ödeme Şekli',
+    "modem_payments" => [
+        1 => "Peşin",
+        2 => "İlk aya yansıt",
+        3 => "İlk iki aya yansıt",
+        4 => "İlk üç aya yansıt"
+    ],
+    "setup_payment" => 'Kurulum/Aktivasyon Ücreti (' . print_money(setting('service.setup.payment')) . ') Ödeme Şekli',
     "setup_payments" => [
         1 => "Peşin",
         2 => "İlk aya yansıt",
@@ -108,8 +116,8 @@ return [
         4 => "İlk üç aya yansıt"
     ],
     "pre_payment" => "Ön ödemeli",
-    "campaing_payment" => 'Kampanya Ücreti Ödeme Şekli',
-    "campaing_payments" => [
+    "summer_campaing_payment" => 'Yaz Kampanyası Ücreti (' . print_money(setting('service.summer.campaing.payment')) . ') Ödeme Şekli',
+    "summer_campaing_payments" => [
         1 => "Peşin",
         2 => "İlk aya yansıt",
         3 => "İlk iki aya yansıt",

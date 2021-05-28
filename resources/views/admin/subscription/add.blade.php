@@ -44,8 +44,8 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">₺</div>
                                         </div>
-                                        <input type="number" v-model="price" name="price" id="inpPrice" class="form-control money-input"
-                                            min="0" step=".01">
+                                        <input type="number" v-model="price" name="price" id="inpPrice"
+                                            class="form-control money-input" min="0" step=".01">
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6" v-if="hasOption('modems')">
+                            <div class="col-lg-4" v-if="hasOption('modems')">
                                 <div class="form-group">
                                     <label for="slcModem">@lang('fields.modem')</label>
                                     <select name="options[modem]" id="slcModem" class="custom-select" v-model="modem"
@@ -97,7 +97,18 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-6" v-if="hasOption('modem_serial') && (modem == 2 || modem == 3)">
+                            <div class="col-lg-4" v-if="hasOption('modem_payments') && (modem != 1)">
+                                <div class="form-group">
+                                    <label for="slcModemPayment">@lang('fields.modem_payment')</label>
+                                    <select name="options[modem_payment]" id="slcModemPayment" class="custom-select"
+                                        v-model="modem_payment" v-select="">
+                                        <option v-for="option in options.modem_payments" :value="option.value"
+                                            v-text="option.title">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" v-if="hasOption('modem_serial') && (modem == 2 || modem == 3)">
                                 <div class="form-group">
                                     <label for="inpModemSerial">@lang('fields.modem_serial')</label>
                                     <input type="text" name="options[modem_serial]" id="inpModemSerial"
@@ -127,12 +138,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6" v-if="hasOption('campaing_payments')">
+                            <div class="col-lg-6" v-if="hasOption('summer_campaing_payments')">
                                 <div class="form-group">
-                                    <label for="slcCampaingPayment">@lang('fields.campaing_payment')</label>
-                                    <select name="options[campaing_payment]" id="slcCampaingPayment" class="custom-select"
+                                    <label for="slcCampaingPayment">@lang('fields.summer_campaing_payment')</label>
+                                    <select name="options[summer_campaing_payment]" id="slcCampaingPayment" class="custom-select"
                                         v-select="">
-                                        <option v-for="option in options.campaing_payments" :value="option.value"
+                                        <option v-for="option in options.summer_campaing_payments" :value="option.value"
                                             v-text="option.title">
                                         </option>
                                     </select>
@@ -201,7 +212,8 @@
                 category: null,
                 startDate: '{{ convert_date(date('Y-m-d'), 'mask') }}',
                 duration: 0,
-                modem: 0
+                modem: 0,
+                modem_payment: 0
             },
             methods: {
                 changeService: function() {
@@ -215,6 +227,14 @@
 
                     if (this.hasOption('modems')) {
                         this.modem = this.options.modems[0].value;
+                    }
+
+                    if (this.hasOption('modem_payments')) {
+                        this.modem_payment = this.options.modem_payments[0].value;
+                    }
+
+                    if (this.hasOption('summer_campaing_payments')) {
+                        this.modem = this.options.summer_campaing_payments[0].value;
                     }
                 },
                 hasOption: function(key) {

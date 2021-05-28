@@ -37,7 +37,13 @@
                                         <td>{{ $subscription->price_print }}</td>
                                         <td>{{ $subscription->customer->full_name }}</td>
                                         <td>{{ convert_date($subscription->start_date, 'mask') }}</td>
-                                        <td>{{ convert_date($subscription->end_date, 'mask') }}</td>
+                                        <td>
+                                            @if ($subscription->end_date)
+                                            {{ convert_date($subscription->end_date, 'mask') }}
+                                            @else
+                                                <span class="badge badge-primary">@lang('fields.commitless')</span>
+                                            @endif
+                                        </td>
                                         <td>{{ convert_date($subscription->approved_at, 'mask_time') }}</td>
                                         <td>
                                             <div class="buttons">

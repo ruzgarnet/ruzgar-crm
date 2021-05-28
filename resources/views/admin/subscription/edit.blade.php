@@ -36,7 +36,7 @@
                         </div>
                         <div class="form-group">
                             <label for="slcCustomer">@lang('fields.customer')</label>
-                            <select name="customer_id" id="slcCustomer" class="custom-select selectpicker"
+                            <select name="customer_id" id="slcCustomer" class="custom-select selectpicker" v-select=""
                                 v-model="customer">
                                 <option disabled value="0">@lang('tables.customer.select')</option>
                                 @foreach ($customers as $customer)
@@ -52,8 +52,8 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">₺</div>
                                         </div>
-                                        <input type="number" v-model="price" name="price" id="inpPrice" class="form-control money-input"
-                                            min="0" step=".01">
+                                        <input type="number" v-model="price" name="price" id="inpPrice"
+                                            class="form-control money-input" min="0" step=".01">
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6" v-if="hasOption('modems')">
+                            <div class="col-lg-4" v-if="hasOption('modems')">
                                 <div class="form-group">
                                     <label for="slcModem">@lang('fields.modem')</label>
                                     <select name="options[modem]" id="slcModem" class="custom-select" v-model="modem"
@@ -105,7 +105,18 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-6" v-if="hasOption('modem_serial') && (modem == 2 || modem == 3)">
+                            <div class="col-lg-4" v-if="hasOption('modem_payments') && (modem != 1)">
+                                <div class="form-group">
+                                    <label for="slcModemPayment">@lang('fields.modem_payment')</label>
+                                    <select name="options[modem_payment]" id="slcModemPayment" class="custom-select"
+                                        v-model="modem_payment" v-select="">
+                                        <option v-for="option in options.modem_payments" :value="option.value"
+                                            v-text="option.title">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" v-if="hasOption('modem_serial') && (modem == 2 || modem == 3)">
                                 <div class="form-group">
                                     <label for="inpModemSerial">@lang('fields.modem_serial')</label>
                                     <input type="text" name="options[modem_serial]" id="inpModemSerial" class="form-control"
@@ -135,12 +146,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6" v-if="hasOption('campaing_payments')">
+                            <div class="col-lg-6" v-if="hasOption('summer_campaing_payments')">
                                 <div class="form-group">
-                                    <label for="slcCampaingPayment">@lang('fields.campaing_payment')</label>
-                                    <select name="options[campaing_payment]" id="slcCampaingPayment" class="custom-select"
-                                        v-model="campaing_payment" v-select="">
-                                        <option v-for="option in options.campaing_payments" :value="option.value"
+                                    <label for="slcCampaingPayment">@lang('fields.summer_campaing_payment')</label>
+                                    <select name="options[summer_campaing_payment]" id="slcCampaingPayment"
+                                        class="custom-select" v-model="summer_campaing_payment" v-select="">
+                                        <option v-for="option in options.summer_campaing_payments" :value="option.value"
                                             v-text="option.title">
                                         </option>
                                     </select>
@@ -216,7 +227,8 @@
                 setup_payment: {{ $subscription->options['setup_payment'] ?? 0 }},
                 modem_serial: '{{ $subscription->options['modem_serial'] ?? '' }}',
                 pre_payment: {{ $subscription->options['pre_payment'] ?? 0 }},
-                campaing_payment: {{ $subscription->options['campaing_payment'] ?? 0 }},
+                summer_campaing_payment: {{ $subscription->options['summer_campaing_payment'] ?? 0 }},
+                modem_payment: {{ $subscription->options['modem_payment'] ?? 0 }}
             },
             methods: {
                 changeService: function() {
@@ -230,6 +242,14 @@
 
                     if (this.hasOption('modems')) {
                         this.modem = this.options.modems[0].value;
+                    }
+
+                    if (this.hasOption('modem_payments')) {
+                        this.modem_payment = this.options.modem_payments[0].value;
+                    }
+
+                    if (this.hasOption('summer_campaing_payments')) {
+                        this.modem = this.options.summer_campaing_payments[0].value;
                     }
                 },
                 hasOption: function(key) {
@@ -254,6 +274,19 @@
                         return moment(end_date).format('DD/MM/YYYY');
                     }
                     return '';
+                }
+            },
+            mounted: function() {
+                let selects = document.querySelectorAll("select");
+                if (selects) {
+                    selects.forEach(function(select, index) {
+                        for (let option in select.options) {
+                            select.options.item(option).removeAttribute("selected");
+                        }
+                        select.options
+                            .item(select.selectedIndex)
+                            .setAttribute("selected", true);
+                    })
                 }
             }
         })
