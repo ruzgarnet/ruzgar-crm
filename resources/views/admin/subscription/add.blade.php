@@ -74,7 +74,7 @@
                                 <div class="form-group">
                                     <label for="inpStartDate">@lang('fields.start_date')</label>
                                     <input type="text" name="start_date" id="inpStartDate" class="form-control date-mask"
-                                        v-model="startDate" value="{{ convert_date(date('Y-m-d'), 'mask') }}">
+                                        v-model="startDate">
                                 </div>
                             </div>
                             <div class="col-lg-4">
