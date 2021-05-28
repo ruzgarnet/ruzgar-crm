@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Attributes\PriceAttribute;
+use App\Models\Mutators\SubscriptionPaymentMutator;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class Subscription extends Model
 {
-    use HasFactory, PriceAttribute;
+    use HasFactory, PriceAttribute, SubscriptionPaymentMutator;
 
     /**
      * All fields fillable
@@ -70,38 +71,18 @@ class Subscription extends Model
         try {
             $this->approved_at = DB::raw('current_timestamp()');
 
-            $data = [
-                'subscription_id' => $this->id,
-                'date' => date('Y-m-15', strtotime('+1 month')),
-                'price' => $this->price
-            ];
-
-            if (isset($this->options['pre_payment']) && $this->options['pre_payment'] == true) {
-                $data = [
-                    'subscription_id' => $this->id,
-                    'date' => date('Y-m-15'),
-                    'price' => $this->price,
-                    'paid_at' => DB::raw('current_timestamp()'),
-                    'type' => 1,
-                    'status' => 2
-                ];
-            }
+            $payments = $this->generatePayments();
 
             $this->save();
-            Payment::insert($data);
 
-            // NOTE Multiple insert not worked, because adding columns not same
-            if (isset($this->options['pre_payment']) && $this->options['pre_payment'] == true) {
-                Payment::insert([
-                    'subscription_id' => $this->id,
-                    'date' => date('Y-m-15', strtotime('+1 month')),
-                    'price' => $this->price
-                ]);
+            foreach ($payments as $payment) {
+                Payment::insert($payment);
             }
 
             DB::commit();
             $success = true;
         } catch (Exception $e) {
+            echo $e->getMessage();
             DB::rollBack();
             $success = false;
         }
