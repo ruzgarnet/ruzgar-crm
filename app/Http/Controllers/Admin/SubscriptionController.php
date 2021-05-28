@@ -51,6 +51,8 @@ class SubscriptionController extends Controller
             $date = new DateTime($validated['start_date']);
             $date->modify("+{$validated['commitment']} month");
             $validated['end_date'] = $date->format('Y-m-d');
+        } else {
+            $validated['end_date'] = null;
         }
 
         if (Subscription::create($validated)) {
@@ -113,6 +115,8 @@ class SubscriptionController extends Controller
             $date = new DateTime($validated['start_date']);
             $date->modify("+{$validated['commitment']} month");
             $validated['end_date'] = $date->format('Y-m-d');
+        } else {
+            $validated['end_date'] = null;
         }
 
         if ($subscription->update($validated)) {
@@ -216,6 +220,15 @@ class SubscriptionController extends Controller
                     ]
                 ]);
             }
+
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.approve.subscription'),
+                    'message' => trans('response.approve.subscription.error')
+                ]
+            ]);
         }
     }
 

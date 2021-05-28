@@ -58,6 +58,11 @@ class Subscription extends Model
         return $this->belongsTo(Service::class);
     }
 
+    /**
+     * Approve and add first payment(s)
+     *
+     * @return boolean
+     */
     public function approve_sub()
     {
         DB::beginTransaction();
@@ -66,19 +71,33 @@ class Subscription extends Model
             $this->approved_at = DB::raw('current_timestamp()');
 
             $data = [
-                "subscription_id" => $this->id,
-                "date" => date('Y-m-15', strtotime("+1 month")),
-                "price" => $this->price
+                'subscription_id' => $this->id,
+                'date' => date('Y-m-15', strtotime('+1 month')),
+                'price' => $this->price
             ];
-            if (isset($this->options["pre_payment"]) && $this->options["pre_payment"] == 1) {
-                $data["date"] = date('Y-m-15');
-                $data["paid_at"] = DB::raw('current_timestamp()');
-                $data["type"] = 1;
-                $data["status"] = 2;
+
+            if (isset($this->options['pre_payment']) && $this->options['pre_payment'] == true) {
+                $data = [
+                    'subscription_id' => $this->id,
+                    'date' => date('Y-m-15'),
+                    'price' => $this->price,
+                    'paid_at' => DB::raw('current_timestamp()'),
+                    'type' => 1,
+                    'status' => 2
+                ];
             }
 
             $this->save();
             Payment::insert($data);
+
+            // NOTE Multiple insert not worked, because adding columns not same
+            if (isset($this->options['pre_payment']) && $this->options['pre_payment'] == true) {
+                Payment::insert([
+                    'subscription_id' => $this->id,
+                    'date' => date('Y-m-15', strtotime('+1 month')),
+                    'price' => $this->price
+                ]);
+            }
 
             DB::commit();
             $success = true;
