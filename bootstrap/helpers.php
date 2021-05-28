@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Setting;
+
 if (!function_exists('relative_route')) {
     /**
      * Generate the relative path to a named route.
@@ -56,5 +58,19 @@ if (!function_exists('convert_date')) {
                 return $date->format('Y-m-d');
                 break;
         }
+    }
+}
+
+if (!function_exists('setting')) {
+    /**
+     * Get value of setting
+     *
+     * @param string $key
+     * @param mixed|null $default
+     * @return mixed
+     */
+    function setting(string $key, $default = null)
+    {
+        return Setting::getValue($key, $default);
     }
 }
