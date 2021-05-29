@@ -116,4 +116,19 @@ class Subscription extends Model
 
         return $rand;
     }
+
+    /**
+     * Get option if is exists by key
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getOption(string $key, $default = false)
+    {
+        if (is_string($key) && isset($this->options[$key]) && !empty($this->options[$key])) {
+            return $this->options[$key];
+        }
+        return $default;
+    }
 }

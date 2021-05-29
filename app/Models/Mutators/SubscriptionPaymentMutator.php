@@ -5,7 +5,7 @@ namespace App\Models\Mutators;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Generate payments datas for subscription model
+ * Generate payment datas for subscription model
  */
 trait SubscriptionPaymentMutator
 {
@@ -23,6 +23,7 @@ trait SubscriptionPaymentMutator
                 $data[] = $this->{$key}($value);
             }
         }
+
         $data = collect($data);
 
         $this->payment = $data->sum("payment");
@@ -36,11 +37,11 @@ trait SubscriptionPaymentMutator
             return count($item);
         })->max();
 
-        $data_append = 1;
+        $date_append = 1;
 
-        if (isset($this->options["pre_payment"]) && $this->options["pre_payment"] && $months < 2) {
+        if ($this->getOption('pre_payment') && $months < 2) {
             $months = 2;
-            $data_append = 0;
+            $date_append = 0;
         }
 
         $payments = [];
@@ -56,11 +57,11 @@ trait SubscriptionPaymentMutator
 
         foreach ($payments as $index => $value) {
             $payments[$index]["subscription_id"] = $this->id;
-            $payments[$index]["date"] = date('Y-m-15', strtotime("+{$data_append} month"));
-            $data_append++;
+            $payments[$index]["date"] = date('Y-m-15', strtotime("+{$date_append} month"));
+            $date_append++;
         }
 
-        if (isset($this->options["pre_payment"]) && $this->options["pre_payment"]) {
+        if ($this->getOption('pre_payment')) {
             $payments[0]['paid_at'] = DB::raw('current_timestamp()');
             $payments[0]['type'] = 1;
             $payments[0]['status'] = 2;
@@ -105,8 +106,9 @@ trait SubscriptionPaymentMutator
         // 2 => adsl
         // 3 => vdsl
         // 4 => fiber
+        // 5 => uydu modem
 
-        $type = (int)$this->options['modem'];
+        $type = (int)$this->getOption('modem');
 
         $typeVal = '';
         if ($type === 2) {
@@ -162,10 +164,8 @@ trait SubscriptionPaymentMutator
      */
     public function modem_price()
     {
-        if (isset($this->options["modem_price"]) && is_numeric($this->options["modem_price"])) {
-            return [
-                'price' => (float)$this->options["modem_price"]
-            ];
-        }
+        return [
+            'price' => (float)$this->getOption('modem_price', 0)
+        ];
     }
 }
