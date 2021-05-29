@@ -39,7 +39,7 @@
                                         <td>{{ convert_date($subscription->start_date, 'mask') }}</td>
                                         <td>
                                             @if ($subscription->end_date)
-                                            {{ convert_date($subscription->end_date, 'mask') }}
+                                                {{ convert_date($subscription->end_date, 'mask') }}
                                             @else
                                                 <span class="badge badge-primary">@lang('fields.commitless')</span>
                                             @endif
@@ -47,12 +47,12 @@
                                         <td>{{ convert_date($subscription->approved_at, 'mask_time') }}</td>
                                         <td>
                                             <div class="buttons">
-                                                @if ($subscription->approved_at === null)
-                                                    <a href="{{ route('admin.subscription.edit', $subscription) }}"
-                                                        class="btn btn-primary edit-row-btn" title="@lang('titles.edit')">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
+                                                <a href="{{ route('admin.subscription.edit', $subscription) }}"
+                                                    class="btn btn-primary edit-row-btn" title="@lang('titles.edit')">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
 
+                                                @if ($subscription->approved_at === null)
                                                     <button type="button" class="btn btn-danger delete-modal-btn"
                                                         data-action="{{ relative_route('admin.subscription.delete', $subscription) }}"
                                                         title="@lang('titles.delete')">
@@ -66,6 +66,12 @@
                                                         <i class="fas fa-check"></i>
                                                     </button>
                                                 @endif
+
+                                                <button type="button" class="btn btn-danger approve-modal-btn"
+                                                    data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
+                                                    data-modal="#approveSubscriptionModal">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

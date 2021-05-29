@@ -233,6 +233,32 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Approve subscription
+     *
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unApprove(Subscription $subscription)
+    {
+        $subscription->approved_at = null;
+        if ($subscription->save()) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.approve.subscription'),
+                    'message' => trans('response.approve.subscription.success')
+                ],
+                'approve' => [
+                    'type' => 2,
+                    'title' => trans('tables.subscription.types.2'),
+                    'column' => 'subscription-type'
+                ]
+            ]);
+        }
+    }
+
+    /**
      * Data for view
      *
      * @return array
@@ -306,17 +332,8 @@ class SubscriptionController extends Controller
             $options = $service->category->options;
 
             foreach ($options as $key => $value) {
-                if (is_array($value)) {
-                    $option = (string)Str::of($key)->singular();
-                    if ($option !== 'commitment') {
-                        $option = "options.{$option}";
-                    }
-                    $optionRules[$option] = [
-                        'required',
-                        Rule::in($value)
-                    ];
-                } else if ($key === 'modem_serial') {
-                    if (request()->input('options.modem') && in_array(request()->input('options.modem'), [2, 3])) {
+                if ($key === 'modem_serial') {
+                    if (request()->input('options.modem') && in_array(request()->input('options.modem'), [2, 3, 5])) {
                         $optionRules['options.modem_serial'] = [
                             'required',
                             'string',
@@ -328,6 +345,30 @@ class SubscriptionController extends Controller
                         'nullable',
                         'boolean'
                     ];
+                } else if ($key == 'modem_price' && request()->input("options.modem") == 5) {
+                    $optionRules["options.modem_price"] = [
+                        'required',
+                        'numeric'
+                    ];
+                } else if (is_array($value)) {
+                    $option = (string)Str::of($key)->singular();
+                    if ($option !== 'commitment') {
+                        $option = "options.{$option}";
+                    }
+
+                    if ($key == 'modem_payments') {
+                        if (!in_array(request()->input("options.modem"), [1, 5])) {
+                            $optionRules[$option] = [
+                                'required',
+                                Rule::in($value)
+                            ];
+                        }
+                    } else {
+                        $optionRules[$option] = [
+                            'required',
+                            Rule::in($value)
+                        ];
+                    }
                 }
             }
         }

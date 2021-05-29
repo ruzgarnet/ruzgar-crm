@@ -97,7 +97,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4" v-if="hasOption('modem_payments') && (modem != 1)">
+                            <div class="col-lg-4" v-if="hasOption('modem_payments') && (modem != 1 && modem != 5)">
                                 <div class="form-group">
                                     <label for="slcModemPayment">@lang('fields.modem_payment')</label>
                                     <select name="options[modem_payment]" id="slcModemPayment" class="custom-select"
@@ -108,7 +108,14 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4" v-if="hasOption('modem_serial') && (modem == 2 || modem == 3)">
+                            <div class="col-lg-4" v-if="hasOption('modem_price') && modem == 5">
+                                <div class="form-group">
+                                    <label for="inpModemPrice">@lang('fields.modem_price')</label>
+                                    <input type="number" name="options[modem_price]" v-model="modem_price" id="inpModemPrice" step="0.01"
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-4" v-if="hasOption('modem_serial') && (modem == 2 || modem == 3 || modem == 5)">
                                 <div class="form-group">
                                     <label for="inpModemSerial">@lang('fields.modem_serial')</label>
                                     <input type="text" name="options[modem_serial]" id="inpModemSerial"
@@ -141,8 +148,8 @@
                             <div class="col-lg-6" v-if="hasOption('summer_campaing_payments')">
                                 <div class="form-group">
                                     <label for="slcCampaingPayment">@lang('fields.summer_campaing_payment')</label>
-                                    <select name="options[summer_campaing_payment]" id="slcCampaingPayment" class="custom-select"
-                                        v-select="">
+                                    <select name="options[summer_campaing_payment]" id="slcCampaingPayment"
+                                        class="custom-select" v-select="">
                                         <option v-for="option in options.summer_campaing_payments" :value="option.value"
                                             v-text="option.title">
                                         </option>
@@ -204,6 +211,7 @@
         const app = new Vue({
             el: '#app',
             data: {
+                modem_price: 12.99,
                 price: null,
                 service: 0,
                 services: @json($service_props),
@@ -244,6 +252,13 @@
                         }
                     }
                     return false;
+                }
+            },
+            watch: {
+                modem: function() {
+                    if (this.hasOption('modem_payments')) {
+                        this.modem_payment = this.options.modem_payments[0].value;
+                    }
                 }
             },
             computed: {

@@ -23,63 +23,50 @@ trait SubscriptionPaymentMutator
                 $data[] = $this->{$key}($value);
             }
         }
-
         $data = collect($data);
-        $month = $data->max('month');
 
-        $variables = $data->map(function ($item) {
-            $row = [];
-            if (isset($item['monthly'])) {
-                if ($item['monthly'] === true) {
-                    for ($i = 0; $i < $item['month']; $i++) {
-                        $row[$i]['price'] = $item['payment'] / $item['month'];
-                    }
-                } else if ($item['month'] === 0) {
-                    $row['payment'] = $item['payment'];
-                }
-            } else if (isset($item['pre_payment'])) {
-                $row[0]['paid_at'] = DB::raw('current_timestamp()');
-                $row[0]['type'] = 1;
-                $row[0]['status'] = 2;
+        $this->payment = $data->sum("payment");
+        $this->price += $data->sum("price");
 
-                $row[1]['status'] = 1;
-            }
-            return $row;
-        });
+        $payment_variables = $data->filter(function ($value) {
+            return in_array("payments", array_keys($value));
+        })->pluck("payments");
 
-        $this->payment = $this->payment + $variables->sum('payment');
+        $months = $payment_variables->map(function ($item) {
+            return count($item);
+        })->max();
 
-        $months = [];
-        for ($i = 0; $i < $month; $i++) {
-            $months[$i]['price'] = (float)$this->price;
+        $data_append = 1;
+
+        if (isset($this->options["pre_payment"]) && $this->options["pre_payment"] && $months < 2) {
+            $months = 2;
+            $data_append = 0;
         }
 
-        foreach ($variables as $item) {
-            foreach ($item as $index => $value) {
-                if ($index !== 'payment') {
-                    if (isset($value['price'])) {
-                        $months[$index]['price'] = (isset($months[$index]['price']) ? $months[$index]['price'] : 0) + $value['price'];
-                        unset($value['price']);
-                    }
-                    if (is_array($value) && count($value)) {
-                        $months[$index] = array_merge($months[$index], $value);
-                    }
-                    $months[$index]['subscription_id'] = $this->id;
-                }
+        $payments = [];
+        for ($i = 0; $i < $months; $i++) {
+            $payments[$i]["price"] = (float)$this->price;
+        }
+
+        foreach ($payment_variables->toArray() as $values) {
+            foreach ($values as $index => $value) {
+                $payments[$index]["price"] += (float)$value;
             }
         }
 
-        $dateAppend = 1;
-        if (isset($this->options['pre_payment']) && $this->options['pre_payment'] == true) {
-            $dateAppend = 0;
+        foreach ($payments as $index => $value) {
+            $payments[$index]["subscription_id"] = $this->id;
+            $payments[$index]["date"] = date('Y-m-15', strtotime("+{$data_append} month"));
+            $data_append++;
         }
 
-        foreach ($months as $index => $value) {
-            $months[$index]['date'] = date('Y-m-15', strtotime('+' . $dateAppend . ' month'));
-            $dateAppend++;
+        if (isset($this->options["pre_payment"]) && $this->options["pre_payment"]) {
+            $payments[0]['paid_at'] = DB::raw('current_timestamp()');
+            $payments[0]['type'] = 1;
+            $payments[0]['status'] = 2;
         }
 
-        return $months;
+        return $payments;
     }
 
     /**
@@ -90,22 +77,19 @@ trait SubscriptionPaymentMutator
      */
     public function setup_payment($value)
     {
-        return [
-            'payment' => (int)setting('service.setup.payment'),
-            'monthly' => ($value - 1) > 0 ? true : false,
-            'month' => $value - 1
-        ];
-    }
+        $payment = (float)setting('service.setup.payment');
 
-    /**
-     * Pre Payment Variables
-     *
-     * @return array
-     */
-    public function pre_payment()
-    {
+        if ($value == 1) {
+            return ['payment' => $payment];
+        }
+
+        $data = [];
+        for ($i = 0; $i < $value - 1; $i++) {
+            $data[] = $payment / ($value - 1);
+        }
+
         return [
-            'pre_payment' => true
+            'payments' => $data
         ];
     }
 
@@ -131,12 +115,19 @@ trait SubscriptionPaymentMutator
             $typeVal = 'vdsl';
         }
 
-        $payment = (int)setting("service.modem.{$typeVal}");
+        $payment = (float)setting("service.modem.{$typeVal}");
+
+        if ($value == 1) {
+            return ['payment' => $payment];
+        }
+
+        $data = [];
+        for ($i = 0; $i < $value - 1; $i++) {
+            $data[] = $payment / ($value - 1);
+        }
 
         return [
-            'payment' => $payment,
-            'monthly' => ($value - 1) > 0 ? true : false,
-            'month' => $value - 1
+            'payments' => $data
         ];
     }
 
@@ -148,10 +139,33 @@ trait SubscriptionPaymentMutator
      */
     public function summer_campaing_payment($value)
     {
+        $payment = (float)setting('service.summer.campaing.payment');
+
+        if ($value == 1) {
+            return ['payment' => $payment];
+        }
+
+        $data = [];
+        for ($i = 0; $i < $value - 1; $i++) {
+            $data[] = $payment / ($value - 1);
+        }
+
         return [
-            'payment' => (int)setting('service.setup.payment'),
-            'monthly' => ($value - 1) > 0 ? true : false,
-            'month' => $value - 1
+            'payments' => $data
         ];
+    }
+
+    /**
+     * Modem Price Variables
+     *
+     * @return array
+     */
+    public function modem_price()
+    {
+        if (isset($this->options["modem_price"]) && is_numeric($this->options["modem_price"])) {
+            return [
+                'price' => (float)$this->options["modem_price"]
+            ];
+        }
     }
 }

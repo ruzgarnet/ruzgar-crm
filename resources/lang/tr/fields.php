@@ -99,8 +99,10 @@ return [
         1 => "Yok",
         2 => "ADSL (" . print_money(setting('service.modem.adsl')) . ")",
         3 => "VDSL (" . print_money(setting('service.modem.vdsl')) . ")",
-        4 => "Fiber"
+        4 => "Fiber",
+        5 => "Uydu Modem"
     ],
+    'modem_price' => "Modem Kira Ücreti",
     "modem_payment" => 'Modem Ücreti Ödeme Şekli',
     "modem_payments" => [
         1 => "Peşin",

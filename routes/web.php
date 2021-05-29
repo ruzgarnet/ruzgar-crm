@@ -107,6 +107,7 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::put('subscription/edit/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'update'])->name('subscription.edit.put');
     Route::delete('subscription/delete/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'destroy'])->name('subscription.delete');
     Route::put('subscription/approve/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'approve'])->name('subscription.approve.post');
+    Route::put('subscription/unapprove/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'unApprove'])->name('subscription.unapprove.post');
     // Subscription Routes End
 });
 

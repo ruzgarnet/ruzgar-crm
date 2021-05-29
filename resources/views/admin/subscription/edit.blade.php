@@ -105,7 +105,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4" v-if="hasOption('modem_payments') && (modem != 1)">
+                            <div class="col-lg-4" v-if="hasOption('modem_payments') && (modem != 1 && modem != 5)">
                                 <div class="form-group">
                                     <label for="slcModemPayment">@lang('fields.modem_payment')</label>
                                     <select name="options[modem_payment]" id="slcModemPayment" class="custom-select"
@@ -116,7 +116,14 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4" v-if="hasOption('modem_serial') && (modem == 2 || modem == 3)">
+                            <div class="col-lg-4" v-if="hasOption('modem_price') && modem == 5">
+                                <div class="form-group">
+                                    <label for="inpModemPrice">@lang('fields.modem_price')</label>
+                                    <input type="number" name="options[modem_price]" v-model="modem_price" id="inpModemPrice" step="0.01"
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-4" v-if="hasOption('modem_serial') && (modem == 2 || modem == 3 || modem == 5)">
                                 <div class="form-group">
                                     <label for="inpModemSerial">@lang('fields.modem_serial')</label>
                                     <input type="text" name="options[modem_serial]" id="inpModemSerial" class="form-control"
@@ -214,6 +221,7 @@
         const app = new Vue({
             el: '#app',
             data: {
+                modem_price: {{ $subscription->options['modem_price'] ?? 12.99 }},
                 price: {{ $subscription->price }},
                 service: {{ $subscription->service_id }},
                 services: @json($service_props),
@@ -259,6 +267,13 @@
                         }
                     }
                     return false;
+                }
+            },
+            watch: {
+                modem: function() {
+                    if (this.hasOption('modem_payments')) {
+                        this.modem_payment = this.options.modem_payments[0].value;
+                    }
                 }
             },
             computed: {
