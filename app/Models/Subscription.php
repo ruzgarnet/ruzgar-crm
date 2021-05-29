@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class Subscription extends Model
 {
@@ -70,6 +71,7 @@ class Subscription extends Model
 
         try {
             $this->approved_at = DB::raw('current_timestamp()');
+            $this->subscription_no = $this->generateSubscriptionNo();
 
             $payments = $this->generatePayments();
 
@@ -88,5 +90,30 @@ class Subscription extends Model
         }
 
         return $success;
+    }
+
+    /**
+     * Generate subscription number
+     *
+     * @return string
+     */
+    private static function generateSubscriptionNo()
+    {
+        // Control for unique
+        $pass = false;
+        $rand = '';
+        $rule = ['rand' => 'unique:subscriptions,subscription_no'];
+        do {
+            $rand = rand(1000, 9999) . rand(1000, 9999) . rand(100, 999);
+            $input = ['rand' => $rand];
+            $validator = Validator::make($input, $rule);
+            if (!$validator->fails()) {
+                $pass = true;
+            } else {
+                $pass = false;
+            }
+        } while ($pass !== true);
+
+        return $rand;
     }
 }
