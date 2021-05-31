@@ -2,6 +2,7 @@
 
 namespace App\Models\Mutators;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -39,8 +40,10 @@ trait SubscriptionPaymentMutator
 
         $date_append = 1;
 
-        if ($this->getOption('pre_payment') && $months < 2) {
-            $months = 2;
+        if ($this->getOption('pre_payment')) {
+            if ($months < 2) {
+                $months = 2;
+            }
             $date_append = 0;
         }
 
@@ -57,7 +60,7 @@ trait SubscriptionPaymentMutator
 
         foreach ($payments as $index => $value) {
             $payments[$index]["subscription_id"] = $this->id;
-            $payments[$index]["date"] = date('Y-m-15', strtotime("+{$date_append} month"));
+            $payments[$index]["date"] = Carbon::now()->startOfMonth()->addMonth($date_append)->format('Y-m-15');
             $date_append++;
         }
 
