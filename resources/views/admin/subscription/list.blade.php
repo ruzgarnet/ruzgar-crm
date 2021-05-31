@@ -20,9 +20,9 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col">@lang('fields.customer')</th>
                                     <th scope="col">@lang('fields.service')</th>
                                     <th scope="col">@lang('fields.price')</th>
-                                    <th scope="col">@lang('fields.customer')</th>
                                     <th scope="col">@lang('fields.start_date')</th>
                                     <th scope="col">@lang('fields.end_date')</th>
                                     <th scope="col">@lang('fields.approve_date')</th>
@@ -34,9 +34,9 @@
                                     <tr data-id="{{ $subscription->id }}"
                                         class="{{ $subscription->approved_at === null ? 'un-approved-row' : 'approved-row' }}">
                                         <th scope="row">{{ $loop->iteration }}</th>
+                                        <td>{{ $subscription->customer->full_name }}</td>
                                         <td>{{ $subscription->service->name }}</td>
                                         <td>{{ $subscription->price_print }}</td>
-                                        <td>{{ $subscription->customer->full_name }}</td>
                                         <td>{{ convert_date($subscription->start_date, 'mask') }}</td>
                                         <td>
                                             @if ($subscription->end_date)
