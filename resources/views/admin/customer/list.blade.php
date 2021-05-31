@@ -30,7 +30,8 @@
                             </thead>
                             <tbody>
                                 @foreach ($customers as $customer)
-                                    <tr data-id="{{ $customer->id }}">
+                                    <tr data-id="{{ $customer->id }}"
+                                        class="{{ $customer->type === 1 ? 'un-approved-row' : 'approved-row' }}">
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $customer->identification_secret }}</td>
                                         <td>
@@ -39,7 +40,8 @@
                                             </span>
                                         </td>
                                         <td>{{ $customer->full_name }}</td>
-                                        <td data-filter="0{{ $customer->telephone }}">{{ $customer->telephone_print }}</td>
+                                        <td data-filter="0{{ $customer->telephone }}">{{ $customer->telephone_print }}
+                                        </td>
                                         <td>{{ $customer->info->city->name }}</td>
                                         <td>
                                             <div class="buttons">
@@ -49,7 +51,7 @@
                                                 </a>
 
                                                 @if ($customer->type === 1)
-                                                    <button type="button" class="btn btn-success approve-modal-btn"
+                                                    <button type="button" class="btn btn-success un-approved-element approve-modal-btn"
                                                         data-action="{{ route('admin.customer.approve.post', $customer) }}"
                                                         data-modal="#approveCustomerModal" title="@lang('titles.approve')">
                                                         <i class="fas fa-check"></i>

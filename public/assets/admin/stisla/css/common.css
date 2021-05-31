@@ -35,11 +35,11 @@ input[type="checkbox"]:not(:disabled) + label,
     cursor: pointer;
 }
 
-table .buttons a {
+table .buttons > * {
     margin: 0 -5px;
 }
 
-table .buttons a {
+table .buttons > * {
     margin: 0 5px;
 }
 
@@ -74,4 +74,17 @@ textarea.form-control:not(.form-control-sm):not(.form-control-lg) {
 
 .money-input {
     text-align: right;
+}
+
+.table tbody th,
+.table tbody td {
+    vertical-align: middle;
+}
+
+table .approved-row .un-approved-element {
+    display: none;
+}
+
+table .un-approved-row .approved-element {
+    display: none;
 }

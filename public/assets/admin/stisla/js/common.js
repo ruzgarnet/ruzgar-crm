@@ -105,21 +105,25 @@ $(function () {
 
                     let row = $("tr[data-id='" + approve.id + "']");
 
-                    row.find("." + approve.column)
-                        .removeClass()
-                        .addClass([
-                            approve.column,
-                            approve.column + "-" + approve.type,
-                        ])
-                        .text(approve.title);
-
-                    row.find(".approve-modal-btn").remove();
-
-                    if (approve.deleteClasses) {
-                        approve.deleteClasses.forEach(function (value) {
-                            row.find("." + value).remove();
-                        });
+                    if (approve.column) {
+                        row.find("." + approve.column)
+                            .removeClass()
+                            .addClass([
+                                approve.column,
+                                approve.column + "-" + approve.type,
+                            ])
+                            .text(approve.title);
                     }
+
+                    if (approve.unapprove) {
+                        row.removeClass("approved-row");
+                        row.addClass("un-approved-row");
+                    } else {
+                        row.removeClass("un-approved-row");
+                        row.addClass("approved-row");
+                    }
+
+                    form.find("[type='submit']").prop("disabled", false);
                 }
             },
         });
