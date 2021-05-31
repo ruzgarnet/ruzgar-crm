@@ -5,5 +5,8 @@ return [
     'approve' => [
         'customer' => 'Müşterinin kaydını onaylamak istediğinize emin misiniz?',
         'subscription' => 'Abonelik kaydını onaylamak istediğinize emin misiniz?'
-    ]
+    ],
+    'unapproved' => [
+        'subscription' => 'Onaylanmamış abonelikte ödeme işlemleri yapamazsınız!'
+    ],
 ];

@@ -88,3 +88,7 @@ table .approved-row .un-approved-element {
 table .un-approved-row .approved-element {
     display: none;
 }
+
+#paymentForm .payment-types {
+    display: none;
+}

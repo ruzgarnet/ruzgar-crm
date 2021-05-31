@@ -5,6 +5,10 @@ return [
     'send' => 'Gönder',
     'actions' => 'İşlemler',
     'none' => 'Yok',
+    'details' => 'Detaylar',
+    'options' => 'Seçenekler',
+    'option' => 'Seçenek',
+    'define' => 'Tanımla',
     // Global Attributes End
 
     // Identity Attributes
@@ -54,6 +58,9 @@ return [
     'start_date' => 'Başlangıç Tarihi',
     'end_date' => 'Bitiş Tarihi',
     'approve_date' => 'Onay Tarihi',
+    'date' => 'Tarih',
+    'paid_date' => 'Ödeme Tarihi',
+    'subscription_date' => 'Abonelik Tarihi',
     // Date Attributes End
 
     // Meta Attributes
@@ -124,5 +131,20 @@ return [
         2 => "İlk aya yansıt",
         3 => "İlk iki aya yansıt",
     ],
+    'subscriber' => 'Abone',
+    'subscription_no' => 'Abonelik Numarası',
+    'payment_status' => 'Ödeme Durumu',
+    'payment_type' => 'Ödeme Şekli',
+    'advance_paymented_price' => 'Peşin Ödenen Tutar',
     // Subscription Attributes
+
+    // Credit Card Attributes
+    'card' => [
+        'number' => 'Kart Numarası',
+        'name_surname' => 'Kartın Üzerindeki Ad Soyad',
+        'expire_date' => 'Kartın Son Kullanma Tarihi',
+        'security_code' => 'CVV Güvenlik Kodu',
+        'auto_payment' => 'Otomatik Ödeme',
+    ],
+    // Credit Card Attributes End
 ];

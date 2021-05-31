@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Attributes\ApprovedAtAttribute;
+use App\Models\Attributes\OptionValuesAttribute;
+use App\Models\Attributes\PaymentAttribute;
 use App\Models\Attributes\PriceAttribute;
 use App\Models\Mutators\SubscriptionPaymentMutator;
 use Exception;
@@ -12,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class Subscription extends Model
 {
-    use HasFactory, PriceAttribute, SubscriptionPaymentMutator;
+    use HasFactory, PriceAttribute, PaymentAttribute, ApprovedAtAttribute, OptionValuesAttribute, SubscriptionPaymentMutator;
 
     /**
      * All fields fillable
@@ -61,6 +64,16 @@ class Subscription extends Model
     }
 
     /**
+     * Payment relationship with ordered query
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class)->orderByDesc('date');
+    }
+
+    /**
      * Approve and add first payment(s)
      *
      * @return boolean
@@ -84,9 +97,33 @@ class Subscription extends Model
             DB::commit();
             $success = true;
         } catch (Exception $e) {
-            echo $e->getMessage();
             DB::rollBack();
             $success = false;
+        }
+
+        return $success;
+    }
+
+    /**
+     * Unapprove and delete payments
+     *
+     * @return boolean
+     */
+    public function unapprove_sub()
+    {
+        DB::beginTransaction();
+
+        try {
+            $this->approved_at = null;
+            $this->save();
+
+            Payment::where('subscription_id', $this->id)->delete();
+
+            DB::commit();
+            $success = true;
+        } catch (Exception $e) {
+            $success = false;
+            DB::rollBack();
         }
 
         return $success;

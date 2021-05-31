@@ -210,6 +210,13 @@ return [
             'pre_payment' => 'Ön ödeme',
             'campaing_payment' => 'Kampanya ücreti ödeme şekli'
         ],
+        'card' => [
+            'number' => 'Kart numarası',
+            'name_surname' => 'Ad soyad',
+            'expire_date' => 'Son kullanma tarihi',
+            'security_code' => 'CVV  kodu',
+            'auto_payment' => 'Otomatik ödeme',
+        ],
     ],
 
 ];

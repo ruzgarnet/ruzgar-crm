@@ -155,6 +155,31 @@ return [
     ],
     // Subscription Fields End
 
+    // Payment Fields
+    'payment' => [
+        'title' => 'Ödemeler',
+        'singular' => 'Ödeme',
+        'plural' => 'Ödemeler',
+        'add' => 'Ödeme Ekle',
+        'edit' => 'Ödeme Düzenle',
+        'delete' => 'Ödeme Sil',
+        'info' => 'Ödeme Bilgileri',
+        'select' => 'Ödeme Seçiniz',
+        'status' => [
+            1 => 'Sisteme Tanımlandı',
+            2 => 'Ödeme Başarıyla Alındı',
+            3 => 'Ödeme Alınırken Hata Oluştu'
+        ],
+        'select_type' => 'Ödeme Tipini Seçiniz',
+        'types' => [
+            1 => 'Nakit',
+            2 => 'Havale/EFT',
+            3 => 'Kredi/Banka Kartı (Online)',
+            4 => 'Otomatik Ödeme'
+        ]
+    ],
+    // Payment Fields End
+
     // Message Fields
     'message' => [
         'title' => 'Mesajlar',

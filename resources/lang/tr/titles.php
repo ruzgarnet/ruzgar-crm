@@ -19,6 +19,16 @@ return [
     'delete' => 'Sil',
     'cancel' => 'İptal',
     'approve' => 'Onayla',
+    'get_payment' => 'Ödemeyi Al',
+
+    'yes' => 'Evet',
+    'no' => 'Hayır',
+
+    'accessibility' => [
+        'collapse' => [
+            'subscription_info' => 'Abonelik Bilgilerini Göster/Gizle'
+        ]
+    ],
 
     'actions' => [
         'delete' => 'Silme İşlemi',

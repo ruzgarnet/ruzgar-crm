@@ -204,6 +204,30 @@ $(function () {
     });
 
     /**
+     * Open delete modal and change form action
+     */
+    $(document).on("click", ".get-payment-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            price = button.data("price");
+
+        $("#paymentForm").prop("action", action);
+        $("#paymentModal").modal("show");
+        $("#inpPrice").val(price);
+    });
+
+    /**
+     * Open delete modal and change form action
+     */
+    $(document).on("input", "#paymentForm #slcType", function () {
+        let form = $("#paymentForm"),
+            val = $(this).val();
+
+        form.find(".payment-types").hide();
+        form.find(".payment-type-" + val).show();
+    });
+
+    /**
      * Change selected option for fix cloned selects
      */
     const selects = document.querySelectorAll("select");
@@ -360,6 +384,16 @@ if (identifications && typeof Cleave !== "undefined") {
         new Cleave(el, {
             blocks: [11],
             numericOnly: true,
+        });
+    });
+}
+
+let expire = document.querySelectorAll(".expire-date-mask");
+if (expire && typeof Cleave !== "undefined") {
+    expire.forEach(function (el) {
+        new Cleave(el, {
+            date: true,
+            datePattern: ["m", "y"],
         });
     });
 }

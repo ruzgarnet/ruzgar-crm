@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Payment;
 use App\Models\Service;
 use App\Models\Subscription;
 use DateTime;
@@ -250,6 +251,21 @@ class SubscriptionController extends Controller
                 ]
             ]);
         }
+    }
+
+    /**
+     * Show subscription payments
+     *
+     * @param Subscription $subscription
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function payments(Subscription $subscription)
+    {
+        $data = [
+            'paymentTypes' => Payment::getTypes(),
+            'subscription' => $subscription
+        ];
+        return view('admin.subscription.payment', $data);
     }
 
     /**

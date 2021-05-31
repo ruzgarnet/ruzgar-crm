@@ -72,7 +72,7 @@
 
                                                 <a href="{{ route('admin.subscription.payments', $subscription) }}"
                                                     class="btn btn-primary approved-element"
-                                                    title="@lang('titles.payments')">
+                                                    title="@lang('tables.payment.title')">
                                                     <i class="fas fa-file-invoice"></i>
                                                 </a>
 
