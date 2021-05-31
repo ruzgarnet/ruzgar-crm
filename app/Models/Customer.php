@@ -25,6 +25,16 @@ class Customer extends Model
     protected $guarded = [];
 
     /**
+     * Customer info relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function info()
+    {
+        return $this->hasOne(CustomerInfo::class);
+    }
+
+    /**
      * Add customer's main and info data
      *
      * @param array $data
@@ -160,15 +170,5 @@ class Customer extends Model
         } while ($pass !== true);
 
         return $rand;
-    }
-
-    /**
-     * Customer info relationship
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function info()
-    {
-        return $this->hasOne(CustomerInfo::class);
     }
 }
