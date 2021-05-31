@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Setting;
+use Illuminate\Support\Carbon;
 
 if (!function_exists('relative_route')) {
     /**
@@ -35,15 +36,20 @@ if (!function_exists('convert_date')) {
      * Date converts
      *
      * @param string $date
-     * @param mixed $type mysql | mask
+     * @param mixed|null $type mysql | mysql_time | mask | mask_time | medium | large
      * @return string
      */
-    function convert_date($date, $type = 'mysql')
+    function convert_date($date, $type = null)
     {
-        $date = new DateTime($date);
+        $date = Carbon::parse($date);
+
         switch ($type) {
             case 'mysql':
                 return $date->format('Y-m-d');
+                break;
+
+            case 'mysql_time':
+                return $date->format('Y-m-d H:i');
                 break;
 
             case 'mask':
@@ -54,8 +60,16 @@ if (!function_exists('convert_date')) {
                 return $date->format('d/m/Y H:i');
                 break;
 
+            case 'medium':
+                return $date->translatedFormat('j F Y');
+                break;
+
+            case 'large':
+                return $date->translatedFormat('j F Y, l H:i');
+                break;
+
             default:
-                return $date->format('Y-m-d');
+                return $date->format('Y-m-d H:i');
                 break;
         }
     }
