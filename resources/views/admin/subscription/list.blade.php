@@ -31,7 +31,8 @@
                             </thead>
                             <tbody>
                                 @foreach ($subscriptions as $subscription)
-                                    <tr data-id="{{ $subscription->id }}">
+                                    <tr data-id="{{ $subscription->id }}"
+                                        class="{{ $subscription->approved_at === null ? 'un-approved-row' : 'approved-row' }}">
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $subscription->service->name }}</td>
                                         <td>{{ $subscription->price_print }}</td>
@@ -47,27 +48,36 @@
                                         <td>{{ convert_date($subscription->approved_at, 'mask_time') }}</td>
                                         <td>
                                             <div class="buttons">
+                                                {{-- FIXME prepare for production --}}
                                                 <a href="{{ route('admin.subscription.edit', $subscription) }}"
-                                                    class="btn btn-primary edit-row-btn" title="@lang('titles.edit')">
+                                                    class="btn btn-primary un-approved-element"
+                                                    title="@lang('titles.edit')">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
 
-                                                @if ($subscription->approved_at === null)
-                                                    <button type="button" class="btn btn-danger delete-modal-btn"
-                                                        data-action="{{ relative_route('admin.subscription.delete', $subscription) }}"
-                                                        title="@lang('titles.delete')">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                <button type="button"
+                                                    class="btn btn-danger un-approved-element delete-modal-btn"
+                                                    data-action="{{ relative_route('admin.subscription.delete', $subscription) }}"
+                                                    title="@lang('titles.delete')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
 
-                                                    <button type="button" class="btn btn-success approve-modal-btn"
-                                                        data-action="{{ relative_route('admin.subscription.approve.post', $subscription) }}"
-                                                        data-modal="#approveSubscriptionModal"
-                                                        title="@lang('titles.approve')">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
-                                                @endif
+                                                <button type="button"
+                                                    class="btn btn-success approve-modal-btn un-approved-element"
+                                                    data-action="{{ relative_route('admin.subscription.approve.post', $subscription) }}"
+                                                    data-modal="#approveSubscriptionModal" title="@lang('titles.approve')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
 
-                                                <button type="button" class="btn btn-danger approve-modal-btn"
+
+                                                <a href="{{ route('admin.subscription.payments', $subscription) }}"
+                                                    class="btn btn-primary approved-element"
+                                                    title="@lang('titles.payments')">
+                                                    <i class="fas fa-file-invoice"></i>
+                                                </a>
+
+                                                <button type="button"
+                                                    class="btn btn-danger approve-modal-btn approved-element"
                                                     data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
                                                     data-modal="#approveSubscriptionModal">
                                                     <i class="fas fa-check"></i>

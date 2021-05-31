@@ -212,11 +212,7 @@ class SubscriptionController extends Controller
                         'message' => trans('response.approve.subscription.success')
                     ],
                     'approve' => [
-                        'id' => $subscription->id,
-                        'type' => 2,
-                        'title' => trans('tables.subscription.types.2'),
-                        'column' => 'subscription-type',
-                        'deleteClasses' => ['delete-modal-btn', 'edit-row-btn']
+                        'id' => $subscription->id
                     ]
                 ]);
             }
@@ -240,8 +236,7 @@ class SubscriptionController extends Controller
      */
     public function unApprove(Subscription $subscription)
     {
-        $subscription->approved_at = null;
-        if ($subscription->save()) {
+        if ($subscription->unapprove_sub()) {
             return response()->json([
                 'success' => true,
                 'toastr' => [
@@ -250,9 +245,8 @@ class SubscriptionController extends Controller
                     'message' => trans('response.approve.subscription.success')
                 ],
                 'approve' => [
-                    'type' => 2,
-                    'title' => trans('tables.subscription.types.2'),
-                    'column' => 'subscription-type'
+                    'id' => $subscription->id,
+                    'unapprove' => true
                 ]
             ]);
         }
