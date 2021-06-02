@@ -125,6 +125,25 @@ $(function () {
 
                     form.find("[type='submit']").prop("disabled", false);
                 }
+
+                if (result.payment) {
+                    let payment = result.payment;
+
+                    if (payment.frame) {
+                        $("body").append(
+                            `<div id="paymentFrameModal">
+                                <div class="frame-body">
+                                    <iframe src="${payment.frame}">
+                                </div>
+                            </div>`
+                        );
+                        $("body").append(
+                            `<div class="payment-frame-backdrop"></div>`
+                        );
+                    }
+
+                    form.find("[type='submit']").prop("disabled", false);
+                }
             },
         });
     });
@@ -339,6 +358,20 @@ function unMask(form) {
             if (val.length >= 10) {
                 val = val.replace(/\D/g, "");
                 val = val.replace(/[\+90|0]?([1-9][0-9]{9})/g, "$1");
+
+                form.find(el).val(val);
+            } else {
+                form.find(el).val("");
+            }
+        });
+    }
+
+    if (form.find(".credit-card-mask").length > 0) {
+        form.find(".credit-card-mask").each(function (index, el) {
+            let val = form.find(el).val();
+
+            if (val.length >= 16) {
+                val = val.replace(/\D/g, "");
 
                 form.find(el).val(val);
             } else {

@@ -92,3 +92,44 @@ table .un-approved-row .approved-element {
 #paymentForm .payment-types {
     display: none;
 }
+
+#paymentFrameModal {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1090;
+}
+
+#paymentFrameModal .frame-body {
+    min-width: 300px;
+    max-width: 550px;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+#paymentFrameModal .frame-body iframe {
+    width: 100%;
+    height: 450px;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.payment-frame-backdrop {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1089;
+}
