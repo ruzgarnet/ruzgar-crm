@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Classes\Generator;
 use App\Models\Attributes\FullNameAttribute;
 use App\Models\Attributes\IdentificationSecretAttribute;
 use App\Models\Attributes\PersonSelectPrintAttribute;
@@ -10,12 +11,14 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class Customer extends Model
 {
-    use HasFactory, IdentificationSecretAttribute, FullNameAttribute, PhoneAttribute, PersonSelectPrintAttribute;
+    use HasFactory,
+        IdentificationSecretAttribute,
+        FullNameAttribute,
+        PhoneAttribute,
+        PersonSelectPrintAttribute;
 
     /**
      * All fields fillable
@@ -48,8 +51,8 @@ class Customer extends Model
             'last_name' => $data['last_name'],
             'telephone' => $data['telephone'],
             'email' => $data['email'],
-            'customer_no' => self::generateCustomerNo(),
-            'reference_code' => self::generateReferenceCode()
+            'customer_no' => Generator::customerNo(),
+            'reference_code' => Generator::referenceCode()
         ];
 
         $info = [
@@ -120,55 +123,5 @@ class Customer extends Model
         }
 
         return $success;
-    }
-
-    /**
-     * Generate customer number
-     *
-     * @return string
-     */
-    private static function generateCustomerNo()
-    {
-        // Control for unique
-        $pass = false;
-        $rand = '';
-        $rule = ['rand' => 'unique:customers,customer_no'];
-        do {
-            $rand = rand(1000, 9999) . rand(1000, 9999) . rand(100, 999);
-            $input = ['rand' => $rand];
-            $validator = Validator::make($input, $rule);
-            if (!$validator->fails()) {
-                $pass = true;
-            } else {
-                $pass = false;
-            }
-        } while ($pass !== true);
-
-        return $rand;
-    }
-
-    /**
-     * Generate reference code
-     *
-     * @return string
-     */
-    private static function generateReferenceCode()
-    {
-        // Control for unique
-        $pass = false;
-        $rand = '';
-        $rule = ['rand' => 'unique:customers,reference_code'];
-        do {
-            $rand = 'R-' . (string)Str::of(Str::random(6))->upper();
-            $input = ['rand' => $rand];
-            $validator = Validator::make($input, $rule);
-            if (!$validator->fails()) {
-                $pass = true;
-            } else {
-                $pass = false;
-            }
-        } while ($pass !== true);
-
-        return $rand;
     }
 }
