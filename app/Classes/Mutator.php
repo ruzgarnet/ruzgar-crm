@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Classes;
 
 /**
  * For mutating requests before validate
  */
-class Mutator extends Controller
+class Mutator
 {
     /**
      * Mutate telephone numbers to clean type
@@ -21,5 +21,24 @@ class Mutator extends Controller
         }
 
         return $str;
+    }
+
+    /**
+     * Mutate expire date
+     *
+     * @param string $str
+     * @return array
+     */
+    public static function expire_date($str)
+    {
+        $data = explode("/", $str);
+
+        if ($data[0] < 10 && strlen($str) == 1)
+            $data[0] = '0' . $data[0];
+
+        if (strlen($data[1]) == 2)
+            $data[1] = '20' . $data[1];
+
+        return $data;
     }
 }
