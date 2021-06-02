@@ -22,6 +22,7 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
 
     // Main Routes
     Route::get('/', [App\Http\Controllers\Admin\MainController::class, 'index'])->name('dashboard');
+    Route::get('search', [App\Http\Controllers\Admin\MainController::class, 'search'])->name('search');
     // Main Routes End
 
     // Dealer Routes

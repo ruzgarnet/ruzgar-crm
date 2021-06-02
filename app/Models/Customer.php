@@ -7,6 +7,7 @@ use App\Models\Attributes\FullNameAttribute;
 use App\Models\Attributes\IdentificationSecretAttribute;
 use App\Models\Attributes\PersonSelectPrintAttribute;
 use App\Models\Attributes\PhoneAttribute;
+use App\Models\Helpers\FieldHelper;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,8 @@ class Customer extends Model
         IdentificationSecretAttribute,
         FullNameAttribute,
         PhoneAttribute,
-        PersonSelectPrintAttribute;
+        PersonSelectPrintAttribute,
+        FieldHelper;
 
     /**
      * All fields fillable

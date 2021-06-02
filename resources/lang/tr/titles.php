@@ -36,5 +36,12 @@ return [
             'customer' => 'Müşteri Onayı',
             'subscription' => 'Abonelik Onayı'
         ]
-    ]
+    ],
+
+    'search' => [
+        'title' => "Ara",
+        'no_result' => "Aranan müşteri bulunamadı.",
+        'placeholder' => "Buradan müşteri arayabilirsiniz.",
+        'loading' => 'Arama yapılıyor'
+    ],
 ];

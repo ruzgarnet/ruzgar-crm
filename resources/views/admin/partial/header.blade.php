@@ -6,46 +6,39 @@
                         class="fas fa-search"></i></a></li>
         </ul>
         <div class="search-element">
-            <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250">
+            <input class="form-control" name="q" id="inpSearch" type="search" placeholder="Ara" aria-label="Ara"
+                data-width="250">
             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
             <div class="search-backdrop"></div>
             <div class="search-result">
-                <div class="search-header">
-                    Result
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        oPhone S9 Limited Edition
-                    </a>
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        Drone X2 New Gen-7
-                    </a>
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        Headphone Blitz
-                    </a>
-                </div>
-                <div class="search-header">
-                    Projects
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        <div class="search-icon bg-danger text-white mr-3">
-                            <i class="fas fa-code"></i>
+                <div id="searchFields" class="placeholder">
+                    <div class="results">
+                        <div class="search-header">
+                            @lang('tables.customer.title')
                         </div>
-                        Stisla Admin Template
-                    </a>
-                </div>
-                <div class="search-item">
-                    <a href="#">
-                        <div class="search-icon bg-primary text-white mr-3">
-                            <i class="fas fa-laptop"></i>
+                        <div id="searchCustomer"></div>
+                    </div>
+                    <div class="empty">
+                        <div class="search-message">
+                            <div class="search-icon bg-primary text-white mr-2">
+                                <i class="fas fa-exclamation"></i>
+                            </div>
+                            @lang('titles.search.no_result')
                         </div>
-                        Create a new Homepage Design
-                    </a>
+                    </div>
+                    <div class="placeholder">
+                        <div class="search-message">
+                            @lang('titles.search.placeholder')
+                        </div>
+                    </div>
+                    <div class="loading">
+                        <div class="search-message">
+                            <div class="mr-2 text-primary search-loading-icon">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                            </div>
+                            @lang('titles.search.loading')
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -181,7 +174,9 @@
         <li class="dropdown"><a href="#" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <img alt="image" src="/assets/images/ruzgar-logo-white.png" class="rounded-circle mr-1">
-                <div class="d-sm-none d-lg-inline-block">{{ isset(request()->user()->staff) ? request()->user()->staff->full_name : request()->user()->username }}</div>
+                <div class="d-sm-none d-lg-inline-block">
+                    {{ isset(request()->user()->staff) ? request()->user()->staff->full_name : request()->user()->username }}
+                </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-title">Logged in 5 min ago</div>

@@ -327,6 +327,54 @@ $(function () {
                 .setAttribute("selected", true);
         });
     }
+
+    let search_timeout;
+
+    $(document).on("input", "#inpSearch", function () {
+        let input = $(this),
+            val = input.val(),
+            customers = $("#searchCustomer"),
+            fields = $("#searchFields");
+
+        customers.html("");
+        fields.removeClass("results loading empty placeholder");
+
+        clearTimeout(search_timeout);
+
+        if (val.length > 0) {
+            fields.addClass("loading");
+            search_timeout = setTimeout(function () {
+                $.ajax("/admin/search", {
+                    type: "GET",
+                    data: {
+                        q: val,
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.length > 0) {
+                            result.forEach(function (row) {
+                                customers.append(`
+                                    <div class="search-item">
+                                        <a href="${row.link}">
+                                            ${row.title}
+                                        </a>
+                                    </div>
+                                `);
+                            });
+                            fields.addClass("results");
+                        } else {
+                            fields.addClass("empty");
+                        }
+                    },
+                    complete: function () {
+                        fields.removeClass("loading");
+                    },
+                });
+            }, 350);
+        } else {
+            fields.addClass("placeholder");
+        }
+    });
 });
 
 /**

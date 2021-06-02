@@ -133,3 +133,35 @@ table .un-approved-row .approved-element {
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1089;
 }
+
+.search-result .search-message {
+    display: flex;
+    padding: 13px 18px;
+    color: #6777ef;
+    font-weight: 600;
+    align-items: center;
+    justify-content: left;
+}
+
+.search-result .search-message .search-icon {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.search-result .search-message .search-loading-icon i {
+    font-size: 25px;
+}
+
+#searchFields > * {
+    display: none;
+}
+
+#searchFields.results > .results,
+#searchFields.loading > .loading,
+#searchFields.empty > .empty,
+#searchFields.placeholder > .placeholder {
+    display: block;
+}
