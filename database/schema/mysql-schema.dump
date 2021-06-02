@@ -4,40 +4,46 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `ruzgarnet` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `ruzgarnet`;
 DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `contract_type_id` bigint(20) unsigned NOT NULL,
-  `type` tinyint(3) unsigned NOT NULL,
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `parent_id` bigint(20) unsigned DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(3) unsigned NOT NULL DEFAULT 1,
-  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `contract_type_id` bigint unsigned NOT NULL,
+  `type` tinyint unsigned NOT NULL,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent_id` bigint unsigned DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` json DEFAULT NULL,
+  `status` tinyint unsigned NOT NULL DEFAULT '1',
+  `meta_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `categories_slug_unique` (`slug`),
   UNIQUE KEY `categories_key_unique` (`key`),
   KEY `categories_contract_type_id_foreign` (`contract_type_id`),
   CONSTRAINT `categories_contract_type_id_foreign` FOREIGN KEY (`contract_type_id`) REFERENCES `contract_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES (1,1,2,'ruzgarnet',NULL,'RüzgarNET','ruzgarnet','<p>ruzgarnet</p>','{\"modems\": [1, 2, 3, 4], \"commitments\": [0, 6, 12, 24, 27], \"pre_payment\": true, \"modem_serial\": true, \"modem_payments\": [1, 2, 3, 4], \"setup_payments\": [1, 2, 3, 4], \"summer_campaing_payments\": [1, 2, 3]}',1,NULL,NULL,NULL,'2021-05-25 07:52:43','2021-05-28 13:46:33'),(2,2,2,'ruzgaryaz',NULL,'RüzgarYaz','ruzgaryaz','<p>ruzgaryaz</p>','{\"modems\": [1, 2], \"commitments\": [6], \"modem_serial\": true, \"modem_payments\": [1, 2, 3, 4], \"summer_campaing_payments\": [1, 2, 3]}',1,NULL,NULL,NULL,'2021-05-25 09:25:25','2021-05-28 10:15:53');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 DROP TABLE IF EXISTS `cities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cities` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(31) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -47,36 +53,37 @@ INSERT INTO `cities` VALUES (1,'Adana'),(2,'Adıyaman'),(3,'Afyonkarahisar'),(4,
 /*!40000 ALTER TABLE `cities` ENABLE KEYS */;
 DROP TABLE IF EXISTS `contract_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contract_types` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `view` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`options`)),
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `view` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` json DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `contract_types_key_unique` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `contract_types` DISABLE KEYS */;
+INSERT INTO `contract_types` VALUES (1,'ruzgarnet','RüzgarNET','ruzgarnet',NULL,'2021-05-25 07:51:49','2021-05-25 07:51:49'),(2,'ruzgaryaz','RüzgarYAZ','ruzgaryaz',NULL,'2021-05-25 09:24:47','2021-05-25 09:24:47');
 /*!40000 ALTER TABLE `contract_types` ENABLE KEYS */;
 DROP TABLE IF EXISTS `customer_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer_info` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `customer_id` bigint(20) unsigned NOT NULL,
-  `secondary_telephone` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gender` tinyint(3) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `customer_id` bigint unsigned NOT NULL,
+  `secondary_telephone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` tinyint unsigned NOT NULL,
   `birthday` date NOT NULL,
-  `city_id` bigint(20) unsigned NOT NULL,
-  `district_id` bigint(20) unsigned NOT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `city_id` bigint unsigned NOT NULL,
+  `district_id` bigint unsigned NOT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `customer_info_customer_id_foreign` (`customer_id`),
   KEY `customer_info_city_id_foreign` (`city_id`),
@@ -84,52 +91,54 @@ CREATE TABLE `customer_info` (
   CONSTRAINT `customer_info_city_id_foreign` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `customer_info_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `customer_info_district_id_foreign` FOREIGN KEY (`district_id`) REFERENCES `districts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `customer_info` DISABLE KEYS */;
+INSERT INTO `customer_info` VALUES (1,1,'5465456465',1,'2021-05-06',62,752,'Adres','2021-05-25 08:03:25',NULL);
 /*!40000 ALTER TABLE `customer_info` ENABLE KEYS */;
 DROP TABLE IF EXISTS `customers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customers` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `customer_no` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `identification_number` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `first_name` varchar(63) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_name` varchar(63) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `telephone` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` tinyint(3) unsigned NOT NULL DEFAULT 1,
-  `reference_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payment_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `customer_no` varchar(31) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `identification_number` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `first_name` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `telephone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(31) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` tinyint unsigned NOT NULL DEFAULT '1',
+  `reference_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payment_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `customers_customer_no_unique` (`customer_no`),
   UNIQUE KEY `customers_identification_number_unique` (`identification_number`),
   UNIQUE KEY `customers_reference_code_unique` (`reference_code`),
   UNIQUE KEY `customers_payment_code_unique` (`payment_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+INSERT INTO `customers` VALUES (1,'12463727987','00000000000','Nane','Kuş','5510005550','nane@ruzgarnet.com.tr',2,'R-SKGW3G',NULL,'2021-05-25 08:03:25','2021-05-27 09:12:41');
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 DROP TABLE IF EXISTS `dealers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dealers` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tax_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `city_id` bigint(20) unsigned NOT NULL,
-  `district_id` bigint(20) unsigned NOT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `telephone` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tax_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city_id` bigint unsigned NOT NULL,
+  `district_id` bigint unsigned NOT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `telephone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `started_at` date NOT NULL,
   `ended_at` date DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `dealers_tax_number_unique` (`tax_number`),
   KEY `dealers_city_id_foreign` (`city_id`),
@@ -144,11 +153,11 @@ INSERT INTO `dealers` VALUES (1,'RuzgarMERKEZ','000',62,752,'Merkez/Niğde','555
 /*!40000 ALTER TABLE `dealers` ENABLE KEYS */;
 DROP TABLE IF EXISTS `districts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `districts` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `city_id` bigint(20) unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `city_id` bigint unsigned NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `districts_city_id_foreign` (`city_id`),
   CONSTRAINT `districts_city_id_foreign` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -160,34 +169,56 @@ INSERT INTO `districts` VALUES (1,1,'Aladağ'),(2,1,'Ceyhan'),(3,1,'Çukurova'),
 /*!40000 ALTER TABLE `districts` ENABLE KEYS */;
 DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'2021_05_10_113512_create_cities_table',1),(2,'2021_05_10_114948_create_dealers_table',1),(3,'2021_05_10_115357_create_staff_table',1),(4,'2021_05_10_120000_create_users_table',1),(5,'2021_05_10_120100_create_password_resets_table',1),(6,'2021_05_10_120200_create_customers_table',1),(7,'2021_05_10_121050_create_contract_types_table',1),(8,'2021_05_10_121303_create_categories_table',1),(9,'2021_05_10_121754_create_products_table',1),(10,'2021_05_10_124641_create_services_table',1);
+INSERT INTO `migrations` VALUES (1,'2021_05_10_113512_create_cities_table',1),(2,'2021_05_10_114948_create_dealers_table',1),(3,'2021_05_10_115357_create_staff_table',1),(4,'2021_05_10_120000_create_users_table',1),(5,'2021_05_10_120200_create_customers_table',1),(6,'2021_05_10_121050_create_contract_types_table',1),(7,'2021_05_10_121303_create_categories_table',1),(8,'2021_05_10_121754_create_products_table',1),(9,'2021_05_10_124641_create_services_table',1),(10,'2021_05_25_105702_create_subscriptions_table',1),(11,'2021_05_27_174550_create_payments_table',1),(12,'2021_05_28_121748_create_settings_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+DROP TABLE IF EXISTS `payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `payments` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `subscription_id` bigint unsigned NOT NULL,
+  `date` date NOT NULL,
+  `price` decimal(8,2) unsigned NOT NULL,
+  `status` tinyint unsigned NOT NULL DEFAULT '1',
+  `type` tinyint unsigned DEFAULT NULL,
+  `paid_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `payments_subscription_id_foreign` (`subscription_id`),
+  CONSTRAINT `payments_subscription_id_foreign` FOREIGN KEY (`subscription_id`) REFERENCES `subscriptions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `payments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payments` ENABLE KEYS */;
 DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `category_id` bigint(20) unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `model` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` bigint unsigned NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(8,2) unsigned NOT NULL,
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint unsigned NOT NULL DEFAULT '1',
+  `meta_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `products_model_unique` (`model`),
   UNIQUE KEY `products_slug_unique` (`slug`),
@@ -200,49 +231,71 @@ CREATE TABLE `products` (
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 DROP TABLE IF EXISTS `services`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `services` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `category_id` bigint(20) unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `model` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` bigint unsigned NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(8,2) unsigned NOT NULL,
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint unsigned NOT NULL DEFAULT '1',
+  `meta_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `services_model_unique` (`model`),
   UNIQUE KEY `services_slug_unique` (`slug`),
   KEY `services_category_id_foreign` (`category_id`),
   CONSTRAINT `services_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `services` DISABLE KEYS */;
+INSERT INTO `services` VALUES (1,1,'RüzgarNET 8 MBPS','RUZGARNET_8_MBPS','ruzgarnet-8-mbps',49.90,'<p>RUZGARNET_8_MBPS</p>',1,NULL,NULL,NULL,'2021-05-25 07:53:51','2021-05-25 07:53:51'),(2,1,'RüzgarNET 16 MBPS','RUZGARNET_16_MBPS','ruzgarnet-16-mbps',59.90,'<p>RUZGARNET_16_MBPS</p>',1,NULL,NULL,NULL,'2021-05-25 07:54:50','2021-05-25 07:54:50'),(3,1,'RüzgarNET 24 MBPS','RUZGARNET_24_MBPS','ruzgarnet-24-mbps',69.90,'<p>RUZGARNET_24_MBPS</p>',1,NULL,NULL,NULL,'2021-05-25 07:55:25','2021-05-25 07:55:25'),(4,2,'RüzgarYAZ 16 MBPS','RUZGARYAZ_16_MBPS','ruzgaryaz-16-mbps',49.90,'<p>RUZGARYAZ_16_MBPS</p>',1,NULL,NULL,NULL,'2021-05-25 09:26:10','2021-05-25 09:26:10');
 /*!40000 ALTER TABLE `services` ENABLE KEYS */;
+DROP TABLE IF EXISTS `settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `settings` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `settings_key_unique` (`key`),
+  KEY `settings_group_index` (`group`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
+INSERT INTO `settings` VALUES (1,'service','service.summer.campaing.payment','service.campaing.payment','200','2021-05-28 09:23:43','2021-05-28 10:16:10'),(2,'service','service.setup.payment','service.setup.payment','60','2021-05-28 09:27:03','2021-05-28 09:47:30'),(3,'service','service.modem.adsl','service.modem.adsl','175','2021-05-28 09:35:40',NULL),(4,'service','service.modem.vdsl','service.modem.vdsl','275','2021-05-28 09:35:40',NULL);
+/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 DROP TABLE IF EXISTS `staff`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `staff` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `dealer_id` bigint(20) unsigned NOT NULL,
-  `identification_number` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `first_name` varchar(63) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_name` varchar(63) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `gender` tinyint(3) unsigned NOT NULL,
-  `telephone` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `secondary_telephone` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `dealer_id` bigint unsigned NOT NULL,
+  `identification_number` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `first_name` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gender` tinyint unsigned NOT NULL,
+  `telephone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(31) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secondary_telephone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `birthday` date NOT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `started_at` date NOT NULL,
   `released_at` date DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `staff_identification_number_unique` (`identification_number`),
   KEY `staff_dealer_id_foreign` (`dealer_id`),
@@ -253,18 +306,50 @@ CREATE TABLE `staff` (
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
 INSERT INTO `staff` VALUES (1,1,'00000000000','Rüzgar','Personel',1,'5550005500','info@ruzgarnet.com.tr',NULL,'2021-05-12','Merkez/Niğde','2021-05-12',NULL,'2021-05-25 07:10:08',NULL);
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
+DROP TABLE IF EXISTS `subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `subscriptions` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `staff_id` bigint unsigned NOT NULL,
+  `service_id` bigint unsigned NOT NULL,
+  `customer_id` bigint unsigned NOT NULL,
+  `subscription_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bbk_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `commitment` tinyint unsigned NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `price` decimal(8,2) unsigned NOT NULL,
+  `payment` decimal(8,2) unsigned NOT NULL DEFAULT '0.00',
+  `options` json DEFAULT NULL,
+  `approved_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `subscriptions_subscription_no_unique` (`subscription_no`),
+  KEY `subscriptions_staff_id_foreign` (`staff_id`),
+  KEY `subscriptions_service_id_foreign` (`service_id`),
+  KEY `subscriptions_customer_id_foreign` (`customer_id`),
+  CONSTRAINT `subscriptions_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `subscriptions_service_id_foreign` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `subscriptions_staff_id_foreign` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `subscriptions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `subscriptions` ENABLE KEYS */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `staff_id` bigint(20) unsigned DEFAULT NULL,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `staff_id` bigint unsigned DEFAULT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_username_unique` (`username`),
   UNIQUE KEY `users_email_unique` (`email`),

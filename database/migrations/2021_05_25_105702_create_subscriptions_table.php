@@ -18,11 +18,15 @@ class CreateSubscriptionsTable extends Migration
             $table->foreignId('staff_id');
             $table->foreignId('service_id');
             $table->foreignId('customer_id');
-            $table->unsignedTinyInteger('time');
+            $table->string("subscription_no")->unique()->nullable()->default(null);
+            $table->string('bbk_code');
+            $table->unsignedTinyInteger('commitment')->nullable()->default(null);
             $table->date('start_date');
             $table->date('end_date');
             $table->unsignedDecimal('price');
+            $table->unsignedDecimal('payment')->default(0);
             $table->json('options')->nullable()->default(null);
+            $table->timestamp('approved_at')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
 

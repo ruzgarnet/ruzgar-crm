@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->string('slug', 255)->unique();
             $table->unsignedDecimal('price');
             $table->text('content');
+            $table->unsignedTinyInteger('status')->default(1);
             $table->string('meta_title', 255)->nullable()->default(null);
             $table->string('meta_description', 255)->nullable()->default(null);
             $table->string('meta_keywords', 255)->nullable()->default(null);

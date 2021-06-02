@@ -22,6 +22,7 @@ class CreateCategoriesTable extends Migration
             $table->string('name', 255);
             $table->string('slug', 255)->unique();
             $table->text('content');
+            $table->json('options')->nullable()->default(null);
             $table->unsignedTinyInteger('status')->default(1);
             $table->string('meta_title', 255)->nullable()->default(null);
             $table->string('meta_description', 255)->nullable()->default(null);
