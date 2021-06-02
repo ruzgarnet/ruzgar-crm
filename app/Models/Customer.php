@@ -38,6 +38,16 @@ class Customer extends Model
     }
 
     /**
+     * Customer info relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function customerInfo()
+    {
+        return $this->hasOne(CustomerInfo::class);
+    }
+
+    /**
      * Add customer's main and info data
      *
      * @param array $data
