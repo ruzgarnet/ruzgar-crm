@@ -110,6 +110,11 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::put('subscription/unapprove/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'unApprove'])->name('subscription.unapprove.post');
     Route::get('subscription/{subscription}/payments', [App\Http\Controllers\Admin\SubscriptionController::class, 'payments'])->name('subscription.payments');
     // Subscription Routes End
+
+    // Subscription Routes
+    Route::post('payment/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'received'])->name('payment.received.post');
+    Route::post('payment/result/{payment?}', [App\Http\Controllers\Admin\PaymentController::class, 'payment_result'])->name('payment.result');
+    // Subscription Routes End
 });
 
 // Request Routes

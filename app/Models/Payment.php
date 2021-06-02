@@ -5,8 +5,11 @@ namespace App\Models;
 use App\Models\Attributes\DateAttribute;
 use App\Models\Attributes\PaidAtAttribute;
 use App\Models\Attributes\PriceAttribute;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Payment extends Model
 {
@@ -28,6 +31,27 @@ class Payment extends Model
     {
         return $this->belongsTo(Subscription::class);
     }
+
+    /**
+     * Moka Payment relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function moka_payment()
+    {
+        return $this->hasOne(MokaPayment::class);
+    }
+
+    /**
+     * Moka Logs relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function moka_logs()
+    {
+        return $this->hasMany(MokaLog::class);
+    }
+
 
     /**
      * Get payment type id's
@@ -53,7 +77,7 @@ class Payment extends Model
      *
      * 1 => Defined                 - Sisteme Tanımlandı
      * 2 => Receipted               - Ödeme Alındı
-     * 2 => Error While Receipting  - Ödeme Alınırken Hata Oluştu
+     * 3 => Error While Receipting  - Ödeme Alınırken Hata Oluştu
      *
      * @param bool $implode
      * @return array
@@ -62,5 +86,49 @@ class Payment extends Model
     {
         $data = [1, 2, 3];
         return $implode ? implode(',', $data) : $data;
+    }
+
+    /**
+     * Receive payment
+     *
+     * @param array $data
+     * @return void
+     */
+    public function receive_payment(array $data)
+    {
+        $success = false;
+
+        DB::beginTransaction();
+        try {
+            $date = Carbon::parse($this->date);
+            $month = Carbon::now()->format("m");
+
+            if ($date->format("m") == $month) {
+                $this->type = $data["type"];
+                $this->status = 2;
+                $this->paid_at = DB::raw('current_timestamp()');
+            }
+
+            if ($this->save()) {
+                $count = $this->whereDate('date', ">", Carbon::parse("last day of this month")->format('Y-m-d'))->count();
+
+                if ($count < 1) {
+                    $this->insert([
+                        'status' => 1,
+                        'date' => $date->addMonth(1),
+                        'price' => $this->subscription->price
+                    ]);
+                }
+            }
+
+            DB::commit();
+            $success = true;
+        } catch (Exception $e) {
+            DB::rollBack();
+            $success = false;
+            echo $e->getMessage();
+        }
+
+        return $success;
     }
 }

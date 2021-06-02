@@ -130,7 +130,7 @@
                                                     @if ($payment->status !== 2)
                                                         <button type="button"
                                                             class="btn btn-primary un-approved-element get-payment-modal-btn"
-                                                            data-action="{{ relative_route('admin.subscription.add', $subscription) }}"
+                                                            data-action="{{ relative_route('admin.payment.received.post', $payment) }}"
                                                             data-price="{{ $payment->price_print }}"
                                                             title="@lang('titles.get_payment')">
                                                             <i class="fas fa-cash-register"></i>

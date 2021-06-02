@@ -9,4 +9,8 @@ return [
     'unapproved' => [
         'subscription' => 'Onaylanmamış abonelikte ödeme işlemleri yapamazsınız!'
     ],
+    'payment' => [
+        'not_allowed_received_date' => 'Ödeme yapamazsınız.',
+        'successful' => "Ödeme güncellendi."
+    ]
 ];

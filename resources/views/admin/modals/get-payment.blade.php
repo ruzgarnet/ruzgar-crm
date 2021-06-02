@@ -27,7 +27,7 @@
                     <div class="payment-types payment-type-3 payment-type-4">
                         <div class="form-group">
                             <label for="inpCardNumber">@lang('fields.card.number')</label>
-                            <input type="text" card="card[number]" id="inpCardNumber"
+                            <input type="text" name="card[number]" id="inpCardNumber"
                                 class="form-control credit-card-mask">
                         </div>
 
@@ -48,18 +48,6 @@
                                 <div class="form-group">
                                     <label for="inpCVVCode">@lang('fields.card.security_code')</label>
                                     <input type="text" name="card[security_code]" id="inpCVVCode" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 payment-types payment-type-4">
-                                <div class="form-group">
-                                    <label for="chkAutoPayment">@lang('fields.card.auto_payment')</label>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="card[auto_payment]" id="chkAutoPayment"
-                                            class="custom-control-input" value="1">
-                                        <label class="custom-control-label"
-                                            for="chkAutoPayment">@lang('fields.define')</label>
-                                    </div>
                                 </div>
                             </div>
                         </div>
