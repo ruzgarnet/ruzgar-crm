@@ -136,6 +136,8 @@ return [
     'payment_status' => 'Ödeme Durumu',
     'payment_type' => 'Ödeme Şekli',
     'advance_paymented_price' => 'Peşin Ödenen Tutar',
+    'setup' => 'Kurulum',
+    'setup_informations' => 'Kurulum Bilgileri',
     // Subscription Attributes
 
     // Credit Card Attributes

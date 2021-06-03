@@ -65,12 +65,12 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>@lang('fields.options')</td>
+                                        <td>@lang('fields.setup')</td>
                                         <td class="p-0" colspan="3">
                                             <table class="table mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th colspan="2">@lang('fields.option')</th>
+                                                        <th colspan="2">@lang('fields.setup_informations')</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
