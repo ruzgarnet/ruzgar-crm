@@ -10,8 +10,8 @@
                     <h4>@lang('tables.user.title')</h4>
 
                     <div class="card-header-buttons">
-                        <a href="{{ route('admin.user.add') }}" class="btn btn-primary"><i
-                                class="fas fa-sm fa-plus"></i> @lang('tables.user.add')</a>
+                        <a href="{{ route('admin.user.add') }}" class="btn btn-primary"><i class="fas fa-sm fa-plus"></i>
+                            @lang('tables.user.add')</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -35,8 +35,8 @@
                                         <td>{{ $user->staff->full_name }}</td>
                                         <td>
                                             <div class="buttons">
-                                                <a href="{{ route('admin.user.edit', $user) }}"
-                                                    class="btn btn-primary" title="@lang('titles.edit')">
+                                                <a href="{{ route('admin.user.edit', $user) }}" class="btn btn-primary"
+                                                    title="@lang('titles.edit')">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger delete-modal-btn"
@@ -59,11 +59,11 @@
 
 @push('style')
     <link rel="stylesheet" href="/assets/admin/vendor/datatables/datatables.min.css">
-    <link rel="stylesheet" href="/assets/admin/vendor/datatables/DataTables-1.10.24\css\dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/admin/vendor/datatables/DataTables-1.10.24/css/dataTables.bootstrap4.min.css">
 @endpush
 
 @push('script')
-    <script src="/assets/admin/vendor/datatables/DataTables-1.10.24/js/jquery.DataTables.min.js"></script>
+    <script src="/assets/admin/vendor/datatables/DataTables-1.10.24/js/jquery.dataTables.min.js"></script>
     <script src="/assets/admin/vendor/datatables/DataTables-1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
     <script>
@@ -71,7 +71,11 @@
             $("#dataTable").dataTable({
                 language: {
                     url: '/assets/admin/vendor/datatables/i18n/tr.json'
-                }
+                },
+                columnDefs: [{
+                    "type": "num",
+                    "targets": 0
+                }]
             });
         })
 
