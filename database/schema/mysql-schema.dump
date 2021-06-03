@@ -318,7 +318,7 @@ CREATE TABLE `subscriptions` (
   `bbk_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `commitment` tinyint unsigned NOT NULL,
   `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
+  `end_date` date NULL DEFAULT NULL,
   `price` decimal(8,2) unsigned NOT NULL,
   `payment` decimal(8,2) unsigned NOT NULL DEFAULT '0.00',
   `options` json DEFAULT NULL,

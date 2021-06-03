@@ -22,7 +22,7 @@ class CreateSubscriptionsTable extends Migration
             $table->string('bbk_code');
             $table->unsignedTinyInteger('commitment')->nullable()->default(null);
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('end_date')->nullable()->default(null);
             $table->unsignedDecimal('price');
             $table->unsignedDecimal('payment')->default(0);
             $table->json('options')->nullable()->default(null);
