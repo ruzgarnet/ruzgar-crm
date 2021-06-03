@@ -39,7 +39,7 @@ class MainController extends Controller
             foreach ($rows as $row) {
                 $data[] = [
                     'title' => $row->select_print,
-                    'link' => route('admin.customer.edit', $row)
+                    'link' => route('admin.customer.show', $row)
                 ];
             }
         }
