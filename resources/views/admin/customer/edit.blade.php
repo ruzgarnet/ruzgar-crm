@@ -55,12 +55,12 @@
                             <div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" name="gender" id="radGenderMale" class="custom-control-input"
-                                        value="1" @if ($customer->info->gender === 1) checked @endif>
+                                        value="1" @if ($customer->customerInfo->gender === 1) checked @endif>
                                     <label class="custom-control-label" for="radGenderMale">@lang('fields.male')</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" name="gender" id="radGenderFemale" class="custom-control-input"
-                                        value="2" @if ($customer->info->gender === 2) checked @endif>
+                                        value="2" @if ($customer->customerInfo->gender === 2) checked @endif>
                                     <label class="custom-control-label" for="radGenderFemale">@lang('fields.female')</label>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
                                     </div>
                                 </div>
                                 <input type="text" name="birthday" id="inpBirthday" class="form-control date-mask"
-                                    value="{{ convert_date($customer->info->birthday, 'mask') }}">
+                                    value="{{ convert_date($customer->customerInfo->birthday, 'mask') }}">
                             </div>
                         </div>
                         <div class="row">
@@ -102,7 +102,7 @@
                                             </div>
                                         </div>
                                         <input type="text" name="secondary_telephone" id="inpSecondaryTelephone"
-                                            value="0{{ $customer->info->secondary_telephone }}"
+                                            value="0{{ $customer->customerInfo->secondary_telephone }}"
                                             class="form-control telephone-mask">
                                     </div>
                                 </div>
@@ -126,7 +126,7 @@
                                     <label for="slcCity">@lang('fields.city')</label>
                                     <select name="city_id" id="slcCity" class="custom-select">
                                         @foreach ($cities as $city)
-                                            <option value="{{ $city->id }}" @if ($customer->info->city_id === $city->id) selected @endif>
+                                            <option value="{{ $city->id }}" @if ($customer->customerInfo->city_id === $city->id) selected @endif>
                                                 {{ $city->name }}
                                             </option>
                                         @endforeach
@@ -137,8 +137,8 @@
                                 <div class="form-group">
                                     <label for="slcDistrict">@lang('fields.district')</label>
                                     <select name="district_id" id="slcDistrict" class="custom-select">
-                                        @foreach ($customer->info->city->districts as $district)
-                                            <option value="{{ $district->id }}" @if ($customer->info->district_id === $district->id) selected @endif>
+                                        @foreach ($customer->customerInfo->city->districts as $district)
+                                            <option value="{{ $district->id }}" @if ($customer->customerInfo->district_id === $district->id) selected @endif>
                                                 {{ $district->name }}
                                             </option>
                                         @endforeach
@@ -155,7 +155,7 @@
                                     </div>
                                 </div>
                                 <textarea name="address" id="txtAddress"
-                                    class="form-control">{{ $customer->info->address }}</textarea>
+                                    class="form-control">{{ $customer->customerInfo->address }}</textarea>
                             </div>
                         </div>
                     </div>

@@ -45,7 +45,7 @@
                                         <td>{{ $customer->full_name }}</td>
                                         <td data-filter="0{{ $customer->telephone }}">{{ $customer->telephone_print }}
                                         </td>
-                                        <td>{{ $customer->info->city->name }}</td>
+                                        <td>{{ $customer->customerInfo->city->name }}</td>
                                         <td>
                                             <div class="buttons">
                                                 <a href="{{ route('admin.customer.edit', $customer) }}"
