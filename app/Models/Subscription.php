@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Models\Attributes\ApprovedAtAttribute;
+use App\Models\Attributes\EndDateAttribute;
 use App\Models\Attributes\OptionValuesAttribute;
 use App\Models\Attributes\PaymentAttribute;
 use App\Models\Attributes\PriceAttribute;
+use App\Models\Attributes\StartDateAttribute;
 use App\Models\Mutators\SubscriptionPaymentMutator;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +17,14 @@ use Illuminate\Support\Facades\Validator;
 
 class Subscription extends Model
 {
-    use HasFactory, PriceAttribute, PaymentAttribute, ApprovedAtAttribute, OptionValuesAttribute, SubscriptionPaymentMutator;
+    use HasFactory,
+        PriceAttribute,
+        PaymentAttribute,
+        ApprovedAtAttribute,
+        OptionValuesAttribute,
+        SubscriptionPaymentMutator,
+        StartDateAttribute,
+        EndDateAttribute;
 
     /**
      * All fields fillable
