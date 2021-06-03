@@ -448,7 +448,7 @@ function unMask(form) {
 
             if (val.length >= 10) {
                 val = val.replace(/\D/g, "");
-                val = val.replace(/[\+90|0]?([1-9][0-9]{9})/g, "$1");
+                val = val.replace(/[90|0]*([1-9][0-9]{9})/g, "$1");
 
                 form.find(el).val(val);
             } else {
