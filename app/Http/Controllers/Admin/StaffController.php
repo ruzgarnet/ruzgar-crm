@@ -20,7 +20,7 @@ class StaffController extends Controller
      */
     public function index()
     {
-        return view('admin.staff.list', ['staffs' => Staff::all()]);
+        return view('admin.staff.list', ['staffs' => Staff::orderBy('id', 'DESC')->get()]);
     }
 
     /**

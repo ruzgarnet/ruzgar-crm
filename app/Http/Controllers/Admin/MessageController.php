@@ -16,7 +16,7 @@ class MessageController extends Controller
      */
     public function index()
     {
-        return view('admin.message.list', ['messages' => Message::all()]);
+        return view('admin.message.list', ['messages' => Message::orderBy('id', 'DESC')->get()]);
     }
 
     /**

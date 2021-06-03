@@ -18,7 +18,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        return view('admin.service.list', ['services' => Service::all()]);
+        return view('admin.service.list', ['services' => Service::orderBy('id', 'DESC')->get()]);
     }
 
     /**

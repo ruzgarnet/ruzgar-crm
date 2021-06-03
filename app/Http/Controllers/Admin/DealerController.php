@@ -20,7 +20,7 @@ class DealerController extends Controller
      */
     public function index()
     {
-        return view('admin.dealer.list', ['dealers' => Dealer::all()]);
+        return view('admin.dealer.list', ['dealers' => Dealer::orderBy('id', 'DESC')->get()]);
     }
 
     /**

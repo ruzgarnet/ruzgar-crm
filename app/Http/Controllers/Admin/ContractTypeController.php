@@ -13,12 +13,11 @@ class ContractTypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Models\ContractType  $contractType
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function index(ContractType $contractType)
+    public function index()
     {
-        return view('admin.contract-type.list', ['contractTypes' => $contractType->all()]);
+        return view('admin.contract-type.list', ['contractTypes' => ContractType::orderBy('id', 'DESC')->get()]);
     }
 
     /**

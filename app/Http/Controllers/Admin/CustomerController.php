@@ -21,7 +21,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return view('admin.customer.list', ['customers' => Customer::all()]);
+        return view('admin.customer.list', ['customers' => Customer::orderBy('id', 'DESC')->get()]);
     }
 
     /**

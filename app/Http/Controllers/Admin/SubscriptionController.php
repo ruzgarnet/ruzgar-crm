@@ -22,7 +22,7 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        return view('admin.subscription.list', ['subscriptions' => Subscription::all()]);
+        return view('admin.subscription.list', ['subscriptions' => Subscription::orderBy('id', 'DESC')->get()]);
     }
 
     /**
@@ -293,8 +293,8 @@ class SubscriptionController extends Controller
         }
 
         $data = [
-            'services' => Service::where('status', 1)->get(),
-            'customers' => Customer::where('type', 2)->get(),
+            'services' => Service::where('status', 1)->orderByRaw('name * 1')->get(),
+            'customers' => Customer::where('type', 2)->orderBy('id', 'DESC')->get(),
             'option_fields' => $option_fields,
             'service_props' => $service_props
         ];

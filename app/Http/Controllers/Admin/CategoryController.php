@@ -18,7 +18,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.category.list', ['categories' => Category::all()]);
+        return view('admin.category.list', ['categories' => Category::orderBy('id', 'DESC')->get()]);
     }
 
     /**
