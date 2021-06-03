@@ -15,6 +15,7 @@ return [
     'name' => 'İsim',
     'first_name' => 'Ad',
     'last_name' => 'Soyad',
+    'name_surname' => 'Ad Soyad',
     'identification_number' => 'Kimlik Numarası',
     'gender' => 'Cinsiyet',
     'genders' => [
@@ -28,6 +29,7 @@ return [
     'birthday' => 'Doğum Tarihi',
     'city' => 'İl',
     'district' => 'İlçe',
+    'city_district' => 'İl/İlçe',
     'address' => 'Adres',
     // Identity Attributes End
 
@@ -43,6 +45,8 @@ return [
     'staff' => 'Personel',
     'service' => 'Hizmet',
     'customer' => 'Müşteri',
+    'customer_no' => 'Müşteri Numarası',
+    'reference_code' => 'Referans Kodu',
     // Name Attributes End
 
     // Auth|User Attributes
@@ -60,6 +64,7 @@ return [
     'approve_date' => 'Onay Tarihi',
     'date' => 'Tarih',
     'paid_date' => 'Ödeme Tarihi',
+    'save_date' => 'Kayıt Tarihi',
     'subscription_date' => 'Abonelik Tarihi',
     // Date Attributes End
 
@@ -138,6 +143,8 @@ return [
     'advance_paymented_price' => 'Peşin Ödenen Tutar',
     'setup' => 'Kurulum',
     'setup_informations' => 'Kurulum Bilgileri',
+    'subscription_duration' => 'Abonelik Aralığı',
+    'payable' => 'Ödenecek',
     // Subscription Attributes
 
     // Credit Card Attributes

@@ -53,6 +53,11 @@
                                                     <i class="fas fa-edit"></i>
                                                 </a>
 
+                                                <a href="{{ route('admin.customer.show', $customer) }}"
+                                                    class="btn btn-primary" title="@lang('titles.show')">
+                                                    <i class="fas fa-file"></i>
+                                                </a>
+
                                                 @if ($customer->type === 1)
                                                     <button type="button"
                                                         class="btn btn-success un-approved-element approve-modal-btn"

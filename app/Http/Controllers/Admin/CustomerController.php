@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\Mutator;
 use App\Models\City;
 use App\Models\Customer;
+use App\Models\Payment;
 use App\Rules\AvailableDistrict;
 use App\Rules\TCNo;
 use App\Rules\Telephone;
@@ -77,6 +78,21 @@ class CustomerController extends Controller
                 'message' => trans('response.insert.error')
             ]
         ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Customer  $customer
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function show(Customer $customer)
+    {
+        $data = [
+            'paymentTypes' => Payment::getTypes(),
+            'customer' => $customer
+        ];
+        return view('admin.customer.show', $data);
     }
 
     /**

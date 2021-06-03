@@ -48,8 +48,8 @@ table .buttons > * {
 }
 
 .customer-type {
-    font-size: 0.9em;
     color: #ffffff;
+    font-size: 0.9em;
 }
 .customer-type-1 {
     color: var(--warning);
@@ -94,61 +94,61 @@ table .un-approved-row .approved-element {
 }
 
 #paymentFrameModal {
-    width: 100%;
-    height: 100%;
+    display: flex;
     position: fixed;
-    left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    display: flex;
+    left: 0;
     align-items: center;
     justify-content: center;
     z-index: 1090;
+    width: 100%;
+    height: 100%;
 }
 
 #paymentFrameModal .frame-body {
+    background-color: #ffffff;
+    width: 100%;
     min-width: 300px;
     max-width: 550px;
-    width: 100%;
-    background-color: #ffffff;
 }
 
 #paymentFrameModal .frame-body iframe {
-    width: 100%;
-    height: 450px;
+    margin: 0;
     border: none;
     padding: 0;
-    margin: 0;
+    width: 100%;
+    height: 450px;
 }
 
 .payment-frame-backdrop {
     position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    left: 0;
     z-index: 1089;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
 }
 
 .search-result .search-message {
     display: flex;
+    align-items: center;
+    justify-content: left;
     padding: 13px 18px;
     color: #6777ef;
     font-weight: 600;
-    align-items: center;
-    justify-content: left;
 }
 
 .search-result .search-message .search-icon {
+    border-radius: 50%;
     width: 30px;
     height: 30px;
-    line-height: 30px;
     text-align: center;
-    border-radius: 50%;
+    line-height: 30px;
 }
 
 .search-result .search-message .search-loading-icon i {
@@ -164,4 +164,12 @@ table .un-approved-row .approved-element {
 #searchFields.empty > .empty,
 #searchFields.placeholder > .placeholder {
     display: block;
+}
+
+.subscription-list {
+    line-height: 1.6 !important;
+}
+
+.subscription-list li {
+    margin-bottom: 7.5px;
 }

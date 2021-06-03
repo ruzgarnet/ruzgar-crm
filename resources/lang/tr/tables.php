@@ -152,6 +152,10 @@ return [
         'delete' => 'Abonelik Sil',
         'info' => 'Abonelik Bilgileri',
         'select' => 'Abonelik Seçiniz',
+        'types' => [
+            1 => 'Aktif Abonelik',
+            2 => 'Hazırlık Aşamasında'
+        ]
     ],
     // Subscription Fields End
 

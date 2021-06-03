@@ -50,6 +50,16 @@ class Customer extends Model
     }
 
     /**
+     * Subscription relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    /**
      * Add customer's main and info data
      *
      * @param array $data

@@ -375,6 +375,14 @@ $(function () {
             fields.addClass("placeholder");
         }
     });
+
+    $(document).on("shown.bs.tab", ".customer-subs-tab", function (event) {
+        let button = $(event.target),
+            id = button.data("id");
+
+        $(".subs-payments").fadeOut(300);
+        $(".subs-" + id + "-payments").fadeIn(600);
+    });
 });
 
 /**
