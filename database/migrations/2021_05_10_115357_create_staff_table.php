@@ -21,7 +21,7 @@ class CreateStaffTable extends Migration
             $table->string('last_name', 63);
             $table->unsignedTinyInteger('gender');
             $table->string('telephone', 15);
-            $table->string('email', 31);
+            $table->string('email');
             $table->string('secondary_telephone', 15)->nullable()->default(null);
             $table->date('birthday');
             $table->string('address', 255);
