@@ -1,6 +1,7 @@
 "use strict";
 
 $(function () {
+    // Bind CSRF token to request header
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -8,7 +9,7 @@ $(function () {
     });
 
     /**
-     * Ajax requests
+     * Ajax form requests
      */
     $(document).on("submit", "form:not([data-ajax='false'])", function (event) {
         // Disable submit
@@ -42,7 +43,9 @@ $(function () {
                 // 422 = validation failed
                 if (xhr.status === 422) {
                     let response = xhr.responseJSON;
+
                     for (let field in response.errors) {
+                        // Regex for array inputs
                         let input = form.find(
                             "[name='" + field.replace(/\.(\w*)/, "[$1]") + "']"
                         );
@@ -88,7 +91,7 @@ $(function () {
                         .remove();
                 }
 
-                // If response has redirect, fly me to moon
+                // If response has redirect, fly me to the moon
                 if (result.redirect) {
                     setTimeout(function () {
                         location.replace(result.redirect);
@@ -105,6 +108,7 @@ $(function () {
 
                     let row = $("tr[data-id='" + approve.id + "']");
 
+                    // Change column class and text
                     if (approve.column) {
                         row.find("." + approve.column)
                             .removeClass()
@@ -115,6 +119,7 @@ $(function () {
                             .text(approve.title);
                     }
 
+                    // Show approve lines in table row
                     if (approve.unapprove) {
                         row.removeClass("approved-row");
                         row.addClass("un-approved-row");
@@ -126,6 +131,7 @@ $(function () {
                     form.find("[type='submit']").prop("disabled", false);
                 }
 
+                // Show payment modal frame
                 if (result.payment) {
                     let payment = result.payment;
 
@@ -223,7 +229,8 @@ $(function () {
     });
 
     /**
-     * Open delete modal and change form action
+     * Open get payment modal, change form action and price
+     * !Price fetching from database
      */
     $(document).on("click", ".get-payment-modal-btn", function () {
         let button = $(this),
@@ -236,7 +243,7 @@ $(function () {
     });
 
     /**
-     * Open delete modal and change form action
+     * Change payment view when type changed
      */
     $(document).on("input", "#paymentForm #slcType", function () {
         let form = $("#paymentForm"),
@@ -263,6 +270,9 @@ $(function () {
         });
     }
 
+    /**
+     * Open approve modal and change form action
+     */
     $(document).on("click", ".approve-modal-btn", function () {
         let button = $(this),
             action = button.data("action"),
@@ -272,6 +282,9 @@ $(function () {
         modal.modal("show");
     });
 
+    /**
+     * Fill slug when .slug-to-input changed
+     */
     $(document).on("input", ".slug-to-input", function () {
         if (typeof slugify !== "undefined") {
             let input = $(this),
@@ -285,6 +298,9 @@ $(function () {
         }
     });
 
+    /**
+     * Slug input
+     */
     $(document).on("input", ".slug-input", function () {
         if (typeof slugify !== "undefined") {
             let input = $(this),
@@ -306,6 +322,9 @@ $(function () {
         }
     });
 
+    /**
+     * Initalize ckeditor
+     */
     let editors = document.querySelectorAll(".txt-editor");
     if (editors && typeof CKEDITOR !== "undefined") {
         editors.forEach(function (el) {
@@ -314,8 +333,15 @@ $(function () {
         CKEDITOR.dtd.$removeEmpty["span"] = false;
     }
 
+    /**
+     * Initalize select2
+     */
     if (typeof $.fn.select2 !== "undefined") {
         $(".selectpicker").select2({ lang: "tr" });
+
+        /**
+         * Fix selected option for cloned forms
+         */
         $(".selectpicker").on("change", function (e) {
             let select = this;
 
@@ -328,8 +354,14 @@ $(function () {
         });
     }
 
+    /**
+     * Search timeout
+     */
     let search_timeout;
 
+    /**
+     * Search
+     */
     $(document).on("input", "#inpSearch", function () {
         let input = $(this),
             val = input.val(),
@@ -376,6 +408,9 @@ $(function () {
         }
     });
 
+    /**
+     * Generate tabs for payments in customer view
+     */
     $(document).on("shown.bs.tab", ".customer-subs-tab", function (event) {
         let button = $(event.target),
             id = button.data("id");
@@ -437,6 +472,7 @@ function unMask(form) {
     }
 }
 
+// Initalize date mask
 let datemasks = document.querySelectorAll(".date-mask");
 if (datemasks && typeof Cleave !== "undefined") {
     datemasks.forEach(function (el) {
@@ -447,6 +483,7 @@ if (datemasks && typeof Cleave !== "undefined") {
     });
 }
 
+// Initalize credit card mask
 let creditcards = document.querySelectorAll(".credit-card-mask");
 if (creditcards && typeof Cleave !== "undefined") {
     creditcards.forEach(function (el) {
@@ -456,6 +493,7 @@ if (creditcards && typeof Cleave !== "undefined") {
     });
 }
 
+// Initalize telephone mask
 let telephones = document.querySelectorAll(".telephone-mask");
 if (telephones && typeof Cleave !== "undefined") {
     telephones.forEach(function (el) {
@@ -467,6 +505,7 @@ if (telephones && typeof Cleave !== "undefined") {
     });
 }
 
+// Initalize identification number mask
 let identifications = document.querySelectorAll(".identification-mask");
 if (identifications && typeof Cleave !== "undefined") {
     identifications.forEach(function (el) {
@@ -477,6 +516,7 @@ if (identifications && typeof Cleave !== "undefined") {
     });
 }
 
+// Initalize expire date mask
 let expire = document.querySelectorAll(".expire-date-mask");
 if (expire && typeof Cleave !== "undefined") {
     expire.forEach(function (el) {
