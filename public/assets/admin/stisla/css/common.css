@@ -173,3 +173,7 @@ table .un-approved-row .approved-element {
 .subscription-list li {
     margin-bottom: 7.5px;
 }
+
+.subs-payments:not(:first-child) {
+    display: none;
+}

@@ -37,7 +37,7 @@ class Payment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
-    public function moka_payment()
+    public function mokaPayment()
     {
         return $this->hasOne(MokaPayment::class);
     }
@@ -47,11 +47,10 @@ class Payment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function moka_logs()
+    public function mokaLogs()
     {
         return $this->hasMany(MokaLog::class);
     }
-
 
     /**
      * Get payment type id's
@@ -101,19 +100,29 @@ class Payment extends Model
         DB::beginTransaction();
         try {
             $date = Carbon::parse($this->date);
-            $month = Carbon::now()->format("m");
+            $month = Carbon::now()->format('m');
 
-            if ($date->format("m") == $month) {
-                $this->type = $data["type"];
+            // TODO remove env conditions for product
+            if (env('APP_ENV') === 'local' || $date->format('m') == $month) {
+                $this->type = $data['type'];
                 $this->status = 2;
                 $this->paid_at = DB::raw('current_timestamp()');
             }
 
             if ($this->save()) {
-                $count = $this->whereDate('date', ">", Carbon::parse("last day of this month")->format('Y-m-d'))->count();
+                $count = $this
+                    ->where('subscription_id', $this->subscription_id)
+                    ->whereNull('paid_at')
+                    ->whereDate(
+                        'date',
+                        '>',
+                        Carbon::parse('last day of this month')->format('Y-m-d')
+                    )
+                    ->count();
 
                 if ($count < 1) {
                     $this->insert([
+                        'subscription_id' => $this->subscription_id,
                         'status' => 1,
                         'date' => $date->addMonth(1),
                         'price' => $this->subscription->price
@@ -126,7 +135,6 @@ class Payment extends Model
         } catch (Exception $e) {
             DB::rollBack();
             $success = false;
-            echo $e->getMessage();
         }
 
         return $success;

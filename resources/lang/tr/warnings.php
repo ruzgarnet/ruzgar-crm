@@ -11,6 +11,6 @@ return [
     ],
     'payment' => [
         'not_allowed_received_date' => 'Ödeme yapamazsınız.',
-        'successful' => "Ödeme güncellendi."
+        'successful' => "Ödeme alındı."
     ]
 ];

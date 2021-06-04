@@ -24,6 +24,7 @@ class PaymentController extends Controller
     public function received(Request $request, Payment $payment)
     {
         $rules = $this->rules();
+
         if (in_array($request->input('type'), [3, 4])) {
             $rules["card.number"] = [
                 'required',
@@ -39,6 +40,7 @@ class PaymentController extends Controller
                 'string'
             ];
         }
+
         if ($request->input('type') == 3) {
             $rules["card.security_code"] = [
                 'required',
@@ -49,29 +51,38 @@ class PaymentController extends Controller
 
         $validated = $request->validate($rules);
 
-        if ($request->input('type') == 3) {
-            $expire = Mutator::expire_date($validated["card"]["expire_date"]);
-            $card = [
-                'full_name' => $validated["card"]['full_name'],
-                'number' => $validated["card"]['number'],
-                'expire_month' => $expire[0],
-                'expire_year' => $expire[1],
-                'security_code' => $validated["card"]['security_code'],
-                'amount' => $payment->price
-            ];
-            $moka = new Moka();
-            $response = $moka->pay(
-                $card,
-                route('admin.payment.result', $payment)
-            );
-            if ($response->Data != null) {
-                return response()->json([
-                    'success' => true,
-                    'payment' => [
-                        'frame' => $response->Data
-                    ]
-                ]);
-            } else {
+        $date = Carbon::parse($payment->date);
+        $month = Carbon::now()->format("m");
+
+        // TODO remove env conditions for product
+        if (env('APP_ENV') === 'local' || $date->format('m') == $month) {
+            if ($request->input('type') == 3) {
+                $expire = Mutator::expire_date($validated["card"]["expire_date"]);
+
+                $card = [
+                    'full_name' => $validated["card"]['full_name'],
+                    'number' => $validated["card"]['number'],
+                    'expire_month' => $expire[0],
+                    'expire_year' => $expire[1],
+                    'security_code' => $validated["card"]['security_code'],
+                    'amount' => $payment->price
+                ];
+
+                $moka = new Moka();
+                $response = $moka->pay(
+                    $card,
+                    route('admin.payment.result', $payment)
+                );
+
+                if ($response->Data != null) {
+                    return response()->json([
+                        'success' => true,
+                        'payment' => [
+                            'frame' => $response->Data
+                        ]
+                    ]);
+                }
+
                 MokaLog::create([
                     'payment_id' => $payment->id,
                     'ip' => $request->ip(),
@@ -87,13 +98,8 @@ class PaymentController extends Controller
                     ]
                 ]);
             }
-        } else {
-            $date = Carbon::parse($payment->date);
-            $month = Carbon::now()->format("m");
 
-            if ($date->format("m") == $month) {
-                $payment->receive_payment($validated);
-
+            if ($payment->receive_payment($validated)) {
                 return response()->json([
                     'success' => true,
                     'toastr' => [
@@ -101,19 +107,28 @@ class PaymentController extends Controller
                         'title' => trans('response.title.success'),
                         'message' => trans('warnings.payment.successful')
                     ],
-                    'redirect' => relative_route('admin.subscription.payments', ['subscription' => $payment->subscription])
-                ]);
-            } else {
-                return response()->json([
-                    'error' => true,
-                    'toastr' => [
-                        'type' => 'error',
-                        'title' => trans('response.title.error'),
-                        'message' => trans('warnings.payment.not_allowed_received_date')
-                    ]
+                    'reload' => true
                 ]);
             }
+
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('response.edit.error')
+                ]
+            ]);
         }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('warnings.payment.not_allowed_received_date')
+            ]
+        ]);
     }
 
     /**
@@ -131,6 +146,11 @@ class PaymentController extends Controller
         // TODO Sunucuya aktarıldığında yapılacak.
     }
 
+    /**
+     * Rules for validation
+     *
+     * @return array
+     */
     private function rules()
     {
         return [

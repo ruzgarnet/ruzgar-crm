@@ -43,7 +43,7 @@
                                         <td>@lang('fields.service')</td>
                                         <td><b>{{ $subscription->service->name }}</b></td>
                                         <td>@lang('fields.price')</td>
-                                        <td><b>{{ $subscription->service->price_print }}</b></td>
+                                        <td><b>{{ $subscription->price_print }}</b></td>
                                     </tr>
                                     <tr>
                                         <td>@lang('fields.advance_paymented_price')</td>
@@ -129,7 +129,7 @@
                                                 <div class="buttons">
                                                     @if ($payment->status !== 2)
                                                         <button type="button"
-                                                            class="btn btn-primary un-approved-element get-payment-modal-btn"
+                                                            class="btn btn-primary get-payment-modal-btn"
                                                             data-action="{{ relative_route('admin.payment.received.post', $payment) }}"
                                                             data-price="{{ $payment->price_print }}"
                                                             title="@lang('titles.get_payment')">
