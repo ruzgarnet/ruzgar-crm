@@ -27,7 +27,6 @@
                             <label for="slcService">@lang('fields.service')</label>
                             <select name="service_id" id="slcService" class="custom-select service-select selectpicker"
                                 v-model="service" v-selectpicker="service" v-on:change="changeService()">
-                                <option disabled value="0">@lang('tables.service.select')</option>
                                 @foreach ($services as $service)
                                     <option value="{{ $service->id }}" @if ($subscription->service_id === $service->id) selected @endif>
                                         {{ $service->select_print }}</option>
@@ -38,7 +37,6 @@
                             <label for="slcCustomer">@lang('fields.customer')</label>
                             <select name="customer_id" id="slcCustomer" class="custom-select selectpicker" v-select=""
                                 v-model="customer">
-                                <option disabled value="0">@lang('tables.customer.select')</option>
                                 @foreach ($customers as $customer)
                                     <option value="{{ $customer->id }}" @if ($subscription->customer_id === $customer->id) selected @endif>{{ $customer->full_name }}</option>
                                 @endforeach
@@ -306,6 +304,14 @@
                             .setAttribute("selected", true);
                     })
                 }
+
+                // Change selected options and trigger event
+                $('#slcService').val(this.service);
+                $('#slcService').trigger('change');
+
+                // Change selected options and trigger event
+                $('#slcCustomer').val(this.customer);
+                $('#slcCustomer').trigger('change');
             }
         })
 
