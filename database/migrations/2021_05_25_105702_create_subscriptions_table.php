@@ -26,6 +26,7 @@ class CreateSubscriptionsTable extends Migration
             $table->unsignedDecimal('price');
             $table->unsignedDecimal('payment')->default(0);
             $table->json('options')->nullable()->default(null);
+            $table->json('values')->nullable()->default(null);
             $table->timestamp('approved_at')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);

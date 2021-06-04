@@ -119,11 +119,12 @@
                             <div class="col-lg-4" v-if="hasOption('modem_price') && modem == 5">
                                 <div class="form-group">
                                     <label for="inpModemPrice">@lang('fields.modem_price')</label>
-                                    <input type="number" name="options[modem_price]" v-model="modem_price" id="inpModemPrice" step="0.01"
-                                        class="form-control">
+                                    <input type="number" name="options[modem_price]" v-model="modem_price"
+                                        id="inpModemPrice" step="0.01" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-lg-4" v-if="hasOption('modem_serial') && (modem == 2 || modem == 3 || modem == 5)">
+                            <div class="col-lg-4"
+                                v-if="hasOption('modem_serial') && (modem == 2 || modem == 3 || modem == 5)">
                                 <div class="form-group">
                                     <label for="inpModemSerial">@lang('fields.modem_serial')</label>
                                     <input type="text" name="options[modem_serial]" id="inpModemSerial" class="form-control"
@@ -133,7 +134,8 @@
                             <div class="w-100"></div>
                             <div class="col-lg-6" v-if="hasOption('setup_payments')">
                                 <div class="form-group">
-                                    <label for="slcSetupPayment">@lang('fields.setup_payment')</label>
+                                    <label for="slcSetupPayment">@lang('fields.setup_payment', ['price' =>
+                                        print_money(setting('service.setup.payment'))])</label>
                                     <select name="options[setup_payment]" id="slcSetupPayment" class="custom-select"
                                         v-model="setup_payment" v-select="">
                                         <option v-for="option in options.setup_payments" :value="option.value"
@@ -155,7 +157,8 @@
                             </div>
                             <div class="col-lg-6" v-if="hasOption('summer_campaing_payments')">
                                 <div class="form-group">
-                                    <label for="slcCampaingPayment">@lang('fields.summer_campaing_payment')</label>
+                                    <label for="slcCampaingPayment">@lang('fields.summer_campaing_payment', ['price' =>
+                                        print_money(setting('service.summer.campaing.payment'))])</label>
                                     <select name="options[summer_campaing_payment]" id="slcCampaingPayment"
                                         class="custom-select" v-model="summer_campaing_payment" v-select="">
                                         <option v-for="option in options.summer_campaing_payments" :value="option.value"

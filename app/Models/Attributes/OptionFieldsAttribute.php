@@ -38,9 +38,22 @@ trait OptionFieldsAttribute
     {
         $data = [];
         foreach ($values as $value) {
+            $title = trans("fields.{$option}.{$value}");
+
+            if ($option === 'modems' && ($value == 2 || $value == 3)) {
+                $type = 'adsl';
+                if ($value == 3) {
+                    $type = 'vdsl';
+                }
+
+                $price = (float)setting("service.modem.{$type}");
+
+                $title = trans("fields.modems.{$value}", ['price' => print_money($price)]);
+            }
+
             $data[] = [
                 'value' => $value,
-                'title' => trans("fields.{$option}.{$value}")
+                'title' => $title
             ];
         }
         return $data;

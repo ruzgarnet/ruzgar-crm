@@ -39,7 +39,8 @@ class Subscription extends Model
      * @var array
      */
     protected $casts = [
-        'options' => 'array'
+        'options' => 'array',
+        'values' => 'array'
     ];
 
     /**
@@ -174,6 +175,21 @@ class Subscription extends Model
     {
         if (is_string($key) && isset($this->options[$key]) && !empty($this->options[$key])) {
             return $this->options[$key];
+        }
+        return $default;
+    }
+
+    /**
+     * Get value if is exists by key
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getValue(string $key, $default = false)
+    {
+        if (is_string($key) && isset($this->values[$key]) && !empty($this->values[$key])) {
+            return $this->values[$key];
         }
         return $default;
     }

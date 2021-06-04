@@ -23,14 +23,23 @@ trait OptionValuesAttribute
                 $option = (string)Str::of($key)->plural();
 
                 $data[$key]['title'] = trans("fields.{$key}");
+                if ($price = $this->getValue($key)) {
+                    $data[$key]['title'] = trans("fields.{$key}", ['price' => print_money($price)]);
+                }
 
                 if (Lang::has("fields.{$option}.{$value}")) {
                     $data[$key]['value'] = trans("fields.{$option}.{$value}");
+                    if ($key == 'modem') {
+                        $price = $this->getValue('modem_payment');
+                        $data[$key]['value'] = trans("fields.{$option}.{$value}", ['price' => print_money($price)]);
+                    }
                 } else {
                     if ($value === '1' || $value === true) {
                         $data[$key]['value'] = trans("titles.yes");
                     } else if ($value === '0' || $value === false) {
                         $data[$key]['value'] = trans("titles.no");
+                    } else if ($key == 'modem_price') {
+                        $data[$key]['value'] = print_money($value);
                     } else {
                         $data[$key]['value'] = $value;
                     }

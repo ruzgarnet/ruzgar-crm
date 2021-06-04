@@ -18,12 +18,31 @@ trait SubscriptionPaymentMutator
     public function generatePayments()
     {
         $data = [];
+        $values = [];
 
         foreach ($this->options as $key => $value) {
             if (method_exists($this, $key)) {
-                $data[] = $this->{$key}($value);
+                $row = $this->{$key}($value);
+                $data[] = $row;
+
+                if (array_key_exists('payment', $row)) {
+                    $values[$key] = $row['payment'];
+                }
+                if (array_key_exists('price', $row)) {
+                    $values[$key] = $row['price'];
+                }
+                if (array_key_exists('payments', $row)) {
+                    $total = 0;
+                    foreach ($row['payments'] as $payment) {
+                        $total += $payment;
+                    }
+                    $values[$key] = $total;
+                }
             }
         }
+
+        $values['service_price'] = $this->service->price;
+        $this->values = $values;
 
         $data = collect($data);
 

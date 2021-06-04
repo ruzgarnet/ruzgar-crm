@@ -109,8 +109,8 @@ return [
     'modem_serial' => 'Modem Seri Numarası',
     "modems" => [
         1 => "Yok",
-        2 => "ADSL (" . print_money(setting('service.modem.adsl')) . ")",
-        3 => "VDSL (" . print_money(setting('service.modem.vdsl')) . ")",
+        2 => "ADSL (:price)",
+        3 => "VDSL (:price)",
         4 => "Fiber",
         5 => "Uydu Modem"
     ],
@@ -122,7 +122,7 @@ return [
         3 => "İlk iki aya yansıt",
         4 => "İlk üç aya yansıt"
     ],
-    "setup_payment" => 'Kurulum/Aktivasyon Ücreti (' . print_money(setting('service.setup.payment')) . ') Ödeme Şekli',
+    "setup_payment" => 'Kurulum/Aktivasyon Ücreti (:price) Ödeme Şekli',
     "setup_payments" => [
         1 => "Peşin",
         2 => "İlk aya yansıt",
@@ -130,7 +130,7 @@ return [
         4 => "İlk üç aya yansıt"
     ],
     "pre_payment" => "Ön ödemeli",
-    "summer_campaing_payment" => 'Yaz Kampanyası Ücreti (' . print_money(setting('service.summer.campaing.payment')) . ') Ödeme Şekli',
+    "summer_campaing_payment" => 'Yaz Kampanyası Ücreti (:price) Ödeme Şekli',
     "summer_campaing_payments" => [
         1 => "Peşin",
         2 => "İlk aya yansıt",
