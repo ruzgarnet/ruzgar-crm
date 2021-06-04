@@ -98,6 +98,13 @@ $(function () {
                     }, 3000);
                 }
 
+                // Reload page
+                if (result.reload) {
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                }
+
                 // If response has approve, change fields from table
                 if (result.approve) {
                     let approve = result.approve,
@@ -354,9 +361,6 @@ $(function () {
         });
     }
 
-    /**
-     * Search timeout
-     */
     let search_timeout;
 
     /**
@@ -417,6 +421,19 @@ $(function () {
 
         $(".subs-payments").fadeOut(300);
         $(".subs-" + id + "-payments").fadeIn(600);
+    });
+
+    /**
+     * Open get payment modal, change form action and price
+     */
+    $(document).on("click", ".edit-payment-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            price = button.data("price");
+
+        $("#editPaymentPriceForm").prop("action", action);
+        $("#editPaymentPriceModal").modal("show");
+        $("#inpEditPrice").val(price);
     });
 });
 

@@ -127,6 +127,14 @@
                                             </td>
                                             <td>
                                                 <div class="buttons">
+                                                    <button type="button"
+                                                        class="btn btn-primary edit-payment-modal-btn"
+                                                        data-action="{{ relative_route('admin.payment.price.put', $payment) }}"
+                                                        data-price="{{ $payment->price }}"
+                                                        title="@lang('titles.edit_payment')">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+
                                                     @if ($payment->status !== 2)
                                                         <button type="button"
                                                             class="btn btn-primary get-payment-modal-btn"
@@ -182,4 +190,5 @@
 
 @push('modal')
     @include('admin.modals.get-payment')
+    @include('admin.modals.edit-payment-price')
 @endpush

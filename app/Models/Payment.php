@@ -53,6 +53,16 @@ class Payment extends Model
     }
 
     /**
+     * Edit Payments relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function editPayments()
+    {
+        return $this->hasMany(EditPayment::class);
+    }
+
+    /**
      * Get payment type id's
      * For titles use language files => tables.{table_name|model_name}.types.{type_id}
      *
@@ -128,6 +138,33 @@ class Payment extends Model
                         'price' => $this->subscription->price
                     ]);
                 }
+            }
+
+            DB::commit();
+            $success = true;
+        } catch (Exception $e) {
+            DB::rollBack();
+            $success = false;
+        }
+
+        return $success;
+    }
+
+    /**
+     * Edit payment price
+     *
+     * @param array $data
+     * @return void
+     */
+    public function edit_price(array $data)
+    {
+        $success = false;
+
+        DB::beginTransaction();
+        try {
+            if (EditPayment::create($data)) {
+                $this->price = $data['new_price'];
+                $this->save();
             }
 
             DB::commit();

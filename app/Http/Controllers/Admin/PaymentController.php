@@ -147,6 +147,52 @@ class PaymentController extends Controller
     }
 
     /**
+     * Update price
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Payment $payment
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function price(Request $request, Payment $payment)
+    {
+        $rules = [
+            'price' => 'required|numeric|min:0',
+            'description' => 'required|string|max:511'
+        ];
+
+        $validated = $request->validate($rules);
+
+        $data = [
+            'payment_id' => $payment->id,
+            'staff_id' => $request->user()->staff->id,
+            'old_price' => $payment->price,
+            'new_price' => $validated['price'],
+            'description' => $validated['description']
+        ];
+
+        if ($payment->edit_price($data)) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.edit.success')
+                ],
+                'reload' => true
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.edit.error')
+            ]
+        ]);
+    }
+
+    /**
      * Rules for validation
      *
      * @return array

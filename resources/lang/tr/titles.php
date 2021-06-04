@@ -20,6 +20,7 @@ return [
     'cancel' => 'İptal',
     'approve' => 'Onayla',
     'get_payment' => 'Ödemeyi Al',
+    'edit_payment' => 'Ödemeyi Düzenle',
 
     'yes' => 'Evet',
     'no' => 'Hayır',
