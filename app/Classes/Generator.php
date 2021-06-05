@@ -59,4 +59,29 @@ class Generator
 
         return $rand;
     }
+
+    /**
+     * Generate subscription number
+     *
+     * @return string
+     */
+    public static function subscriptionNo()
+    {
+        // Control for unique
+        $pass = false;
+        $rand = '';
+        $rule = ['rand' => 'unique:subscriptions,subscription_no'];
+        do {
+            $rand = rand(1000, 9999) . rand(1000, 9999) . rand(100, 999);
+            $input = ['rand' => $rand];
+            $validator = Validator::make($input, $rule);
+            if (!$validator->fails()) {
+                $pass = true;
+            } else {
+                $pass = false;
+            }
+        } while ($pass !== true);
+
+        return $rand;
+    }
 }

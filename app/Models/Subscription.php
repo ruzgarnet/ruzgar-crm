@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Classes\Generator;
 use App\Models\Attributes\ApprovedAtAttribute;
 use App\Models\Attributes\EndDateAttribute;
 use App\Models\Attributes\OptionValuesAttribute;
@@ -94,7 +95,7 @@ class Subscription extends Model
 
         try {
             $this->approved_at = DB::raw('current_timestamp()');
-            $this->subscription_no = $this->generateSubscriptionNo();
+            $this->subscription_no = Generator::subscriptionNo();
 
             $payments = $this->generatePayments();
 
@@ -137,31 +138,6 @@ class Subscription extends Model
         }
 
         return $success;
-    }
-
-    /**
-     * Generate subscription number
-     *
-     * @return string
-     */
-    private static function generateSubscriptionNo()
-    {
-        // Control for unique
-        $pass = false;
-        $rand = '';
-        $rule = ['rand' => 'unique:subscriptions,subscription_no'];
-        do {
-            $rand = rand(1000, 9999) . rand(1000, 9999) . rand(100, 999);
-            $input = ['rand' => $rand];
-            $validator = Validator::make($input, $rule);
-            if (!$validator->fails()) {
-                $pass = true;
-            } else {
-                $pass = false;
-            }
-        } while ($pass !== true);
-
-        return $rand;
     }
 
     /**
