@@ -299,9 +299,11 @@
                         for (let option in select.options) {
                             select.options.item(option).removeAttribute("selected");
                         }
-                        select.options
-                            .item(select.selectedIndex)
-                            .setAttribute("selected", true);
+                        if (select.options.item(select.selectedIndex)) {
+                            select.options
+                                .item(select.selectedIndex)
+                                .setAttribute("selected", true);
+                        }
                     })
                 }
 
