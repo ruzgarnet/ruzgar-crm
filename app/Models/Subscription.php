@@ -9,10 +9,12 @@ use App\Models\Attributes\OptionValuesAttribute;
 use App\Models\Attributes\PaymentAttribute;
 use App\Models\Attributes\PriceAttribute;
 use App\Models\Attributes\StartDateAttribute;
+use App\Models\Generators\SubscriptionChangeGenerator;
 use App\Models\Generators\SubscriptionPaymentGenerator;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class Subscription extends Model
@@ -24,7 +26,8 @@ class Subscription extends Model
         OptionValuesAttribute,
         SubscriptionPaymentGenerator,
         StartDateAttribute,
-        EndDateAttribute;
+        EndDateAttribute,
+        SubscriptionChangeGenerator;
 
     /**
      * All fields fillable
@@ -83,7 +86,7 @@ class Subscription extends Model
         return $this->hasMany(Payment::class)->orderByDesc('date');
     }
 
-     /**
+    /**
      * Edit Subscription Price relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -200,7 +203,86 @@ class Subscription extends Model
             $success = true;
         } catch (Exception $e) {
             DB::rollBack();
-            echo $e->getMessage();
+            $success = false;
+        }
+
+        return $success;
+    }
+
+    /**
+     * Check row can editable
+     *
+     * If subs changed or expired returns true
+     *
+     * @return boolean
+     */
+    public function isEditable()
+    {
+        return !($this->isChanged() || ($this->end_date !== null && Carbon::parse($this->end_date)->isPast()));
+    }
+
+    /**
+     * Check this row changed
+     *
+     * @return boolean
+     */
+    public function isChanged()
+    {
+        $count = DB::table('change_subscriptions')
+            ->where('subscription_id', $this->id)
+            ->count();
+
+        return $count > 0 ? true : false;
+    }
+
+    /**
+     * If row changed get new sub
+     *
+     * @return \App\Models\Subscription
+     */
+    public function getChanged()
+    {
+        $row = DB::table('change_subscriptions')
+            ->where('subscription_id', $this->id)
+            ->first();
+
+        return self::find($row->changed_id) ?? false;
+    }
+
+    /**
+     * Change service
+     *
+     * Create new sub, generate new payments, delete old payments, insert changed info
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function change_service(array $data)
+    {
+        $success = false;
+
+        DB::beginTransaction();
+        try {
+            $sub = $this->getChangedSubscription($data);
+
+            $this->addChangedRow($sub);
+
+            $payments = $this->getChangedPayments($sub->id, $data['price']);
+            $this->deleteChangedPayments();
+
+            foreach ($payments as $payment) {
+                Payment::insert($payment);
+            }
+
+            $this->end_date = Carbon::parse($data['date'])->format('Y-m-d');
+            $this->save();
+
+            DB::commit();
+
+            $success = true;
+        } catch (Exception $e) {
+            DB::rollBack();
+
             $success = false;
         }
 

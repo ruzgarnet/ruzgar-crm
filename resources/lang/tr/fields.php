@@ -147,6 +147,8 @@ return [
     'setup_informations' => 'Kurulum Bilgileri',
     'subscription_duration' => 'Abonelik Aralığı',
     'payable' => 'Ödenecek',
+    'changed_service' => 'Değiştirilmiş Hizmet',
+    'change_service_payment' => 'Hizmet Değişim Ücreti',
     // Subscription Attributes
 
     // Credit Card Attributes

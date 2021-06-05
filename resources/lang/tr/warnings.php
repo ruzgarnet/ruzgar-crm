@@ -15,5 +15,11 @@ return [
     'payment' => [
         'not_allowed_received_date' => 'Ödeme yapamazsınız.',
         'successful' => "Ödeme alındı."
+    ],
+    'subscription' => [
+        'not_approved' => 'Onaylanmamış abonelikte bu işlemi gerçekleştiremezsiniz!',
+        'cant_change_same_service' => 'Değiştirmek istediğiniz hizmet, önceki hizmetle aynı!',
+        'ended' => 'Taahhüt süresi bitmiş abonelikte bu işlemi gerçekleştiremezsiniz!',
+        'already_changed' => 'Abonelik zaten değiştirilmiş!'
     ]
 ];

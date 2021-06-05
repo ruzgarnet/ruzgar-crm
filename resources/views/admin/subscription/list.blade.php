@@ -38,7 +38,19 @@
                                             <a
                                                 href="{{ route('admin.customer.show', $subscription->customer_id) }}">{{ $subscription->customer->full_name }}</a>
                                         </td>
-                                        <td>{{ $subscription->service->name }}</td>
+                                        <td>
+                                            <div>{{ $subscription->service->name }}</div>
+                                            @if ($subscription->isChanged())
+                                                <div>
+                                                    <small>
+                                                        <a
+                                                            href="{{ route('admin.subscription.payments', $subscription->getChanged()) }}">
+                                                            {{ $subscription->getChanged()->service->name }}
+                                                        </a>
+                                                    </small>
+                                                </div>
+                                            @endif
+                                        </td>
                                         <td>{{ $subscription->price_print }}</td>
                                         <td>{{ convert_date($subscription->start_date, 'mask') }}</td>
                                         <td>
@@ -82,15 +94,23 @@
                                                     <i class="fas fa-file-invoice"></i>
                                                 </a>
 
-                                                <button type="button"
-                                                    class="btn btn-info approved-element edit-subscription-price-modal-btn"
-                                                    data-action="{{ relative_route('admin.subscription.price', $subscription) }}"
-                                                    data-customer="{{ $subscription->customer->full_name }}"
-                                                    data-service="{{ $subscription->service->name }}"
-                                                    data-price="{{ $subscription->price }}"
-                                                    title="@lang('titles.edit_subscription_price')">
-                                                    <i class="fas fa-coins"></i>
-                                                </button>
+                                                @if ($subscription->isEditable())
+                                                    <button type="button"
+                                                        class="btn btn-info approved-element edit-subscription-price-modal-btn"
+                                                        data-action="{{ relative_route('admin.subscription.price', $subscription) }}"
+                                                        data-customer="{{ $subscription->customer->full_name }}"
+                                                        data-service="{{ $subscription->service->name }}"
+                                                        data-price="{{ $subscription->price }}"
+                                                        title="@lang('titles.edit_subscription_price')">
+                                                        <i class="fas fa-coins"></i>
+                                                    </button>
+
+                                                    <a href="{{ route('admin.subscription.change', $subscription) }}"
+                                                        class="btn btn-primary approved-element"
+                                                        title="@lang('tables.subscription.change_service')">
+                                                        <i class="fas fa-cloud-upload-alt"></i>
+                                                    </a>
+                                                @endif
 
                                                 <button type="button"
                                                     class="btn btn-danger approve-modal-btn approved-element"

@@ -314,6 +314,113 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function change(Subscription $subscription)
+    {
+        $data = [
+            'subscription' => $subscription,
+            'services' => Service::where('status', 1)->get()
+        ];
+
+        return view('admin.subscription.change', $data);
+    }
+
+    /**
+     * Change service
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function upgrade(Request $request, Subscription $subscription)
+    {
+        $validated = $request->validate([
+            'service_id' => [
+                'required',
+                Rule::exists('services', 'id')->where(function ($query) {
+                    return $query->where('status', 1);
+                })
+            ],
+            'date' => 'required|date',
+            'price' => 'required|numeric|min:0',
+            'payment' => 'required|numeric|min:0',
+        ]);
+
+        if ($subscription->approved_at === null) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.subscription.not_approved')
+                ]
+            ]);
+        }
+
+        if ($subscription->isChanged()) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.subscription.already_changed')
+                ]
+            ]);
+        }
+
+        if (
+            $subscription->end_date !== null
+            && Carbon::parse($subscription->end_date)->isPast()
+        ) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.subscription.ended')
+                ]
+            ]);
+        }
+
+        if ($validated['service_id'] == $subscription->service_id) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.subscription.cant_change_same_service')
+                ]
+            ]);
+        }
+
+        $validated['staff_id'] = $request->user()->staff_id;
+
+        if ($subscription->change_service($validated)) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.subscription.change.success')
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.subscription.change.error')
+            ]
+        ]);
+    }
+
+    /**
      * Data for view
      *
      * @return array

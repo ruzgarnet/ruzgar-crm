@@ -35,4 +35,11 @@ return [
             'error' => 'Abonelik kaydı onaylanırken hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
         ]
     ],
+
+    'subscription' => [
+        'changed' => [
+            'success' => 'Abonenin hizmeti başarıyla değiştirildi.',
+            'error' => 'Abonenin hizmeti değiştirilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
+        ]
+    ]
 ];

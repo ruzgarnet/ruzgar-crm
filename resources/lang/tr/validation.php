@@ -212,7 +212,8 @@ return [
             'security_code' => 'CVV  kodu',
             'auto_payment' => 'Otomatik ödeme',
         ],
-        'description' => 'Açıklama'
+        'description' => 'Açıklama',
+        'payment' => 'Tutar'
     ],
 
 ];
