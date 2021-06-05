@@ -8,6 +8,11 @@ $(function () {
         },
     });
 
+    // Prevent null links
+    $(document).on("click", "[href='#']", function (event) {
+        event.preventDefault();
+    });
+
     /**
      * Ajax form requests
      */
@@ -424,7 +429,7 @@ $(function () {
     });
 
     /**
-     * Open get payment modal, change form action and price
+     * Open edit payment price modal, change form action and price
      */
     $(document).on("click", ".edit-payment-modal-btn", function () {
         let button = $(this),
@@ -433,7 +438,7 @@ $(function () {
 
         $("#editPaymentPriceForm").prop("action", action);
         $("#editPaymentPriceModal").modal("show");
-        $("#inpEditPrice").val(price);
+        $("#inpEditPaymentModalEditPrice").val(price);
     });
 });
 

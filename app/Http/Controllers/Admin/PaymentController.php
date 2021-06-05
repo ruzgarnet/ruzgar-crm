@@ -155,12 +155,10 @@ class PaymentController extends Controller
      */
     public function price(Request $request, Payment $payment)
     {
-        $rules = [
+        $validated = $request->validate([
             'price' => 'required|numeric|min:0',
             'description' => 'required|string|max:511'
-        ];
-
-        $validated = $request->validate($rules);
+        ]);
 
         $data = [
             'payment_id' => $payment->id,

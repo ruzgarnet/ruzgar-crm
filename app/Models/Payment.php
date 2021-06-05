@@ -55,7 +55,7 @@ class Payment extends Model
     /**
      * Edit Payments relationship
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function editPayments()
     {

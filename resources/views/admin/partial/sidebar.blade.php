@@ -1,10 +1,10 @@
 <div class="main-sidebar">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="/">RüzgarNET</a>
+            <a href="{{ route('admin.dashboard') }}">RüzgarNET</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="/">RN</a>
+            <a href="{{ route('admin.dashboard') }}">RN</a>
         </div>
         <ul class="sidebar-menu">
             @foreach ($admin->sideNav() as $nav)

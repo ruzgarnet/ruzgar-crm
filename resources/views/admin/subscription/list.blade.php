@@ -34,7 +34,10 @@
                                     <tr data-id="{{ $subscription->id }}"
                                         class="{{ $subscription->approved_at === null ? 'un-approved-row' : 'approved-row' }}">
                                         <th scope="row">{{ $loop->iteration }}</th>
-                                        <td>{{ $subscription->customer->full_name }}</td>
+                                        <td>
+                                            <a
+                                                href="{{ route('admin.customer.show', $subscription->customer_id) }}">{{ $subscription->customer->full_name }}</a>
+                                        </td>
                                         <td>{{ $subscription->service->name }}</td>
                                         <td>{{ $subscription->price_print }}</td>
                                         <td>{{ convert_date($subscription->start_date, 'mask') }}</td>
@@ -69,7 +72,6 @@
                                                     <i class="fas fa-check"></i>
                                                 </button>
 
-
                                                 <a href="{{ route('admin.subscription.payments', $subscription) }}"
                                                     class="btn btn-primary approved-element"
                                                     title="@lang('tables.payment.title')">
@@ -80,7 +82,7 @@
                                                     class="btn btn-danger approve-modal-btn approved-element"
                                                     data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
                                                     data-modal="#approveSubscriptionModal">
-                                                    <i class="fas fa-check"></i>
+                                                    <i class="fas fa-times"></i>
                                                 </button>
                                             </div>
                                         </td>

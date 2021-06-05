@@ -66,6 +66,7 @@ return [
     'date' => 'Tarih',
     'paid_date' => 'Ödeme Tarihi',
     'save_date' => 'Kayıt Tarihi',
+    'first_save_date' => 'İlk Kayıt Tarihi',
     'subscription_date' => 'Abonelik Tarihi',
     // Date Attributes End
 

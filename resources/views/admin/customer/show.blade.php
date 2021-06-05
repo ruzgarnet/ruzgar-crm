@@ -122,13 +122,6 @@
                                             <div>{{ $subscription->bbk_code }}<div>
                                         </li>
                                         <li>
-                                            <span class="fa-li"><i class="fas fa-history"></i></span>
-                                            <div><b>@lang('fields.commitment_period')</b></div>
-                                            <div>
-                                                @lang("fields.commitments.{$subscription->commitment}")
-                                            </div>
-                                        </li>
-                                        <li>
                                             <span class="fa-li"><i class="fas fa-calendar-alt"></i></span>
                                             <div><b>@lang('fields.subscription_duration')</b></div>
                                             <div>
@@ -138,6 +131,8 @@
                                                 @if ($subscription->commitment > 0)
                                                     <span
                                                         title="@lang('fields.end_date')">{{ $subscription->end_date_print }}</span>
+                                                    <span>(@lang('fields.commitment_period'):
+                                                        @lang("fields.commitments.{$subscription->commitment}"))</span>
                                                 @else
                                                     @lang('fields.commitless')
                                                 @endif
@@ -152,7 +147,7 @@
                                         @endif
                                         <li>
                                             <span class="fa-li"><i class="fas fa-file-signature"></i></span>
-                                            <div><b>@lang('fields.save_date')</b></div>
+                                            <div><b>@lang('fields.first_save_date')</b></div>
                                             <div>{{ convert_date($subscription->created_at, 'large') }}</div>
                                         </li>
                                         <li>
@@ -244,7 +239,7 @@
                                                                 data-action="{{ relative_route('admin.payment.price.put', $payment) }}"
                                                                 data-price="{{ $payment->price }}"
                                                                 title="@lang('titles.edit_payment')">
-                                                                <i class="fas fa-edit"></i>
+                                                                <i class="fas fa-file-invoice-dollar"></i>
                                                             </button>
 
                                                             @if ($payment->status !== 2)
