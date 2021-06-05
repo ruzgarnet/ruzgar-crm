@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\Subscription;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -104,7 +105,7 @@ class SubscriptionController extends Controller
                 'toastr' => [
                     'type' => 'error',
                     'title' => trans('response.title.error'),
-                    'message' => trans('response.approved.subscription')
+                    'message' => trans('warnings.approved.subscription')
                 ]
             ]);
         }
@@ -156,7 +157,7 @@ class SubscriptionController extends Controller
                 'toastr' => [
                     'type' => 'error',
                     'title' => trans('response.title.error'),
-                    'message' => trans('response.approved.subscription')
+                    'message' => trans('warnings.approved.subscription')
                 ]
             ]);
         }
@@ -199,7 +200,7 @@ class SubscriptionController extends Controller
                     'toastr' => [
                         'type' => 'error',
                         'title' => trans('response.title.error'),
-                        'message' => trans('response.approved.subscription')
+                        'message' => trans('warnings.approved.subscription')
                     ]
                 ]);
             }
@@ -268,6 +269,13 @@ class SubscriptionController extends Controller
         return view('admin.subscription.payment', $data);
     }
 
+    /**
+     * Update price
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function price(Request $request, Subscription $subscription)
     {
         $validated = $request->validate([

@@ -48,7 +48,11 @@
                                                 <span class="badge badge-primary">@lang('fields.commitless')</span>
                                             @endif
                                         </td>
-                                        <td>{{ convert_date($subscription->approved_at, 'mask_time') }}</td>
+                                        <td>
+                                            @if ($subscription->approved_at !== null)
+                                                {{ convert_date($subscription->approved_at, 'mask_time') }}
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="buttons">
                                                 {{-- FIXME prepare for production --}}

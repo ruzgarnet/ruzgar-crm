@@ -6,6 +6,9 @@ return [
         'customer' => 'Müşterinin kaydını onaylamak istediğinize emin misiniz?',
         'subscription' => 'Abonelik kaydını onaylamak istediğinize emin misiniz?'
     ],
+    'approved' => [
+        'subscription' => 'Onaylanmış aboneliği düzenleyemez veya silemezsiniz!'
+    ],
     'unapproved' => [
         'subscription' => 'Onaylanmamış abonelikte ödeme işlemleri yapamazsınız!'
     ],

@@ -19,7 +19,7 @@
                     <div class="card-body">
                         @if ($subscription->approved_at)
                             <div class="alert alert-danger">
-                                @lang('response.approved.subscription')
+                                @lang('warnings.approved.subscription')
                             </div>
                         @endif
 

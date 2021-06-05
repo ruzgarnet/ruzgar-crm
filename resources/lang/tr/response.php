@@ -35,8 +35,4 @@ return [
             'error' => 'Abonelik kaydı onaylanırken hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
         ]
     ],
-
-    'approved' => [
-        'subscription' => 'Onaylanmış aboneliği düzenleyemez veya silemezsiniz!'
-    ],
 ];
