@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Mutators;
+namespace App\Models\Generators;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 /**
  * Generate payment datas for subscription model
  */
-trait SubscriptionPaymentMutator
+trait SubscriptionPaymentGenerator
 {
     /**
      * Generates first payments

@@ -9,12 +9,11 @@ use App\Models\Attributes\OptionValuesAttribute;
 use App\Models\Attributes\PaymentAttribute;
 use App\Models\Attributes\PriceAttribute;
 use App\Models\Attributes\StartDateAttribute;
-use App\Models\Mutators\SubscriptionPaymentMutator;
+use App\Models\Generators\SubscriptionPaymentGenerator;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class Subscription extends Model
 {
@@ -23,7 +22,7 @@ class Subscription extends Model
         PaymentAttribute,
         ApprovedAtAttribute,
         OptionValuesAttribute,
-        SubscriptionPaymentMutator,
+        SubscriptionPaymentGenerator,
         StartDateAttribute,
         EndDateAttribute;
 
