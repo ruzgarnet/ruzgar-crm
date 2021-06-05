@@ -152,7 +152,8 @@
                                                 @if ($subscription->commitment > 0)
                                                     <span
                                                         title="@lang('fields.end_date')">{{ $subscription->end_date_print }}</span>
-                                                    <span>(@lang('fields.commitment_period'): @lang("fields.commitments.{$subscription->commitment}"))</span>
+                                                    <span>(@lang('fields.commitment_period'):
+                                                        @lang("fields.commitments.{$subscription->commitment}"))</span>
                                                 @else
                                                     @lang('fields.commitless')
                                                 @endif
@@ -254,13 +255,15 @@
                                                     </td>
                                                     <td>
                                                         <div class="buttons">
-                                                            <button type="button"
-                                                                class="btn btn-primary edit-payment-modal-btn"
-                                                                data-action="{{ relative_route('admin.payment.price.put', $payment) }}"
-                                                                data-price="{{ $payment->price }}"
-                                                                title="@lang('titles.edit_payment')">
-                                                                <i class="fas fa-file-invoice-dollar"></i>
-                                                            </button>
+                                                            @if ($payment->paid_at === null)
+                                                                <button type="button"
+                                                                    class="btn btn-primary edit-payment-modal-btn"
+                                                                    data-action="{{ relative_route('admin.payment.price.put', $payment) }}"
+                                                                    data-price="{{ $payment->price }}"
+                                                                    title="@lang('titles.edit_payment')">
+                                                                    <i class="fas fa-file-invoice-dollar"></i>
+                                                                </button>
+                                                            @endif
 
                                                             @if ($payment->status !== 2)
                                                                 <button type="button"

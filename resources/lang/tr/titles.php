@@ -14,6 +14,7 @@ return [
     'other' => 'Diğer',
 
     'list' => 'Listele',
+    'show' => 'Görüntüle',
     'add' => 'Ekle',
     'edit' => 'Düzenle',
     'delete' => 'Sil',

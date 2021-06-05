@@ -168,7 +168,7 @@ class PaymentController extends Controller
             'description' => $validated['description']
         ];
 
-        if ($payment->edit_price($data)) {
+        if ($payment->paid_at === null && $payment->edit_price($data)) {
             return response()->json([
                 'success' => true,
                 'toastr' => [
