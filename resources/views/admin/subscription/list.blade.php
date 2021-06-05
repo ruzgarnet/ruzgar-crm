@@ -79,6 +79,16 @@
                                                 </a>
 
                                                 <button type="button"
+                                                    class="btn btn-info approved-element edit-subscription-price-modal-btn"
+                                                    data-action="{{ relative_route('admin.subscription.price', $subscription) }}"
+                                                    data-customer="{{ $subscription->customer->full_name }}"
+                                                    data-service="{{ $subscription->service->name }}"
+                                                    data-price="{{ $subscription->price }}"
+                                                    title="@lang('titles.edit_subscription_price')">
+                                                    <i class="fas fa-coins"></i>
+                                                </button>
+
+                                                <button type="button"
                                                     class="btn btn-danger approve-modal-btn approved-element"
                                                     data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
                                                     data-modal="#approveSubscriptionModal">
@@ -125,4 +135,5 @@
 @push('modal')
     @include('admin.modals.delete')
     @include('admin.modals.approve-subscription')
+    @include('admin.modals.edit-subscription-price')
 @endpush

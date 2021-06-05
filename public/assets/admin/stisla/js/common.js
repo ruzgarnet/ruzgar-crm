@@ -440,6 +440,23 @@ $(function () {
         $("#editPaymentPriceModal").modal("show");
         $("#inpEditPaymentModalEditPrice").val(price);
     });
+
+    /**
+     * Open edit subscription price modal, change form action and price
+     */
+    $(document).on("click", ".edit-subscription-price-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            price = button.data("price"),
+            customer = button.data("customer"),
+            service = button.data("service");
+
+        $("#editSubscriptionPriceForm").prop("action", action);
+        $("#editSubscriptionPriceModal").modal("show");
+        $("#inpEditSubPriceModalEditPrice").val(price);
+        $("#inpEditSubPriceModalCustomer").val(customer);
+        $("#inpEditSubPriceModalService").val(service);
+    });
 });
 
 /**

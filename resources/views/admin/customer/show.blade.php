@@ -115,6 +115,27 @@
                                     </div>
                                 </div>
                                 <div class="profile-widget-description">
+                                    @if ($subscription->approved_at !== null)
+                                        <div class="mb-3">
+                                            <div class="dropdown">
+                                                <button class="btn btn-primary dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    @lang('fields.actions')
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a href="#" class="dropdown-item edit-subscription-price-modal-btn"
+                                                        data-action="{{ relative_route('admin.subscription.price', $subscription) }}"
+                                                        data-customer="{{ $subscription->customer->full_name }}"
+                                                        data-service="{{ $subscription->service->name }}"
+                                                        data-price="{{ $subscription->price }}">
+                                                        <i class="fas fa-coins"></i>
+                                                        @lang('titles.edit_subscription_price')
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <ul class="fa-ul subscription-list mb-0">
                                         <li>
                                             <span class="fa-li"><i class="fas fa-map-marker-alt"></i></span>
@@ -131,8 +152,7 @@
                                                 @if ($subscription->commitment > 0)
                                                     <span
                                                         title="@lang('fields.end_date')">{{ $subscription->end_date_print }}</span>
-                                                    <span>(@lang('fields.commitment_period'):
-                                                        @lang("fields.commitments.{$subscription->commitment}"))</span>
+                                                    <span>(@lang('fields.commitment_period'): @lang("fields.commitments.{$subscription->commitment}"))</span>
                                                 @else
                                                     @lang('fields.commitless')
                                                 @endif
@@ -295,4 +315,5 @@
 @push('modal')
     @include('admin.modals.get-payment')
     @include('admin.modals.edit-payment-price')
+    @include('admin.modals.edit-subscription-price')
 @endpush

@@ -21,6 +21,8 @@ return [
     'approve' => 'Onayla',
     'get_payment' => 'Ödemeyi Al',
     'edit_payment' => 'Ödemeyi Düzenle',
+    'edit_price' => 'Ücreti Düzenle',
+    'edit_subscription_price' => 'Abonelik Ücretini Düzenle',
 
     'yes' => 'Evet',
     'no' => 'Hayır',

@@ -268,6 +268,43 @@ class SubscriptionController extends Controller
         return view('admin.subscription.payment', $data);
     }
 
+    public function price(Request $request, Subscription $subscription)
+    {
+        $validated = $request->validate([
+            'price' => 'required|numeric|min:0',
+            'description' => 'required|string|max:511'
+        ]);
+
+        $data = [
+            'subscription_id' => $subscription->id,
+            'staff_id' => $request->user()->staff->id,
+            'old_price' => $subscription->price,
+            'new_price' => $validated['price'],
+            'description' => $validated['description']
+        ];
+
+        if ($subscription->edit_price($data)) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.edit.success')
+                ],
+                'reload' => true
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.edit.error')
+            ]
+        ]);
+    }
+
     /**
      * Data for view
      *

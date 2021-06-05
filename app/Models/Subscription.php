@@ -84,6 +84,16 @@ class Subscription extends Model
         return $this->hasMany(Payment::class)->orderByDesc('date');
     }
 
+     /**
+     * Edit Subscription Price relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function editSubscriptionPrice()
+    {
+        return $this->hasMany(EditSubscriptionPrice::class);
+    }
+
     /**
      * Approve and add first payment(s)
      *
@@ -168,5 +178,33 @@ class Subscription extends Model
             return $this->values[$key];
         }
         return $default;
+    }
+
+    /**
+     * Edit subscription's price
+     *
+     * @param array $data
+     * @return void
+     */
+    public function edit_price(array $data)
+    {
+        $success = false;
+
+        DB::beginTransaction();
+        try {
+            if (EditSubscriptionPrice::create($data)) {
+                $this->price = $data['new_price'];
+                $this->save();
+            }
+
+            DB::commit();
+            $success = true;
+        } catch (Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            $success = false;
+        }
+
+        return $success;
     }
 }
