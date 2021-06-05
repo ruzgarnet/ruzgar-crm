@@ -66,6 +66,10 @@ trait SubscriptionPaymentMutator
             $date_append = 0;
         }
 
+        if ($months == 0) {
+            $months = 1;
+        }
+
         $payments = [];
         for ($i = 0; $i < $months; $i++) {
             $payments[$i]["price"] = (float)$this->price;
