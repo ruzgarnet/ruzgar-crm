@@ -218,7 +218,7 @@ class Subscription extends Model
      */
     public function isEditable()
     {
-        return !($this->isChanged() || ($this->end_date !== null && Carbon::parse($this->end_date)->isPast()));
+        return !($this->isChanged() || $this->isDisabled() || ($this->end_date !== null && Carbon::parse($this->end_date)->isPast()));
     }
 
     /**
@@ -250,6 +250,20 @@ class Subscription extends Model
     }
 
     /**
+     * Check subscriptions diasble status
+     *
+     * @return boolean
+     */
+    public function isCanceled()
+    {
+        $count = DB::table('canceled_subscriptions')
+            ->where('subscription_id', $this->id)
+            ->count();
+
+        return $count > 0 ? true : false;
+    }
+
+    /**
      * Change service
      *
      * Create new sub, generate new payments, delete old payments, insert changed info
@@ -276,6 +290,43 @@ class Subscription extends Model
 
             $this->end_date = Carbon::parse($data['date'])->format('Y-m-d');
             $this->save();
+
+            DB::commit();
+
+            $success = true;
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            $success = false;
+        }
+
+        return $success;
+    }
+
+    /**
+     * Cancel subscription and delete next payments
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function cancel_subscription(array $data)
+    {
+        $success = false;
+
+        DB::beginTransaction();
+        try {
+            DB::table('canceled_subscriptions')
+                ->insert($data);
+
+            $this->end_date = Carbon::now()->format('Y-m-d');
+            $this->save();
+
+            $dateAppend = $this->getOption('pre_payment') ? 0 : 1;
+
+            Payment::where('subscription_id', $this->id)
+                ->where('date', '>', Carbon::now()->addMonth($dateAppend)->lastOfMonth()->format('Y-m-d'))
+                ->whereNull('paid_at')
+                ->delete();
 
             DB::commit();
 

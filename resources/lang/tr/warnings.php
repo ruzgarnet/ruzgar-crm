@@ -20,6 +20,9 @@ return [
         'not_approved' => 'Onaylanmamış abonelikte bu işlemi gerçekleştiremezsiniz!',
         'cant_change_same_service' => 'Değiştirmek istediğiniz hizmet, önceki hizmetle aynı!',
         'ended' => 'Taahhüt süresi bitmiş abonelikte bu işlemi gerçekleştiremezsiniz!',
-        'already_changed' => 'Abonelik zaten değiştirilmiş!'
+        'already_changed' => 'Aboneliğin hizmeti zaten değiştirilmiş!',
+        'changed' => 'Hizmeti değiştirilmiş abonelikte bu işlemi gerçekleştiremezsiniz!',
+        'already_canceled' => 'Abonelik zaten iptal edilmiş!',
+        'canceled' => 'İptal edilmiş abonelikte bu işlemi gerçekleştiremezsiniz!'
     ]
 ];

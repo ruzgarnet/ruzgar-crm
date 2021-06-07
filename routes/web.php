@@ -114,6 +114,7 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::put('subscription/price/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'price'])->name('subscription.price');
     Route::get('subscription/change/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'change'])->name('subscription.change');
     Route::put('subscription/change/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'upgrade'])->name('subscription.change.put');
+    Route::put('subscription/cancel/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'cancel'])->name('subscription.cancel.put');
     // Subscription Routes End
 
     // Subscription Routes

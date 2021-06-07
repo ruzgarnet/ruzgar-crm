@@ -457,6 +457,21 @@ $(function () {
         $("#inpEditSubPriceModalCustomer").val(customer);
         $("#inpEditSubPriceModalService").val(service);
     });
+
+    /**
+     * Open edit subscription price modal, change form action and price
+     */
+    $(document).on("click", ".cancel-subscription-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            customer = button.data("customer"),
+            service = button.data("service");
+
+        $("#cancelSubscriptionForm").prop("action", action);
+        $("#cancelSubscriptionModal").modal("show");
+        $("#inpCancelSubscriptionModalCustomer").val(customer);
+        $("#inpCancelSubscriptionModalService").val(service);
+    });
 });
 
 /**

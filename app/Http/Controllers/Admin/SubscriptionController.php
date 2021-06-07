@@ -361,6 +361,17 @@ class SubscriptionController extends Controller
             ]);
         }
 
+        if ($subscription->isCanceled()) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.subscription.canceled')
+                ]
+            ]);
+        }
+
         if ($subscription->isChanged()) {
             return response()->json([
                 'error' => true,
@@ -416,6 +427,90 @@ class SubscriptionController extends Controller
                 'type' => 'error',
                 'title' => trans('response.title.error'),
                 'message' => trans('response.subscription.change.error')
+            ]
+        ]);
+    }
+
+    /**
+     * Cancel subscription
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cancel(Request $request, Subscription $subscription)
+    {
+        $validated = $request->validate([
+            'description' => 'required|string|max:511',
+        ]);
+
+        if ($subscription->approved_at === null) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.subscription.not_approved')
+                ]
+            ]);
+        }
+
+        if ($subscription->isCanceled()) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.subscription.already_canceled')
+                ]
+            ]);
+        }
+
+        if ($subscription->isChanged()) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.subscription.changed')
+                ]
+            ]);
+        }
+
+        if (
+            $subscription->end_date !== null
+            && Carbon::parse($subscription->end_date)->isPast()
+        ) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.subscription.ended')
+                ]
+            ]);
+        }
+
+        $validated['staff_id'] = $request->user()->staff_id;
+        $validated['subscription_id'] = $subscription->id;
+
+        if ($subscription->cancel_subscription($validated)) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.subscription.cancel.success')
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.subscription.cancel.error')
             ]
         ]);
     }

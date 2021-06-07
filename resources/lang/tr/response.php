@@ -37,7 +37,7 @@ return [
     ],
 
     'subscription' => [
-        'changed' => [
+        'change' => [
             'success' => 'Abonenin hizmeti başarıyla değiştirildi.',
             'error' => 'Abonenin hizmeti değiştirilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
         ]

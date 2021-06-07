@@ -105,6 +105,15 @@
                                                         <i class="fas fa-coins"></i>
                                                     </button>
 
+                                                    <button type="button"
+                                                        class="btn btn-danger approved-element cancel-subscription-modal-btn"
+                                                        data-action="{{ relative_route('admin.subscription.cancel.put', $subscription) }}"
+                                                        data-customer="{{ $subscription->customer->select_print }}"
+                                                        data-service="{{ $subscription->service->select_print }}"
+                                                        title="@lang('titles.cancel_subscription')">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+
                                                     <a href="{{ route('admin.subscription.change', $subscription) }}"
                                                         class="btn btn-primary approved-element"
                                                         title="@lang('tables.subscription.change_service')">
@@ -113,7 +122,7 @@
                                                 @endif
 
                                                 <button type="button"
-                                                    class="btn btn-danger approve-modal-btn approved-element"
+                                                    class="btn btn-warning approve-modal-btn approved-element"
                                                     data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
                                                     data-modal="#approveSubscriptionModal">
                                                     <i class="fas fa-times"></i>
@@ -160,4 +169,5 @@
     @include('admin.modals.delete')
     @include('admin.modals.approve-subscription')
     @include('admin.modals.edit-subscription-price')
+    @include('admin.modals.cancel-subscription')
 @endpush
