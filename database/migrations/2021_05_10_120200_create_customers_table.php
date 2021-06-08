@@ -23,7 +23,6 @@ class CreateCustomersTable extends Migration
             $table->string('email');
             $table->unsignedTinyInteger('type')->default(1);
             $table->string('reference_code')->unique();
-            $table->string('payment_code', 255)->unique()->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
         });
