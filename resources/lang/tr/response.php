@@ -40,6 +40,10 @@ return [
         'change' => [
             'success' => 'Abonenin hizmeti başarıyla değiştirildi.',
             'error' => 'Abonenin hizmeti değiştirilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
+        ],
+        'cancel' => [
+            'success' => 'Abonenin başarıyla iptal edildi.',
+            'error' => 'Abonenin iptal edilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
         ]
     ]
 ];

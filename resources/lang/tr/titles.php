@@ -25,6 +25,7 @@ return [
     'edit_price' => 'Ücreti Düzenle',
     'edit_subscription_price' => 'Abonelik Ücretini Düzenle',
     'cancel_subscription' => 'Abonelik İptali',
+    'cancel' => 'İptal',
 
     'yes' => 'Evet',
     'no' => 'Hayır',

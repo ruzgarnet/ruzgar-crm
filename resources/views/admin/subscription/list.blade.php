@@ -39,7 +39,18 @@
                                                 href="{{ route('admin.customer.show', $subscription->customer_id) }}">{{ $subscription->customer->full_name }}</a>
                                         </td>
                                         <td>
-                                            <div>{{ $subscription->service->name }}</div>
+                                            <div>
+                                                {{ $subscription->service->name }}
+                                                @if ($subscription->isCanceled())
+                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                        data-toggle="popover" data-html="true"
+                                                        data-content="<b>Tarih:</b> {{ convert_date($subscription->canceledSubscription->created_at, 'large') }} <br>
+                                                        <b>Personel</b>: {{ $subscription->canceledSubscription->staff->full_name }} <br>
+                                                        <b>Sebep</b>: {{ $subscription->canceledSubscription->description }}">
+                                                        @lang('titles.cancel')
+                                                    </button>
+                                                @endif
+                                            </div>
                                             @if ($subscription->isChanged())
                                                 <div>
                                                     <small>

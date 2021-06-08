@@ -417,7 +417,8 @@ class SubscriptionController extends Controller
                     'type' => 'success',
                     'title' => trans('response.title.success'),
                     'message' => trans('response.subscription.change.success')
-                ]
+                ],
+                'redirect' => relative_route('admin.subscriptions')
             ]);
         }
 
@@ -501,7 +502,8 @@ class SubscriptionController extends Controller
                     'type' => 'success',
                     'title' => trans('response.title.success'),
                     'message' => trans('response.subscription.cancel.success')
-                ]
+                ],
+                'reload' => true
             ]);
         }
 

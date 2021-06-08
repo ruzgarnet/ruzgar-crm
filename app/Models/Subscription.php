@@ -97,6 +97,16 @@ class Subscription extends Model
     }
 
     /**
+     * Get cancel information
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function canceledSubscription()
+    {
+        return $this->hasOne(CanceledSubscription::class);
+    }
+
+    /**
      * Approve and add first payment(s)
      *
      * @return boolean
@@ -218,7 +228,7 @@ class Subscription extends Model
      */
     public function isEditable()
     {
-        return !($this->isChanged() || $this->isDisabled() || ($this->end_date !== null && Carbon::parse($this->end_date)->isPast()));
+        return !($this->isChanged() || $this->isCanceled() || ($this->end_date !== null && Carbon::parse($this->end_date)->isPast()));
     }
 
     /**
@@ -256,9 +266,7 @@ class Subscription extends Model
      */
     public function isCanceled()
     {
-        $count = DB::table('canceled_subscriptions')
-            ->where('subscription_id', $this->id)
-            ->count();
+        $count = CanceledSubscription::where('subscription_id', $this->id)->count();
 
         return $count > 0 ? true : false;
     }
@@ -315,8 +323,7 @@ class Subscription extends Model
 
         DB::beginTransaction();
         try {
-            DB::table('canceled_subscriptions')
-                ->insert($data);
+            CanceledSubscription::insert($data);
 
             $this->end_date = Carbon::now()->format('Y-m-d');
             $this->save();
