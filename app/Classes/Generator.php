@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Milon\Barcode\Facades\DNS1DFacade;
 
 /**
  * For generating values
@@ -83,5 +84,16 @@ class Generator
         } while ($pass !== true);
 
         return $rand;
+    }
+
+    /**
+     * Prints barcode image
+     *
+     * @param string $barcode
+     * @return string
+     */
+    public static function barcode(string $barcode)
+    {
+        return $barcode = DNS1DFacade::getBarcodePNG($barcode, 'C128');
     }
 }
