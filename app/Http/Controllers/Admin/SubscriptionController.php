@@ -285,7 +285,7 @@ class SubscriptionController extends Controller
 
         $data = [
             'subscription_id' => $subscription->id,
-            'staff_id' => $request->user()->staff->id,
+            'staff_id' => $request->user()->staff_id,
             'old_price' => $subscription->price,
             'new_price' => $validated['price'],
             'description' => $validated['description']

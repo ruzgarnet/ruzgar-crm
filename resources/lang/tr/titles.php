@@ -10,6 +10,7 @@ return [
     ],
 
     'product_and_services' => 'Ürün ve Hizmetler',
+    'services' => 'Hizmetler',
     'customers_and_orders' => 'Müşteriler ve Satışlar',
     'other' => 'Diğer',
 

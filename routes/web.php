@@ -117,11 +117,11 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::put('subscription/cancel/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'cancel'])->name('subscription.cancel.put');
     // Subscription Routes End
 
-    // Subscription Routes
+    // Payment Routes
     Route::post('payment/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'received'])->name('payment.received.post');
     Route::post('payment/result/{payment?}', [App\Http\Controllers\Admin\PaymentController::class, 'payment_result'])->name('payment.result');
     Route::put('payment/price/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'price'])->name('payment.price.put');
-    // Subscription Routes End
+    // Payment Routes End
 });
 
 // Request Routes
