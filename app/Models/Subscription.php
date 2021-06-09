@@ -107,6 +107,16 @@ class Subscription extends Model
     }
 
     /**
+     * Returns only active subscriptions
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function getActive()
+    {
+        return self::where('status', 1)->get();
+    }
+
+    /**
      * Approve and add first payment(s)
      *
      * @return boolean
@@ -117,6 +127,7 @@ class Subscription extends Model
 
         try {
             $this->approved_at = DB::raw('current_timestamp()');
+            $this->status = 1;
             $this->subscription_no = Generator::subscriptionNo();
 
             $payments = $this->generatePayments();
@@ -148,6 +159,7 @@ class Subscription extends Model
 
         try {
             $this->approved_at = null;
+            $this->status = 0;
             $this->save();
 
             Payment::where('subscription_id', $this->id)->delete();
@@ -196,7 +208,7 @@ class Subscription extends Model
      * Edit subscription's price
      *
      * @param array $data
-     * @return void
+     * @return boolean
      */
     public function edit_price(array $data)
     {
@@ -238,11 +250,7 @@ class Subscription extends Model
      */
     public function isChanged()
     {
-        $count = DB::table('change_subscriptions')
-            ->where('subscription_id', $this->id)
-            ->count();
-
-        return $count > 0 ? true : false;
+        return $this->status === 2 ? true : false;
     }
 
     /**
@@ -266,9 +274,7 @@ class Subscription extends Model
      */
     public function isCanceled()
     {
-        $count = CanceledSubscription::where('subscription_id', $this->id)->count();
-
-        return $count > 0 ? true : false;
+        return $this->status === 3 ? true : false;
     }
 
     /**
@@ -297,6 +303,7 @@ class Subscription extends Model
             }
 
             $this->end_date = Carbon::parse($data['date'])->format('Y-m-d');
+            $this->status = 2;
             $this->save();
 
             DB::commit();
@@ -315,7 +322,7 @@ class Subscription extends Model
      * Cancel subscription and delete next payments
      *
      * @param array $data
-     * @return bool
+     * @return boolean
      */
     public function cancel_subscription(array $data)
     {
@@ -326,6 +333,7 @@ class Subscription extends Model
             CanceledSubscription::insert($data);
 
             $this->end_date = Carbon::now()->format('Y-m-d');
+            $this->status = 3;
             $this->save();
 
             $dateAppend = $this->getOption('pre_payment') ? 0 : 1;

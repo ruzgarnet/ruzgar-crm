@@ -321,7 +321,7 @@ CREATE TABLE `subscriptions` (
   `payment` decimal(8,2) unsigned NOT NULL DEFAULT '0.00',
   `options` json DEFAULT NULL,
   `values` json DEFAULT NULL,
-  `status` tinyint unsigned NOT NULL,
+  `status` tinyint unsigned NOT NULL DEFAULT 0,
   `approved_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
