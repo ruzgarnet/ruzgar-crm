@@ -158,7 +158,10 @@ class ServiceController extends Controller
             'content' => 'required',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:255',
-            'meta_keywords' => 'nullable|string|max:255'
+            'meta_keywords' => 'nullable|string|max:255',
+            'original_price' => 'required|numeric|between:0,1000000',
+            'download' => 'required|numeric|between:0,1000000',
+            'upload' => 'required|numeric|between:0,1000000',
         ];
     }
 }

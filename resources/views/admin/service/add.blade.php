@@ -41,14 +41,26 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="inpModel">@lang('fields.model')</label>
                                     <input type="text" name="model" id="inpModel" class="form-control slug-input"
                                         data-lower="off">
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="inpOriginalPrice">@lang('fields.original_price')</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₺</div>
+                                        </div>
+                                        <input type="number" name="original_price" id="inpOriginalPrice" class="form-control money-input"
+                                            min="0" step=".01">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="inpPrice">@lang('fields.price')</label>
                                     <div class="input-group">
@@ -58,6 +70,20 @@
                                         <input type="number" name="price" id="inpPrice" class="form-control money-input"
                                             min="0" step=".01">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inpDownload">@lang('fields.download')</label>
+                                    <input type="number" step="0.01" name="download" id="inpDownload" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="inpUpload">@lang('fields.upload')</label>
+                                    <input type="number" step="0.01" name="upload" id="inpUpload" class="form-control">
                                 </div>
                             </div>
                         </div>

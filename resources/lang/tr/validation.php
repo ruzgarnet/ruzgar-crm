@@ -203,7 +203,9 @@ return [
             'modem_serial' => 'Modem seri numarası',
             'setup_payment' => 'Kurulum/Aktivasyon ücreti ödeme şekli',
             'pre_payment' => 'Ön ödeme',
-            'campaing_payment' => 'Kampanya ücreti ödeme şekli'
+            'campaing_payment' => 'Kampanya ücreti ödeme şekli',
+            'modem_model' => 'Modem marka ve modeli',
+            'address' => 'Adres'
         ],
         'card' => [
             'number' => 'Kart numarası',
@@ -213,7 +215,10 @@ return [
             'auto_payment' => 'Otomatik ödeme',
         ],
         'description' => 'Açıklama',
-        'payment' => 'Tutar'
+        'payment' => 'Tutar',
+        'download' => 'İndirme hızı',
+        'upload' => 'Yükleme hızı',
+        'original_price' => 'Kampanyasız fiyatı'
     ],
 
 ];

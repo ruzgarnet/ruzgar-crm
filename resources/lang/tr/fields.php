@@ -48,6 +48,9 @@ return [
     'customer_no' => 'Müşteri Numarası',
     'reference_code' => 'Referans Kodu',
     'description' => 'Açıklama',
+    'download' => 'İndirme Hızı',
+    'upload' => 'Yükleme Hızı',
+    'original_price' => 'Kampanyasız Fiyatı',
     // Name Attributes End
 
     // Auth|User Attributes
@@ -92,6 +95,7 @@ return [
     'parent_category' => 'Üst Kategori',
     'contract_type' => 'Sözleşme Tipi',
     'category_type' => 'Kategori Tipi',
+    'contract' => "Sözleşme",
     // Category|Product|Service Attributes
 
     // Subscription Attributes
@@ -149,6 +153,9 @@ return [
     'payable' => 'Ödenecek',
     'changed_service' => 'Değiştirilmiş Hizmet',
     'change_service_payment' => 'Hizmet Değişim Ücreti',
+    'speed_info' => ":download/:upload (İndirme/Yükleme) Mbps'e Kadar Hız",
+    'modem_model' => 'Modem Marka Ve Modeli',
+    'subscription_address_placeholder' => 'Eğer bu alanı boş bırakırsanız müşterinin adresi kullanılır.',
     // Subscription Attributes
 
     // Credit Card Attributes

@@ -115,12 +115,12 @@ CREATE TABLE `customers` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `customers_customer_no_unique` (`customer_no`),
   UNIQUE KEY `customers_identification_number_unique` (`identification_number`),
-  UNIQUE KEY `customers_reference_code_unique` (`reference_code`),
+  UNIQUE KEY `customers_reference_code_unique` (`reference_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-INSERT INTO `customers` VALUES (1,'12463727987','00000000000','Nane','Kuş','5510005550','nane@ruzgarnet.com.tr',2,'R-SKGW3G',NULL,'2021-05-25 08:03:25','2021-05-27 09:12:41');
+INSERT INTO `customers` VALUES (1,'12463727987','00000000000','Nane','Kuş','5510005550','nane@ruzgarnet.com.tr',2,'R-SKGW3G','2021-05-25 08:03:25','2021-05-27 09:12:41');
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 DROP TABLE IF EXISTS `dealers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -237,6 +237,9 @@ CREATE TABLE `services` (
   `model` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(8,2) unsigned NOT NULL,
+  `original_price` decimal(8,2) unsigned NOT NULL,
+  `download` tinyint unsigned NOT NULL,
+  `upload` tinyint unsigned NOT NULL,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` tinyint unsigned NOT NULL DEFAULT '1',
   `meta_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -313,7 +316,7 @@ CREATE TABLE `subscriptions` (
   `service_id` bigint unsigned NOT NULL,
   `customer_id` bigint unsigned NOT NULL,
   `subscription_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `bbk_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bbk_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `commitment` tinyint unsigned NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NULL DEFAULT NULL,
