@@ -27,6 +27,16 @@ class Category extends Model
     ];
 
     /**
+     * ContractType Relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function contractType()
+    {
+        return $this->belongsTo(ContractType::class);
+    }
+
+    /**
      * Get categorytype id's
      * For titles use language files => tables.{table_name|model_name}.types.{type_id}
      * 1 => Product

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Generator as Generator;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
 class SubscriptionController extends Controller
 {
@@ -206,6 +208,18 @@ class SubscriptionController extends Controller
             }
 
             if ($subscription->approve_sub()) {
+                $pdf = Pdf::loadView("pdf.contract.{$subscription->service->category->contractType->view}", [
+                    'subscription' => $subscription,
+                    'device_brand' => 'Huawei',
+                    'device_model' => 'HGS',
+                    'barcode' => Generator::barcode($subscription->subscription_no)
+                ]);
+                $path = "contracts/" . md5($subscription->subscription_no) . ".pdf";
+                if (!is_dir(public_path('contracts'))) {
+                    mkdir(public_path('contracts'), "0775");
+                }
+                $pdf->save($path);
+
                 return response()->json([
                     'success' => true,
                     'toastr' => [
@@ -571,9 +585,9 @@ class SubscriptionController extends Controller
                     return $query->where('type', 2);
                 })
             ],
-            'bbk_code' => 'required|string|max:255',
             'start_date' => 'required|date',
-            'price' => 'required|numeric'
+            'price' => 'required|numeric',
+            'options.address' => 'nullable|string|max:255'
         ];
     }
 
@@ -589,6 +603,20 @@ class SubscriptionController extends Controller
         if (request()->input('service_id')) {
             $service = Service::find(request()->input('service_id'));
             $options = $service->category->options;
+
+            if (request()->input('options.modem') && in_array(request()->input('options.modem'), [2, 3, 5])) {
+                $optionRules['bbk_code'] = [
+                    'required',
+                    'string',
+                    'max:255'
+                ];
+            } else {
+                $optionRules['bbk_code'] = [
+                    'nullable',
+                    'string',
+                    'max:255'
+                ];
+            }
 
             foreach ($options as $key => $value) {
                 if ($key === 'modem_serial') {
@@ -609,6 +637,18 @@ class SubscriptionController extends Controller
                         'required',
                         'numeric'
                     ];
+                } else if ($key === 'modem_model') {
+                    if (in_array(request()->input("options.modem"), [2, 3, 5])) {
+                        $values = json_decode(setting("service.modems"), true);
+                        $data = [];
+                        foreach ($values as $item) {
+                            $data[] = $item["value"];
+                        }
+                        $optionRules["options.modem_model"] = [
+                            'required',
+                            Rule::in($data)
+                        ];
+                    }
                 } else if (is_array($value)) {
                     $option = (string)Str::of($key)->singular();
                     if ($option !== 'commitment') {

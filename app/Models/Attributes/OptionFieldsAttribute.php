@@ -19,6 +19,8 @@ trait OptionFieldsAttribute
             foreach ($this->options as $option => $values) {
                 if (is_array($values)) {
                     $data[$option] = $this->optionFields($option, $values);
+                } else if ($option == "modem_model") {
+                    $data[$option] = json_decode(setting("service.modems"), true);
                 } else {
                     $data[$option] = $values;
                 }

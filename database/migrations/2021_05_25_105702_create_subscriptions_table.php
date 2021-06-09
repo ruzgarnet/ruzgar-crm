@@ -19,7 +19,7 @@ class CreateSubscriptionsTable extends Migration
             $table->foreignId('service_id');
             $table->foreignId('customer_id');
             $table->string("subscription_no")->unique()->nullable()->default(null);
-            $table->string('bbk_code');
+            $table->string('bbk_code')->nullable()->default(null);;
             $table->unsignedTinyInteger('commitment')->nullable()->default(null);
             $table->date('start_date');
             $table->date('end_date')->nullable()->default(null);

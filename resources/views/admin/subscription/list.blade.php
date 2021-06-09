@@ -45,8 +45,8 @@
                                                     <button type="button" class="btn btn-danger btn-sm"
                                                         data-toggle="popover" data-html="true"
                                                         data-content="<b>Tarih:</b> {{ convert_date($subscription->canceledSubscription->created_at, 'large') }} <br>
-                                                        <b>Personel</b>: {{ $subscription->canceledSubscription->staff->full_name }} <br>
-                                                        <b>Sebep</b>: {{ $subscription->canceledSubscription->description }}">
+                                                                <b>Personel</b>: {{ $subscription->canceledSubscription->staff->full_name }} <br>
+                                                                <b>Sebep</b>: {{ $subscription->canceledSubscription->description }}">
                                                         @lang('titles.cancel')
                                                     </button>
                                                 @endif
@@ -131,6 +131,15 @@
                                                         <i class="fas fa-cloud-upload-alt"></i>
                                                     </a>
                                                 @endif
+
+                                                @if ($subscription->approved_at)
+                                                    <a target="_blank" class="approve-element btn btn-secondary"
+                                                        href="/contracts/{{ md5($subscription->subscription_no) }}.pdf"
+                                                        title="@lang(" fields.contract")">
+                                                        <i class="fas fa-file-contract"></i>
+                                                    </a>
+                                                @endif
+
 
                                                 <button type="button"
                                                     class="btn btn-warning approve-modal-btn approved-element"

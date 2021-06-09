@@ -42,8 +42,12 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="txtAddress">@lang('fields.address')</label>
+                            <textarea name="options[address]" id="txtAddress" rows="2" placeholder="@lang('fields.subscription_address_placeholder')" class="form-control" v-model="address"></textarea>
+                        </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-3">
                                 <div class="form-group">
                                     <label for="inpPrice">@lang('fields.price')</label>
                                     <div class="input-group">
@@ -55,16 +59,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="inpBBKCode">@lang('fields.bbk_code')</label>
-                                    <input type="text" name="bbk_code" id="inpBBKCode" class="form-control"
-                                        value="{{ $subscription->bbk_code }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                                 <div class="form-group">
                                     <label for="slcCommitment">@lang('fields.commitment_period')</label>
                                     <select name="commitment" id="slcCommitment" class="custom-select" v-model="duration"
@@ -76,14 +71,14 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                                 <div class="form-group">
                                     <label for="inpStartDate">@lang('fields.start_date')</label>
                                     <input type="text" name="start_date" id="inpStartDate" class="form-control date-mask"
                                         v-model="startDate">
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                                 <div class="form-group">
                                     <label for="inpEndDate">@lang('fields.end_date')</label>
                                     <input type="text" name="end_date" id="inpEndDate" class="form-control date-mask"
@@ -103,7 +98,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4" v-if="hasOption('modem_payments') && (modem != 1 && modem != 5)">
+                            <div class="col-lg-4" v-if="hasOption('modem_payments') && (modem != 1 && modem != 4 && modem != 5)">
                                 <div class="form-group">
                                     <label for="slcModemPayment">@lang('fields.modem_payment')</label>
                                     <select name="options[modem_payment]" id="slcModemPayment" class="custom-select"
@@ -114,11 +109,30 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4" v-if="hasOption('modem_price') && modem == 5">
+                            <div class="col-lg-4" v-if="hasOption('modem_price') && (modem == 5 || modem == 4)">
                                 <div class="form-group">
                                     <label for="inpModemPrice">@lang('fields.modem_price')</label>
                                     <input type="number" name="options[modem_price]" v-model="modem_price"
                                         id="inpModemPrice" step="0.01" class="form-control">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-lg-4" v-if="modem && (modem != 5 && modem != 1)">
+                                <div class="form-group">
+                                    <label for="inpBBKCode">@lang('fields.bbk_code')</label>
+                                    <input type="text" name="bbk_code" id="inpBBKCode" class="form-control"
+                                        value="{{ $subscription->bbk_code }}">
+                                </div>
+                            </div>
+                            <div class="col-lg-4" v-if="hasOption('modem_model') && modem != 1 && modem != 4">
+                                <div class="form-group">
+                                    <label for="slcModemModel">@lang('fields.modem_model')</label>
+                                    <select name="options[modem_model]" id="slcModemModel" class="custom-select"
+                                        v-select="" v-model="modem_model">
+                                        <option v-for="option in options.modem_model" :value="option.value"
+                                            v-text="option.title">
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-lg-4"
@@ -130,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="w-100"></div>
-                            <div class="col-lg-6" v-if="hasOption('setup_payments')">
+                            <div class="col-lg-4" v-if="hasOption('setup_payments')">
                                 <div class="form-group">
                                     <label for="slcSetupPayment">@lang('fields.setup_payment', ['price' =>
                                         print_money(setting('service.setup.payment'))])</label>
@@ -142,18 +156,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-6" v-if="hasOption('pre_payment')">
-                                <div class="form-group">
-                                    <label for="chkPrePayment">@lang('fields.payment_type')</label>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="chkPrePayment"
-                                            name="options[pre_payment]" value="1" v-model="pre_payment">
-                                        <label class="custom-control-label"
-                                            for="chkPrePayment">@lang('fields.pre_payment')</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6" v-if="hasOption('summer_campaing_payments')">
+                            <div class="col-lg-4" v-if="hasOption('summer_campaing_payments')">
                                 <div class="form-group">
                                     <label for="slcCampaingPayment">@lang('fields.summer_campaing_payment', ['price' =>
                                         print_money(setting('service.summer.campaing.payment'))])</label>
@@ -163,6 +166,17 @@
                                             v-text="option.title">
                                         </option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" v-if="hasOption('pre_payment')">
+                                <div class="form-group">
+                                    <label for="chkPrePayment">@lang('fields.payment_type')</label>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="chkPrePayment"
+                                            name="options[pre_payment]" value="1" v-model="pre_payment">
+                                        <label class="custom-control-label"
+                                            for="chkPrePayment">@lang('fields.pre_payment')</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -237,7 +251,9 @@
                 modem_serial: '{{ $subscription->options['modem_serial'] ?? '' }}',
                 pre_payment: {{ $subscription->options['pre_payment'] ?? 0 }},
                 summer_campaing_payment: {{ $subscription->options['summer_campaing_payment'] ?? 0 }},
-                modem_payment: {{ $subscription->options['modem_payment'] ?? 0 }}
+                modem_payment: {{ $subscription->options['modem_payment'] ?? 0 }},
+                modem_model: {{ $subscription->options['modem_model'] ?? 0 }},
+                address:{{ $subscription->options['address'] ?? "" }}
             },
             methods: {
                 changeService: function() {
@@ -259,6 +275,10 @@
 
                     if (this.hasOption('summer_campaing_payments')) {
                         this.modem = this.options.summer_campaing_payments[0].value;
+                    }
+
+                    if (this.hasOption('modem_model')) {
+                        this.modem = this.options.modem_model[0].value;
                     }
                 },
                 hasOption: function(key) {

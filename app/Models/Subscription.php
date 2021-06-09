@@ -9,6 +9,7 @@ use App\Models\Attributes\OptionValuesAttribute;
 use App\Models\Attributes\PaymentAttribute;
 use App\Models\Attributes\PriceAttribute;
 use App\Models\Attributes\StartDateAttribute;
+use App\Models\Attributes\SubscriptionAddressAttribute;
 use App\Models\Generators\SubscriptionChangeGenerator;
 use App\Models\Generators\SubscriptionPaymentGenerator;
 use Exception;
@@ -27,7 +28,8 @@ class Subscription extends Model
         SubscriptionPaymentGenerator,
         StartDateAttribute,
         EndDateAttribute,
-        SubscriptionChangeGenerator;
+        SubscriptionChangeGenerator,
+        SubscriptionAddressAttribute;
 
     /**
      * All fields fillable
@@ -172,6 +174,14 @@ class Subscription extends Model
     public function getOption(string $key, $default = false)
     {
         if (is_string($key) && isset($this->options[$key]) && !empty($this->options[$key])) {
+            if ($key == "modem_model") {
+                $data = json_decode(setting("service.modems"), true);
+                foreach ($data as $item) {
+                    if ($item["value"] == $this->options[$key]) {
+                        return $item["title"];
+                    }
+                }
+            }
             return $this->options[$key];
         }
         return $default;
