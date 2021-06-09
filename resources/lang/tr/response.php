@@ -25,6 +25,11 @@ return [
         'error' => 'Veri silinirken hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
     ],
 
+    'reference' => [
+        'success' => 'Referans başarıyla tanımlandı ve ücreti düzenlendi.',
+        'error' => 'Referans tanımlanırken hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
+    ],
+
     'approve' => [
         'customer' => [
             'success' => 'Müşteri kaydı başarıyla onaylandı.',
@@ -45,5 +50,9 @@ return [
             'success' => 'Abonenin başarıyla iptal edildi.',
             'error' => 'Abonenin iptal edilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
         ]
+    ],
+
+    'system' => [
+        'referenced' => 'Referans işlemi gerçekleştirildi. Bu mesaj sistem tarafından düzenlenmiştir.'
     ]
 ];

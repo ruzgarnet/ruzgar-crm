@@ -132,6 +132,10 @@
                                                         <i class="fas fa-coins"></i>
                                                         @lang('titles.edit_subscription_price')
                                                     </a>
+                                                    <a href="{{ route('admin.reference.add', $subscription) }}" class="dropdown-item">
+                                                        <i class="fas fa-user-friends"></i>
+                                                        @lang('tables.reference.add')
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>

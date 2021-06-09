@@ -48,6 +48,8 @@ return [
     'customer_no' => 'Müşteri Numarası',
     'reference_code' => 'Referans Kodu',
     'description' => 'Açıklama',
+    'reference' => 'Referans',
+    'referenced' => 'Referans Olunan',
     // Name Attributes End
 
     // Auth|User Attributes

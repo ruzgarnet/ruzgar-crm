@@ -197,4 +197,17 @@ return [
         'select' => 'Mesajı Seçiniz'
     ],
     // Message Fields End
+
+    // Reference Fields
+    'reference' => [
+        'title' => 'Referanslar',
+        'singular' => 'Referans',
+        'plural' => 'Referanslar',
+        'add' => 'Referans Ekle',
+        'edit' => 'Referans Düzenle',
+        'delete' => 'Referans Sil',
+        'info' => 'Referans Bilgileri',
+        'select' => 'Referansı Seçiniz'
+    ],
+    // Reference Fields End
 ];
