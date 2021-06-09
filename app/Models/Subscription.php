@@ -119,6 +119,19 @@ class Subscription extends Model
     }
 
     /**
+     * Returns current payment
+     *
+     * @return \App\Models\Payment
+     */
+    public function currentPayment()
+    {
+        return Payment::where('subscription_id', $this->id)
+            ->whereNull('paid_at')
+            ->orderBy('date', 'ASC')
+            ->first();
+    }
+
+    /**
      * Approve and add first payment(s)
      *
      * @return boolean
