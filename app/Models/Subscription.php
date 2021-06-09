@@ -9,6 +9,7 @@ use App\Models\Attributes\OptionValuesAttribute;
 use App\Models\Attributes\PaymentAttribute;
 use App\Models\Attributes\PriceAttribute;
 use App\Models\Attributes\StartDateAttribute;
+use App\Models\Attributes\SubscriptionSelectPrintAttribute;
 use App\Models\Generators\SubscriptionChangeGenerator;
 use App\Models\Generators\SubscriptionPaymentGenerator;
 use Exception;
@@ -27,7 +28,8 @@ class Subscription extends Model
         SubscriptionPaymentGenerator,
         StartDateAttribute,
         EndDateAttribute,
-        SubscriptionChangeGenerator;
+        SubscriptionChangeGenerator,
+        SubscriptionSelectPrintAttribute;
 
     /**
      * All fields fillable
