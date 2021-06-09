@@ -162,7 +162,7 @@ class PaymentController extends Controller
 
         $data = [
             'payment_id' => $payment->id,
-            'staff_id' => $request->user()->staff->id,
+            'staff_id' => $request->user()->staff_id,
             'old_price' => $payment->price,
             'new_price' => $validated['price'],
             'description' => $validated['description']

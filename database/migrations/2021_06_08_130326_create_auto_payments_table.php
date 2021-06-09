@@ -18,7 +18,7 @@ class CreateAutoPaymentsTable extends Migration
             $table->foreignId('subscription_id');
             $table->foreignId('moka_sale_id')->nullable()->default(null);
             $table->foreignId('moka_customer_id')->nullable()->default(null);
-            $table->varchar('moka_card_token', 255)->nullable()->default(null);
+            $table->string('moka_card_token', 255)->nullable()->default(null);
             $table->boolean('active')->default(true);
             $table->timestamp('disabled_at')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();

@@ -85,7 +85,7 @@ trait ViewAttributes
 
             // Product and Service Header
             [
-                'header' =>  trans('titles.product_and_services')
+                'header' =>  trans('titles.services')
             ],
             // Product and Service Header End
 
@@ -104,14 +104,6 @@ trait ViewAttributes
                 'icon' => 'fas fa-archive',
                 'actions' => [
                     'add' => 'admin.category.add'
-                ]
-            ],
-            [
-                'title' => trans('tables.product.title'),
-                'route' => 'admin.products',
-                'icon' => 'fas fa-boxes',
-                'actions' => [
-                    'add' => 'admin.product.add'
                 ]
             ],
             [

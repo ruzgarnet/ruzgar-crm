@@ -51,6 +51,8 @@ return [
     'download' => 'İndirme Hızı',
     'upload' => 'Yükleme Hızı',
     'original_price' => 'Kampanyasız Fiyatı',
+    'reference' => 'Referans',
+    'referenced' => 'Referans Olunan',
     // Name Attributes End
 
     // Auth|User Attributes
