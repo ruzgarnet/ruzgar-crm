@@ -36,7 +36,7 @@
                                                 {{ $reference->referenced->select_print }}
                                             </a>
                                         </td>
-                                        <td>{{ $reference->created_at }}</td>
+                                        <td>{{ convert_date($reference->created_at, 'large') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

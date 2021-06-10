@@ -48,6 +48,11 @@ trait ViewAttributes
                     'add' => 'admin.subscription.add'
                 ]
             ],
+            [
+                'title' => trans('tables.reference.title'),
+                'route' => 'admin.references',
+                'icon' => 'fas fa-people-arrows'
+            ],
             // Customer Field End
 
             // Company Header
@@ -117,20 +122,20 @@ trait ViewAttributes
             // Product Fields End
 
             // Product and Service Header
-            [
-                'header' =>  trans('titles.other')
-            ],
+            // [
+            //     'header' =>  trans('titles.other')
+            // ],
             // Product and Service Header End
 
             // Message Fields
-            [
-                'title' => trans('tables.message.title'),
-                'route' => 'admin.messages',
-                'icon' => 'fas fa-sms',
-                'actions' => [
-                    'add' => 'admin.message.add'
-                ]
-            ]
+            // [
+            //     'title' => trans('tables.message.title'),
+            //     'route' => 'admin.messages',
+            //     'icon' => 'fas fa-sms',
+            //     'actions' => [
+            //         'add' => 'admin.message.add'
+            //     ]
+            // ]
             // Message Field End
 
         ];

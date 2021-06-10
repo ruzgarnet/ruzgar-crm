@@ -135,7 +135,7 @@
                                                 @if ($subscription->approved_at)
                                                     <a target="_blank" class="approve-element btn btn-secondary"
                                                         href="/contracts/{{ md5($subscription->subscription_no) }}.pdf"
-                                                        title="@lang(" fields.contract")">
+                                                        title="@lang("fields.contract")">
                                                         <i class="fas fa-file-contract"></i>
                                                     </a>
                                                 @endif
