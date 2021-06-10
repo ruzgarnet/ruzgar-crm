@@ -128,6 +128,12 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::post('payment/result/{payment?}', [App\Http\Controllers\Admin\PaymentController::class, 'payment_result'])->name('payment.result');
     Route::put('payment/price/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'price'])->name('payment.price.put');
     // Payment Routes End
+
+    // Infrastructure Routes
+    Route::get('infrastructure', [App\Http\Controllers\Admin\MainController::class, 'infrastructure'])->name('infrastructure');
+    Route::post('infrastructure/load', [App\Http\Controllers\Admin\MainController::class, 'load'])->name('infrastructure.load');
+    Route::post('infrastructure/submit', [App\Http\Controllers\Admin\MainController::class, 'infrastructure_submit'])->name('infrastructure.post');
+    // Infrastructure Routes End
 });
 
 // Request Routes
