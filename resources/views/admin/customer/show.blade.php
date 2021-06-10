@@ -132,7 +132,8 @@
                                                         <i class="fas fa-coins"></i>
                                                         @lang('titles.edit_subscription_price')
                                                     </a>
-                                                    <a href="{{ route('admin.reference.add', $subscription) }}" class="dropdown-item">
+                                                    <a href="{{ route('admin.reference.add', $subscription) }}"
+                                                        class="dropdown-item">
                                                         <i class="fas fa-user-friends"></i>
                                                         @lang('tables.reference.add')
                                                     </a>
@@ -237,6 +238,7 @@
                                                 <th scope="col">@lang('fields.price')</th>
                                                 <th scope="col">@lang('fields.payment_status')</th>
                                                 <th scope="col">@lang('fields.payment_type')</th>
+                                                <th scope="col">@lang('fields.payment_date')</th>
                                                 <th scope="col">@lang('fields.actions')</th>
                                             </tr>
                                         </thead>
@@ -252,11 +254,17 @@
                                                     <td>
                                                         @if ($payment->type)
                                                             <div>@lang("tables.payment.types.{$payment->type}")</div>
+                                                        @endif
+                                                    </td>
+                                                    @if ($payment->paid_at)
+                                                        <td data-sort="{{ $payment->paid_at }}">
                                                             <div title="@lang('fields.paid_date')">
                                                                 {{ $payment->paid_at_print }}
                                                             </div>
-                                                        @endif
-                                                    </td>
+                                                        </td>
+                                                    @else
+                                                        <td></td>
+                                                    @endif
                                                     <td>
                                                         <div class="buttons">
                                                             @if ($payment->paid_at === null)

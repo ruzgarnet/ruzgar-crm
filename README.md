@@ -4,7 +4,7 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 
 ## Yapılacaklar
 
-- [x] Referans
+- [ ] Referans
 - [x] Sözleşme
 - [ ] Otomatik Ödeme ve İndirim
 - [ ] Altyapı Sorgulama
@@ -17,6 +17,7 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 - [ ] Geribildirimler (ücret değişiklikleri, referanslar, iptal olan abonelikler, ...)
 - [ ] Abonelik dondurma işlemleri
 - [ ] Toplu ödemeler
+- [ ] Sistem içi talep/istek yapısı
 
 ## Otomatize İşlemler
 
@@ -27,3 +28,4 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 ## İyileştirmeler/Fikirler
 
 - [ ] Responseler için class yapısı
+- [ ] Datatable için dinamik sorgu yapısı

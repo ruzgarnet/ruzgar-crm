@@ -207,7 +207,14 @@ return [
         'edit' => 'Referans Düzenle',
         'delete' => 'Referans Sil',
         'info' => 'Referans Bilgileri',
-        'select' => 'Referansı Seçiniz'
+        'select' => 'Referansı Seçiniz',
+        'status' => [
+            1 => 'Referans işlemi tanımlandı',
+            2 => 'Referans onaylandı, ücreti düşürüldü',
+            3 => 'Faturalar düzenli ödenmediği için iptal edildi',
+            4 => 'Abonelik(ler) iptal edildiği için işlem geçersiz',
+            5 => 'Abonelik hizmeti değiştiği için işlem geçersiz',
+        ]
     ],
     // Reference Fields End
 ];

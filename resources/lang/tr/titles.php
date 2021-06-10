@@ -13,6 +13,7 @@ return [
     'services' => 'Hizmetler',
     'customers_and_orders' => 'Müşteriler ve Satışlar',
     'other' => 'Diğer',
+    'campaings' => 'Kampanyalar',
 
     'list' => 'Listele',
     'show' => 'Görüntüle',

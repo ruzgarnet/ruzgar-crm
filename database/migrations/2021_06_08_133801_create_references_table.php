@@ -18,6 +18,8 @@ class CreateReferencesTable extends Migration
             $table->foreignId('staff_id');
             $table->foreignId('reference_id')->comment('Referens olanın aboneliği');
             $table->foreignId('referenced_id')->comment('Yeni gelenin aboneliği');
+            $table->unsignedTinyInteger('status')->default(1);
+            $table->timestamp('approved_at')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
 

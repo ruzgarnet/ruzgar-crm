@@ -102,7 +102,7 @@ return [
 
     // Subscription Attributes
     'bbk_code' => 'BBK Kodu',
-    'payment_type' => 'Ödeme Şekli',
+    // Comitment
     'commitment_period' => 'Taahhüt Süresi',
     'commitment' => 'Taahhüt',
     'commitless' => 'Taahhütsüz',
@@ -113,6 +113,7 @@ return [
         24 => '24 Ay',
         27 => '27 Ay',
     ],
+    // Modem
     "modem" => 'Modem',
     'modem_serial' => 'Modem Seri Numarası',
     "modems" => [
@@ -130,6 +131,9 @@ return [
         3 => "İlk iki aya yansıt",
         4 => "İlk üç aya yansıt"
     ],
+    'modem_model' => 'Modem Marka Ve Modeli',
+    // Setup
+    'setup' => 'Kurulum',
     "setup_payment" => 'Kurulum/Aktivasyon Ücreti (:price) Ödeme Şekli',
     "setup_payments" => [
         1 => "Peşin",
@@ -137,26 +141,31 @@ return [
         3 => "İlk iki aya yansıt",
         4 => "İlk üç aya yansıt"
     ],
-    "pre_payment" => "Ön ödemeli",
+    // Summer Campaing
     "summer_campaing_payment" => 'Yaz Kampanyası Ücreti (:price) Ödeme Şekli',
     "summer_campaing_payments" => [
         1 => "Peşin",
         2 => "İlk aya yansıt",
         3 => "İlk iki aya yansıt",
     ],
+    // Other Options
+    "pre_payment" => "Ön ödemeli",
+    'setup_informations' => 'Kurulum Bilgileri',
+    // Subscription Info
     'subscriber' => 'Abone',
     'subscription_no' => 'Abonelik Numarası',
+    'subscription_duration' => 'Abonelik Aralığı',
+    'speed_info' => ":download/:upload (İndirme/Yükleme) Mbps'e Kadar Hız",
+    // Payment
     'payment_status' => 'Ödeme Durumu',
     'payment_type' => 'Ödeme Şekli',
+    'payment_date' => 'Ödeme Tarihi',
     'advance_paymented_price' => 'Peşin Ödenen Tutar',
-    'setup' => 'Kurulum',
-    'setup_informations' => 'Kurulum Bilgileri',
-    'subscription_duration' => 'Abonelik Aralığı',
     'payable' => 'Ödenecek',
+    // Change Service
     'changed_service' => 'Değiştirilmiş Hizmet',
     'change_service_payment' => 'Hizmet Değişim Ücreti',
-    'speed_info' => ":download/:upload (İndirme/Yükleme) Mbps'e Kadar Hız",
-    'modem_model' => 'Modem Marka Ve Modeli',
+    // Other
     'subscription_address_placeholder' => 'Eğer bu alanı boş bırakırsanız müşterinin adresi kullanılır.',
     // Subscription Attributes
 

@@ -25,11 +25,11 @@ trait ViewAttributes
             ],
             // Admin Field End
 
-            // Product and Service Header
+            // Customers and Orders Header
             [
                 'header' =>  trans('titles.customers_and_orders')
             ],
-            // Product and Service Header End
+            // Customers and Orders Header End
 
             // Customer Fields
             [
@@ -48,12 +48,21 @@ trait ViewAttributes
                     'add' => 'admin.subscription.add'
                 ]
             ],
+            // Customer Field End
+
+            // Campaings Header
+            [
+                'header' =>  trans('titles.campaings')
+            ],
+            // Campaings Header End
+
+            // Campaing Field
             [
                 'title' => trans('tables.reference.title'),
                 'route' => 'admin.references',
                 'icon' => 'fas fa-people-arrows'
             ],
-            // Customer Field End
+            // Campaing Field End
 
             // Company Header
             [

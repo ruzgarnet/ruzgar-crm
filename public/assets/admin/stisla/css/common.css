@@ -177,3 +177,16 @@ table .un-approved-row .approved-element {
 .subs-payments:not(:first-child) {
     display: none;
 }
+
+button.dropdown-item {
+    font-size: 13px;
+    padding: 10px 20px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.dropdown-item .dropdown-icon {
+    margin-left: 0 !important;
+    width: 1.33em;
+    text-align: center;
+}
