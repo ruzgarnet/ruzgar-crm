@@ -169,4 +169,14 @@ return [
         'auto_payment' => 'Otomatik Ödeme',
     ],
     // Credit Card Attributes End
+
+    // Infrastructure Attributes
+    'townships' => 'Bucak',
+    'villages' => 'Kasaba/Köy',
+    'neighborhoods' => 'Mahalle',
+    'streets' => 'Cadde/Sokak/Bulvar/Meydan',
+    'buildings' => 'Bina No/Adı',
+    'doors' => ' Kapı No',
+    'full_name' => 'Adı Soyadı',
+    // Infrastructure Attributes End
 ];

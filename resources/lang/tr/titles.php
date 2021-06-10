@@ -51,4 +51,6 @@ return [
         'placeholder' => "Buradan müşteri arayabilirsiniz.",
         'loading' => 'Arama yapılıyor'
     ],
+
+    'infrastructure' => 'Altyapı Sorgulama'
 ];

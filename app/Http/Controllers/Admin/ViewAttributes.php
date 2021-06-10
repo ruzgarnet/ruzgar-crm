@@ -23,6 +23,11 @@ trait ViewAttributes
                 'route' => 'admin.dashboard',
                 'icon' => 'fas fa-home'
             ],
+            [
+                'title' => trans('titles.infrastructure'),
+                'route' => 'admin.infrastructure',
+                'icon' => 'fas fa-file'
+            ],
             // Admin Field End
 
             // Product and Service Header

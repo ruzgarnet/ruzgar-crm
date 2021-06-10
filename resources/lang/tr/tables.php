@@ -14,7 +14,8 @@ return [
     'district' => [
         'title' => 'İlçe',
         'singular' => 'İlçe',
-        'plural' => 'İlçeler'
+        'plural' => 'İlçeler',
+        'select' => 'İlçe Seçiniz'
     ],
     // District Fields End
 
@@ -210,4 +211,16 @@ return [
         'select' => 'Referansı Seçiniz'
     ],
     // Reference Fields End
+
+    // Infrastructure Fields
+    'infrastructure' => [
+        'title' => 'Altyapı Sorgula',
+        'townships' => 'Bucak Seçiniz',
+        'villages' => 'Kasaba/Köy Seçiniz',
+        'neighborhoods' => 'Mahalle Seçiniz',
+        'streets' => 'Cadde/Sokak/Bulvar/Meydan Seçiniz',
+        'buildings' => 'Bina No/Adı Seçiniz',
+        'doors' => ' Kapı No Seçiniz'
+    ]
+    // Infrastructure Fields End
 ];
