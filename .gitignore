@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/contracts
+/resources/views/pdf/contract
 /storage/*.key
 /vendor
 .env
