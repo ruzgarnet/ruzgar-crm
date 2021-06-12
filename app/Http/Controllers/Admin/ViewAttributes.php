@@ -167,14 +167,14 @@ trait ViewAttributes
             // Product and Service Header End
 
             // Message Fields
-            // [
-            //     'title' => trans('tables.message.title'),
-            //     'route' => 'admin.messages',
-            //     'icon' => 'fas fa-sms',
-            //     'actions' => [
-            //         'add' => 'admin.message.add'
-            //     ]
-            // ]
+            [
+                'title' => trans('tables.message.title'),
+                'route' => 'admin.messages',
+                'icon' => 'fas fa-sms',
+                'actions' => [
+                    'add' => 'admin.message.add'
+                ]
+            ]
             // Message Field End
 
         ];
