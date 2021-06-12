@@ -12,7 +12,6 @@ use App\Models\Attributes\StartDateAttribute;
 use App\Models\Attributes\SubscriptionAddressAttribute;
 use App\Models\Attributes\SubscriptionContractPrintAttribute;
 use App\Models\Attributes\SubscriptionSelectPrintAttribute;
-use App\Models\Generators\SubscriptionChangeGenerator;
 use App\Models\Generators\SubscriptionPaymentGenerator;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,7 +29,6 @@ class Subscription extends Model
         SubscriptionPaymentGenerator,
         StartDateAttribute,
         EndDateAttribute,
-        SubscriptionChangeGenerator,
         SubscriptionAddressAttribute,
         SubscriptionSelectPrintAttribute,
         SubscriptionContractPrintAttribute;
@@ -93,23 +91,33 @@ class Subscription extends Model
     }
 
     /**
-     * Edit Subscription Price relationship
+     * Edit Subscription Price Relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function editSubscriptionPrice()
+    public function priceEdits()
     {
-        return $this->hasMany(EditSubscriptionPrice::class);
+        return $this->hasMany(SubscriptionPriceEdit::class);
     }
 
     /**
-     * Get cancel information
+     * Canceled Subscription Relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function canceledSubscription()
+    public function cancellation()
     {
-        return $this->hasOne(CanceledSubscription::class);
+        return $this->hasOne(SubscriptionCancellation::class);
+    }
+
+    /**
+     * Changed Subscription Relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function changed()
+    {
+        return $this->hasOne(SubscriptionChange::class);
     }
 
     /**
@@ -140,10 +148,9 @@ class Subscription extends Model
      *
      * @return boolean
      */
-    public function approve_sub()
+    public function approve_subscription()
     {
         DB::beginTransaction();
-
         try {
             $this->approved_at = DB::raw('current_timestamp()');
             $this->status = 1;
@@ -158,13 +165,12 @@ class Subscription extends Model
             }
 
             DB::commit();
-            $success = true;
+            return true;
         } catch (Exception $e) {
             DB::rollBack();
-            $success = false;
+            echo $e->getMessage();
+            return false;
         }
-
-        return $success;
     }
 
     /**
@@ -172,25 +178,26 @@ class Subscription extends Model
      *
      * @return boolean
      */
-    public function unapprove_sub()
+    public function unapprove_subscription()
     {
         DB::beginTransaction();
-
         try {
             $this->approved_at = null;
             $this->status = 0;
             $this->save();
 
-            Payment::where('subscription_id', $this->id)->delete();
+            $this->payments()->delete();
+            $this->priceEdits()->delete();
+            $this->cancellation()->delete();
+            $this->changed()->delete();
 
             DB::commit();
-            $success = true;
+            return true;
         } catch (Exception $e) {
-            $success = false;
             DB::rollBack();
+            echo $e->getMessage();
+            return false;
         }
-
-        return $success;
     }
 
     /**
@@ -232,40 +239,13 @@ class Subscription extends Model
     }
 
     /**
-     * Edit subscription's price
-     *
-     * @param array $data
-     * @return boolean
-     */
-    public function edit_price(array $data)
-    {
-        $success = false;
-
-        DB::beginTransaction();
-        try {
-            if (EditSubscriptionPrice::create($data)) {
-                $this->price = $data['new_price'];
-                $this->save();
-            }
-
-            DB::commit();
-            $success = true;
-        } catch (Exception $e) {
-            DB::rollBack();
-            $success = false;
-        }
-
-        return $success;
-    }
-
-    /**
      * Check row can editable
      *
      * If subs changed or expired returns true
      *
      * @return boolean
      */
-    public function isEditable()
+    public function isActive()
     {
         return !($this->isChanged() || $this->isCanceled() || ($this->end_date != null && Carbon::parse($this->end_date)->isPast()));
     }
@@ -287,7 +267,7 @@ class Subscription extends Model
      */
     public function getChanged()
     {
-        $row = DB::table('change_subscriptions')
+        $row = DB::table('subscription_changes')
             ->where('subscription_id', $this->id)
             ->first();
 
@@ -302,83 +282,5 @@ class Subscription extends Model
     public function isCanceled()
     {
         return $this->status == 3 ? true : false;
-    }
-
-    /**
-     * Change service
-     *
-     * Create new sub, generate new payments, delete old payments, insert changed info
-     *
-     * @param array $data
-     * @return boolean
-     */
-    public function change_service(array $data)
-    {
-        $success = false;
-
-        DB::beginTransaction();
-        try {
-            $sub = $this->getChangedSubscription($data);
-
-            $this->addChangedRow($sub);
-
-            $payments = $this->getChangedPayments($sub->id, $data['price']);
-            $this->deleteChangedPayments();
-
-            foreach ($payments as $payment) {
-                Payment::insert($payment);
-            }
-
-            $this->end_date = Carbon::parse($data['date'])->format('Y-m-d');
-            $this->status = 2;
-            $this->save();
-
-            DB::commit();
-
-            $success = true;
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            $success = false;
-        }
-
-        return $success;
-    }
-
-    /**
-     * Cancel subscription and delete next payments
-     *
-     * @param array $data
-     * @return boolean
-     */
-    public function cancel_subscription(array $data)
-    {
-        $success = false;
-
-        DB::beginTransaction();
-        try {
-            CanceledSubscription::insert($data);
-
-            $this->end_date = Carbon::now()->format('Y-m-d');
-            $this->status = 3;
-            $this->save();
-
-            $dateAppend = $this->getOption('pre_payment') ? 0 : 1;
-
-            Payment::where('subscription_id', $this->id)
-                ->where('date', '>', Carbon::now()->addMonth($dateAppend)->lastOfMonth()->format('Y-m-d'))
-                ->whereNull('paid_at')
-                ->delete();
-
-            DB::commit();
-
-            $success = true;
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            $success = false;
-        }
-
-        return $success;
     }
 }

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Generator as Generator;
 use App\Http\Controllers\Controller;
+use App\Models\SubscriptionCancellation;
 use App\Models\Category;
+use App\Models\SubscriptionChange;
 use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\Service;
@@ -216,7 +218,7 @@ class SubscriptionController extends Controller
                 ]);
             }
 
-            if ($subscription->approve_sub()) {
+            if ($subscription->approve_subscription()) {
                 $pdf = Pdf::loadView("pdf.contract.{$subscription->service->category->contractType->view}", [
                     'subscription' => $subscription,
                     'device_brand' => 'Huawei',
@@ -224,8 +226,8 @@ class SubscriptionController extends Controller
                     'barcode' => Generator::barcode($subscription->subscription_no)
                 ]);
                 $path = "contracts/" . md5($subscription->subscription_no) . ".pdf";
-                if (!is_dir(public_path('contracts'))) {
-                    mkdir(public_path('contracts'), "0775");
+                if (!file_exists(public_path('contracts'))) {
+                    mkdir(public_path('contracts'), 0755, true);
                 }
                 $pdf->save($path);
 
@@ -261,7 +263,7 @@ class SubscriptionController extends Controller
      */
     public function unApprove(Subscription $subscription)
     {
-        if ($subscription->unapprove_sub()) {
+        if ($subscription->unapprove_subscription()) {
             return response()->json([
                 'success' => true,
                 'toastr' => [
@@ -433,7 +435,7 @@ class SubscriptionController extends Controller
 
         $validated['staff_id'] = $request->user()->staff_id;
 
-        if ($subscription->change_service($validated)) {
+        if (SubscriptionChange::change($subscription, $validated)) {
             return response()->json([
                 'success' => true,
                 'toastr' => [
@@ -518,7 +520,7 @@ class SubscriptionController extends Controller
         $validated['staff_id'] = $request->user()->staff_id;
         $validated['subscription_id'] = $subscription->id;
 
-        if ($subscription->cancel_subscription($validated)) {
+        if (SubscriptionCancellation::cancel($subscription, $validated)) {
             return response()->json([
                 'success' => true,
                 'toastr' => [

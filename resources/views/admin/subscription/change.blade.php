@@ -18,9 +18,9 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="inpCustomer">@lang('fields.customer')</label>
-                            <input type="text" id="inpCustomer" class="form-control" readonly
-                                value="{{ $subscription->customer->select_print }}">
+                            <label for="inpSubscription">@lang('fields.subscription')</label>
+                            <input type="text" id="inpSubscription" class="form-control" readonly
+                                value="{{ $subscription->select_print }}">
                         </div>
 
                         <div class="form-group">
@@ -42,8 +42,7 @@
 
                         <div class="form-group">
                             <label for="inpPrice">@lang('fields.price')</label>
-                            <input type="number" name="price" id="inpPrice" class="form-control" step="0.01"
-                                value="{{ $subscription->price }}">
+                            <input type="number" name="price" id="inpPrice" class="form-control" step="0.01">
                         </div>
 
                         <div class="form-group">

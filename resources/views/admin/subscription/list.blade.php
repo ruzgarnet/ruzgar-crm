@@ -22,10 +22,9 @@
                                     <th scope="col">#</th>
                                     <th scope="col">@lang('fields.customer')</th>
                                     <th scope="col">@lang('fields.service')</th>
+                                    <th scope="col"></th>
                                     <th scope="col">@lang('fields.price')</th>
-                                    <th scope="col">@lang('fields.start_date')</th>
-                                    <th scope="col">@lang('fields.end_date')</th>
-                                    <th scope="col">@lang('fields.approve_date')</th>
+                                    <th scope="col">@lang('fields.subscription_duration')</th>
                                     <th scope="col">@lang('fields.actions')</th>
                                 </tr>
                             </thead>
@@ -38,42 +37,35 @@
                                             <a
                                                 href="{{ route('admin.customer.show', $subscription->customer_id) }}">{{ $subscription->customer->full_name }}</a>
                                         </td>
+                                        <td>{{ $subscription->service->name }}</td>
                                         <td>
-                                            <div>
-                                                {{ $subscription->service->name }}
-                                                @if ($subscription->isCanceled())
-                                                    <button type="button" class="btn btn-danger btn-sm"
-                                                        data-toggle="popover" data-html="true"
-                                                        data-content="<b>Tarih:</b> {{ convert_date($subscription->canceledSubscription->created_at, 'large') }} <br>
-                                                                                                                        <b>Personel</b>: {{ $subscription->canceledSubscription->staff->full_name }} <br>
-                                                                                                                        <b>Sebep</b>: {{ $subscription->canceledSubscription->description }}">
-                                                        @lang('titles.cancel')
-                                                    </button>
-                                                @endif
-                                            </div>
-                                            @if ($subscription->isChanged())
-                                                <div>
-                                                    <small>
-                                                        <a
-                                                            href="{{ route('admin.subscription.payments', $subscription->getChanged()) }}">
-                                                            {{ $subscription->getChanged()->service->name }}
-                                                        </a>
-                                                    </small>
-                                                </div>
-                                            @endif
+                                            <div class="buttons">
+												@if ($subscription->isCanceled())
+													<button type="button" class="btn btn-danger btn-sm"
+														data-toggle="popover" data-html="true"
+														data-content="<b>Tarih:</b> {{ convert_date($subscription->cancellation->created_at, 'large') }} <br>
+																														<b>Personel</b>: {{ $subscription->cancellation->staff->full_name }} <br>
+																														<b>Sebep</b>: {{ $subscription->cancellation->description }}">
+														@lang('titles.cancel')
+													</button>
+												@endif
+
+												@if ($subscription->isChanged())
+													<a class="btn btn-info btn-sm"
+														href="{{ route('admin.subscription.payments', $subscription->getChanged()) }}">
+														{{ $subscription->getChanged()->service->name }}
+													</a>
+												@endif
+											</div>
                                         </td>
                                         <td>{{ $subscription->price_print }}</td>
-                                        <td>{{ convert_date($subscription->start_date, 'mask') }}</td>
                                         <td>
+                                            {{ convert_date($subscription->start_date, 'medium') }}
+                                            -
                                             @if ($subscription->end_date)
-                                                {{ convert_date($subscription->end_date, 'mask') }}
+                                                {{ convert_date($subscription->end_date, 'medium') }}
                                             @else
                                                 <span class="badge badge-primary">@lang('fields.commitless')</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if ($subscription->approved_at != null)
-                                                {{ convert_date($subscription->approved_at, 'mask_time') }}
                                             @endif
                                         </td>
                                         <td>
@@ -128,8 +120,16 @@
                                                                 <i class="dropdown-icon fas fa-file-contract"></i>
                                                                 @lang('fields.contract')
                                                             </a>
+
+                                                            <button type="button"
+                                                                class="dropdown-item approve-modal-btn approved-element"
+                                                                data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
+                                                                data-modal="#approveSubscriptionModal">
+                                                                <i class="dropdown-icon fas fa-redo-alt"></i>
+                                                                @lang('fields.reset')
+                                                            </button>
                                                         @endif
-                                                        @if($subscription->isEditable())
+                                                        @if($subscription->isActive())
                                                             <a href="{{ route('admin.reference.add', $subscription) }}"
                                                                 class="dropdown-item approved-element">
                                                                 <i class="dropdown-icon fas fa-user-friends"></i>

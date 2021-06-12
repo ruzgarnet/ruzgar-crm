@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
-class EditSubscriptionPrice extends Model
+class SubscriptionPriceEdit extends Model
 {
     use HasFactory;
 
@@ -34,5 +36,29 @@ class EditSubscriptionPrice extends Model
     public function staff()
     {
         return $this->belongsTo(Staff::class);
+    }
+
+    /**
+     * Edit subscription's price
+     *
+     * @param \App\Models\Subscription $subscription
+     * @param array $data
+     * @return boolean
+     */
+    public function edit_price(Subscription $subscription, array $data)
+    {
+        DB::beginTransaction();
+        try {
+            self::create($data);
+
+            $subscription->price = $data['new_price'];
+            $subscription->save();
+
+            DB::commit();
+            return true;
+        } catch (Exception $e) {
+            DB::rollBack();
+            return false;
+        }
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEditSubscriptionPricesTable extends Migration
+class CreateSubscriptionCancellationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateEditSubscriptionPricesTable extends Migration
      */
     public function up()
     {
-        Schema::create('edit_subscription_prices', function (Blueprint $table) {
+        Schema::create('subscription_cancellations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('subscription_id');
             $table->foreignId('staff_id');
-            $table->unsignedDecimal('old_price');
-            $table->unsignedDecimal('new_price');
             $table->string('description', 511);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
@@ -44,6 +42,6 @@ class CreateEditSubscriptionPricesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('edit_subscription_prices');
+        Schema::dropIfExists('subscription_cancellations');
     }
 }

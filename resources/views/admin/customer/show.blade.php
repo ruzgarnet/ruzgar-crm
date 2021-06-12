@@ -167,7 +167,7 @@
                                                         @lang('fields.contract')
                                                     </a>
                                                 @endif
-                                                @if ($subscription->isEditable())
+                                                @if ($subscription->isActive())
                                                     <a href="{{ route('admin.reference.add', $subscription) }}"
                                                         class="dropdown-item approved-element">
                                                         <i class="dropdown-icon fas fa-user-friends"></i>
