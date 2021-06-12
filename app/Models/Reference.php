@@ -56,36 +56,31 @@ class Reference extends Model
      */
     public static function add_reference(array $data)
     {
-        $success = false;
-
         DB::beginTransaction();
         try {
             self::insert($data);
 
-            $subscription = Subscription::find($data['reference_id']);
-            $payment = $subscription->currentPayment();
+            // $subscription = Subscription::find($data['reference_id']);
+            // $payment = $subscription->currentPayment();
 
-            $reference_price = $payment->price - $subscription->price + setting('reference.price', 10);
+            // $reference_price = $payment->price - $subscription->price + setting('reference.price', 10);
 
-            EditPayment::create([
-                'payment_id' => $payment->id,
-                'staff_id' => $data['staff_id'],
-                'old_price' => $payment->price,
-                'new_price' => $reference_price,
-                'description' => trans('response.system.referenced')
-            ]);
+            // EditPayment::create([
+            //     'payment_id' => $payment->id,
+            //     'staff_id' => $data['staff_id'],
+            //     'old_price' => $payment->price,
+            //     'new_price' => $reference_price,
+            //     'description' => trans('response.system.referenced')
+            // ]);
 
-            $payment->price = $reference_price;
-            $payment->save();
+            // $payment->price = $reference_price;
+            // $payment->save();
 
             DB::commit();
-            $success = true;
+            return true;
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
-            $success = false;
+            return false;
         }
-
-        return $success;
     }
 }

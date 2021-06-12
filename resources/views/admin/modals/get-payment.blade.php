@@ -24,7 +24,7 @@
                         <input type="text" id="inpPrice" class="form-control" readonly>
                     </div>
 
-                    <div class="payment-types payment-type-3 payment-type-4">
+                    <div class="payment-types payment-type-4 payment-type-5">
                         <div class="form-group">
                             <label for="inpCardNumber">@lang('fields.card.number')</label>
                             <input type="text" name="card[number]" id="inpCardNumber"
@@ -44,7 +44,7 @@
                                         class="form-control expire-date-mask" placeholder="AA/YY">
                                 </div>
                             </div>
-                            <div class="col-lg-6 payment-types payment-type-3">
+                            <div class="col-lg-6 payment-types payment-type-4">
                                 <div class="form-group">
                                     <label for="inpCVVCode">@lang('fields.card.security_code')</label>
                                     <input type="text" name="card[security_code]" id="inpCVVCode" class="form-control">

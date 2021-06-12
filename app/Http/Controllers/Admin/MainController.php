@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Classes\SMS_Api;
-use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
-use App\Models\CanceledSubscription;
-use App\Models\City;
 use App\Models\Customer;
 use App\Models\FaultRecord;
 use App\Models\Payment;

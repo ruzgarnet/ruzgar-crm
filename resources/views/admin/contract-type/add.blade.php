@@ -24,7 +24,7 @@
                                         <i class="fas fa-key"></i>
                                     </div>
                                 </div>
-                                <input type="text" name="key" id="inpKey" class="form-control">
+                                <input type="text" name="key" id="inpKey" class="form-control slug-input" data-lower="off">
                             </div>
                         </div>
                         <div class="form-group">
@@ -39,7 +39,7 @@
                                         <i class="fas fa-file-pdf"></i>
                                     </div>
                                 </div>
-                                <input type="text" name="view" id="inpView" class="form-control">
+                                <input type="text" name="view" id="inpView" class="form-control slug-input" data-lower="off">
                             </div>
                         </div>
                         <div class="form-group">
@@ -55,3 +55,7 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+    <script src="/assets/admin/vendor/slugify/slugify.js"></script>
+@endpush

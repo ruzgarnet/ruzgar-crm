@@ -6,7 +6,6 @@
     </div>
 
     <div class="row">
-
         <div class="col-lg-3 col-md-6 col-sm-6 col-12">
             <div class="card card-statistic-1">
                 <div class="card-icon bg-primary">
@@ -104,9 +103,9 @@
                                             @if ($subscription->isCanceled())
                                                 <button type="button" class="btn btn-danger btn-sm"
                                                     data-toggle="popover" data-html="true"
-                                                    data-content="<b>Tarih:</b> {{ convert_date($subscription->canceledSubscription->created_at, 'large') }} <br>
-                                                                                                    <b>Personel</b>: {{ $subscription->canceledSubscription->staff->full_name }} <br>
-                                                                                                    <b>Sebep</b>: {{ $subscription->canceledSubscription->description }}">
+                                                    data-content="<b>Tarih:</b> {{ convert_date($subscription->cancellation->created_at, 'large') }} <br>
+                                                                                                    <b>Personel</b>: {{ $subscription->cancellation->staff->full_name }} <br>
+                                                                                                    <b>Sebep</b>: {{ $subscription->cancellation->description }}">
                                                     @lang('titles.cancel')
                                                 </button>
                                             @endif
