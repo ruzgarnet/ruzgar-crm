@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Attributes\DateAttribute;
 use App\Models\Attributes\PaidAtAttribute;
+use App\Models\Attributes\PaymentDateAttribute;
 use App\Models\Attributes\PriceAttribute;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class Payment extends Model
 {
-    use HasFactory, PriceAttribute, DateAttribute, PaidAtAttribute;
+    use HasFactory, PriceAttribute, PaymentDateAttribute, PaidAtAttribute;
 
     /**
      * All fields fillable
@@ -67,16 +67,17 @@ class Payment extends Model
      * For titles use language files => tables.{table_name|model_name}.types.{type_id}
      *
      * 1 => Cash                        - Nakit
-     * 2 => Transfer/EFT                - Havale/EFT
-     * 3 => Credit/Bank Cart (Online)   - Kredi/Banka Kartı (Online)
-     * 4 => Auto Payment                - Otomatik Ödeme
+     * 2 => Credit/Bank Cart (Pos)      - Kredi/Banka Kartı (Pos)
+     * 3 => Transfer/EFT                - Havale/EFT
+     * 4 => Credit/Bank Cart (Online)   - Kredi/Banka Kartı (Online)
+     * 5 => Auto Payment                - Otomatik Ödeme
      *
      * @param bool $implode
      * @return array
      */
     public static function getTypes($implode = false)
     {
-        $data = [1, 2, 3, 4];
+        $data = [1, 2, 3, 4, 5];
         return $implode ? implode(',', $data) : $data;
     }
 
@@ -130,7 +131,7 @@ class Payment extends Model
                     )
                     ->count();
 
-                if ($count < 1) {
+                if ($count < 1 && $this->subscription->isActive()) {
                     $this->insert([
                         'subscription_id' => $this->subscription_id,
                         'status' => 1,

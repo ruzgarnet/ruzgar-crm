@@ -25,7 +25,7 @@ class PaymentController extends Controller
     {
         $rules = $this->rules();
 
-        if (in_array($request->input('type'), [3, 4])) {
+        if (in_array($request->input('type'), [4, 5])) {
             $rules["card.number"] = [
                 'required',
                 'numeric'
@@ -41,7 +41,7 @@ class PaymentController extends Controller
             ];
         }
 
-        if ($request->input('type') == 3) {
+        if ($request->input('type') == 4) {
             $rules["card.security_code"] = [
                 'required',
                 'numeric',
@@ -56,7 +56,7 @@ class PaymentController extends Controller
 
         // TODO remove env conditions for product
         if (env('APP_ENV') == 'local' || $date->format('m') == $month) {
-            if ($request->input('type') == 3) {
+            if ($request->input('type') == 4) {
                 $expire = Mutator::expire_date($validated["card"]["expire_date"]);
 
                 $card = [
