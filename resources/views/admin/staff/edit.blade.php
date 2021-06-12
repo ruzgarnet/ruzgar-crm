@@ -27,7 +27,7 @@
                                 </div>
                                 <select name="dealer_id" id="slcDealer" class="custom-select">
                                     @foreach ($dealers as $dealer)
-                                        <option value="{{ $dealer->id }}" @if ($dealer->id === $staff->dealer_id) selected @endif>
+                                        <option value="{{ $dealer->id }}" @if ($dealer->id == $staff->dealer_id) selected @endif>
                                             {{ $dealer->name }}
                                         </option>
                                     @endforeach
@@ -67,13 +67,13 @@
                             <div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" name="gender" id="radGenderMale" class="custom-control-input"
-                                        value="1" @if ($staff->gender === 1) checked @endif>
+                                        value="1" @if ($staff->gender == 1) checked @endif>
 
                                     <label class="custom-control-label" for="radGenderMale">@lang('fields.male')</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" name="gender" id="radGenderFemale" class="custom-control-input"
-                                        value="2" @if ($staff->gender === 2) checked @endif>
+                                        value="2" @if ($staff->gender == 2) checked @endif>
 
                                     <label class="custom-control-label" for="radGenderFemale">@lang('fields.female')</label>
                                 </div>

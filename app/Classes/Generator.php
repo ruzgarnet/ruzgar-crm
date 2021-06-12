@@ -31,7 +31,7 @@ class Generator
             } else {
                 $pass = false;
             }
-        } while ($pass !== true);
+        } while ($pass != true);
 
         return $rand;
     }
@@ -56,7 +56,7 @@ class Generator
             } else {
                 $pass = false;
             }
-        } while ($pass !== true);
+        } while ($pass != true);
 
         return $rand;
     }
@@ -81,7 +81,7 @@ class Generator
             } else {
                 $pass = false;
             }
-        } while ($pass !== true);
+        } while ($pass != true);
 
         return $rand;
     }

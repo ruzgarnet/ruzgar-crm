@@ -218,7 +218,8 @@ return [
         'payment' => 'Tutar',
         'download' => 'İndirme hızı',
         'upload' => 'Yükleme hızı',
-        'original_price' => 'Kampanyasız fiyatı'
+        'original_price' => 'Kampanyasız fiyatı',
+        'fault_type_id' => 'Arıza kayıt tipi'
     ],
 
 ];

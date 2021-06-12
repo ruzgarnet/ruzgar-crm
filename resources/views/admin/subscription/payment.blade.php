@@ -127,7 +127,7 @@
                                             </td>
                                             <td>
                                                 <div class="buttons">
-                                                    @if ($payment->paid_at === null)
+                                                    @if ($payment->paid_at == null)
                                                         <button type="button" class="btn btn-primary edit-payment-modal-btn"
                                                             data-action="{{ relative_route('admin.payment.price.put', $payment) }}"
                                                             data-price="{{ $payment->price }}"
@@ -136,7 +136,7 @@
                                                         </button>
                                                     @endif
 
-                                                    @if ($payment->status !== 2)
+                                                    @if ($payment->status != 2)
                                                         <button type="button" class="btn btn-primary get-payment-modal-btn"
                                                             data-action="{{ relative_route('admin.payment.received.post', $payment) }}"
                                                             data-price="{{ $payment->price_print }}"

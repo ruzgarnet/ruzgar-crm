@@ -22,7 +22,7 @@
                             <select name="subscription_id" id="slcSubscription" class="custom-select selectpicker">
                                 <option selected disabled>@lang('tables.subscription.select')</option>
                                 @foreach ($subscriptions as $row)
-                                    @if ($row->id !== $subscription->id)
+                                    @if ($row->id != $subscription->id)
                                         <option value="{{ $row->id }}">{{ $row->select_print }}</option>
                                     @endif
                                 @endforeach

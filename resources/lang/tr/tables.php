@@ -228,6 +228,58 @@ return [
         'streets' => 'Cadde/Sokak/Bulvar/Meydan Seçiniz',
         'buildings' => 'Bina No/Adı Seçiniz',
         'doors' => ' Kapı No Seçiniz'
-    ]
+    ],
     // Infrastructure Fields End
+
+    // Fault Fields
+    'fault' => [
+        // Fault Type Fields
+        'type' => [
+            'title' => 'Arıza Tipleri',
+            'singular' => 'Arıza Tipi',
+            'plural' => 'Arıza Tipleri',
+            'add' => 'Arıza Tipi Ekle',
+            'edit' => 'Arıza Tipi Düzenle',
+            'delete' => 'Arıza Tipi Sil',
+            'info' => 'Arıza Tipi Bilgileri',
+            'types' => [
+                1 => 'Ürün',
+                2 => 'Hizmet'
+            ],
+            'status' => [
+                1 => 'Aktif',
+                2 => 'Kapalı'
+            ],
+            'select_type' => 'Arıza Tipini Seç',
+            'select' => 'Arıza Tipi Seç'
+        ],
+        // Fault Type Fields End
+
+        // Fault Record Fields
+        'record' => [
+            'title' => 'Arıza Kayıtları',
+            'singular' => 'Arıza Kaydı',
+            'plural' => 'Arıza Kayıtları',
+            'add' => 'Arıza Kaydı Ekle',
+            'edit' => 'Arıza Kaydı Düzenle',
+            'delete' => 'Arıza Kaydı Sil',
+            'info' => 'Arıza Kaydı Bilgileri',
+            'types' => [
+                1 => 'Ürün',
+                2 => 'Hizmet'
+            ],
+            'status' => [
+                1 => 'Sisteme Tanımlandı',
+                2 => 'Müşteri Temsilcisine Aktarıldı',
+                3 => 'Teknik Ekibe Aktarıldı',
+                4 => 'Teknik Ekip Müdahale Ediyor',
+                5 => 'Kalite Kontrol Ekibi Tarafından Onaylandı',
+                6 => 'Çözülemedi'
+            ],
+            'select_type' => 'Arıza Tipini Seç',
+            'select' => 'Arıza Kaydı Seç'
+        ],
+        // Fault Record Fields End
+    ]
+    // Fault Fields End
 ];

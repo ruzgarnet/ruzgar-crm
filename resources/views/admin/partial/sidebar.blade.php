@@ -12,7 +12,7 @@
                     <li class="menu-header">{{ $nav['header'] }}</li>
                 @else
                     @isset($nav['submenu'])
-                        <li class="nav-item dropdown @if ($nav['active']===true) active @endif">
+                        <li class="nav-item dropdown @if ($nav['active']==true) active @endif">
                             <a href="{{ isset($nav['route']) ? route($nav['route']) : '#' }}" class="nav-link has-dropdown">
                                 <i class="{{ $nav['icon'] }}"></i>
                                 <span>{{ $nav['title'] }}</span>
@@ -20,7 +20,7 @@
 
                             <ul class="dropdown-menu">
                                 @foreach ($nav['submenu'] as $subnav)
-                                    <li @if ($subnav['active'] === true) class="active" @endif>
+                                    <li @if ($subnav['active'] == true) class="active" @endif>
                                         <a class="nav-link" href="{{ route($subnav['route']) }}">
                                             {{ $subnav['title'] }}
                                         </a>
@@ -29,7 +29,7 @@
                             </ul>
                         </li>
                     @else
-                        <li @if ($nav['active'] === true) class="active" @endif>
+                        <li @if ($nav['active'] == true) class="active" @endif>
                             <a href="{{ route($nav['route']) }}" class="nav-link">
                                 <i class="{{ $nav['icon'] }}"></i>
                                 <span>{{ $nav['title'] }}</span>

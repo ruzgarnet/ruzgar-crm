@@ -255,9 +255,6 @@ CREATE TABLE `services` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-/*!40000 ALTER TABLE `services` DISABLE KEYS */;
-INSERT INTO `services` VALUES (1,1,'RüzgarNET 8 MBPS','RUZGARNET_8_MBPS','ruzgarnet-8-mbps',49.90,'<p>RUZGARNET_8_MBPS</p>',1,NULL,NULL,NULL,'2021-05-25 07:53:51','2021-05-25 07:53:51'),(2,1,'RüzgarNET 16 MBPS','RUZGARNET_16_MBPS','ruzgarnet-16-mbps',59.90,'<p>RUZGARNET_16_MBPS</p>',1,NULL,NULL,NULL,'2021-05-25 07:54:50','2021-05-25 07:54:50'),(3,1,'RüzgarNET 24 MBPS','RUZGARNET_24_MBPS','ruzgarnet-24-mbps',69.90,'<p>RUZGARNET_24_MBPS</p>',1,NULL,NULL,NULL,'2021-05-25 07:55:25','2021-05-25 07:55:25'),(4,2,'RüzgarYAZ 16 MBPS','RUZGARYAZ_16_MBPS','ruzgaryaz-16-mbps',49.90,'<p>RUZGARYAZ_16_MBPS</p>',1,NULL,NULL,NULL,'2021-05-25 09:26:10','2021-05-25 09:26:10');
-/*!40000 ALTER TABLE `services` ENABLE KEYS */;
 DROP TABLE IF EXISTS `settings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;

@@ -17,7 +17,7 @@ class TCNo implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (env('APP_ENV') === 'test' || env('APP_ENV') === 'local') {
+        if (env('APP_ENV') == 'test' || env('APP_ENV') == 'local') {
             return true;
         }
         $invalids = [

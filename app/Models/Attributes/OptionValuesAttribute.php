@@ -34,9 +34,9 @@ trait OptionValuesAttribute
                         $data[$key]['value'] = trans("fields.{$option}.{$value}", ['price' => print_money($price)]);
                     }
                 } else {
-                    if ($value === '1' || $value === true) {
+                    if ($value == '1' || $value == true) {
                         $data[$key]['value'] = trans("titles.yes");
-                    } else if ($value === '0' || $value === false) {
+                    } else if ($value == '0' || $value == false) {
                         $data[$key]['value'] = trans("titles.no");
                     } else if ($key == 'modem_price') {
                         $data[$key]['value'] = print_money($value);

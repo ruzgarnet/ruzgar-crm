@@ -10,6 +10,7 @@ use App\Models\Attributes\PaymentAttribute;
 use App\Models\Attributes\PriceAttribute;
 use App\Models\Attributes\StartDateAttribute;
 use App\Models\Attributes\SubscriptionAddressAttribute;
+use App\Models\Attributes\SubscriptionContractPrintAttribute;
 use App\Models\Attributes\SubscriptionSelectPrintAttribute;
 use App\Models\Generators\SubscriptionChangeGenerator;
 use App\Models\Generators\SubscriptionPaymentGenerator;
@@ -31,7 +32,8 @@ class Subscription extends Model
         EndDateAttribute,
         SubscriptionChangeGenerator,
         SubscriptionAddressAttribute,
-        SubscriptionSelectPrintAttribute;
+        SubscriptionSelectPrintAttribute,
+        SubscriptionContractPrintAttribute;
 
     /**
      * All fields fillable
@@ -265,7 +267,7 @@ class Subscription extends Model
      */
     public function isEditable()
     {
-        return !($this->isChanged() || $this->isCanceled() || ($this->end_date !== null && Carbon::parse($this->end_date)->isPast()));
+        return !($this->isChanged() || $this->isCanceled() || ($this->end_date != null && Carbon::parse($this->end_date)->isPast()));
     }
 
     /**
@@ -275,7 +277,7 @@ class Subscription extends Model
      */
     public function isChanged()
     {
-        return $this->status === 2 ? true : false;
+        return $this->status == 2 ? true : false;
     }
 
     /**
@@ -299,7 +301,7 @@ class Subscription extends Model
      */
     public function isCanceled()
     {
-        return $this->status === 3 ? true : false;
+        return $this->status == 3 ? true : false;
     }
 
     /**

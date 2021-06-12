@@ -38,6 +38,15 @@ class SubscriptionController extends Controller
         return view('admin.subscription.add', $this->viewData());
     }
 
+    public function preview(Subscription $subscription)
+    {
+        $pdf = Pdf::loadView("pdf.contract.{$subscription->service->category->contractType->view}", [
+            'subscription' => $subscription,
+            'barcode' => Generator::barcode("0000000000")
+        ]);
+        return $pdf->stream();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -364,7 +373,7 @@ class SubscriptionController extends Controller
             'payment' => 'required|numeric|min:0',
         ]);
 
-        if ($subscription->approved_at === null) {
+        if ($subscription->approved_at == null) {
             return response()->json([
                 'error' => true,
                 'toastr' => [
@@ -398,7 +407,7 @@ class SubscriptionController extends Controller
         }
 
         if (
-            $subscription->end_date !== null
+            $subscription->end_date != null
             && Carbon::parse($subscription->end_date)->isPast()
         ) {
             return response()->json([
@@ -459,7 +468,7 @@ class SubscriptionController extends Controller
             'description' => 'required|string|max:511',
         ]);
 
-        if ($subscription->approved_at === null) {
+        if ($subscription->approved_at == null) {
             return response()->json([
                 'error' => true,
                 'toastr' => [
@@ -493,7 +502,7 @@ class SubscriptionController extends Controller
         }
 
         if (
-            $subscription->end_date !== null
+            $subscription->end_date != null
             && Carbon::parse($subscription->end_date)->isPast()
         ) {
             return response()->json([
@@ -619,7 +628,7 @@ class SubscriptionController extends Controller
             }
 
             foreach ($options as $key => $value) {
-                if ($key === 'modem_serial') {
+                if ($key == 'modem_serial') {
                     if (request()->input('options.modem') && in_array(request()->input('options.modem'), [2, 3, 5])) {
                         $optionRules['options.modem_serial'] = [
                             'required',
@@ -627,7 +636,7 @@ class SubscriptionController extends Controller
                             'max:255'
                         ];
                     }
-                } else if ($key === 'pre_payment') {
+                } else if ($key == 'pre_payment') {
                     $optionRules['options.pre_payment'] = [
                         'nullable',
                         'boolean'
@@ -637,7 +646,7 @@ class SubscriptionController extends Controller
                         'required',
                         'numeric'
                     ];
-                } else if ($key === 'modem_model') {
+                } else if ($key == 'modem_model') {
                     if (in_array(request()->input("options.modem"), [2, 3, 5])) {
                         $values = json_decode(setting("service.modems"), true);
                         $data = [];
@@ -651,12 +660,12 @@ class SubscriptionController extends Controller
                     }
                 } else if (is_array($value)) {
                     $option = (string)Str::of($key)->singular();
-                    if ($option !== 'commitment') {
+                    if ($option != 'commitment') {
                         $option = "options.{$option}";
                     }
 
                     if ($key == 'modem_payments') {
-                        if (!in_array(request()->input("options.modem"), [1, 5])) {
+                        if (!in_array(request()->input("options.modem"), [1, 4, 5])) {
                             $optionRules[$option] = [
                                 'required',
                                 Rule::in($value)

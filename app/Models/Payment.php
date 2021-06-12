@@ -113,7 +113,7 @@ class Payment extends Model
             $month = Carbon::now()->format('m');
 
             // TODO remove env conditions for product
-            if (env('APP_ENV') === 'local' || $date->format('m') == $month) {
+            if (env('APP_ENV') == 'local' || $date->format('m') == $month) {
                 $this->type = $data['type'];
                 $this->status = 2;
                 $this->paid_at = DB::raw('current_timestamp()');

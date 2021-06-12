@@ -55,6 +55,31 @@ trait ViewAttributes
             ],
             // Customer Field End
 
+            // Customers and Orders Header
+            [
+                'header' =>  trans('titles.fault_records')
+            ],
+            // Customers and Orders Header End
+
+            // Fault Fields
+            [
+                'title' => trans('tables.fault.record.title'),
+                'route' => 'admin.fault.records',
+                'icon' => 'fas fa-tools',
+                'actions' => [
+                    'add' => 'admin.fault_record.add'
+                ]
+            ],
+            [
+                'title' => trans('tables.fault.type.title'),
+                'route' => 'admin.fault.types',
+                'icon' => 'fas fa-toolbox',
+                'actions' => [
+                    'add' => 'admin.fault_type.add'
+                ]
+            ],
+            // Fault Fields End
+
             // Campaings Header
             [
                 'header' =>  trans('titles.campaings')
@@ -68,6 +93,39 @@ trait ViewAttributes
                 'icon' => 'fas fa-people-arrows'
             ],
             // Campaing Field End
+
+            // Product and Service Header
+            [
+                'header' =>  trans('titles.services')
+            ],
+            // Product and Service Header End
+
+            // Product Fields
+            [
+                'title' => trans('tables.contract_type.title'),
+                'route' => 'admin.contract.types',
+                'icon' => 'fas fa-file-signature',
+                'actions' => [
+                    'add' => 'admin.contract.type.add'
+                ]
+            ],
+            [
+                'title' => trans('tables.category.title'),
+                'route' => 'admin.categories',
+                'icon' => 'fas fa-archive',
+                'actions' => [
+                    'add' => 'admin.category.add'
+                ]
+            ],
+            [
+                'title' => trans('tables.service.title'),
+                'route' => 'admin.services',
+                'icon' => 'fas fa-ethernet',
+                'actions' => [
+                    'add' => 'admin.service.add'
+                ]
+            ],
+            // Product Fields End
 
             // Company Header
             [
@@ -103,39 +161,6 @@ trait ViewAttributes
             // Company Field End
 
             // Product and Service Header
-            [
-                'header' =>  trans('titles.services')
-            ],
-            // Product and Service Header End
-
-            // Product Fields
-            [
-                'title' => trans('tables.contract_type.title'),
-                'route' => 'admin.contract.types',
-                'icon' => 'fas fa-file-signature',
-                'actions' => [
-                    'add' => 'admin.contract.type.add'
-                ]
-            ],
-            [
-                'title' => trans('tables.category.title'),
-                'route' => 'admin.categories',
-                'icon' => 'fas fa-archive',
-                'actions' => [
-                    'add' => 'admin.category.add'
-                ]
-            ],
-            [
-                'title' => trans('tables.service.title'),
-                'route' => 'admin.services',
-                'icon' => 'fas fa-ethernet',
-                'actions' => [
-                    'add' => 'admin.service.add'
-                ]
-            ],
-            // Product Fields End
-
-            // Product and Service Header
             // [
             //     'header' =>  trans('titles.other')
             // ],
@@ -161,7 +186,7 @@ trait ViewAttributes
             if (isset($item['submenu'])) {
                 $active = false;
                 foreach ($item['submenu'] as $subkey => $subnav) {
-                    if (isset($subnav['route']) && $subnav['route'] === $route) {
+                    if (isset($subnav['route']) && $subnav['route'] == $route) {
                         $active = true;
                         $data[$key]['submenu'][$subkey]['active'] = true;
                     } else {
@@ -169,7 +194,7 @@ trait ViewAttributes
                     }
                 }
                 $data[$key]['active'] = $active;
-            } else if (isset($item['route']) && $item['route'] === $route) {
+            } else if (isset($item['route']) && $item['route'] == $route) {
                 $data[$key]['active'] = true;
             } else if (isset($item['route'])) {
                 $data[$key]['active'] = false;

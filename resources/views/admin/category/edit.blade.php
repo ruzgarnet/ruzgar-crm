@@ -27,7 +27,7 @@
                                 </div>
                                 <select name="contract_type_id" id="slcContractType" class="custom-select">
                                     @foreach ($contractTypes as $type)
-                                        <option value="{{ $type->id }}" @if ($category->contract_type_id === $type->id) selected @endif>{{ $type->title }}</option>
+                                        <option value="{{ $type->id }}" @if ($category->contract_type_id == $type->id) selected @endif>{{ $type->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -36,7 +36,7 @@
                             <label for="slcType">@lang('fields.data_type')</label>
                             <select name="type" id="slcType" class="custom-select">
                                 @foreach ($types as $type)
-                                    <option value="{{ $type }}" @if ($category->type === $type) selected @endif>
+                                    <option value="{{ $type }}" @if ($category->type == $type) selected @endif>
                                         @lang("tables.category.types.{$type}")</option>
                                 @endforeach
                             </select>
@@ -46,7 +46,7 @@
                             <select name="parent_id" id="slcParentCategory" class="custom-select selectpicker">
                                 <option value="" selected>@lang('fields.none')</option>
                                 @foreach ($categories as $row)
-                                    <option value="{{ $row->id }}" @if ($category->parent_id === $row->id) selected @endif>{{ $row->name }}</option>
+                                    <option value="{{ $row->id }}" @if ($category->parent_id == $row->id) selected @endif>{{ $row->name }}</option>
                                 @endforeach
                             </select>
                         </div>

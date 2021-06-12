@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{{ $subscription->contract_print }}</title>
+    <title>{{ $subscription->select_print }}</title>
     <style type="text/css">
         * {
             margin: 0;

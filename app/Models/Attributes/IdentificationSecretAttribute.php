@@ -14,6 +14,7 @@ trait IdentificationSecretAttribute
      */
     public function getIdentificationSecretAttribute()
     {
-        return preg_replace('/.{7}(\w{4})/', str_repeat('*', 7) . '$1', $this->identification_number);
+        return $this->identification_number;
+        //return preg_replace('/.{7}(\w{4})/', str_repeat('*', 7) . '$1', $this->identification_number);
     }
 }

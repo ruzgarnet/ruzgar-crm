@@ -2,7 +2,7 @@
 
 return [
     'admin' => [
-        'dashboard' => 'Dashboard',
+        'dashboard' => 'Ana Sayfa',
     ],
 
     'company' => [
@@ -14,6 +14,7 @@ return [
     'customers_and_orders' => 'Müşteriler ve Satışlar',
     'other' => 'Diğer',
     'campaings' => 'Kampanyalar',
+    'fault_records' => 'Arıza Kayıtları',
 
     'list' => 'Listele',
     'show' => 'Görüntüle',

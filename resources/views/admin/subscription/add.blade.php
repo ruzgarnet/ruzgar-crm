@@ -271,7 +271,7 @@
                 },
                 hasOption: function(key) {
                     for (let option in this.options) {
-                        if (option === key) {
+                        if (option == key) {
                             return true;
                         }
                     }

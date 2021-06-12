@@ -30,12 +30,12 @@
                             <tbody>
                                 @foreach ($customers as $customer)
                                     <tr data-id="{{ $customer->id }}"
-                                        class="{{ $customer->type === 1 ? 'un-approved-row' : 'approved-row' }}">
+                                        class="{{ $customer->type == 1 ? 'un-approved-row' : 'approved-row' }}">
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>
                                             <span class="d-inline-block text-center">
                                                 {{ $customer->identification_secret }}
-                                                @if ($customer->type === 1)
+                                                @if ($customer->type == 1)
                                                     <div class="customer-type customer-type-{{ $customer->type }}">
                                                         @lang("tables.customer.types.{$customer->type}")
                                                     </div>
@@ -58,9 +58,9 @@
                                                     <i class="fas fa-file"></i>
                                                 </a>
 
-                                                @if ($customer->type === 1)
+                                                @if ($customer->type == 1)
                                                     <button type="button"
-                                                        class="btn btn-success un-approved-element approve-modal-btn"
+                                                        class="btn btn-success approve-modal-btn"
                                                         data-action="{{ route('admin.customer.approve.post', $customer) }}"
                                                         data-modal="#approveCustomerModal" title="@lang('titles.approve')">
                                                         <i class="fas fa-check"></i>

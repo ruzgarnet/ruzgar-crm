@@ -21,7 +21,7 @@
                             <label for="slcCategory">@lang('fields.category')</label>
                             <select name="category_id" id="slcCategory" class="custom-select selectpicker">
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}" @if ($product->category_id === $category->id) selected @endif>{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}" @if ($product->category_id == $category->id) selected @endif>{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>

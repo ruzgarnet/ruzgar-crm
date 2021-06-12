@@ -137,9 +137,9 @@ trait SubscriptionPaymentGenerator
         $type = (int)$this->getOption('modem');
 
         $typeVal = '';
-        if ($type === 2) {
+        if ($type == 2) {
             $typeVal = 'adsl';
-        } else if ($type === 3) {
+        } else if ($type == 3) {
             $typeVal = 'vdsl';
         }
 

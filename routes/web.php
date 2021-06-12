@@ -115,6 +115,7 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::get('subscription/change/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'change'])->name('subscription.change');
     Route::put('subscription/change/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'upgrade'])->name('subscription.change.put');
     Route::put('subscription/cancel/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'cancel'])->name('subscription.cancel.put');
+    Route::get('subscription/preview/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'preview'])->name('subscription.contract');
     // Subscription Routes End
 
     // Reference Routes
@@ -134,6 +135,23 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::post('infrastructure/load', [App\Http\Controllers\Admin\MainController::class, 'load'])->name('infrastructure.load');
     Route::post('infrastructure/submit', [App\Http\Controllers\Admin\MainController::class, 'infrastructure_submit'])->name('infrastructure.post');
     // Infrastructure Routes End
+
+    // Fault Record Routes
+    Route::get('fault/records', [App\Http\Controllers\Admin\FaultRecordController::class, 'index'])->name('fault.records');
+    Route::get('fault/record/add', [App\Http\Controllers\Admin\FaultRecordController::class, 'create'])->name('fault.record.add');
+    Route::post('fault/record/add', [App\Http\Controllers\Admin\FaultRecordController::class, 'store'])->name('fault.record.add.post');
+    Route::get('fault/record/edit/{faultRecord}', [App\Http\Controllers\Admin\FaultRecordController::class, 'edit'])->name('fault.record.edit');
+    Route::put('fault/record/edit/{faultRecord}', [App\Http\Controllers\Admin\FaultRecordController::class, 'update'])->name('fault.record.edit.put');
+    // Fault Record Routes End
+
+    // Fault Type Routes
+    Route::get('fault/types', [App\Http\Controllers\Admin\FaultTypeController::class, 'index'])->name('fault.types');
+    Route::get('fault/type/add', [App\Http\Controllers\Admin\FaultTypeController::class, 'create'])->name('fault.type.add');
+    Route::post('fault/type/add', [App\Http\Controllers\Admin\FaultTypeController::class, 'store'])->name('fault.type.add.post');
+    Route::get('fault/type/edit/{faultType}', [App\Http\Controllers\Admin\FaultTypeController::class, 'edit'])->name('fault.type.edit');
+    Route::put('fault/type/edit/{faultType}', [App\Http\Controllers\Admin\FaultTypeController::class, 'update'])->name('fault.type.edit.put');
+    // Fault Type Routes End
+
 });
 
 // Request Routes

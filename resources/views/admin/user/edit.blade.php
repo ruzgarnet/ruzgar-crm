@@ -22,7 +22,7 @@
                             <select name="staff_id" id="slcStaff" class="custom-select selectpicker">
                                 <option selected disabled>@lang('tables.staff.select')</option>
                                 @foreach ($staffs as $staff)
-                                    <option value="{{ $staff->id }}" @if ($user->staff_id === $staff->id) selected @endif>{{ $staff->full_name }}</option>
+                                    <option value="{{ $staff->id }}" @if ($user->staff_id == $staff->id) selected @endif>{{ $staff->full_name }}</option>
                                 @endforeach
                             </select>
                         </div>

@@ -55,7 +55,7 @@ class PaymentController extends Controller
         $month = Carbon::now()->format("m");
 
         // TODO remove env conditions for product
-        if (env('APP_ENV') === 'local' || $date->format('m') == $month) {
+        if (env('APP_ENV') == 'local' || $date->format('m') == $month) {
             if ($request->input('type') == 3) {
                 $expire = Mutator::expire_date($validated["card"]["expire_date"]);
 
@@ -168,7 +168,7 @@ class PaymentController extends Controller
             'description' => $validated['description']
         ];
 
-        if ($payment->paid_at === null && $payment->edit_price($data)) {
+        if ($payment->paid_at == null && $payment->edit_price($data)) {
             return response()->json([
                 'success' => true,
                 'toastr' => [

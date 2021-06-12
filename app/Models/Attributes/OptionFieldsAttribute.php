@@ -42,7 +42,7 @@ trait OptionFieldsAttribute
         foreach ($values as $value) {
             $title = trans("fields.{$option}.{$value}");
 
-            if ($option === 'modems' && ($value == 2 || $value == 3)) {
+            if ($option == 'modems' && ($value == 2 || $value == 3)) {
                 $type = 'adsl';
                 if ($value == 3) {
                     $type = 'vdsl';

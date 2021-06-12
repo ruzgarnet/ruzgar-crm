@@ -24,7 +24,7 @@
                     <div
                         class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
                         <div class="login-brand">
-                            <img src="/assets/images/ruzgar-logo-white.png" alt="{{ env('APP_NAME') }}" width="200">
+                            <img src="/assets/images/ruzgarnet.png" alt="{{ env('APP_NAME') }}" width="200">
                         </div>
 
                         @yield('content')

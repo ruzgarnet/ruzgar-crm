@@ -98,6 +98,7 @@ return [
     'contract_type' => 'Sözleşme Tipi',
     'category_type' => 'Kategori Tipi',
     'contract' => "Sözleşme",
+    'contract_preview' => 'Sözleşme Önizlemesi',
     // Category|Product|Service Attributes
 
     // Subscription Attributes
@@ -188,4 +189,9 @@ return [
     'doors' => ' Kapı No',
     'full_name' => 'Adı Soyadı',
     // Infrastructure Attributes End
+
+    // Fault Attributes
+    'fault_type' => 'Arıza Kayıt Tipi',
+    'status' => 'Durum'
+    // Fault Attributes End
 ];

@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\SMS_Api;
 use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
+use App\Models\CanceledSubscription;
 use App\Models\City;
 use App\Models\Customer;
+use App\Models\FaultRecord;
+use App\Models\Payment;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +18,16 @@ class MainController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');
+        $data = [
+            'total' => [
+                'customer' => Customer::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->count(),
+                'subscription' => Subscription::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->count(),
+                'faultRecord' => FaultRecord::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->count(),
+                'payment' => Payment::whereBetween('date', [date('Y-m-d H:i', strtotime('first day of this month')), date('Y-m-d H:i', strtotime('first day of next month'))])->sum('price')
+            ],
+            'subscriptions' => Subscription::limit(20)->get()
+        ];
+        return view('admin.dashboard', $data);
     }
 
     public function infrastructure()
@@ -165,21 +178,20 @@ class MainController extends Controller
             $message .= "Kullanıcı fiber altyapıya sahiptir.";
         }
 
-        if($port_statu)
-		{
+        if ($port_statu) {
             // $sms = new SMS_Api("", "");
-			// $sms->submit(
+            // $sms->submit(
             //     "RUZGARNET",
-			// 	"Binanızda RüzgarNET olarak hizmetimiz mevcuttur. İsterseniz, www.ruzgarnet.com.tr websitemiz üzerinden inceleyip, abone olabilirsiniz. Sizleri de MUTLU abonelerimiz arasında görmekten gurur duyarız. RUZGARNET 0216 205 06 06",
-			// 	array($phone)
-			// );
+            // 	"Binanızda RüzgarNET olarak hizmetimiz mevcuttur. İsterseniz, www.ruzgarnet.com.tr websitemiz üzerinden inceleyip, abone olabilirsiniz. Sizleri de MUTLU abonelerimiz arasında görmekten gurur duyarız. RUZGARNET 0216 205 06 06",
+            // 	array($phone)
+            // );
 
             // $telegram = new Telegram();
             // $telegram->send_message(
             //     "1046241971",
             //     $message." Adı Soyadı : ".$full_name." - Telefon Numarası : ".$phone." - İl : ".$cities[$city_code]." - BBK : ".$door_id
             // );
-		}
+        }
 
         echo json_encode($json_results);
     }

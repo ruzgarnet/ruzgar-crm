@@ -28,7 +28,7 @@
                             <select name="service_id" id="slcService" class="custom-select service-select selectpicker"
                                 v-model="service" v-selectpicker="service" v-on:change="changeService()">
                                 @foreach ($services as $service)
-                                    <option value="{{ $service->id }}" @if ($subscription->service_id === $service->id) selected disabled @endif>
+                                    <option value="{{ $service->id }}" @if ($subscription->service_id == $service->id) selected disabled @endif>
                                         {{ $service->select_print }}</option>
                                 @endforeach
                             </select>

@@ -33,7 +33,7 @@
                                     <select name="city_id" id="slcCity" class="custom-select">
                                         <option disabled selected>@lang('tables.city.select')</option>
                                         @foreach ($cities as $city)
-                                            <option value="{{ $city->id }}" @if ($dealer->city_id === $city->id) selected @endif>
+                                            <option value="{{ $city->id }}" @if ($dealer->city_id == $city->id) selected @endif>
                                                 {{ $city->name }}
                                             </option>
                                         @endforeach
@@ -45,7 +45,7 @@
                                     <label for="slcDistrict">@lang('fields.district')</label>
                                     <select name="district_id" id="slcDistrict" class="custom-select">
                                         @foreach ($dealer->city->districts as $district)
-                                            <option value="{{ $district->id }}" @if ($dealer->district_id === $district->id) selected @endif>
+                                            <option value="{{ $district->id }}" @if ($dealer->district_id == $district->id) selected @endif>
                                                 {{ $district->name }}
                                             </option>
                                         @endforeach
