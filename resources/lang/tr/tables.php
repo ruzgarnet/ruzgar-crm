@@ -196,7 +196,9 @@ return [
         'edit' => 'Mesaj Düzenle',
         'delete' => 'Mesaj Sil',
         'info' => 'Mesaj Bilgileri',
-        'select' => 'Mesajı Seçiniz'
+        'select' => 'Mesajı Seçiniz',
+        'send_sms' => 'Mesaj Gönder',
+        'send_sms_to_number' => 'Mesaj Gönder'
     ],
     // Message Fields End
 

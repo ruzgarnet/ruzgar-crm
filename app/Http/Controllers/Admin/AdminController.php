@@ -11,4 +11,12 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     use ViewAttributes;
+
+    public function request_routes()
+    {
+        return [
+            'infrastructureLoad' => relative_route('infrastructure.load'),
+            'infrastructurePost' => relative_route('infrastructure.post')
+        ];
+    }
 }

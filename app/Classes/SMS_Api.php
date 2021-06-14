@@ -6,17 +6,25 @@ use SimpleXMLElement;
 
 class SMS_Api
 {
-    public $username;
-    public $password;
-    public $credentials;
-    public $url;
-    public $soap_request;
+    private $username;
+    private $password;
+    private $credentials;
+    private $api_url;
+    private $soap_request;
+    private $action;
 
-    public function __construct($username, $password)
+    public function __construct()
     {
-        $this->username = "ruzgarnet";
-        $this->password = "a85463";
-        $credentials = $username . ":" . $password;
+        $this->username = env('1TELEKOM_SMS_API_USERNAME');
+        $this->password = env('1TELEKOM_SMS_API_PASSWORD');
+        $this->credentials = "{$this->username}:{$this->password}";
+
+        $this->api_url = "http://141.98.204.107/Api/";
+    }
+
+    private function url()
+    {
+        return trim($this->api_url, "/") . "/" . trim($this->action, "/");
     }
 
     public function xmlConfig()
@@ -26,7 +34,7 @@ class SMS_Api
             "Accept: text/xml",
             "Cache-Control: no-cache",
             "Pragma: no-cache",
-            "SOAPAction: '" . $this->url . "'",
+            "SOAPAction: '" . $this->url() . "'",
             "Content-length: " . strlen($this->soap_request),
         );
 
@@ -43,21 +51,20 @@ class SMS_Api
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
-        curl_setopt($curl, CURLOPT_URL, $this->url);
+        curl_setopt($curl, CURLOPT_URL, $this->url());
 
         $xml_result = curl_exec($curl);
         $xml_result = trim(preg_replace('/\s+/', ' ', $xml_result));
-        if ($xml_result == "")
-            return false;
-        else {
+        if ($xml_result != "") {
             $xml_result = str_replace('xmlns="SmsApi"', "", $xml_result);
             return new SimpleXMLElement($xml_result);
         }
+        return false;
     }
 
     public function getBalance()
     {
-        $this->url = "http://141.98.204.107/Api/GetBalance";
+        $this->action = "GetBalance";
         $this->soap_request = "<GetBalance xmlns:i='http://www.w3.org/2001/XMLSchema-instance' xmlns='SmsApi'>
                                     <Credential>
                                           <Password>" . $this->password . "</Password>
@@ -69,7 +76,7 @@ class SMS_Api
 
     public function getQuery($msisdn, $messageID)
     {
-        $this->url = "http://141.98.204.107/Api/Query";
+        $this->action = "Query";
         $this->soap_request = "<Query xmlns:i='http://www.w3.org/2001/XMLSchema-instance' xmlns='SmsApi'>
                                    <Credential>
                                         <Password>" . $this->password . "</Password>
@@ -88,7 +95,7 @@ class SMS_Api
             $numberContent .= "<d2p1:string>" . $x . "</d2p1:string>";
         }
 
-        $this->url = "http://141.98.204.107/Api/Submit/";
+        $this->action = "Submit/";
         $this->soap_request = "<Submit xmlns:i='http://www.w3.org/2001/XMLSchema-instance' xmlns='SmsApi'>
                                    <Credential>
                                         <Password>" . $this->password . "</Password>
@@ -115,7 +122,7 @@ class SMS_Api
             $numberContent .= "<d2p1:string>" . $x . "</d2p1:string>";
         }
 
-        $this->url = "http://141.98.204.107/Api/Submit/";
+        $this->action = "Submit/";
         $this->soap_request = "<Submit xmlns:i='http://www.w3.org/2001/XMLSchema-instance' xmlns='SmsApi'>
                                    <Credential>
                                         <Password>" . $this->password . "</Password>
@@ -141,7 +148,7 @@ class SMS_Api
         for ($row = 0; $row < sizeof($numberMessageArray); $row++) {
             $numberContent .= "<Envelope><Message>" . $numberMessageArray[$row][1] . "</Message><To>" . $numberMessageArray[$row][0] . "</To></Envelope>";
         }
-        $this->url = "http://141.98.204.107/Api/SubmitMulti";
+        $this->action = "SubmitMulti";
         $this->soap_request = "<SubmitMulti xmlns:i='http://www.w3.org/2001/XMLSchema-instance' xmlns='SmsApi'>
                                    <Credential>
                                         <Password>" . $this->password . "</Password>

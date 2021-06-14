@@ -23,6 +23,7 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     // Main Routes
     Route::get('/', [App\Http\Controllers\Admin\MainController::class, 'index'])->name('dashboard');
     Route::get('search', [App\Http\Controllers\Admin\MainController::class, 'search'])->name('search');
+    Route::get('infrastructure', [App\Http\Controllers\Admin\MainController::class, 'infrastructure'])->name('infrastructure');
     // Main Routes End
 
     // Dealer Routes
@@ -99,6 +100,9 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::post('message/add', [App\Http\Controllers\Admin\MessageController::class, 'store'])->name('message.add.post');
     Route::get('message/edit/{message}', [App\Http\Controllers\Admin\MessageController::class, 'edit'])->name('message.edit');
     Route::put('message/edit/{message}', [App\Http\Controllers\Admin\MessageController::class, 'update'])->name('message.edit.put');
+    Route::get('message/send', [App\Http\Controllers\Admin\MessageController::class, 'send'])->name('message.send');
+    Route::post('message/send', [App\Http\Controllers\Admin\MessageController::class, 'submit'])->name('message.send.post');
+
     // Message Routes End
 
     // Subscription Routes
@@ -131,12 +135,6 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::put('payment/price/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'price'])->name('payment.price.put');
     // Payment Routes End
 
-    // Infrastructure Routes
-    Route::get('infrastructure', [App\Http\Controllers\Admin\MainController::class, 'infrastructure'])->name('infrastructure');
-    Route::post('infrastructure/load', [App\Http\Controllers\Admin\MainController::class, 'load'])->name('infrastructure.load');
-    Route::post('infrastructure/submit', [App\Http\Controllers\Admin\MainController::class, 'infrastructure_submit'])->name('infrastructure.post');
-    // Infrastructure Routes End
-
     // Fault Record Routes
     Route::get('fault/records', [App\Http\Controllers\Admin\FaultRecordController::class, 'index'])->name('fault.records');
     Route::get('fault/record/add', [App\Http\Controllers\Admin\FaultRecordController::class, 'create'])->name('fault.record.add');
@@ -158,4 +156,10 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
 // Request Routes
 // Get district by city id
 Route::get('getDistricts/{id}', [App\Http\Controllers\CityController::class, 'districts'])->name('get.district')->where('id', '[0-9]+');
+
+ // Infrastructure Routes
+ Route::post('infrastructure/load', [App\Http\Controllers\InfrastructureController::class, 'load'])->name('infrastructure.load');
+ Route::post('infrastructure/submit', [App\Http\Controllers\InfrastructureController::class, 'submit'])->name('infrastructure.post');
+ // Infrastructure Routes End
+
 // Request Routes End
