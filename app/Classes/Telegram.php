@@ -7,6 +7,22 @@ namespace App\Classes;
  */
 class Telegram
 {
+    public $chats = [
+        'AboneTamamlanan' => "-1001446123222",
+        'AltyapıSorgulama' => '-1001234818134',
+        'NiğdeSatış' => '-1001312842188',
+        'WebÜzerindenSatış' => '-1001239160019',
+        'RüzgarNETÖdeme' => '-1001188341295',
+        'AboneBilgileri' => '-1001393165900',
+        'KaliteKontrolEkibi' => '-1001468489934',
+        'İptalİşlemler' => '-1001123700542',
+        'BizSiziArayalım' => '-1001459396907',
+        'RüzgarTeknik' => '-1001270493121',
+        'RüzgarCELLKotaSorgulama' => '-1001470398107',
+        'SözleşmesiSonaErecekler' => '-1001172443073',
+        'BayiSatışlar' => '-1001412338702'
+    ];
+
     /**
      * API Telegram Token
      *
