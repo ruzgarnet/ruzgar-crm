@@ -4,11 +4,10 @@ function processForm() {
     $("#speed_information").fadeOut();
     $("#adviced_tariffs").fadeOut();
 
-    jQuery
-        .ajax({
-            url: "/admin/infrastructure/submit",
+    $.ajax({
+            url: urls.infrastructurePost,
             type: "POST",
-            data: jQuery("#infrastructure_statu_form").serialize(),
+            data: $("#infrastructure_statu_form").serialize(),
             dataType: "json",
         })
         .fail(function (e) {
@@ -99,7 +98,7 @@ function get_cities() {
     $("#cities").html("");
     $.ajax({
         type: "POST",
-        url: "/admin/infrastructure/load",
+        url: urls.infrastructureLoad,
         async: true,
         dataType: "JSON",
         data: {
@@ -132,7 +131,7 @@ function get_districts(city_id) {
     $("#districts").html("");
     $.ajax({
         type: "POST",
-        url: "/admin/infrastructure/load",
+        url: urls.infrastructureLoad,
         async: true,
         dataType: "JSON",
         data: {
@@ -165,7 +164,7 @@ function get_townships(district_id) {
     $("#townships").html("");
     $.ajax({
         type: "POST",
-        url: "/admin/infrastructure/load",
+        url: urls.infrastructureLoad,
         async: true,
         dataType: "JSON",
         data: {
@@ -219,7 +218,7 @@ function get_villages(township_id) {
     $("#villages").html("");
     $.ajax({
         type: "POST",
-        url: "/admin/infrastructure/load",
+        url: urls.infrastructureLoad,
         async: true,
         dataType: "JSON",
         data: {
@@ -273,7 +272,7 @@ function get_neighborhoods(village_id) {
     $("#neighborhoods").html("");
     $.ajax({
         type: "POST",
-        url: "/admin/infrastructure/load",
+        url: urls.infrastructureLoad,
         async: true,
         dataType: "JSON",
         data: {
@@ -328,7 +327,7 @@ function get_streets(neighborhood_id) {
     $("#streets").html("");
     $.ajax({
         type: "POST",
-        url: "/admin/infrastructure/load",
+        url: urls.infrastructureLoad,
         async: true,
         dataType: "JSON",
         data: {
@@ -383,7 +382,7 @@ function get_buildings(street_id) {
     $("#buildings").html("");
     $.ajax({
         type: "POST",
-        url: "/admin/infrastructure/load",
+        url: urls.infrastructureLoad,
         async: true,
         dataType: "JSON",
         data: {
@@ -437,7 +436,7 @@ function get_doors(building_id) {
     $("#doors").html("");
     $.ajax({
         type: "POST",
-        url: "/admin/infrastructure/load",
+        url: urls.infrastructureLoad,
         async: true,
         dataType: "JSON",
         data: {
@@ -542,6 +541,13 @@ function reset_form(id) {
 }
 
 $(document).ready(function () {
+    // Bind CSRF token to request header
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
     get_cities();
 
     $("#cities").change(function () {
