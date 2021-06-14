@@ -26,7 +26,7 @@ return [
     ],
 
     'reference' => [
-        'success' => 'Referans başarıyla tanımlandı ve ücreti düzenlendi.',
+        'success' => 'Referans başarıyla tanımlandı.',
         'error' => 'Referans tanımlanırken hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
     ],
 
@@ -53,6 +53,6 @@ return [
     ],
 
     'system' => [
-        'referenced' => 'Referans işlemi gerçekleştirildi. Bu mesaj sistem tarafından düzenlenmiştir.'
+        'referenced' => 'Referans işlemi gerçekleştirildi. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.'
     ]
 ];

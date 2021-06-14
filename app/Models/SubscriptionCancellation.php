@@ -58,6 +58,8 @@ class SubscriptionCancellation extends Model
 
             $dateAppend = $subscription->getOption('pre_payment') ? 0 : 1;
 
+            Reference::cancel($subscription, $data['staff_id']);
+
             Payment::where('subscription_id', $subscription->id)
                 ->where('date', '>', Carbon::now()->addMonth($dateAppend)->lastOfMonth()->format('Y-m-d'))
                 ->whereNull('paid_at')

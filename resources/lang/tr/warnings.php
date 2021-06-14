@@ -24,5 +24,8 @@ return [
         'changed' => 'Hizmeti değiştirilmiş abonelikte bu işlemi gerçekleştiremezsiniz!',
         'already_canceled' => 'Abonelik zaten iptal edilmiş!',
         'canceled' => 'İptal edilmiş abonelikte bu işlemi gerçekleştiremezsiniz!'
+    ],
+    'reference' => [
+        'control_time' => 'Kontrol Edilebilir'
     ]
 ];

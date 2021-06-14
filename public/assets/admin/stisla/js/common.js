@@ -472,6 +472,23 @@ $(function () {
         $("#inpCancelSubscriptionModalCustomer").val(customer);
         $("#inpCancelSubscriptionModalService").val(service);
     });
+
+    /**
+     * Open edit reference modal, change form values
+     */
+    $(document).on("click", ".edit-reference-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            status = button.data("status"),
+            row = button.parents("tr");
+
+        $("#editReferenceForm").prop("action", action);
+        $("#editReferenceModal").modal("show");
+
+        $("#inpEditReferenceModalReference").val(row.find(".reference-subscription").text().trim());
+        $("#inpEditReferenceModalReferenced").val(row.find(".referenced-subscription").text().trim());
+        $("#slcEditReferenceModalStatus").val(status).change();
+    });
 });
 
 /**

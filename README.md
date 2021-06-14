@@ -4,7 +4,7 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 
 ## Yapılacaklar
 
-- [ ] Referans
+- [x] Referans
 - [x] Sözleşme
 - [ ] Otomatik Ödeme ve İndirim
 - [ ] Altyapı Sorgulama

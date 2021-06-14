@@ -17,14 +17,17 @@ class ReferenceController extends Controller
      */
     public function index()
     {
-        return view('admin.reference.list', ['references' => Reference::orderBy('id', 'DESC')->get()]);
+        return view('admin.reference.list', [
+            'references' => Reference::orderBy('id', 'DESC')->get(),
+            'referenceStatus' => Reference::getStatus()
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
      * @param  \App\Models\Subscription  $subscription
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function create(Subscription $subscription)
     {
@@ -40,7 +43,7 @@ class ReferenceController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Subscription  $subscription
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request, Subscription $subscription)
     {
@@ -57,12 +60,11 @@ class ReferenceController extends Controller
         $referenced = Subscription::find($validated['subscription_id']);
 
         $data = [
-            'staff_id' => $request->user()->staff_id,
             'reference_id' => $subscription->id,
             'referenced_id' => $referenced->id,
         ];
 
-        if (Reference::add_reference($data)) {
+        if (Reference::create($data)) {
             return response()->json([
                 'success' => true,
                 'toastr' => [
@@ -71,6 +73,46 @@ class ReferenceController extends Controller
                     'message' => trans('response.reference.success')
                 ],
                 'redirect' => relative_route('admin.customer.show', $subscription->customer)
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.reference.error')
+            ]
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Reference  $reference
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, Reference $reference)
+    {
+        $validated = $request->validate([
+            'status' => [
+                'required',
+                Rule::in(Reference::getStatus())
+            ]
+        ]);
+
+        $validated['staff_id'] = $request->user()->staff_id;
+
+        if ($reference->edit_reference($validated)) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.reference.success')
+                ],
+                'reload' => true
             ]);
         }
 

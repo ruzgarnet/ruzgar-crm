@@ -68,6 +68,8 @@ class SubscriptionChange extends Model
             $subscription->status = 2;
             $subscription->save();
 
+            Reference::change($subscription->id, $changedSubscription->id);
+
             DB::commit();
             return true;
         } catch (Exception $e) {

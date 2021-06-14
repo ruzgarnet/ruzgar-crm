@@ -179,14 +179,48 @@ table .un-approved-row .approved-element {
 }
 
 button.dropdown-item {
-    font-size: 13px;
     padding: 10px 20px;
-    font-weight: 500;
     line-height: 1.2;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .dropdown-item .dropdown-icon {
     margin-left: 0 !important;
     width: 1.33em;
     text-align: center;
+}
+
+.reference-statuses {
+    display: inline-block;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 7.5px;
+    text-align: center;
+    font-weight: bold;
+}
+.reference-statuses:hover {
+    opacity: 0.75;
+}
+
+.reference-status-1 {
+    background-color: var(--info);
+    cursor: default;
+    color: #ffffff;
+}
+.reference-status-2 {
+    background-color: var(--success);
+    color: #ffffff;
+}
+.reference-status-3 {
+    background-color: var(--danger);
+    color: #ffffff;
+}
+.reference-status-4 {
+    background-color: var(--warning);
+    color: #ffffff;
+}
+.reference-status-5 {
+    background-color: var(--danger);
+    color: #ffffff;
 }

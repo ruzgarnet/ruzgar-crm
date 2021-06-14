@@ -74,6 +74,7 @@ return [
     'save_date' => 'Kayıt Tarihi',
     'first_save_date' => 'İlk Kayıt Tarihi',
     'subscription_date' => 'Abonelik Tarihi',
+    'passed_time' => 'Geçen Süre',
     // Date Attributes End
 
     // Meta Attributes
