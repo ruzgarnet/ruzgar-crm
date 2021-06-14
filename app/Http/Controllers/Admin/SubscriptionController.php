@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Classes\Generator as Generator;
+use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
 use App\Models\SubscriptionCancellation;
 use App\Models\Category;
@@ -230,6 +231,12 @@ class SubscriptionController extends Controller
                     mkdir(public_path('contracts'), 0755, true);
                 }
                 $pdf->save($path);
+
+                $telegram = new Telegram();
+                $telegram->send_message(
+                    "1046241971",
+                    $subscription->customer->identification_number." - ".$subscription->customer->full_name." İşlemi gerçekleştiren kullanıcı : ".$subscription->staff->full_name
+                );
 
                 return response()->json([
                     'success' => true,
@@ -521,6 +528,13 @@ class SubscriptionController extends Controller
         $validated['subscription_id'] = $subscription->id;
 
         if (SubscriptionCancellation::cancel($subscription, $validated)) {
+            // TODO Change group for production
+            // FIXME Named groups
+            $telegram = new Telegram();
+            $telegram->send_message(
+                "1046241971",
+                $subscription->customer->full_name." - ".$subscription->customer->identification_number." kimlik numaralı müşterimizin kaydı silindi. Silme Nedeni : ".$validated["description"]." İşlemi Gerçekleştiren Kullanıcı : ".request()->user()->username
+            );
             return response()->json([
                 'success' => true,
                 'toastr' => [
@@ -615,7 +629,7 @@ class SubscriptionController extends Controller
             $service = Service::find(request()->input('service_id'));
             $options = $service->category->options;
 
-            if (request()->input('options.modem') && in_array(request()->input('options.modem'), [2, 3, 5])) {
+            if (request()->input('options.modem') && in_array(request()->input('options.modem'), [2, 3, 4])) {
                 $optionRules['bbk_code'] = [
                     'required',
                     'string',

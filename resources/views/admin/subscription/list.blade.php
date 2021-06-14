@@ -51,7 +51,7 @@
 												@endif
 
 												@if ($subscription->isChanged())
-													<a class="btn btn-info btn-sm"
+													<a class="btn btn-info btn-sm" title="@lang('fields.changed_service')"
 														href="{{ route('admin.subscription.payments', $subscription->getChanged()) }}">
 														{{ $subscription->getChanged()->service->name }}
 													</a>

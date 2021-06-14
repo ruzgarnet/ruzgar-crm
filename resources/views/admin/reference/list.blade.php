@@ -40,8 +40,7 @@
                                                 </span>
                                             @else
                                                 <span class="reference-statuses reference-status-{{ $reference->status }}"
-                                                    title="@lang("
-                                                    tables.reference.status.descriptions.{$reference->status}")">
+                                                    title="@lang("tables.reference.status.descriptions.{$reference->status}")">
                                                     @lang("tables.reference.status.titles.{$reference->status}")
                                                 </span>
                                             @endif

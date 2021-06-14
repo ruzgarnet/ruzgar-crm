@@ -7,17 +7,20 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 - [x] Referans
 - [x] Sözleşme
 - [ ] Otomatik Ödeme ve İndirim
-- [ ] Altyapı Sorgulama
+- [x] Altyapı Sorgulama
 - [ ] Sorgulanan altyapı bilgilerini kayda aktarma
-- [ ] SMS Entegrasyonu
+- [x] SMS Entegrasyonu
 - [ ] Rapor Sayfaları
-- [ ] Arıza kayıtları
+- [x] Arıza kayıtları
+- [ ] Arıza kayıtları geliştirmesi
 - [ ] Taleplerin takibi
 - [ ] Site yönetimi için modül yapısının tasarlanması
 - [ ] Geribildirimler (ücret değişiklikleri, referanslar, iptal olan abonelikler, ...)
 - [ ] Abonelik dondurma işlemleri
 - [ ] Toplu ödemeler
 - [ ] Sistem içi talep/istek yapısı
+- [ ] Ayın 25. gününden sonra gelen abonelerin ilk ay ücretlerinin yarıya düşürülmesi
+- [ ] Fatura oluşturma ve silme işlemleri
 
 ## Otomatize İşlemler
 
