@@ -163,7 +163,7 @@ class Payment extends Model
 
         DB::beginTransaction();
         try {
-            if (EditPayment::create($data)) {
+            if (PaymentPriceEdit::create($data)) {
                 $this->price = $data['new_price'];
                 $this->save();
             }

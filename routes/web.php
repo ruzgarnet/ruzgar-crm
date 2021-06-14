@@ -122,6 +122,7 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::get('references', [App\Http\Controllers\Admin\ReferenceController::class, 'index'])->name('references');
     Route::get('reference/{subscription}', [App\Http\Controllers\Admin\ReferenceController::class, 'create'])->name('reference.add');
     Route::post('reference/{subscription}', [App\Http\Controllers\Admin\ReferenceController::class, 'store'])->name('reference.add.post');
+    Route::put('reference/edit/{reference}', [App\Http\Controllers\Admin\ReferenceController::class, 'update'])->name('reference.edit.put');
     // Reference Routes
 
     // Payment Routes

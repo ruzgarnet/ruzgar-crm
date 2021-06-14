@@ -60,6 +60,10 @@ if (!function_exists('convert_date')) {
                 return $date->format('d/m/Y H:i');
                 break;
 
+            case 'month_period':
+                return $date->translatedFormat('F Y');
+                break;
+
             case 'medium':
                 return $date->translatedFormat('j F Y');
                 break;

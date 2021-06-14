@@ -9,6 +9,7 @@ return [
     'options' => 'Seçenekler',
     'option' => 'Seçenek',
     'define' => 'Tanımla',
+    'reset' => 'Sıfırla',
     // Global Attributes End
 
     // Identity Attributes

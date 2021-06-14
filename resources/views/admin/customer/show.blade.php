@@ -154,7 +154,7 @@
                                                         @lang('titles.delete')
                                                     </button>
                                                 @endif
-                                                @if ($subscription->approved_at)
+                                                @if ($subscription->approved_at || $subscription->type == 0)
                                                     <a href="{{ route('admin.subscription.payments', $subscription) }}"
                                                         class="dropdown-item approved-element">
                                                         <i class="dropdown-icon fas fa-file-invoice"></i>
