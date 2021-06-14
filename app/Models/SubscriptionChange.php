@@ -53,12 +53,12 @@ class SubscriptionChange extends Model
     {
         DB::beginTransaction();
         try {
-            $changedSubscription = $subscription->getChangedSubscription($subscription, $data);
+            $changedSubscription = self::getChangedSubscription($subscription, $data);
 
-            $subscription->addChangedRow($subscription, $changedSubscription);
+            self::addChangedRow($subscription, $changedSubscription);
 
-            $payments = $subscription->getChangedPayments($subscription, $changedSubscription->id, $data['price']);
-            $subscription->deleteChangedPayments($subscription->id);
+            $payments = self::getChangedPayments($subscription, $changedSubscription->id, $data['price']);
+            self::deleteChangedPayments($subscription->id);
 
             foreach ($payments as $payment) {
                 Payment::insert($payment);

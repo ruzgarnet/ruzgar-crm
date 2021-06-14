@@ -21,7 +21,7 @@ trait SubscriptionChangeGenerator
      * @param array $data
      * @return \App\Models\Subscription
      */
-    public function getChangedSubscription(Subscription $subscription, array $data)
+    public static function getChangedSubscription(Subscription $subscription, array $data)
     {
         return Subscription::create([
             'staff_id' => $data['staff_id'],
@@ -49,7 +49,7 @@ trait SubscriptionChangeGenerator
      * @param \App\Models\Subscription $changedSubscription New Subscription
      * @return void
      */
-    public function addChangedRow(Subscription $subscription, Subscription $changedSubscription)
+    public static function addChangedRow(Subscription $subscription, Subscription $changedSubscription)
     {
         return SubscriptionChange::create([
             'subscription_id' => $subscription->id,
@@ -71,7 +71,7 @@ trait SubscriptionChangeGenerator
      * @param float $price
      * @return array
      */
-    public function getChangedPayments(Subscription $subscription, int $changed_id, float $price)
+    public static function getChangedPayments(Subscription $subscription, int $changed_id, float $price)
     {
         $payments = Payment::where('subscription_id', $subscription->id)
             ->whereNull('paid_at')
@@ -96,7 +96,7 @@ trait SubscriptionChangeGenerator
      * @param integer $subscription_id
      * @return void
      */
-    public function deleteChangedPayments(int $subscription_id)
+    public static function deleteChangedPayments(int $subscription_id)
     {
         return Payment::where('subscription_id', $subscription_id)
             ->whereNull('paid_at')
