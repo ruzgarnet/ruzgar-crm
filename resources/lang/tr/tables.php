@@ -179,9 +179,10 @@ return [
         'select_type' => 'Ödeme Tipini Seçiniz',
         'types' => [
             1 => 'Nakit',
-            2 => 'Havale/EFT',
-            3 => 'Kredi/Banka Kartı (Online)',
-            4 => 'Otomatik Ödeme'
+            2 => 'Kredi/Banka Kartı (Pos)',
+            3 => 'Havale/EFT',
+            4 => 'Kredi/Banka Kartı (Online)',
+            5 => 'Otomatik Ödeme'
         ]
     ],
     // Payment Fields End
