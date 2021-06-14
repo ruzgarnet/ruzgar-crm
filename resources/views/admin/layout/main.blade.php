@@ -8,6 +8,10 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <script>
+        window.urls = @json($admin->request_routes());
+    </script>
+
     <link rel="stylesheet" href="/assets/admin/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/admin/vendor/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/assets/admin/vendor/iziToast/css/iziToast.min.css">
