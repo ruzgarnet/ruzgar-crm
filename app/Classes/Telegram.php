@@ -9,7 +9,12 @@ use Exception;
  */
 class Telegram
 {
-    public $chats = [
+    /**
+     * Telegram Groups
+     *
+     * @var array
+     */
+    public $groups = [
         'AboneTamamlanan' => "-1001446123222",
         'AltyapıSorgulama' => '-1001234818134',
         'NiğdeSatış' => '-1001312842188',
@@ -68,24 +73,31 @@ class Telegram
     /**
      * Send message to id
      *
-     * @param int $chat_id
+     * @param string $chat_key
      * @param string $message
      * @return json|null
      */
-    public function send_message($chat_id, $message)
+    public static function send($group_key, $message)
     {
-        if (env('APP_ENV') === 'local') {
-            $chat_id = '-562316544';
+        // FIXME Preapre for production
+        if (env('APP_ENV') === 'local' || array_key_exists($group_key, self::$groups)) {
+            self::$request_parameters["chat_id"] = env('APP_ENV') === 'local' ? '-562316544' : self::$groups[$group_key];
+            self::$request_parameters["text"] = $message;
+            self::$function = "sendMessage";
+            return self::init();
+        } else {
+            throw new Exception('Chat group not found', 101);
         }
-        $this->request_parameters["chat_id"] = $chat_id;
-        $this->request_parameters["text"] = $message;
-        $this->function = "sendMessage";
-        $this->send();
     }
 
-    private function send()
+    /**
+     * Send message and get response
+     *
+     * @return string|false
+     */
+    private static function init()
     {
-        $this->url .= $this->function . "?" . http_build_query($this->request_parameters);
-        return file_get_contents($this->url);
+        self::$url .= self::$function . "?" . http_build_query(self::$request_parameters);
+        return file_get_contents(self::$url);
     }
 }
