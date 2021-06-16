@@ -224,3 +224,7 @@ button.dropdown-item {
     background-color: var(--danger);
     color: #ffffff;
 }
+
+.modal-body p:last-child {
+    margin-bottom: 0;
+}

@@ -459,7 +459,7 @@ $(function () {
     });
 
     /**
-     * Open edit subscription price modal, change form action and price
+     * Open subscription cancellation modal, change form inputs
      */
     $(document).on("click", ".cancel-subscription-modal-btn", function () {
         let button = $(this),
@@ -488,6 +488,21 @@ $(function () {
         $("#inpEditReferenceModalReference").val(row.find(".reference-subscription").text().trim());
         $("#inpEditReferenceModalReferenced").val(row.find(".referenced-subscription").text().trim());
         $("#slcEditReferenceModalStatus").val(status).change();
+    });
+
+    /**
+     * Open subscription freeze modal, change form inputs
+     */
+    $(document).on("click", ".freeze-subscription-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            customer = button.data("customer"),
+            service = button.data("service");
+
+        $("#freezeSubscriptionForm").prop("action", action);
+        $("#freezeSubscriptionModal").modal("show");
+        $("#inpFreezeSubscriptionModalCustomer").val(customer);
+        $("#inpFreezeSubscriptionModalService").val(service);
     });
 });
 

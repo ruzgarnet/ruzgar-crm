@@ -12,6 +12,7 @@ use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\Service;
 use App\Models\Subscription;
+use App\Models\SubscriptionFreeze;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -41,6 +42,12 @@ class SubscriptionController extends Controller
         return view('admin.subscription.add', $this->viewData());
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function preview(Subscription $subscription)
     {
         $pdf = Pdf::loadView("pdf.contract.{$subscription->service->category->contractType->view}", [
@@ -232,11 +239,7 @@ class SubscriptionController extends Controller
                 }
                 $pdf->save($path);
 
-                $telegram = new Telegram();
-                $telegram->send_message(
-                    "1046241971",
-                    $subscription->customer->identification_number." - ".$subscription->customer->full_name." İşlemi gerçekleştiren kullanıcı : ".$subscription->staff->full_name
-                );
+                Telegram::send('1046241971', 'sub approve');
 
                 return response()->json([
                     'success' => true,
@@ -382,60 +385,28 @@ class SubscriptionController extends Controller
             'payment' => 'required|numeric|min:0',
         ]);
 
-        if ($subscription->approved_at == null) {
-            return response()->json([
-                'error' => true,
-                'toastr' => [
-                    'type' => 'error',
-                    'title' => trans('response.title.error'),
-                    'message' => trans('warnings.subscription.not_approved')
-                ]
-            ]);
-        }
+        $error = null;
 
-        if ($subscription->isCanceled()) {
-            return response()->json([
-                'error' => true,
-                'toastr' => [
-                    'type' => 'error',
-                    'title' => trans('response.title.error'),
-                    'message' => trans('warnings.subscription.canceled')
-                ]
-            ]);
-        }
+        if ($subscription->approved_at == null)
+            $error = trans('warnings.subscription.not_approved');
+        if ($subscription->isCanceled())
+            $error = trans('warnings.subscription.already_canceled');
+        if ($subscription->isChanged())
+            $error = trans('warnings.subscription.changed');
+        if ($subscription->isEnded())
+            $error = trans('warnings.subscription.ended');
+        if ($subscription->isFreezed())
+            $error = trans('warnings.subscription.freezed');
+        if ($validated['service_id'] == $subscription->service_id)
+            $error = trans('warnings.subscription.cant_change_same_service');
 
-        if ($subscription->isChanged()) {
+        if ($error) {
             return response()->json([
                 'error' => true,
                 'toastr' => [
                     'type' => 'error',
                     'title' => trans('response.title.error'),
-                    'message' => trans('warnings.subscription.already_changed')
-                ]
-            ]);
-        }
-
-        if (
-            $subscription->end_date != null
-            && Carbon::parse($subscription->end_date)->isPast()
-        ) {
-            return response()->json([
-                'error' => true,
-                'toastr' => [
-                    'type' => 'error',
-                    'title' => trans('response.title.error'),
-                    'message' => trans('warnings.subscription.ended')
-                ]
-            ]);
-        }
-
-        if ($validated['service_id'] == $subscription->service_id) {
-            return response()->json([
-                'error' => true,
-                'toastr' => [
-                    'type' => 'error',
-                    'title' => trans('response.title.error'),
-                    'message' => trans('warnings.subscription.cant_change_same_service')
+                    'message' => $error
                 ]
             ]);
         }
@@ -477,49 +448,24 @@ class SubscriptionController extends Controller
             'description' => 'required|string|max:511',
         ]);
 
-        if ($subscription->approved_at == null) {
-            return response()->json([
-                'error' => true,
-                'toastr' => [
-                    'type' => 'error',
-                    'title' => trans('response.title.error'),
-                    'message' => trans('warnings.subscription.not_approved')
-                ]
-            ]);
-        }
+        $error = null;
 
-        if ($subscription->isCanceled()) {
-            return response()->json([
-                'error' => true,
-                'toastr' => [
-                    'type' => 'error',
-                    'title' => trans('response.title.error'),
-                    'message' => trans('warnings.subscription.already_canceled')
-                ]
-            ]);
-        }
+        if ($subscription->approved_at == null)
+            $error = trans('warnings.subscription.not_approved');
+        if ($subscription->isCanceled())
+            $error = trans('warnings.subscription.already_canceled');
+        if ($subscription->isChanged())
+            $error = trans('warnings.subscription.changed');
+        if ($subscription->isEnded())
+            $error = trans('warnings.subscription.ended');
 
-        if ($subscription->isChanged()) {
+        if ($error) {
             return response()->json([
                 'error' => true,
                 'toastr' => [
                     'type' => 'error',
                     'title' => trans('response.title.error'),
-                    'message' => trans('warnings.subscription.changed')
-                ]
-            ]);
-        }
-
-        if (
-            $subscription->end_date != null
-            && Carbon::parse($subscription->end_date)->isPast()
-        ) {
-            return response()->json([
-                'error' => true,
-                'toastr' => [
-                    'type' => 'error',
-                    'title' => trans('response.title.error'),
-                    'message' => trans('warnings.subscription.ended')
+                    'message' => $error
                 ]
             ]);
         }
@@ -530,11 +476,135 @@ class SubscriptionController extends Controller
         if (SubscriptionCancellation::cancel($subscription, $validated)) {
             // TODO Change group for production
             // FIXME Named groups
-            $telegram = new Telegram();
-            $telegram->send_message(
-                "1046241971",
-                $subscription->customer->full_name." - ".$subscription->customer->identification_number." kimlik numaralı müşterimizin kaydı silindi. Silme Nedeni : ".$validated["description"]." İşlemi Gerçekleştiren Kullanıcı : ".request()->user()->username
-            );
+            Telegram::send('1046241971', 'cancel');
+
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.subscription.cancel.success')
+                ],
+                'reload' => true
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.subscription.cancel.error')
+            ]
+        ]);
+    }
+
+    /**
+     * Freeze subscription
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function freeze(Request $request, Subscription $subscription)
+    {
+        $validated = $request->validate([
+            'description' => 'required|string|max:511',
+        ]);
+
+        $error = null;
+
+        if ($subscription->approved_at == null)
+            $error = trans('warnings.subscription.not_approved');
+        if ($subscription->isCanceled())
+            $error = trans('warnings.subscription.canceled');
+        if ($subscription->isChanged())
+            $error = trans('warnings.subscription.changed');
+        if ($subscription->isEnded())
+            $error = trans('warnings.subscription.ended');
+        if ($subscription->isFreezed())
+            $error = trans('warnings.subscription.already_freezed');
+
+        if ($error) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => $error
+                ]
+            ]);
+        }
+
+        $validated['staff_id'] = $request->user()->staff_id;
+        $validated['subscription_id'] = $subscription->id;
+
+        if (SubscriptionFreeze::freeze($subscription, $validated)) {
+            // TODO Change group for production
+            // FIXME Named groups
+            Telegram::send('1046241971', 'freeze');
+
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.subscription.cancel.success')
+                ],
+                'reload' => true
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.subscription.cancel.error')
+            ]
+        ]);
+    }
+
+    /**
+     * Unfreeze subscription
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unFreeze(Request $request, Subscription $subscription)
+    {
+        $error = null;
+
+        if ($subscription->approved_at == null)
+            $error = trans('warnings.subscription.not_approved');
+        if ($subscription->isCanceled())
+            $error = trans('warnings.subscription.canceled');
+        if ($subscription->isChanged())
+            $error = trans('warnings.subscription.changed');
+        if ($subscription->isEnded())
+            $error = trans('warnings.subscription.ended');
+        if (!$subscription->isFreezed())
+            $error = trans('warnings.subscription.not_freezed');
+
+        if ($error) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => $error
+                ]
+            ]);
+        }
+
+        $staff_id = $request->user()->staff_id;
+
+        if (SubscriptionFreeze::unFreeze($subscription, $staff_id)) {
+            // TODO Change group for production
+            // FIXME Named groups
+            Telegram::send('1046241971', 'unfreeze');
+
             return response()->json([
                 'success' => true,
                 'toastr' => [

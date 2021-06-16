@@ -99,7 +99,7 @@ class PaymentController extends Controller
                 ]);
             }
 
-            if ($payment->receive_payment($validated)) {
+            if ($payment->receive($validated)) {
                 return response()->json([
                     'success' => true,
                     'toastr' => [

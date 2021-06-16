@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentPriceEditsTable extends Migration
+class CreateSubscriptionFreezesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,29 @@ class CreatePaymentPriceEditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_price_edits', function (Blueprint $table) {
+        Schema::create('subscription_freezes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('payment_id');
-            $table->foreignId('staff_id')->nullable()->default(null);
-            $table->unsignedDecimal('old_price');
-            $table->unsignedDecimal('new_price');
+            $table->foreignId('subscription_id');
+            $table->foreignId('staff_id');
             $table->string('description', 511);
+            $table->foreignId('unfreeze_staff')->nullable()->default(null);
+            $table->timestamp('unfreezed_at')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
 
-            $table->foreign('payment_id')
+            $table->foreign('subscription_id')
                 ->references('id')
-                ->on('payments')
+                ->on('subscriptions')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
 
             $table->foreign('staff_id')
+                ->references('id')
+                ->on('staff')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
+
+            $table->foreign('unfreeze_staff')
                 ->references('id')
                 ->on('staff')
                 ->onUpdate('CASCADE')
@@ -44,6 +50,6 @@ class CreatePaymentPriceEditsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_price_edits');
+        Schema::dropIfExists('subscription_freezes');
     }
 }

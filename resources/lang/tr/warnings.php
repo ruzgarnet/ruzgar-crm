@@ -23,7 +23,10 @@ return [
         'already_changed' => 'Aboneliğin hizmeti zaten değiştirilmiş!',
         'changed' => 'Hizmeti değiştirilmiş abonelikte bu işlemi gerçekleştiremezsiniz!',
         'already_canceled' => 'Abonelik zaten iptal edilmiş!',
-        'canceled' => 'İptal edilmiş abonelikte bu işlemi gerçekleştiremezsiniz!'
+        'canceled' => 'İptal edilmiş abonelikte bu işlemi gerçekleştiremezsiniz!',
+        'already_freezed' => 'Abonelik zaten dondurulmuş edilmiş!',
+        'freezed' => 'Dondurulumuş abonelikte bu işlemi gerçekleştiremezsiniz!',
+        'not_freezed' => 'Bu abonelik dondurulmamış!'
     ],
     'reference' => [
         'control_time' => 'Kontrol Edilebilir'

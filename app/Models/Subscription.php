@@ -12,6 +12,7 @@ use App\Models\Attributes\StartDateAttribute;
 use App\Models\Attributes\SubscriptionAddressAttribute;
 use App\Models\Attributes\SubscriptionContractPrintAttribute;
 use App\Models\Attributes\SubscriptionSelectPrintAttribute;
+use App\Models\Attributes\SubscriptionServicePrintAttribute;
 use App\Models\Generators\SubscriptionPaymentGenerator;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,7 +32,8 @@ class Subscription extends Model
         EndDateAttribute,
         SubscriptionAddressAttribute,
         SubscriptionSelectPrintAttribute,
-        SubscriptionContractPrintAttribute;
+        SubscriptionContractPrintAttribute,
+        SubscriptionServicePrintAttribute;
 
     /**
      * All fields fillable
@@ -121,6 +123,16 @@ class Subscription extends Model
     }
 
     /**
+     * Freeze Subscription Relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function freeze()
+    {
+        return $this->hasOne(SubscriptionFreeze::class);
+    }
+
+    /**
      * Returns only active subscriptions
      *
      * @return \Illuminate\Database\Eloquent\Collection
@@ -128,6 +140,24 @@ class Subscription extends Model
     public static function getActive()
     {
         return self::where('status', 1)->get();
+    }
+
+    /**
+     * Get subscription status
+     *
+     * 0 => Unapproved  - Onaylanmamış
+     * 1 => Approved    - Onaylandı
+     * 2 => Changed     - Değiştirilmiş
+     * 3 => Canceled    - İptal Edilmiş
+     * 4 => Freezed     - Donmuş
+     *
+     * @param boolean $implode
+     * @return array|string
+     */
+    public static function getStatus($implode = false)
+    {
+        $data = [1, 2, 3, 4];
+        return $implode ? implode(',', $data) : $data;
     }
 
     /**
@@ -168,7 +198,6 @@ class Subscription extends Model
             return true;
         } catch (Exception $e) {
             DB::rollBack();
-            echo $e->getMessage();
             return false;
         }
     }
@@ -195,7 +224,6 @@ class Subscription extends Model
             return true;
         } catch (Exception $e) {
             DB::rollBack();
-            echo $e->getMessage();
             return false;
         }
     }
@@ -261,6 +289,26 @@ class Subscription extends Model
     }
 
     /**
+     * Check this row ended
+     *
+     * @return boolean
+     */
+    public function isEnded()
+    {
+        return $this->end_date != null && Carbon::parse($this->end_date)->isPast();
+    }
+
+    /**
+     * Check this row changed
+     *
+     * @return boolean
+     */
+    public function isFreezed()
+    {
+        return $this->status == 4 ? true : false;
+    }
+
+    /**
      * If row changed get new sub
      *
      * @return \App\Models\Subscription
@@ -271,11 +319,11 @@ class Subscription extends Model
             ->where('subscription_id', $this->id)
             ->first();
 
-        return self::find($row->changed_id) ?? false;
+        return $row ? self::find($row->changed_id) : false;
     }
 
     /**
-     * Check subscriptions diasble status
+     * Check subscriptions disable status
      *
      * @return boolean
      */

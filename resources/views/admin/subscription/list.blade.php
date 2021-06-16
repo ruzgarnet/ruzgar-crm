@@ -56,6 +56,16 @@
 														{{ $subscription->getChanged()->service->name }}
 													</a>
 												@endif
+
+                                                @if ($subscription->isFreezed())
+													<button type="button" class="btn btn-warning btn-sm"
+														data-toggle="popover" data-html="true"
+														data-content="<b>Tarih:</b> {{ convert_date($subscription->freeze->created_at, 'large') }} <br>
+																														<b>Personel</b>: {{ $subscription->freeze->staff->full_name }} <br>
+																														<b>Sebep</b>: {{ $subscription->freeze->description }}">
+														@lang('titles.freeze')
+													</button>
+												@endif
 											</div>
                                         </td>
                                         <td>{{ $subscription->price_print }}</td>
@@ -150,10 +160,21 @@
                                                                 class="dropdown-item approved-element cancel-subscription-modal-btn"
                                                                 data-action="{{ relative_route('admin.subscription.cancel.put', $subscription) }}"
                                                                 data-customer="{{ $subscription->customer->select_print }}"
-                                                                data-service="{{ $subscription->service->select_print }}">
+                                                                data-service="{{ $subscription->service_print }}">
                                                                 <i class="dropdown-icon fas fa-times"></i>
                                                                 @lang('titles.cancel_subscription')
                                                             </button>
+
+                                                            @if (!$subscription->isFreezed())
+                                                                <button type="button"
+                                                                    class="dropdown-item approved-element freeze-subscription-modal-btn"
+                                                                    data-action="{{ relative_route('admin.subscription.freeze.put', $subscription) }}"
+                                                                    data-customer="{{ $subscription->customer->select_print }}"
+                                                                    data-service="{{ $subscription->service_print }}">
+                                                                    <i class="dropdown-icon far fa-snowflake"></i>
+                                                                    @lang('titles.freeze_subscription')
+                                                                </button>
+                                                            @endif
 
                                                             <a href="{{ route('admin.subscription.change', $subscription) }}"
                                                                 class="dropdown-item approved-element">

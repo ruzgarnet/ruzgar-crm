@@ -29,6 +29,9 @@ return [
     'edit_subscription_price' => 'Abonelik Ücretini Düzenle',
     'cancel_subscription' => 'Abonelik İptali',
     'cancel' => 'İptal',
+    'freeze_subscription' => 'Abonelik Dondurma',
+    'freeze' => 'Dondurulmuş',
+    'close' => 'Kapat',
 
     'yes' => 'Evet',
     'no' => 'Hayır',

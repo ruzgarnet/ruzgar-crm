@@ -47,12 +47,19 @@ return [
             'error' => 'Abonenin hizmeti değiştirilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
         ],
         'cancel' => [
-            'success' => 'Abonenin başarıyla iptal edildi.',
+            'success' => 'Abonelik başarıyla iptal edildi.',
             'error' => 'Abonenin iptal edilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
+        ],
+        'cancel' => [
+            'success' => 'Abonelik başarıyla donduruldu.',
+            'error' => 'Abonenin dondurulurken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
         ]
     ],
 
     'system' => [
-        'referenced' => 'Referans işlemi gerçekleştirildi. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.'
+        'referenced' => 'Referans işlemi gerçekleştirildi. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
+        'freezing' => 'Dondurma işlemi başlatıldı. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
+        'price_freezed' => 'Dondurma işleminden dolayı ücreti düşürülmüştür. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
+        'freezing' => 'Dondurma işlemi kaldırıldı. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.'
     ]
 ];

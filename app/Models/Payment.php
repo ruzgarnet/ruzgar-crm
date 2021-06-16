@@ -104,51 +104,70 @@ class Payment extends Model
      * @param array $data
      * @return void
      */
-    public function receive_payment(array $data)
+    public function receive(array $data)
     {
-        $success = false;
-
         DB::beginTransaction();
         try {
             $date = Carbon::parse($this->date);
             $month = Carbon::now()->format('m');
 
-            // TODO remove env conditions for product
-            if (env('APP_ENV') == 'local' || $date->format('m') == $month) {
-                $this->type = $data['type'];
-                $this->status = 2;
-                $this->paid_at = DB::raw('current_timestamp()');
-            }
+            $this->type = $data['type'];
+            $this->status = 2;
+            $this->paid_at = DB::raw('current_timestamp()');
 
-            if ($this->save()) {
-                $count = $this
-                    ->where('subscription_id', $this->subscription_id)
-                    ->whereNull('paid_at')
-                    ->whereDate(
-                        'date',
-                        '>',
-                        Carbon::parse('last day of this month')->format('Y-m-d')
-                    )
-                    ->count();
+            $this->save();
 
-                if ($count < 1 && $this->subscription->isActive()) {
-                    $this->insert([
+            $count = self::where('subscription_id', $this->subscription_id)
+                ->whereNull('paid_at')
+                ->whereDate(
+                    'date',
+                    '>',
+                    Carbon::parse('last day of this month')->format('Y-m-d')
+                )
+                ->count();
+
+            if ($this->subscription->isFreeze()) {
+                if ($count > 1) {
+                    // If new payment exists change price for freeze
+                    $next_payment = $this->subscription->currentPayment();
+                    $old_price = $next_payment->price;
+                    $next_payment->price = $old_price / 2;
+                    $new_price = $old_price / 2;
+                    $next_payment->save();
+                } else {
+                    // If new payment not exists add new payment for freeze
+                    $old_price = $this->subscription->price;
+                    $new_price = $old_price / 2;
+
+                    $next_payment = self::create([
                         'subscription_id' => $this->subscription_id,
                         'status' => 1,
                         'date' => $date->addMonth(1),
-                        'price' => $this->subscription->price
+                        'price' => $new_price
                     ]);
                 }
+
+                PaymentPriceEdit::create([
+                    'payment_id' => $next_payment->id,
+                    'old_price' => $old_price,
+                    'new_price' => $new_price,
+                    'description' => trans('response.system.price_freezed')
+                ]);
+            } else if ($count < 1 && $this->subscription->isActive()) {
+                self::create([
+                    'subscription_id' => $this->subscription_id,
+                    'status' => 1,
+                    'date' => $date->addMonth(1),
+                    'price' => $this->subscription->price
+                ]);
             }
 
             DB::commit();
-            $success = true;
+            return true;
         } catch (Exception $e) {
             DB::rollBack();
-            $success = false;
+            return false;
         }
-
-        return $success;
     }
 
     /**
@@ -159,8 +178,6 @@ class Payment extends Model
      */
     public function edit_price(array $data)
     {
-        $success = false;
-
         DB::beginTransaction();
         try {
             if (PaymentPriceEdit::create($data)) {
@@ -169,12 +186,10 @@ class Payment extends Model
             }
 
             DB::commit();
-            $success = true;
+            return true;
         } catch (Exception $e) {
             DB::rollBack();
-            $success = false;
+            return false;
         }
-
-        return $success;
     }
 }
