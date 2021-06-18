@@ -165,6 +165,81 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Creates a new payment
+     *
+     * @param Request $request
+     * @param Subscription $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function create_payment(Request $request, Subscription $subscription)
+    {
+        $validated = $request->validate([
+            'price' => 'required|numeric',
+            'date' => 'required',
+            'status' => 'required',
+            'type' => 'required'
+        ]);
+
+        $validated['date'] = date('Y-m-15', strtotime($validated['date']));
+        $validated["subscription_id"] = $subscription->id;
+
+        if (Payment::create($validated)) {
+            return response()->json([
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.insert.success')
+                ],
+                'redirect' => relative_route('admin.subscriptions')
+            ]);
+        }
+
+        return response()->json([
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.insert.error')
+            ]
+        ]);
+    }
+
+    /**
+     * Deletes a payment
+     *
+     * @param Request $request
+     * @param Payment $payment
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete_payment(Request $request, Payment $payment)
+    {
+        $validated = $request->validate([
+            'description' => 'required'
+        ]);
+
+        $id = $payment->id;
+        if ($payment->delete()) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.delete.success')
+                ],
+                'deleted' => $id
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.delete.error')
+            ]
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Subscription  $subscription
@@ -239,7 +314,7 @@ class SubscriptionController extends Controller
                 }
                 $pdf->save($path);
 
-                Telegram::send('1046241971', 'sub approve');
+                //Telegram::send('1046241971', 'sub approve');
 
                 return response()->json([
                     'success' => true,
@@ -299,7 +374,9 @@ class SubscriptionController extends Controller
     {
         $data = [
             'paymentTypes' => Payment::getTypes(),
-            'subscription' => $subscription
+            'subscription' => $subscription,
+            'statuses' => trans('tables.payment.status'),
+            'types' => trans('tables.payment.types')
         ];
         return view('admin.subscription.payment', $data);
     }

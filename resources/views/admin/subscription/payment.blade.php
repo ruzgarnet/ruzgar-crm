@@ -17,6 +17,11 @@
 
                         <a href="{{ route('admin.subscriptions') }}" class="btn btn-primary"><i
                                 class="fas fa-sm fa-list-ul"></i> @lang('tables.subscription.title')</a>
+
+                        <a class="btn btn-primary create-payment-modal-btn"
+                            data-action="{{ relative_route('admin.subscription.payment.create', $subscription) }}"
+                            title="@lang('titles.subscription.create_payment')"><i class="fas fa-sm fa-plus"></i>
+                            @lang('tables.subscription.create_payment')</a>
                     </div>
                 </div>
                 <div class="collapse" id="subscriptionDetails">
@@ -144,6 +149,15 @@
                                                             <i class="fas fa-cash-register"></i>
                                                         </button>
                                                     @endif
+
+                                                    <button type="button" class="btn btn-danger delete-payment-modal-btn"
+                                                        data-action="{{ relative_route('admin.subscription.payment.delete', $payment) }}"
+                                                        data-customer="{{ $subscription->customer->full_name }}"
+                                                        data-payment="{{ $payment->id }}"
+                                                        data-title="Ödemeyi Sil"
+                                                        title="@lang('titles.get_payment')">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -191,4 +205,6 @@
 @push('modal')
     @include('admin.modals.get-payment')
     @include('admin.modals.edit-payment-price')
+    @include('admin.modals.create-payment')
+    @include('admin.modals.delete-payment')
 @endpush
