@@ -96,4 +96,16 @@ class Generator
     {
         return $barcode = DNS1DFacade::getBarcodePNG($barcode, 'C128');
     }
+
+    /**
+     * Generate unique code for Moka
+     *
+     * @param string $subscription_no
+     * @param string $payment_created_at
+     * @return string
+     */
+    public static function trxCode($subscription_no, $payment_created_at)
+    {
+        return substr(hash('sha256', $subscription_no . "-" . date('YmdHi', strtotime($payment_created_at)) . "-" . date('YmdHi')), 0, 32);
+    }
 }

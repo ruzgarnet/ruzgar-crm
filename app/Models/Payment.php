@@ -43,6 +43,16 @@ class Payment extends Model
     }
 
     /**
+     * Moka Auto Payment relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function mokaAutoPayment()
+    {
+        return $this->hasOne(MokaAutoPayment::class);
+    }
+
+    /**
      * Moka Logs relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
@@ -126,7 +136,7 @@ class Payment extends Model
                 )
                 ->count();
 
-            if ($this->subscription->isFreeze()) {
+            if ($this->subscription->isFreezed()) {
                 if ($count > 1) {
                     // If new payment exists change price for freeze
                     $next_payment = $this->subscription->currentPayment();

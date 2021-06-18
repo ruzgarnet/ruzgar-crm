@@ -122,6 +122,8 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::get('subscription/contract/preview/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'preview'])->name('subscription.contract');
     Route::put('subscription/freeze/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'freeze'])->name('subscription.freeze.put');
     Route::put('subscription/unfreeze/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'unFreeze'])->name('subscription.unfreeze.put');
+    Route::post('subscription/payment/create/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'create_payment'])->name('subscription.payment.create');
+    Route::delete('subscription/payment/delete/{payment}', [App\Http\Controllers\Admin\SubscriptionController::class, 'delete_payment'])->name('subscription.payment.delete');
     // Subscription Routes End
 
     // Reference Routes
@@ -133,8 +135,8 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
 
     // Payment Routes
     Route::post('payment/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'received'])->name('payment.received.post');
-    Route::post('payment/result/{payment?}', [App\Http\Controllers\Admin\PaymentController::class, 'payment_result'])->name('payment.result');
     Route::put('payment/price/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'price'])->name('payment.price.put');
+    Route::get('payment/auto/request/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'send_auto'])->name('payment.auto.request');
     // Payment Routes End
 
     // Fault Record Routes
@@ -153,6 +155,22 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::put('fault/type/edit/{faultType}', [App\Http\Controllers\Admin\FaultTypeController::class, 'update'])->name('fault.type.edit.put');
     // Fault Type Routes End
 
+    // Customer Application Routes
+    Route::get('customer_applications', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'index'])->name('customer_applications');
+    Route::get('customer_application/add', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'create'])->name('customer_application.add');
+    Route::post('customer_application/add', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'store'])->name('customer_application.add.post');
+    Route::get('customer_application/edit/{customer_application}', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'edit'])->name('customer_application.edit');
+    Route::post('customer_application/edit/{customer_application}', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'update'])->name('customer_application.edit.post');
+    // Customer Application Routes End
+
+    // Customer Application Routes
+    Route::get('customer_application_types', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'index'])->name('customer_application_types');
+    Route::get('customer_application_type/add', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'create'])->name('customer_application_type.add');
+    Route::post('customer_application_type/add', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'store'])->name('customer_application_type.add.post');
+    Route::get('customer_application_type/edit/{customer_application_type}', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'edit'])->name('customer_application_type.edit');
+    Route::put('customer_application_type/edit/{customer_application_type}', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'update'])->name('customer_application_type.edit.put');
+    // Customer Application Routes End
+
 });
 
 // Request Routes
@@ -164,4 +182,6 @@ Route::get('getDistricts/{id}', [App\Http\Controllers\CityController::class, 'di
  Route::post('infrastructure/submit', [App\Http\Controllers\InfrastructureController::class, 'submit'])->name('infrastructure.post');
  // Infrastructure Routes End
 
-// Request Routes End
+ Route::match(['get', 'post'], 'payment/result/{payment?}', [App\Http\Controllers\Admin\PaymentController::class, 'payment_result'])->name('payment.result');
+ Route::match(['get', 'post'], 'payment/auto/result', [App\Http\Controllers\Admin\PaymentController::class, 'payment_auto_result'])->name('payment.auto.result');
+ // Request Routes End

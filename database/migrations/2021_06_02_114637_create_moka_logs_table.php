@@ -16,9 +16,11 @@ class CreateMokaLogsTable extends Migration
         Schema::create('moka_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('payment_id');
-            $table->foreignId('moka_id')->nullable()->default(null);
             $table->ipAddress('ip');
+            $table->string('trx_code')->nullable()->default(null);
             $table->json('response')->nullable()->default(null);
+            $table->unsignedTinyInteger('type')->default(1);
+            $table->unsignedTinyInteger('status')->default(1);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
 

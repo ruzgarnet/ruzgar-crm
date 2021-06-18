@@ -30,6 +30,13 @@ class Moka
      */
     private string $action = "";
 
+    /**
+     * Trx Code
+     *
+     * @var string $trx_code
+     */
+    public string $trx_code = "";
+
     public function __construct()
     {
         $dealer_code = env('MOKA_DEALER_CODE');
@@ -84,12 +91,14 @@ class Moka
      *
      * @param array $card Card Info
      * @param string $uri Action Uri
+     * @param array $hash Hash
      * @param array $optional Optional Fields
      * @return object|null
      */
     public function pay(
         array $card,
         string $uri,
+        array $hash,
         array $optional = []
     ) {
         $this->action = "PaymentDealer/DoDirectPaymentThreeD";
@@ -106,12 +115,16 @@ class Moka
                 "Currency" => "TL",
                 "InstallmentNumber" => "1",
                 "ClientIP" => $_SERVER['REMOTE_ADDR'],
-                "OtherTrxCode" => $this->generate_unique_code(),
+                "OtherTrxCode" => $this->generate_unique_code(
+                    $hash["subscription_no"],
+                    $hash["payment_created_at"]
+                ),
                 "IsPreAuth" => 0,
+                "ReturnHash" => 1,
                 "IsPoolPayment" => 0,
                 "Software" => "RüzgarNET",
                 "RedirectUrl" => $uri,
-                "RedirectType" => 0
+                "RedirectType" => 1
             ]
         ];
 
@@ -141,6 +154,7 @@ class Moka
                 "CustomerCode" => $customer["id"],
                 "FirstName" => $customer["first_name"],
                 "LastName" => $customer["last_name"],
+                'Phone' => $customer["telephone"],
                 "CardHolderFullName" => $card["full_name"],
                 "CardNumber" => $card["number"],
                 "ExpMonth" => $card["expire_month"],
@@ -181,7 +195,7 @@ class Moka
      * @param array $subscription
      * @param array $date
      * @return object|null
-    */
+     */
     public function add_sale(
         array $customer,
         array $subscription,
@@ -202,7 +216,7 @@ class Moka
                 "BeginDate" => $date["start"],
                 "EndDate" => $date["end"],
                 "HowManyTrial" => 1,
-                "PlanType" => 3,
+                "PlanType" => 2,
                 "Description" => "",
                 "DealerCustomerTypeId" => "",
                 "DefaultCard1Token" => $customer["card_token"]
@@ -275,12 +289,47 @@ class Moka
     }
 
     /**
+     * Add payment plan
+     *
+     * @param int $sale_id
+     * @return object|null
+     */
+    public function add_payment_plan(
+        int $sale_id,
+        string $payment_date,
+        $amount
+    ) {
+        $this->action = "/DealerSale/AddPaymentPlan";
+
+        $request = [
+            'DealerSaleAuthentication' => $this->auth,
+            "DealerSaleRequest" => [
+                "DealerSaleId" => $sale_id,
+                'PaymentDate' => $payment_date,
+                'Amount' => $amount
+            ]
+        ];
+
+        return $this->send($request);
+    }
+
+    /**
      * Generate unique code for Moka
      *
+     * @param string $subscription_no
+     * @param string $payment_created_at
      * @return string
      */
-    private function generate_unique_code()
+    private function generate_unique_code($subscription_no, $payment_created_at)
     {
-        return substr(hash('sha256', str_shuffle('abcdefghijklmnoprstuvyzwxqABCDEFGHIKJLMNOPRSTUVYZWXQ0123456789')), 0, 32);
+        // $this->trx_code = substr(hash('sha256', $subscription_no . "-" . date('YmdHi', strtotime($payment_created_at)) . "-" . date('YmdHi')), 0, 32);
+        $this->trx_code = Generator::trxCode($subscription_no, $payment_created_at);
+        return $this->trx_code;
+    }
+
+    public static function check_hash($hash_value, $code_for_hash)
+    {
+        $hash = hash('sha256', $code_for_hash."T");
+        return $hash == $hash_value ? true : false;
     }
 }

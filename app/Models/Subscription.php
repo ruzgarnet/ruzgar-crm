@@ -133,6 +133,16 @@ class Subscription extends Model
     }
 
     /**
+     * Sale relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function sales()
+    {
+        return $this->hasMany(MokaSale::class);
+    }
+
+    /**
      * Returns only active subscriptions
      *
      * @return \Illuminate\Database\Eloquent\Collection
@@ -174,6 +184,26 @@ class Subscription extends Model
     }
 
     /**
+     * Check auto payment information
+     *
+     * @return boolean
+     */
+    public function is_auto()
+    {
+        return $this->sales()->where("active", true)->count() > 0 ? true : false;
+    }
+
+    /**
+     * Get auto payment information
+     *
+     * @return void
+     */
+    public function get_auto()
+    {
+        return $this->is_auto() ? $this->sales()->where("active", true)->first() : null;
+    }
+
+    /**
      * Approve and add first payment(s)
      *
      * @return boolean
@@ -190,7 +220,12 @@ class Subscription extends Model
 
             $this->save();
 
-            foreach ($payments as $payment) {
+            // Set the first price after 25
+            // 25'ten sonra aboneliği eklenirse ilk ay ücretini yarıya düş
+            foreach ($payments as $index => $payment) {
+                if (date('d') >= 25 && $index == 0) {
+                    $payment["price"] /= 2;
+                }
                 Payment::insert($payment);
             }
 

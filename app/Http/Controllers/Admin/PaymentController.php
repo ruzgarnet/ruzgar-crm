@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Moka;
 use App\Classes\Mutator;
 use App\Http\Controllers\Controller;
+use App\Models\MokaAutoPayment;
 use App\Models\MokaLog;
 use App\Models\MokaPayment;
+use App\Models\MokaSale;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class PaymentController extends Controller
@@ -68,17 +71,29 @@ class PaymentController extends Controller
                     'amount' => $payment->price
                 ];
 
+                $hash = [
+                    'subscription_no' => $payment->subscription->subscription_no,
+                    'payment_created_at' => $payment->created_at
+                ];
+
                 $moka = new Moka();
                 $response = $moka->pay(
                     $card,
-                    route('admin.payment.result', $payment)
+                    route('payment.result', $payment),
+                    $hash
                 );
 
                 if ($response->Data != null) {
+                    MokaPayment::create([
+                        'payment_id' => $payment->id,
+                        'response' => $response,
+                        'trx_code' => $moka->trx_code
+                    ]);
+
                     return response()->json([
                         'success' => true,
                         'payment' => [
-                            'frame' => $response->Data
+                            'frame' => $response->Data->Url
                         ]
                     ]);
                 }
@@ -86,7 +101,8 @@ class PaymentController extends Controller
                 MokaLog::create([
                     'payment_id' => $payment->id,
                     'ip' => $request->ip(),
-                    'response' => $response
+                    'response' => $response,
+                    'trx_code' => $moka->trx_code
                 ]);
 
                 return response()->json([
@@ -96,6 +112,81 @@ class PaymentController extends Controller
                         'title' => trans('response.title.error'),
                         'message' => $response->ResultCode
                     ]
+                ]);
+            } else if ($request->input('type') == 5) {
+
+                $expire = Mutator::expire_date($validated["card"]["expire_date"]);
+
+                $card = [
+                    'full_name' => $validated["card"]['full_name'],
+                    'number' => $validated["card"]['number'],
+                    'expire_month' => $expire[0],
+                    'expire_year' => $expire[1],
+                    'amount' => $payment->price
+                ];
+                if (!$payment->subscription->is_auto()) {
+                    $moka = new Moka();
+                    $results = $moka->create_customer(
+                        [
+                            'id' => md5($payment->subscription->subscription_no),
+                            'first_name' => $payment->subscription->customer->first_name,
+                            'last_name' => $payment->subscription->customer->last_name,
+                            'telephone' => $payment->subscription->customer->telephone
+                        ],
+                        [
+                            'full_name' => $card["full_name"],
+                            'number' => $card["number"],
+                            'expire_month' => $expire[0],
+                            'expire_year' => $expire[1]
+                        ]
+                    );
+
+                    $dates = [
+                        'start' => date('Ymd', strtotime($payment->subscription->created_at))
+                    ];
+
+                    if ($payment->subscription->end_date)
+                        $dates["end"] = date('Ymd', strtotime($payment->subscription->end_date));
+                    else
+                        $dates["end"] = "";
+
+                    $sale_response = $moka->add_sale(
+                        [
+                            'moka_id' => $results->Data->DealerCustomer->DealerCustomerId,
+                            'card_token' => $results->Data->CardList[0]->CardToken
+                        ],
+                        [
+                            'service_code' => $payment->subscription->service->model,
+                            'amount' => $payment->subscription->price
+                        ],
+                        $dates
+                    );
+
+                    MokaSale::create([
+                        'subscription_id' => $payment->subscription->id,
+                        'moka_customer_id' => $results->Data->DealerCustomer->DealerCustomerId,
+                        'moka_sale_id' => $sale_response->Data->DealerSaleId,
+                        'moka_card_token' => $results->Data->CardList[0]->CardToken
+                    ]);
+                } else {
+                    return response()->json([
+                        'error' => true,
+                        'toastr' => [
+                            'type' => 'error',
+                            'title' => trans('response.title.error'),
+                            'message' => trans('warnings.payment.is_already_auto')
+                        ]
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'toastr' => [
+                        'type' => 'success',
+                        'title' => trans('response.title.success'),
+                        'message' => "Otomatik Ödeme"
+                    ],
+                    'reload' => true
                 ]);
             }
 
@@ -132,6 +223,44 @@ class PaymentController extends Controller
     }
 
     /**
+     * Send sale plan to moka for test
+     *
+     * @param Payment $payment
+     * @return void
+     */
+    public function send_auto(Payment $payment)
+    {
+        $auto = $payment->subscription->get_auto();
+        $moka = new Moka();
+        $result = $moka->add_payment_plan(
+            $auto->moka_sale_id,
+            date('Ymd', strtotime(' + 1 day')),
+            0.01
+        );
+
+        if (isset($result->Data->DealerPaymentPlanId)) {
+            MokaAutoPayment::create([
+                'sale_id' => $auto->id,
+                'payment_id' => $payment->id,
+                'moka_plan_id' => $result->Data->DealerPaymentPlanId
+            ]);
+        }
+    }
+
+    /**
+     * Get plan payment info from Moka
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function payment_auto_result(Request $request)
+    {
+        DB::table('auto_results')->insert([
+            'response' => json_encode($request->all())
+        ]);
+    }
+
+    /**
      * Gets Moka payment result
      *
      * @param \Illuminate\Http\Request $request
@@ -140,10 +269,49 @@ class PaymentController extends Controller
      */
     public function payment_result(Request $request, Payment $payment)
     {
+        // TODO Print result response
         $data = $request->all();
-        $data["payment_id"] = $payment->id;
-        MokaPayment::insert($data);
-        // TODO Sunucuya aktarıldığında yapılacak.
+
+        $moka_transaction = $payment->mokaPayment;
+        MokaLog::insert([
+            [
+                'payment_id' => $payment->id,
+                'ip' => $request->ip(),
+                'response' => json_encode($moka_transaction->response),
+                'trx_code' => $moka_transaction->trx_code,
+                'type' => 6
+            ], [
+                'payment_id' => $payment->id,
+                'ip' => $request->ip(),
+                'response' => json_encode($data),
+                'trx_code' => $moka_transaction->trx_code,
+                'type' => 6
+            ]
+        ]);
+
+        if (isset($data["hashValue"])) {
+            if (
+                isset($moka_transaction) &&
+                Moka::check_hash(
+                    $data["hashValue"],
+                    $moka_transaction->response["Data"]["CodeForHash"]
+                )
+            ) {
+                $payment->receive([
+                    'type' => 4
+                ]);
+
+                $moka_transaction->moka_trx_code = $data["trxCode"];
+                $moka_transaction->save();
+
+                return "Başarılı";
+            }
+            $payment->mokaPayment->delete();
+            return "Başarısız";
+        } else {
+            $payment->mokaPayment->delete();
+            return "Başarısız";
+        }
     }
 
     /**

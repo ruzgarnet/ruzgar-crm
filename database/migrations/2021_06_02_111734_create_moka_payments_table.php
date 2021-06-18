@@ -16,7 +16,8 @@ class CreateMokaPaymentsTable extends Migration
         Schema::create('moka_payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('payment_id');
-            $table->foreignId('moka_id');
+            $table->string('moka_trx_code')->nullable()->default(null);
+            $table->string('trx_code')->nullable()->default(null);
             $table->json('response')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);

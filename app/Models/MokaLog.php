@@ -34,4 +34,24 @@ class MokaLog extends Model
     {
         return $this->belongsTo(Payment::class);
     }
+
+    /**
+     * Moka Log types
+     *
+     * 1 => - Online Satış 3D
+     * 2 => - Online Satış Cevabı
+     * 3 => - Otomatik Ödeme Tanımlama
+     * 4 => - Ödeme Planı Ekleme
+     * 5 => - Ödeme Planı Cevabı
+     * 6 => - Online Satış 3D Hata
+     *
+     *
+     * @param boolean $implode
+     * @return array|string
+     */
+    public static function getType($implode = false)
+    {
+        $data = [1, 2, 3, 4, 5, 6];
+        return $implode ? implode(',', $data) : $data;
+    }
 }
