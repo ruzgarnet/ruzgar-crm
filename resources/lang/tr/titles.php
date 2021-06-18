@@ -57,5 +57,15 @@ return [
         'loading' => 'Arama yapılıyor'
     ],
 
-    'infrastructure' => 'Altyapı Sorgulama'
+    'infrastructure' => 'Altyapı Sorgulama',
+
+    'subscription' => [
+        'create_payment' => 'Fatura Oluştur',
+        'delete_payment' => 'Ödemeyi Sil'
+    ],
+
+    'customer_applications' => 'Başvurular',
+    'customer_application_types' => 'Başvuru Tipleri',
+
+    'description' => 'Açıklama'
 ];

@@ -157,7 +157,8 @@ return [
         'types' => [
             1 => 'Aktif Abonelik',
             2 => 'Hazırlık Aşamasında'
-        ]
+        ],
+        'create_payment' => 'Fatura Oluştur'
     ],
     // Subscription Fields End
 
@@ -186,6 +187,50 @@ return [
         ]
     ],
     // Payment Fields End
+
+    // Customer Application Fields
+    'customer_application' => [
+        'title' => 'Başvurular',
+        'singular' => 'Başvuru',
+        'plural' => 'Başvurular',
+        'add' => 'Başvuru Ekle',
+        'edit' => 'Başvuru Düzenle',
+        'delete' => 'Başvuru Sil',
+        'info' => 'Başvuru Bilgileri',
+        'select' => 'Başvuru Seçiniz',
+        'status' => [
+            1 => 'Sisteme Tanımlandı',
+            2 => 'Olumlu',
+            3 => 'Olumsuz'
+        ],
+        'select_type' => 'Başvuru Tipini Seçiniz',
+        'types' => [
+            1 => 'İptal',
+            2 => 'Bilgi Alma',
+            3 => 'Tarife Yükseltme',
+            4 => 'Dondurma',
+            5 => 'İstek/Öneri/Şikayet'
+        ]
+    ],
+    // Customer Application End
+
+    // Customer Application Type Fields
+    'customer_application_type' => [
+        'title' => 'Başvuru Tipleri',
+        'singular' => 'Başvuru Tipi',
+        'plural' => 'Başvuru Tipleri',
+        'add' => 'Başvuru Tipi Ekle',
+        'edit' => 'Başvuru Tipini Düzenle',
+        'delete' => 'Başvuru Tipini Sil',
+        'info' => 'Başvuru Tipi Bilgileri',
+        'select' => 'Başvuru Tipini Seçiniz',
+        'status' => [
+            1 => 'Aktif',
+            2 => 'Kapalı'
+        ],
+        'select_type' => 'Başvuru Tipini Seçiniz'
+    ],
+    // Customer Application Type End
 
     // Message Fields
     'message' => [
@@ -292,6 +337,21 @@ return [
             'select' => 'Arıza Kaydı Seç'
         ],
         // Fault Record Fields End
-    ]
+    ],
     // Fault Fields End
+
+    'moka_log' => [
+        'types' => [
+            1 => 'Online Satış 3D',
+            2 => 'Online Satış Cevabı',
+            3 => 'Otomatik Ödeme Tanımlama',
+            4 => 'Ödeme Planı Ekleme',
+            5 => 'Ödeme Planı Cevabı',
+            6 => 'Online Satış 3D Hata'
+        ],
+        'statuses' => [
+            1 => 'Hatalı',
+            2 => 'Hatasız'
+        ]
+    ]
 ];

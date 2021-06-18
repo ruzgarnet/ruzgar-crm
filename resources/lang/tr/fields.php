@@ -194,6 +194,10 @@ return [
 
     // Fault Attributes
     'fault_type' => 'Arıza Kayıt Tipi',
-    'status' => 'Durum'
+    'status' => 'Durum',
     // Fault Attributes End
+
+    'payment' => 'Ödeme',
+    'customer_application' => 'Başvuru',
+    'type' => 'Tip'
 ];

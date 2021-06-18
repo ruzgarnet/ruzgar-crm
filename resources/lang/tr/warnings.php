@@ -14,7 +14,8 @@ return [
     ],
     'payment' => [
         'not_allowed_received_date' => 'Ödeme yapamazsınız.',
-        'successful' => "Ödeme alındı."
+        'successful' => "Ödeme alındı.",
+        'is_already_auto' => "Bu ödeme zaten otomatik ödeme olarak tanımlanmıştır."
     ],
     'subscription' => [
         'not_approved' => 'Onaylanmamış abonelikte bu işlemi gerçekleştiremezsiniz!',

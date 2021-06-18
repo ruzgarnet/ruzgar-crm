@@ -95,7 +95,9 @@ class FaultRecordController extends Controller
      */
     public function update(Request $request, FaultRecord $faultRecord)
     {
-        $validated = $request->validate($this->rules());
+        $rules = $this->rules();
+        $rules["status"] = 'required';
+        $validated = $request->validate($rules);
 
         if ($faultRecord->update($validated)) {
             return response()->json([
@@ -139,7 +141,6 @@ class FaultRecordController extends Controller
                     return $query->where('status', 1);
                 })
             ],
-            'status' => 'required',
             'description' => 'required|string'
         ];
     }

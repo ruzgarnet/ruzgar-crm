@@ -283,6 +283,34 @@ $(function () {
     }
 
     /**
+     * Open create payment modal and change form action
+     */
+     $(document).on("click", ".create-payment-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            modal = $("#createPaymentModal");
+
+        modal.find("#createPaymentForm").prop("action", action);
+        modal.modal("show");
+    });
+
+    /**
+     * Open delete payment modal and change form action
+     */
+     $(document).on("click", ".delete-payment-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            customer = button.data("customer"),
+            payment = button.data("payment"),
+            modal = $("#deletePaymentModal");
+
+        $("#inpDeletePaymentModalCustomer").val(customer);
+        $("#inpDeletePaymentModalPayment").val(payment);
+        $("#deletePaymentForm").prop("action", action);
+        modal.modal("show");
+    });
+
+    /**
      * Open approve modal and change form action
      */
     $(document).on("click", ".approve-modal-btn", function () {

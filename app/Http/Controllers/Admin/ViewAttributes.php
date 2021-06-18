@@ -28,6 +28,23 @@ trait ViewAttributes
                 'route' => 'admin.infrastructure',
                 'icon' => 'fas fa-file'
             ],
+
+            // Customers and Orders Header
+            [
+                'header' =>  trans('titles.customer_applications')
+            ],
+            // Customers and Orders Header End
+
+            [
+                'title' => trans('titles.customer_applications'),
+                'route' => 'admin.customer_applications',
+                'icon' => 'fas fa-sun'
+            ],
+            [
+                'title' => trans('titles.customer_application_types'),
+                'route' => 'admin.customer_application_types',
+                'icon' => 'fas fa-moon'
+            ],
             // Admin Field End
 
             // Customers and Orders Header
