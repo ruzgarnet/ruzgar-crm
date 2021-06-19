@@ -15,7 +15,6 @@ use App\Models\Subscription;
 use App\Models\SubscriptionFreeze;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
@@ -167,12 +166,15 @@ class SubscriptionController extends Controller
     /**
      * Creates a new payment
      *
-     * @param Request $request
-     * @param Subscription $subscription
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
      * @return \Illuminate\Http\JsonResponse
      */
     public function create_payment(Request $request, Subscription $subscription)
     {
+        // FIXME not logged
+        // Create new table and insert description and staff id
+
         $validated = $request->validate([
             'price' => 'required|numeric',
             'date' => 'required',
@@ -206,17 +208,33 @@ class SubscriptionController extends Controller
     /**
      * Deletes a payment
      *
-     * @param Request $request
-     * @param Payment $payment
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\JsonResponse
      */
     public function delete_payment(Request $request, Payment $payment)
     {
+        // FIXME delete not logged
+        // Create new table and insert description and staff id
         $validated = $request->validate([
             'description' => 'required'
         ]);
 
-        $id = $payment->id;
+        $subscription = $payment->subscription;
+        if ($subscription->approved_at == null)
+            $error = trans('warnings.subscription.not_approved');
+
+        if ($error) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => $error
+                ]
+            ]);
+        }
+
         if ($payment->delete()) {
             return response()->json([
                 'success' => true,
@@ -225,7 +243,7 @@ class SubscriptionController extends Controller
                     'title' => trans('response.title.success'),
                     'message' => trans('response.delete.success')
                 ],
-                'deleted' => $id
+                'reload' => true
             ]);
         }
 
@@ -258,7 +276,6 @@ class SubscriptionController extends Controller
             ]);
         }
 
-        $id = $subscription->id;
         if ($subscription->delete()) {
             return response()->json([
                 'success' => true,
@@ -267,7 +284,7 @@ class SubscriptionController extends Controller
                     'title' => trans('response.title.success'),
                     'message' => trans('response.delete.success')
                 ],
-                'deleted' => $id
+                'reload' => true
             ]);
         }
 
@@ -323,9 +340,7 @@ class SubscriptionController extends Controller
                         'title' => trans('response.title.approve.subscription'),
                         'message' => trans('response.approve.subscription.success')
                     ],
-                    'approve' => [
-                        'id' => $subscription->id
-                    ]
+                    'reload' => true
                 ]);
             }
 
@@ -356,10 +371,7 @@ class SubscriptionController extends Controller
                     'title' => trans('response.title.approve.subscription'),
                     'message' => trans('response.approve.subscription.success')
                 ],
-                'approve' => [
-                    'id' => $subscription->id,
-                    'unapprove' => true
-                ]
+                'reload' => true
             ]);
         }
     }

@@ -137,7 +137,7 @@ class UserController extends Controller
                     'title' => trans('response.title.success'),
                     'message' => trans('response.delete.success')
                 ],
-                'deleted' => $id
+                'reload' => true
             ]);
         }
 
