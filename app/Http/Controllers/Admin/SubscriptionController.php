@@ -173,17 +173,31 @@ class SubscriptionController extends Controller
      */
     public function create_payment(Request $request, Subscription $subscription)
     {
-        $validated = $request->validate([
-            'price' => 'required|numeric',
-            'date' => 'required',
-            'status' => 'required',
-            'type' => 'required'
-        ]);
+        if ($request->input('is_lump_sum') != null) {
+            $validated = $request->validate([
+                'price' => 'required|numeric',
+                'date' => 'required',
+                'status' => 'required',
+                'type' => 'required',
+                'is_lump_sum' => 'required',
+                'lump_sum_value' => 'required'
+            ]);
 
-        $validated['date'] = date('Y-m-15', strtotime($validated['date']));
-        $validated["subscription_id"] = $subscription->id;
 
-        if (Payment::create($validated)) {
+            $iteration = 0;
+            for ($iteration = 0; $iteration < $validated["lump_sum_value"]; $iteration++)
+            {
+                $temporary = [
+                    'subscription_id' => $subscription->id,
+                    'price' => $validated['price'],
+                    'date' => date('Y-m-15', strtotime($validated['date'].' + '.($iteration + 1).' month')),
+                    'status' => $validated['status'],
+                    'type' => $validated['type']
+                ];
+
+                Payment::create($temporary);
+            }
+
             return response()->json([
                 'toastr' => [
                     'type' => 'success',
@@ -192,6 +206,27 @@ class SubscriptionController extends Controller
                 ],
                 'redirect' => relative_route('admin.subscriptions')
             ]);
+        } else {
+            $validated = $request->validate([
+                'price' => 'required|numeric',
+                'date' => 'required',
+                'status' => 'required',
+                'type' => 'required'
+            ]);
+
+            $validated['date'] = date('Y-m-15', strtotime($validated['date']));
+            $validated["subscription_id"] = $subscription->id;
+
+            if (Payment::create($validated)) {
+                return response()->json([
+                    'toastr' => [
+                        'type' => 'success',
+                        'title' => trans('response.title.success'),
+                        'message' => trans('response.insert.success')
+                    ],
+                    'redirect' => relative_route('admin.subscriptions')
+                ]);
+            }
         }
 
         return response()->json([

@@ -41,6 +41,26 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="chkLumpSum">@lang('fields.payment_type')</label>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chkLumpSum"
+                                        name="is_lump_sum" value="1">
+                                    <label class="custom-control-label"
+                                        for="chkLumpSum">@lang('fields.lump_sum')</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="inpLumpSumValue">@lang('fields.month')</label>
+                                <input type="number" name="lump_sum_value" id="inpLumpSumValue" class="form-control">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">@lang('titles.cancel')</button>
