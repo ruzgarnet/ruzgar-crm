@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Generator;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\FaultRecord;
@@ -45,6 +46,8 @@ class FaultRecordController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate($this->rules());
+
+        $validated["serial_number"] = Generator::serialNumber();
 
         if (FaultRecord::create($validated)) {
             return response()->json([

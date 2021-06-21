@@ -153,6 +153,8 @@ return [
         3 => "İlk iki aya yansıt",
     ],
     // Other Options
+    'lump_sum' => 'Toplu Ödeme',
+    'month' => 'Ay',
     "pre_payment" => "Ön ödemeli",
     'setup_informations' => 'Kurulum Bilgileri',
     // Subscription Info
