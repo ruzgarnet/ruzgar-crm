@@ -62,6 +62,31 @@ class Generator
     }
 
     /**
+     * Generate serial number
+     *
+     * @return string
+     */
+    public static function serialNumber()
+    {
+        // Control for unique
+        $pass = false;
+        $rand = '';
+        $rule = ['rand' => 'unique:fault_records,serial_number'];
+        do {
+            $rand = 'RN-' . (string)Str::of(Str::random(6))->upper();
+            $input = ['rand' => $rand];
+            $validator = Validator::make($input, $rule);
+            if (!$validator->fails()) {
+                $pass = true;
+            } else {
+                $pass = false;
+            }
+        } while ($pass != true);
+
+        return $rand;
+    }
+
+    /**
      * Generate subscription number
      *
      * @return string
