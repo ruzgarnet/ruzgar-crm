@@ -124,50 +124,104 @@ class PaymentController extends Controller
                     'expire_year' => $expire[1],
                     'amount' => $payment->price
                 ];
-                if (!$payment->subscription->is_auto()) {
+                if (true) {
+                    $sale = MokaSale::where("customer_id", $payment->subscription->customer->id)->first();
+
                     $moka = new Moka();
-                    $results = $moka->create_customer(
-                        [
-                            'id' => md5($payment->subscription->subscription_no),
-                            'first_name' => $payment->subscription->customer->first_name,
-                            'last_name' => $payment->subscription->customer->last_name,
-                            'telephone' => $payment->subscription->customer->telephone
-                        ],
-                        [
-                            'full_name' => $card["full_name"],
-                            'number' => $card["number"],
-                            'expire_month' => $expire[0],
-                            'expire_year' => $expire[1]
-                        ]
-                    );
+                    if ($sale) {
+                        $customer_id = $sale->moka_customer_id;
+                        $result = $moka->add_card(
+                            $customer_id,
+                            $card["full_name"],
+                            $card["number"],
+                            $expire[0],
+                            $expire[1]
+                        );
 
-                    $dates = [
-                        'start' => date('Ymd', strtotime($payment->subscription->created_at))
-                    ];
+                        if($result->Data != null)
+                        {
+                            $card_token = $result->Data->CardList[0]->CardToken;
 
-                    if ($payment->subscription->end_date)
-                        $dates["end"] = date('Ymd', strtotime($payment->subscription->end_date));
-                    else
-                        $dates["end"] = "";
+                            $moka->update_sale(
+                                $sale->moka_sale_id,
+                                $card_token
+                            );
+                        }
+                        else
+                        {
+                            return response()->json([
+                                'error' => true,
+                                'toastr' => [
+                                    'type' => 'error',
+                                    'title' => trans('response.title.error'),
+                                    'message' => trans('warnings.payment.add_card_failure')
+                                ]
+                            ]);
+                        }
+                    } else {
+                        $results = $moka->create_customer(
+                            [
+                                'id' => md5($payment->subscription->subscription_no),
+                                'first_name' => $payment->subscription->customer->first_name,
+                                'last_name' => $payment->subscription->customer->last_name,
+                                'telephone' => $payment->subscription->customer->telephone
+                            ],
+                            [
+                                'full_name' => $card["full_name"],
+                                'number' => $card["number"],
+                                'expire_month' => $expire[0],
+                                'expire_year' => $expire[1]
+                            ]
+                        );
 
-                    $sale_response = $moka->add_sale(
-                        [
-                            'moka_id' => $results->Data->DealerCustomer->DealerCustomerId,
-                            'card_token' => $results->Data->CardList[0]->CardToken
-                        ],
-                        [
-                            'service_code' => $payment->subscription->service->model,
-                            'amount' => $payment->subscription->price
-                        ],
-                        $dates
-                    );
+                        if ($results->Data != null) {
+                            $customer_id = $results->Data->DealerCustomer->DealerCustomerId;
+                            $card_token = $results->Data->CardList[0]->CardToken;
+                        }
+                        else
+                        {
+                            return response()->json([
+                                'error' => true,
+                                'toastr' => [
+                                    'type' => 'error',
+                                    'title' => trans('response.title.error'),
+                                    'message' => trans('warnings.payment.add_customer_failure')
+                                ]
+                            ]);
+                        }
+                    }
 
-                    MokaSale::create([
-                        'subscription_id' => $payment->subscription->id,
-                        'moka_customer_id' => $results->Data->DealerCustomer->DealerCustomerId,
-                        'moka_sale_id' => $sale_response->Data->DealerSaleId,
-                        'moka_card_token' => $results->Data->CardList[0]->CardToken
-                    ]);
+                    if($customer_id && $card_token)
+                    {
+                        $dates = [
+                            'start' => date('Ymd', strtotime($payment->subscription->created_at))
+                        ];
+
+                        if ($payment->subscription->end_date)
+                            $dates["end"] = date('Ymd', strtotime($payment->subscription->end_date));
+                        else
+                            $dates["end"] = "";
+
+                        $sale_response = $moka->add_sale(
+                            [
+                                'moka_id' => $customer_id,
+                                'card_token' => $card_token
+                            ],
+                            [
+                                'service_code' => $payment->subscription->service->model,
+                                'amount' => $payment->subscription->price
+                            ],
+                            $dates
+                        );
+
+                        MokaSale::create([
+                            'customer_id' => $payment->subscription->customer->id,
+                            'subscription_id' => $payment->subscription->id,
+                            'moka_customer_id' => $customer_id,
+                            'moka_sale_id' => $sale_response->Data->DealerSaleId,
+                            'moka_card_token' => $card_token
+                        ]);
+                    }
                 } else {
                     return response()->json([
                         'error' => true,
@@ -255,9 +309,16 @@ class PaymentController extends Controller
      */
     public function payment_auto_result(Request $request)
     {
+        $data = [
+            "method" => $request->method(),
+            "ip" => $request->ip(),
+            "values" => $request->all()
+        ];
         DB::table('auto_results')->insert([
-            'response' => json_encode($request->all())
+            'response' => json_encode($data),
         ]);
+
+        return "OK";
     }
 
     /**
