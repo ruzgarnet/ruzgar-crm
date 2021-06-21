@@ -10,36 +10,23 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="inpCreatePaymenttModalFullName">@lang('fields.name')</label>
-                        <input type="text" value="{{ $subscription->customer->full_name }}" id="inpCreatePaymenttModalFullName" class="form-control" step="0.01" readonly>
+                        <label for="inpCreatePaymentModalSubscription">@lang('fields.subscription')</label>
+                        <input type="text" id="inpCreatePaymentModalSubscription" class="form-control" readonly>
                     </div>
 
                     <div class="form-group">
-                        <label for="inpCreatePaymenttModalPrice">@lang('fields.price')</label>
-                        <input type="number" name="price" id="inpCreatePaymenttModalPrice" class="form-control" step="0.01">
+                        <label for="inpCreatePaymentModalPrice">@lang('fields.price')</label>
+                        <input type="number" name="price" id="inpCreatePaymentModalPrice" class="form-control" step="0.01">
                     </div>
 
                     <div class="form-group">
-                        <label for="inpCreatePaymenttModalDate">@lang('fields.date')</label>
-                        <input type="date" name="date" id="inpCreatePaymenttModalDate" class="form-control">
+                        <label for="inpCreatePaymentModalDate">@lang('fields.date')</label>
+                        <input type="date" name="date" id="inpCreatePaymentModalDate" class="form-control">
                     </div>
 
                     <div class="form-group">
-                        <label for="slcStatus">@lang('fields.status')</label>
-                        <select name="status" id="slcStatus" class="custom-select selectpicker">
-                            @foreach ($statuses as $key => $status)
-                                <option value="{{ $key }}">{{ $status }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="slcType">@lang('fields.type')</label>
-                        <select name="type" id="slcType" class="custom-select selectpicker">
-                            @foreach ($types as $key => $type)
-                                <option value="{{ $key }}">{{ $type }}</option>
-                            @endforeach
-                        </select>
+                        <label for="txtCreatePaymentDescription">@lang('fields.description')</label>
+                        <textarea name="description" id="txtCreatePaymentDescription" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

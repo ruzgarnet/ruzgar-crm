@@ -125,11 +125,11 @@ class Subscription extends Model
     /**
      * Freeze Subscription Relationship
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
     public function freeze()
     {
-        return $this->hasOne(SubscriptionFreeze::class);
+        return $this->hasMany(SubscriptionFreeze::class);
     }
 
     /**
@@ -310,7 +310,10 @@ class Subscription extends Model
      */
     public function isActive()
     {
-        return !($this->isChanged() || $this->isCanceled() || ($this->end_date != null && Carbon::parse($this->end_date)->isPast()));
+        return $this->approved_at != null &&
+            !($this->isChanged() ||
+                $this->isCanceled() ||
+                ($this->end_date != null && Carbon::parse($this->end_date)->isPast()));
     }
 
     /**
@@ -344,6 +347,16 @@ class Subscription extends Model
     }
 
     /**
+     * Check subscriptions disable status
+     *
+     * @return boolean
+     */
+    public function isCanceled()
+    {
+        return $this->status == 3 ? true : false;
+    }
+
+    /**
      * If row changed get new sub
      *
      * @return \App\Models\Subscription
@@ -355,15 +368,5 @@ class Subscription extends Model
             ->first();
 
         return $row ? self::find($row->changed_id) : false;
-    }
-
-    /**
-     * Check subscriptions disable status
-     *
-     * @return boolean
-     */
-    public function isCanceled()
-    {
-        return $this->status == 3 ? true : false;
     }
 }

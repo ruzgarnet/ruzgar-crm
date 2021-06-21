@@ -228,3 +228,7 @@ button.dropdown-item {
 .modal-body p:last-child {
     margin-bottom: 0;
 }
+
+/* .select2-hidden-accessible {
+    width: 1px !important;
+} */

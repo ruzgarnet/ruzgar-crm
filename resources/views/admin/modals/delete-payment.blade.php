@@ -11,8 +11,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="inpDeletePaymentModalCustomer">@lang('fields.customer')</label>
-                        <input type="text" id="inpDeletePaymentModalCustomer" class="form-control" readonly>
+                        <label for="inpDeletePaymentModalSubscription">@lang('fields.customer')</label>
+                        <input type="text" id="inpDeletePaymentModalSubscription" class="form-control" readonly>
                     </div>
 
                     <div class="form-group">

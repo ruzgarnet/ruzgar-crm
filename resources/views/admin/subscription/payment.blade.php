@@ -10,6 +10,12 @@
                     <h4>@lang('tables.subscription.info')</h4>
 
                     <div class="card-header-buttons">
+                        <a class="btn btn-primary create-payment-modal-btn"
+                            data-action="{{ relative_route('admin.subscription.payment.create', $subscription) }}"
+                            title="@lang('titles.subscription.create_payment')"
+                            data-subscription="{{ $subscription->select_print }}"><i class="fas fa-sm fa-plus"></i>
+                            @lang('tables.subscription.create_payment')</a>
+
                         <button class="btn btn-primary" type="button" data-toggle="collapse"
                             data-target="#subscriptionDetails" aria-expanded="false" aria-controls="subscriptionDetails"><i
                                 class="fas fa-sm fa-clipboard-list"></i>
@@ -17,11 +23,6 @@
 
                         <a href="{{ route('admin.subscriptions') }}" class="btn btn-primary"><i
                                 class="fas fa-sm fa-list-ul"></i> @lang('tables.subscription.title')</a>
-
-                        <a class="btn btn-primary create-payment-modal-btn"
-                            data-action="{{ relative_route('admin.subscription.payment.create', $subscription) }}"
-                            title="@lang('titles.subscription.create_payment')"><i class="fas fa-sm fa-plus"></i>
-                            @lang('tables.subscription.create_payment')</a>
                     </div>
                 </div>
                 <div class="collapse" id="subscriptionDetails">
@@ -152,10 +153,9 @@
 
                                                     <button type="button" class="btn btn-danger delete-payment-modal-btn"
                                                         data-action="{{ relative_route('admin.subscription.payment.delete', $payment) }}"
-                                                        data-customer="{{ $subscription->customer->full_name }}"
-                                                        data-payment="{{ $payment->id }}"
-                                                        data-title="Ödemeyi Sil"
-                                                        title="@lang('titles.get_payment')">
+                                                        data-subscription="{{ $subscription->select_print }}"
+                                                        data-payment="{{ $payment->date_print }}"
+                                                        title="@lang('titles.delete_payment')">
                                                         <i class="fas fa-times"></i>
                                                     </button>
                                                 </div>
@@ -198,7 +198,6 @@
                 }]
             });
         })
-
     </script>
 @endpush
 

@@ -31,24 +31,6 @@ trait ViewAttributes
 
             // Customers and Orders Header
             [
-                'header' =>  trans('titles.customer_applications')
-            ],
-            // Customers and Orders Header End
-
-            [
-                'title' => trans('titles.customer_applications'),
-                'route' => 'admin.customer_applications',
-                'icon' => 'fas fa-sun'
-            ],
-            [
-                'title' => trans('titles.customer_application_types'),
-                'route' => 'admin.customer_application_types',
-                'icon' => 'fas fa-moon'
-            ],
-            // Admin Field End
-
-            // Customers and Orders Header
-            [
                 'header' =>  trans('titles.customers_and_orders')
             ],
             // Customers and Orders Header End
@@ -71,6 +53,25 @@ trait ViewAttributes
                 ]
             ],
             // Customer Field End
+
+            // Customers Applications Header
+            [
+                'header' =>  trans('titles.customer_applications')
+            ],
+            // Customers Applications Header End
+
+            // Customers Applications Field End
+            [
+                'title' => trans('titles.customer_applications'),
+                'route' => 'admin.customer_applications',
+                'icon' => 'fas fa-sun'
+            ],
+            [
+                'title' => trans('titles.customer_application_types'),
+                'route' => 'admin.customer_application_types',
+                'icon' => 'fas fa-moon'
+            ],
+            // Customers Applications Field End
 
             // Customers and Orders Header
             [

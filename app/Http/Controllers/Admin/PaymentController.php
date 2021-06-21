@@ -10,6 +10,10 @@ use App\Models\MokaLog;
 use App\Models\MokaPayment;
 use App\Models\MokaSale;
 use App\Models\Payment;
+use App\Models\PaymentCancellation;
+use App\Models\PaymentCreate;
+use App\Models\PaymentDelete;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -354,6 +358,171 @@ class PaymentController extends Controller
                 'type' => 'error',
                 'title' => trans('response.title.error'),
                 'message' => trans('response.edit.error')
+            ]
+        ]);
+    }
+
+    /**
+     * Creates a new payment
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request, Subscription $subscription)
+    {
+        if ($request->input('is_lump_sum') != null) {
+            $validated = $request->validate([
+                'price' => 'required|numeric',
+                'date' => 'required',
+                'status' => 'required',
+                'type' => 'required',
+                'is_lump_sum' => 'required',
+                'lump_sum_value' => 'required'
+            ]);
+
+
+            $iteration = 0;
+            for ($iteration = 0; $iteration < $validated["lump_sum_value"]; $iteration++) {
+                $temporary = [
+                    'subscription_id' => $subscription->id,
+                    'price' => $validated['price'],
+                    'date' => date('Y-m-15', strtotime($validated['date'] . ' + ' . ($iteration + 1) . ' month')),
+                    'status' => $validated['status'],
+                    'type' => $validated['type']
+                ];
+
+                Payment::create($temporary);
+            }
+
+            return response()->json([
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.insert.success')
+                ],
+                'redirect' => relative_route('admin.subscriptions')
+            ]);
+        } else {
+            $validated = $request->validate([
+                'price' => 'required|numeric',
+                'date' => 'required|date',
+                'description' => 'required|string|max:511'
+            ]);
+
+            $validated['subscription_id'] = $subscription->id;
+            $validated['staff_id'] = $request->user()->staff_id;
+
+            if (PaymentCreate::createPayment($validated)) {
+                return response()->json([
+                    'success' => true,
+                    'toastr' => [
+                        'type' => 'success',
+                        'title' => trans('response.title.success'),
+                        'message' => trans('response.insert.success')
+                    ],
+                    'reload' => true
+                ]);
+            }
+
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('response.insert.error')
+                ]
+            ]);
+        }
+    }
+
+    /**
+     * Deletes a payment
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Payment  $payment
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request, Payment $payment)
+    {
+        $validated = $request->validate([
+            'description' => 'required|string|max:511'
+        ]);
+
+        $error = null;
+        $subscription = $payment->subscription;
+        if ($subscription->approved_at == null)
+            $error = trans('warnings.subscription.not_approved');
+
+        if ($error) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => $error
+                ]
+            ]);
+        }
+
+        $validated['staff_id'] = $request->user()->staff_id;
+
+        if (PaymentDelete::deletePayment($payment, $validated)) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.delete.success')
+                ],
+                'reload' => true
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.delete.error')
+            ]
+        ]);
+    }
+
+    /**
+     * Creates a new payment
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Payment  $payment
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cancel(Request $request, Payment $payment)
+    {
+        $validated = $request->validate([
+            'description' => 'required|string|max:511'
+        ]);
+
+        $validated['subscription_id'] = $payment->id;
+        $validated['staff_id'] = $request->user()->staff_id;
+
+        if (PaymentCancellation::cancel($payment, $validated)) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.insert.success')
+                ],
+                'reload' => true
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.insert.error')
             ]
         ]);
     }
