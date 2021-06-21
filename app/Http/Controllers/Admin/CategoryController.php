@@ -50,11 +50,6 @@ class CategoryController extends Controller
 
         $rules = $this->rules();
 
-        // FIXME fix for null parent_id
-        // if ($request->input('parent_id')) {
-        //     $rules['parent_id'][] = 'exists:categories,id';
-        // }
-
         $validated = $request->validate($rules);
 
         if (Category::create($validated)) {
@@ -110,11 +105,6 @@ class CategoryController extends Controller
         ]);
 
         $rules = $this->rules();
-
-        // FIXME fix for null parent_id
-        // if ($request->input('parent_id')) {
-        //     $rules['parent_id'][] = 'exists:categories,id';
-        // }
 
         $rules['key']['unique'] = Rule::unique('categories', 'key')->ignore($category->id);
         $rules['slug']['unique'] = Rule::unique('categories', 'slug')->ignore($category->id);

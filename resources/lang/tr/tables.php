@@ -158,6 +158,13 @@ return [
             1 => 'Aktif Abonelik',
             2 => 'Hazırlık Aşamasında'
         ],
+        'status' => [
+            0 => 'Hazırlık Aşamasında',
+            1 => 'Aktif Abonelik',
+            2 => 'Tarife Değiştirilmiş',
+            3 => 'İptal Edilmiş',
+            4 => 'Dondurulmuş'
+        ],
         'create_payment' => 'Fatura Oluştur'
     ],
     // Subscription Fields End

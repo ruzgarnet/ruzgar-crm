@@ -37,6 +37,8 @@ return [
     'unfreezed' => 'Aktifleştirilmiş',
     'close' => 'Kapat',
     'reset' => 'Sıfırla',
+    'unapproved' => 'Onaylanmamış',
+    'delete_payment' => 'Ödemeyi Sil',
 
     'yes' => 'Evet',
     'no' => 'Hayır',

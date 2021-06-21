@@ -104,6 +104,7 @@ return [
     // Category|Product|Service Attributes
 
     // Subscription Attributes
+    'subscription' => 'Abonelik',
     'bbk_code' => 'BBK Kodu',
     // Comitment
     'commitment_period' => 'Taahhüt Süresi',

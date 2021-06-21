@@ -102,7 +102,6 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::put('message/edit/{message}', [App\Http\Controllers\Admin\MessageController::class, 'update'])->name('message.edit.put');
     Route::get('message/send', [App\Http\Controllers\Admin\MessageController::class, 'send'])->name('message.send');
     Route::post('message/send', [App\Http\Controllers\Admin\MessageController::class, 'submit'])->name('message.send.post');
-
     // Message Routes End
 
     // Subscription Routes
@@ -122,9 +121,16 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::get('subscription/contract/preview/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'preview'])->name('subscription.contract');
     Route::put('subscription/freeze/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'freeze'])->name('subscription.freeze.put');
     Route::put('subscription/unfreeze/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'unFreeze'])->name('subscription.unfreeze.put');
-    Route::post('subscription/payment/create/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'create_payment'])->name('subscription.payment.create');
-    Route::delete('subscription/payment/delete/{payment}', [App\Http\Controllers\Admin\SubscriptionController::class, 'delete_payment'])->name('subscription.payment.delete');
     // Subscription Routes End
+
+    // Payment Routes
+    Route::post('payment/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'received'])->name('payment.received.post');
+    Route::put('payment/price/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'price'])->name('payment.price.put');
+    Route::get('payment/auto/request/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'send_auto'])->name('payment.auto.request');
+    Route::post('payment/add/{subscription}', [App\Http\Controllers\Admin\PaymentController::class, 'store'])->name('subscription.payment.create');
+    Route::post('payment/cancel/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'cancel'])->name('subscription.payment.cancel');
+    Route::delete('payment/delete/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'destroy'])->name('subscription.payment.delete');
+    // Payment Routes End
 
     // Reference Routes
     Route::get('references', [App\Http\Controllers\Admin\ReferenceController::class, 'index'])->name('references');
@@ -132,12 +138,6 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::post('reference/{subscription}', [App\Http\Controllers\Admin\ReferenceController::class, 'store'])->name('reference.add.post');
     Route::put('reference/edit/{reference}', [App\Http\Controllers\Admin\ReferenceController::class, 'update'])->name('reference.edit.put');
     // Reference Routes
-
-    // Payment Routes
-    Route::post('payment/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'received'])->name('payment.received.post');
-    Route::put('payment/price/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'price'])->name('payment.price.put');
-    Route::get('payment/auto/request/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'send_auto'])->name('payment.auto.request');
-    // Payment Routes End
 
     // Fault Record Routes
     Route::get('fault/records', [App\Http\Controllers\Admin\FaultRecordController::class, 'index'])->name('fault.records');

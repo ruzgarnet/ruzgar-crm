@@ -4,27 +4,33 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 
 ## Yapılacaklar
 
-- [x] Referans
-- [x] Sözleşme
-- [x] Otomatik Ödeme Yapısı
 - [ ] Otomatik ödeme provizyon
 - [ ] Otomatik ödemelerin Moka'ya tanımlanması ve indirim
 - [ ] Tarife değişiminde otomatik ödemenin uyarlanması
-- [x] Altyapı Sorgulama
 - [ ] Sorgulanan altyapı bilgilerini kayda aktarma
-- [x] SMS Entegrasyonu
-- [ ] Rapor Sayfaları
-- [x] Arıza kayıtları
+- [ ] Rapor sayfaları
 - [ ] Arıza kayıtları geliştirmesi
-- [x] Taleplerin takibi
 - [ ] Site yönetimi için modül yapısının tasarlanması
-- [x] Abonelik dondurma işlemleri
-- [ ] Abonelik tekrar aktif etme
 - [ ] Toplu ödemeler
 - [ ] Sistem içi talep/istek yapısı
+- [ ] Dinamik mesaj yapısı
+- [ ] Çoklu mesaj yapısı
+- [ ] Ödenmemiş faturalara gecikme tutarı yansıtma
+
+## Yapılanlar
+
+- [x] Referans yapısı
+- [x] Sözleşme çıktısı
+- [x] Otomatik ödeme yapısı
+- [x] Altyapı sorgulama
+- [x] SMS entegrasyonu
+- [x] Arıza kayıtları
+- [x] Taleplerin takibi
+- [x] Abonelik dondurma işlemleri
 - [x] Ayın 25. gününden sonra gelen abonelerin ilk ay ücretlerinin yarıya düşürülmesi
 - [x] Fatura oluşturma ve silme işlemleri
 - [x] Online ödeme sistemi
+- [x] Abonelik tekrar aktif etme
 
 ## Otomatize İşlemler
 
