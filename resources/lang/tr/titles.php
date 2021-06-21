@@ -30,8 +30,13 @@ return [
     'cancel_subscription' => 'Abonelik İptali',
     'cancel' => 'İptal',
     'freeze_subscription' => 'Abonelik Dondurma',
-    'freeze' => 'Dondurulmuş',
+    'freeze' => 'Dondur',
+    'freezed' => 'Dondurulmuş',
+    'unfreeze_subscription' => 'Aboneliği Aktif Et',
+    'unfreeze' => 'Aktifleştir',
+    'unfreezed' => 'Aktifleştirilmiş',
     'close' => 'Kapat',
+    'reset' => 'Sıfırla',
 
     'yes' => 'Evet',
     'no' => 'Hayır',
@@ -47,6 +52,9 @@ return [
         'approve' => [
             'customer' => 'Müşteri Onayı',
             'subscription' => 'Abonelik Onayı'
+        ],
+        'reset' => [
+            'subscription' => 'Aboneliği Sıfırla'
         ]
     ],
 

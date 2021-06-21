@@ -5,7 +5,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">@lang('titles.edit_subscription_price')</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="@lang('titles.close')">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

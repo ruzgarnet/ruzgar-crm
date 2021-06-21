@@ -84,18 +84,6 @@ $(function () {
                     });
                 }
 
-                // If data deleted, remove from table and close modal
-                if (result.deleted) {
-                    let modal = $("#deleteModal");
-
-                    modal.find("#deleteForm").prop("action", "");
-                    modal.modal("hide");
-
-                    $("table")
-                        .find("tr[data-id='" + result.deleted + "']")
-                        .remove();
-                }
-
                 // If response has redirect, fly me to the moon
                 if (result.redirect) {
                     setTimeout(function () {
@@ -109,40 +97,6 @@ $(function () {
                         location.reload();
                     }, 2000);
                 }
-
-                // If response has approve, change fields from table
-                if (result.approve) {
-                    let approve = result.approve,
-                        modal = $(".approve-modal");
-
-                    modal.find("form").prop("action", "");
-                    modal.modal("hide");
-
-                    let row = $("tr[data-id='" + approve.id + "']");
-
-                    // Change column class and text
-                    if (approve.column) {
-                        row.find("." + approve.column)
-                            .removeClass()
-                            .addClass([
-                                approve.column,
-                                approve.column + "-" + approve.type,
-                            ])
-                            .text(approve.title);
-                    }
-
-                    // Show approve lines in table row
-                    if (approve.unapprove) {
-                        row.removeClass("approved-row");
-                        row.addClass("un-approved-row");
-                    } else {
-                        row.removeClass("un-approved-row");
-                        row.addClass("approved-row");
-                    }
-
-                    form.find("[type='submit']").prop("disabled", false);
-                }
-
                 // Show payment modal frame
                 if (result.payment) {
                     let payment = result.payment;
@@ -229,32 +183,6 @@ $(function () {
     });
 
     /**
-     * Open delete modal and change form action
-     */
-    $(document).on("click", ".delete-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            modal = $("#deleteModal");
-
-        modal.find("#deleteForm").prop("action", action);
-        modal.modal("show");
-    });
-
-    /**
-     * Open get payment modal, change form action and price
-     * !Price fetching from database
-     */
-    $(document).on("click", ".get-payment-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            price = button.data("price");
-
-        $("#paymentForm").prop("action", action);
-        $("#paymentModal").modal("show");
-        $("#inpPrice").val(price);
-    });
-
-    /**
      * Change payment view when type changed
      */
     $(document).on("input", "#paymentForm #slcType", function () {
@@ -279,118 +207,6 @@ $(function () {
                     .item(select.selectedIndex)
                     .setAttribute("selected", true);
             });
-        });
-    }
-
-    /**
-     * Open create payment modal and change form action
-     */
-     $(document).on("click", ".create-payment-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            modal = $("#createPaymentModal");
-
-        modal.find("#createPaymentForm").prop("action", action);
-        modal.modal("show");
-    });
-
-    /**
-     * Open delete payment modal and change form action
-     */
-     $(document).on("click", ".delete-payment-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            customer = button.data("customer"),
-            payment = button.data("payment"),
-            modal = $("#deletePaymentModal");
-
-        $("#inpDeletePaymentModalCustomer").val(customer);
-        $("#inpDeletePaymentModalPayment").val(payment);
-        $("#deletePaymentForm").prop("action", action);
-        modal.modal("show");
-    });
-
-    /**
-     * Open approve modal and change form action
-     */
-    $(document).on("click", ".approve-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            modal = $(button.data("modal"));
-
-        modal.find("form").prop("action", action);
-        modal.modal("show");
-    });
-
-    /**
-     * Fill slug when .slug-to-input changed
-     */
-    $(document).on("input", ".slug-to-input", function () {
-        if (typeof slugify !== "undefined") {
-            let input = $(this),
-                slug = $("#" + input.data("slug")),
-                val = slugify(input.val(), { lower: true });
-
-            slug.val(val);
-            if (slug.hasClass("is-invalid")) {
-                slug.trigger("input");
-            }
-        }
-    });
-
-    /**
-     * Slug input
-     */
-    $(document).on("input", ".slug-input", function () {
-        if (typeof slugify !== "undefined") {
-            let input = $(this),
-                val = input.val(),
-                lowerCase = input.data("lower") === "off" ? false : true;
-
-            if (
-                !(
-                    val.charAt(val.length - 1) === "-" &&
-                    val.charAt(val.length - 2) !== "-"
-                ) &&
-                !(
-                    val.charAt(val.length - 1) === " " &&
-                    val.charAt(val.length - 2) !== " "
-                )
-            ) {
-                input.val(slugify(val, { lower: lowerCase }));
-            }
-        }
-    });
-
-    /**
-     * Initalize ckeditor
-     */
-    let editors = document.querySelectorAll(".txt-editor");
-    if (editors && typeof CKEDITOR !== "undefined") {
-        editors.forEach(function (el) {
-            CKEDITOR.replace(el);
-        });
-        CKEDITOR.dtd.$removeEmpty["span"] = false;
-    }
-
-    /**
-     * Initalize select2
-     */
-    if (typeof $.fn.select2 !== "undefined") {
-        $(".selectpicker").select2({ lang: "tr" });
-
-        /**
-         * Fix selected option for cloned forms
-         */
-        $(".selectpicker").on("change", function (e) {
-            let select = this;
-
-            for (let option in select.options) {
-                select.options.item(option).removeAttribute("selected");
-            }
-            select.options
-                .item(select.selectedIndex)
-                .setAttribute("selected", true);
         });
     }
 
@@ -455,83 +271,6 @@ $(function () {
         $(".subs-payments").fadeOut(300);
         $(".subs-" + id + "-payments").fadeIn(600);
     });
-
-    /**
-     * Open edit payment price modal, change form action and price
-     */
-    $(document).on("click", ".edit-payment-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            price = button.data("price");
-
-        $("#editPaymentPriceForm").prop("action", action);
-        $("#editPaymentPriceModal").modal("show");
-        $("#inpEditPaymentModalEditPrice").val(price);
-    });
-
-    /**
-     * Open edit subscription price modal, change form action and price
-     */
-    $(document).on("click", ".edit-subscription-price-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            price = button.data("price"),
-            customer = button.data("customer"),
-            service = button.data("service");
-
-        $("#editSubscriptionPriceForm").prop("action", action);
-        $("#editSubscriptionPriceModal").modal("show");
-        $("#inpEditSubPriceModalEditPrice").val(price);
-        $("#inpEditSubPriceModalCustomer").val(customer);
-        $("#inpEditSubPriceModalService").val(service);
-    });
-
-    /**
-     * Open subscription cancellation modal, change form inputs
-     */
-    $(document).on("click", ".cancel-subscription-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            customer = button.data("customer"),
-            service = button.data("service");
-
-        $("#cancelSubscriptionForm").prop("action", action);
-        $("#cancelSubscriptionModal").modal("show");
-        $("#inpCancelSubscriptionModalCustomer").val(customer);
-        $("#inpCancelSubscriptionModalService").val(service);
-    });
-
-    /**
-     * Open edit reference modal, change form values
-     */
-    $(document).on("click", ".edit-reference-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            status = button.data("status"),
-            row = button.parents("tr");
-
-        $("#editReferenceForm").prop("action", action);
-        $("#editReferenceModal").modal("show");
-
-        $("#inpEditReferenceModalReference").val(row.find(".reference-subscription").text().trim());
-        $("#inpEditReferenceModalReferenced").val(row.find(".referenced-subscription").text().trim());
-        $("#slcEditReferenceModalStatus").val(status).change();
-    });
-
-    /**
-     * Open subscription freeze modal, change form inputs
-     */
-    $(document).on("click", ".freeze-subscription-modal-btn", function () {
-        let button = $(this),
-            action = button.data("action"),
-            customer = button.data("customer"),
-            service = button.data("service");
-
-        $("#freezeSubscriptionForm").prop("action", action);
-        $("#freezeSubscriptionModal").modal("show");
-        $("#inpFreezeSubscriptionModalCustomer").val(customer);
-        $("#inpFreezeSubscriptionModalService").val(service);
-    });
 });
 
 /**
@@ -586,57 +325,3 @@ function unMask(form) {
     }
 }
 
-// Initalize date mask
-let datemasks = document.querySelectorAll(".date-mask");
-if (datemasks && typeof Cleave !== "undefined") {
-    datemasks.forEach(function (el) {
-        new Cleave(el, {
-            date: true,
-            datePattern: ["d", "m", "Y"],
-        });
-    });
-}
-
-// Initalize credit card mask
-let creditcards = document.querySelectorAll(".credit-card-mask");
-if (creditcards && typeof Cleave !== "undefined") {
-    creditcards.forEach(function (el) {
-        new Cleave(el, {
-            creditCard: true,
-        });
-    });
-}
-
-// Initalize telephone mask
-let telephones = document.querySelectorAll(".telephone-mask");
-if (telephones && typeof Cleave !== "undefined") {
-    telephones.forEach(function (el) {
-        new Cleave(el, {
-            phone: true,
-            phoneRegionCode: "tr",
-            prefix: "0",
-        });
-    });
-}
-
-// Initalize identification number mask
-let identifications = document.querySelectorAll(".identification-mask");
-if (identifications && typeof Cleave !== "undefined") {
-    identifications.forEach(function (el) {
-        new Cleave(el, {
-            blocks: [11],
-            numericOnly: true,
-        });
-    });
-}
-
-// Initalize expire date mask
-let expire = document.querySelectorAll(".expire-date-mask");
-if (expire && typeof Cleave !== "undefined") {
-    expire.forEach(function (el) {
-        new Cleave(el, {
-            date: true,
-            datePattern: ["m", "y"],
-        });
-    });
-}

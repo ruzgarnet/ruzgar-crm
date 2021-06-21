@@ -39,9 +39,9 @@
                                                     title="@lang('titles.edit')">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-danger delete-modal-btn"
+                                                <button type="button" class="btn btn-danger confirm-modal-btn"
                                                     data-action="{{ relative_route('admin.user.delete', $user) }}"
-                                                    title="@lang('titles.delete')">
+                                                    data-modal="delete" title="@lang('titles.delete')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -83,5 +83,11 @@
 @endpush
 
 @push('modal')
-    @include('admin.modals.delete')
+    <x-admin.confirm-modal
+        id="delete"
+        method="delete"
+        :title="trans('titles.actions.delete')"
+        :message="trans('warnings.delete')"
+        :buttonText="trans('titles.delete')"
+        buttonType="danger" />
 @endpush

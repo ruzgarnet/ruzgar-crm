@@ -60,9 +60,9 @@
 
                                                 @if ($customer->type == 1)
                                                     <button type="button"
-                                                        class="btn btn-success approve-modal-btn"
+                                                        class="btn btn-success confirm-modal-btn"
                                                         data-action="{{ route('admin.customer.approve.post', $customer) }}"
-                                                        data-modal="#approveCustomerModal" title="@lang('titles.approve')">
+                                                        data-modal="#approveCustomer" title="@lang('titles.approve')">
                                                         <i class="fas fa-check"></i>
                                                     </button>
                                                 @endif
@@ -105,5 +105,11 @@
 @endpush
 
 @push('modal')
-    @include('admin.modals.approve-customer')
+    <x-admin.confirm-modal
+        id="approveCustomer"
+        method="put"
+        :title="trans('titles.actions.approve.customer')"
+        :message="trans('warnings.approve.customer')"
+        :buttonText="trans('titles.approve')"
+        buttonType="success" />
 @endpush

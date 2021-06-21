@@ -220,12 +220,7 @@ class CustomerController extends Controller
                         'title' => trans('response.title.approve.customer'),
                         'message' => trans('response.approve.customer.success')
                     ],
-                    'approve' => [
-                        'id' => $customer->id,
-                        'type' => 2,
-                        'title' => trans('tables.customer.types.2'),
-                        'column' => 'customer-type'
-                    ]
+                    'reload' => true
                 ]);
             }
         }

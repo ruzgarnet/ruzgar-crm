@@ -63,7 +63,7 @@
 														data-content="<b>Tarih:</b> {{ convert_date($subscription->freeze->created_at, 'large') }} <br>
 																														<b>Personel</b>: {{ $subscription->freeze->staff->full_name }} <br>
 																														<b>Sebep</b>: {{ $subscription->freeze->description }}">
-														@lang('titles.freeze')
+														@lang('titles.freezed')
 													</button>
 												@endif
 											</div>
@@ -92,19 +92,19 @@
 
                                                         @if ($subscription->status == 0)
                                                             <a href="{{ route('admin.subscription.edit', $subscription) }}"
-                                                                class="dropdown-item un-approved-element">
+                                                                class="dropdown-item">
                                                                 <i class="dropdown-icon fas fa-edit"></i>
                                                                 @lang('titles.edit')
                                                             </a>
 
-                                                            <a target="_blank" class="approve-element dropdown-item"
+                                                            <a target="_blank" class="dropdown-item"
                                                                 href="{{ route('admin.subscription.contract', $subscription) }}">
                                                                 <i class="dropdown-icon fas fa-file-contract"></i>
                                                                 @lang('fields.contract_preview')
                                                             </a>
 
                                                             <button type="button"
-                                                                class="dropdown-item approve-modal-btn un-approved-element"
+                                                                class="dropdown-item approve-modal-btn"
                                                                 data-action="{{ relative_route('admin.subscription.approve.post', $subscription) }}"
                                                                 data-modal="#approveSubscriptionModal">
                                                                 <i class="dropdown-icon fas fa-check"></i>
@@ -112,42 +112,45 @@
                                                             </button>
 
                                                             <button type="button"
-                                                                class="dropdown-item un-approved-element delete-modal-btn"
-                                                                data-action="{{ relative_route('admin.subscription.delete', $subscription) }}">
+                                                                class="dropdown-item confirm-modal-btn"
+                                                                data-action="{{ relative_route('admin.subscription.delete', $subscription) }}"
+                                                                data-modal="delete">
                                                                 <i class="dropdown-icon fas fa-trash"></i>
                                                                 @lang('titles.delete')
                                                             </button>
                                                         @endif
-                                                        @if ($subscription->approved_at || $subscription->type == 0)
+                                                        @if ($subscription->approved_at)
                                                             <a href="{{ route('admin.subscription.payments', $subscription) }}"
-                                                                class="dropdown-item approved-element">
+                                                                class="dropdown-item">
                                                                 <i class="dropdown-icon fas fa-file-invoice"></i>
                                                                 @lang('tables.payment.title')
                                                             </a>
 
-                                                            <a target="_blank" class="approve-element dropdown-item"
-                                                                href="/contracts/{{ md5($subscription->subscription_no) }}.pdf">
-                                                                <i class="dropdown-icon fas fa-file-contract"></i>
-                                                                @lang('fields.contract')
-                                                            </a>
+                                                            @if(!$subscription->isChanged())
+                                                                <a target="_blank" class="dropdown-item"
+                                                                    href="/contracts/{{ md5($subscription->subscription_no) }}.pdf">
+                                                                    <i class="dropdown-icon fas fa-file-contract"></i>
+                                                                    @lang('fields.contract')
+                                                                </a>
+                                                            @endif
 
                                                             <button type="button"
-                                                                class="dropdown-item approve-modal-btn approved-element"
+                                                                class="dropdown-item confirm-modal-btn"
                                                                 data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
-                                                                data-modal="#approveSubscriptionModal">
+                                                                data-modal="unApproveSubscription">
                                                                 <i class="dropdown-icon fas fa-redo-alt"></i>
-                                                                @lang('fields.reset')
+                                                                @lang('titles.reset')
                                                             </button>
                                                         @endif
                                                         @if($subscription->isActive())
                                                             <a href="{{ route('admin.reference.add', $subscription) }}"
-                                                                class="dropdown-item approved-element">
+                                                                class="dropdown-item">
                                                                 <i class="dropdown-icon fas fa-user-friends"></i>
                                                                 @lang('tables.reference.add')
                                                             </a>
 
                                                             <button type="button"
-                                                                class="dropdown-item approved-element edit-subscription-price-modal-btn"
+                                                                class="dropdown-item edit-subscription-price-modal-btn"
                                                                 data-action="{{ relative_route('admin.subscription.price', $subscription) }}"
                                                                 data-customer="{{ $subscription->customer->full_name }}"
                                                                 data-service="{{ $subscription->service->name }}"
@@ -157,7 +160,7 @@
                                                             </button>
 
                                                             <button type="button"
-                                                                class="dropdown-item approved-element cancel-subscription-modal-btn"
+                                                                class="dropdown-item cancel-subscription-modal-btn"
                                                                 data-action="{{ relative_route('admin.subscription.cancel.put', $subscription) }}"
                                                                 data-customer="{{ $subscription->customer->select_print }}"
                                                                 data-service="{{ $subscription->service_print }}">
@@ -167,20 +170,30 @@
 
                                                             @if (!$subscription->isFreezed())
                                                                 <button type="button"
-                                                                    class="dropdown-item approved-element freeze-subscription-modal-btn"
+                                                                    class="dropdown-item freeze-subscription-modal-btn"
                                                                     data-action="{{ relative_route('admin.subscription.freeze.put', $subscription) }}"
                                                                     data-customer="{{ $subscription->customer->select_print }}"
                                                                     data-service="{{ $subscription->service_print }}">
                                                                     <i class="dropdown-icon far fa-snowflake"></i>
                                                                     @lang('titles.freeze_subscription')
                                                                 </button>
+                                                            @else
+                                                                <button type="button"
+                                                                    class="dropdown-item confirm-modal-btn"
+                                                                    data-action="{{ relative_route('admin.subscription.unfreeze.put', $subscription) }}"
+                                                                    data-modal="unFreezeSubscription">
+                                                                    <i class="dropdown-icon fas fa-retweet"></i>
+                                                                    @lang('titles.unfreeze_subscription')
+                                                                </button>
                                                             @endif
 
-                                                            <a href="{{ route('admin.subscription.change', $subscription) }}"
-                                                                class="dropdown-item approved-element">
-                                                                <i class="dropdown-icon fas fa-cloud-upload-alt"></i>
-                                                                @lang('tables.subscription.change_service')
-                                                            </a>
+                                                            @if(!$subscription->isChanged())
+                                                                <a href="{{ route('admin.subscription.change', $subscription) }}"
+                                                                    class="dropdown-item">
+                                                                    <i class="dropdown-icon fas fa-cloud-upload-alt"></i>
+                                                                    @lang('tables.subscription.change_service')
+                                                                </a>
+                                                            @endif
                                                         @endif
 
                                                     </div>
@@ -224,8 +237,39 @@
 @endpush
 
 @push('modal')
-    @include('admin.modals.delete')
-    @include('admin.modals.approve-subscription')
     @include('admin.modals.edit-subscription-price')
     @include('admin.modals.cancel-subscription')
+    @include('admin.modals.freeze-subscription')
+
+    <x-admin.confirm-modal
+        id="delete"
+        method="delete"
+        :title="trans('titles.actions.delete')"
+        :message="trans('warnings.delete')"
+        :buttonText="trans('titles.delete')"
+        buttonType="danger" />
+
+    <x-admin.confirm-modal
+        id="approveSubscription"
+        method="put"
+        :title="trans('titles.actions.approve.subscription')"
+        :message="trans('warnings.approve.customer')"
+        :buttonText="trans('titles.approve')"
+        buttonType="success" />
+
+    <x-admin.confirm-modal
+        id="unApproveSubscription"
+        method="put"
+        :title="trans('titles.actions.reset.subscription')"
+        :message="trans('warnings.subscription.reset')"
+        :buttonText="trans('titles.reset')"
+        buttonType="danger" />
+
+    <x-admin.confirm-modal
+        id="unFreezeSubscription"
+        method="put"
+        :title="trans('titles.actions.approve.subscription')"
+        :message="trans('warnings.approve.customer')"
+        :buttonText="trans('titles.approve')"
+        buttonType="success" />
 @endpush
