@@ -9,8 +9,8 @@ $(function () {
             modal = button.data("modal"),
             action = button.data("action");
 
-        $("#" + modal + "Form").prop("action", action);
-        $("#" + modal + "Modal").modal("show");
+        $(modal + "Form").prop("action", action);
+        $(modal + "Modal").modal("show");
     });
 
     /**
