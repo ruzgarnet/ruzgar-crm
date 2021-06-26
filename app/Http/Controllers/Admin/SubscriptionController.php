@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Classes\Generator as Generator;
+use App\Classes\Moka;
 use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
 use App\Models\SubscriptionCancellation;
@@ -15,6 +16,7 @@ use App\Models\Subscription;
 use App\Models\SubscriptionFreeze;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
@@ -69,6 +71,10 @@ class SubscriptionController extends Controller
 
         $validated['staff_id'] = $request->user()->staff_id;
 
+        if ($validated["commitment"] == 0 || $validated["commitment"] == 12) {
+            $validated["price"] += 10;
+        }
+
         if ($validated['commitment'] > 0) {
             $date = new DateTime($validated['start_date']);
             $date->modify("+{$validated['commitment']} month");
@@ -93,6 +99,37 @@ class SubscriptionController extends Controller
                 'type' => 'error',
                 'title' => trans('response.title.error'),
                 'message' => trans('response.insert.error')
+            ]
+        ]);
+    }
+
+    public function cancel_auto_payment(Subscription $subscription)
+    {
+        $auto_payment = $subscription->get_auto();
+        $auto_payment->disabled_at = DB::raw('current_timestamp()');
+
+        $moka = new Moka();
+        $result = $moka->update_sale_end_date(
+            $auto_payment->moka_sale_id,
+            date('Ymd', strtotime('+ 1 day'))
+        );
+
+        if ($auto_payment->save()) {
+            return response()->json([
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.edit.success')
+                ],
+                'redirect' => relative_route('admin.subscriptions')
+            ]);
+        }
+
+        return response()->json([
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.edit.error')
             ]
         ]);
     }
@@ -225,6 +262,20 @@ class SubscriptionController extends Controller
             }
 
             if ($subscription->approve_subscription()) {
+
+                Telegram::send(
+                    'AboneTamamlanan',
+                    trans(
+                        'telegram.add_subscription',
+                        [
+                            'full_name' => $subscription->customer->full_name,
+                            'id_no' => $subscription->customer->identification_number,
+                            'username' => $subscription->staff->full_name,
+                            'customer_staff' => $subscription->customer->staff->full_name
+                        ]
+                    )
+                );
+
                 $pdf = Pdf::loadView("pdf.contract.{$subscription->service->category->contractType->view}", [
                     'subscription' => $subscription,
                     'device_brand' => 'Huawei',
@@ -236,8 +287,6 @@ class SubscriptionController extends Controller
                     mkdir(public_path('contracts'), 0755, true);
                 }
                 $pdf->save($path);
-
-                //Telegram::send('1046241971', 'sub approve');
 
                 return response()->json([
                     'success' => true,
@@ -471,7 +520,18 @@ class SubscriptionController extends Controller
         if (SubscriptionCancellation::cancel($subscription, $validated)) {
             // TODO Change group for production
             // FIXME Named groups
-            Telegram::send('1046241971', 'cancel');
+            Telegram::send(
+                'İptalİşlemler',
+                trans(
+                    "telegram.cancel_subscription",
+                    [
+                        'full_name' => $subscription->customer->full_name,
+                        'id_no' => $subscription->customer->identification_number,
+                        'description' => $validated["description"],
+                        'username' => $request->user()->username
+                    ]
+                )
+            );
 
             return response()->json([
                 'success' => true,

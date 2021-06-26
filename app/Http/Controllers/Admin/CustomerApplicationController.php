@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerApplication;
@@ -48,31 +49,25 @@ class CustomerApplicationController extends Controller
     {
         $rules = $this->rules();
         $customer_id = $request->input('customer_id');
-        if(!$request->input('customer_id'))
-        {
+        if (!$request->input('customer_id')) {
             $rules['first_name'] = 'required';
             $rules['last_name'] = 'required';
             $rules['telephone'] = 'required';
             $customer_id = null;
-        }
-        else
-        {
+        } else {
             $rules['customer_id'] = 'required';
         }
 
         $validated = $request->validate($rules);
         $request = [];
-        if($customer_id == null)
-        {
-            $request["information"] = json_encode([
+        if ($customer_id == null) {
+            $request["information"] = [
                 'first_name' => $validated["first_name"],
                 'last_name' => $validated["last_name"],
                 'telephone' => $validated["telephone"]
-            ]);
+            ];
             $validated["customer_id"] = null;
-        }
-        else
-        {
+        } else {
             $request["information"] = json_encode([]);
         }
 
@@ -82,8 +77,63 @@ class CustomerApplicationController extends Controller
         $request["customer_application_type_id"] = $validated["customer_application_type_id"];
         $request["description"] = $validated["description"];
         $request["staff_id"] = $validated["staff_id"];
-
-        if (CustomerApplication::create($request)) {
+        if ($customer_application = CustomerApplication::create($request)) {
+            if ($validated["customer_application_type_id"] == 1) {
+                if($validated["customer_id"] == null)
+                {
+                    Telegram::send(
+                        "İptalİşlemler",
+                        trans(
+                            'telegram.application_cancel',
+                            [
+                                'full_name' => $customer_application->information["first_name"]." ".$customer_application->information["last_name"],
+                                'telephone' => $customer_application->information["telephone"]
+                            ]
+                        )
+                    );
+                }
+                else
+                {
+                    Telegram::send(
+                        "İptalİşlemler",
+                        trans(
+                            'telegram.application_cancel',
+                            [
+                                'full_name' => $customer_application->customer->full_name,
+                                'telephone' => $customer_application->customer->telephone
+                            ]
+                        )
+                    );
+                }
+            } else if ($validated["customer_application_type_id"] == 2) {
+                if($validated["customer_id"] == null)
+                {
+                    Telegram::send(
+                        "KaliteKontrolEkibi",
+                        trans(
+                            'telegram.application_cancel',
+                            [
+                                'full_name' => $customer_application->information["first_name"]." ".$customer_application->information["last_name"],
+                                'telephone' => $customer_application->information["telephone"]
+                            ]
+                        )
+                    );
+                }
+                else
+                {
+                    Telegram::send(
+                        "KaliteKontrolEkibi",
+                        trans(
+                            'telegram.application_cancel',
+                            [
+                                'full_name' => $customer_application->customer->full_name,
+                                'telephone' => $customer_application->customer->telephone
+                            ]
+                        )
+                    );
+                }
+            } else {
+            }
             return response()->json([
                 'success' => true,
                 'toastr' => [
@@ -186,7 +236,8 @@ class CustomerApplicationController extends Controller
             'staff_id' => 'required',
             'customer_application_type_id' => 'required',
             'status' => 'required',
-            'description' => 'required|max:255'
+            'description' => 'required|max:255',
+            'customer_application_type_id' => 'required'
         ];
     }
 }

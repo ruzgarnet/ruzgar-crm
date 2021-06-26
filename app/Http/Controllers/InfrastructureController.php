@@ -106,7 +106,7 @@ class InfrastructureController extends Controller
         $json_results = [];
 
         $door_id = $request->input('doors');
-        $phone = $request->input('telephone');
+        $telephone = $request->input('telephone');
         $full_name = $request->input('full_name');
         $city_code = $request->input('cities');
 
@@ -161,17 +161,25 @@ class InfrastructureController extends Controller
             Adı Soyadı : ÜMİT DEMİRCİ - Telefon Numarası : 5511265786 - İl : İSTANBUL - BBK : 19889031
         */
         if ($port_statu) {
-            $sms = new SMS_Api();
-            $sms->submit(
-                "RUZGARNET",
-            	"Binanızda RüzgarNET olarak hizmetimiz mevcuttur. İsterseniz, www.ruzgarnet.com.tr websitemiz üzerinden inceleyip, abone olabilirsiniz. Sizleri de MUTLU abonelerimiz arasında görmekten gurur duyarız. RUZGARNET 0216 205 06 06",
-            	array($phone)
-            );
+            // $sms = new SMS_Api();
+            // $sms->submit(
+            //     "RUZGARNET",
+            // 	"Binanızda RüzgarNET olarak hizmetimiz mevcuttur. İsterseniz, www.ruzgarnet.com.tr websitemiz üzerinden inceleyip, abone olabilirsiniz. Sizleri de MUTLU abonelerimiz arasında görmekten gurur duyarız. RUZGARNET 0216 205 06 06",
+            // 	array($phone)
+            // );
 
-            $telegram = new Telegram();
-            $telegram->send_message(
-                "1046241971",
-                $message." Adı Soyadı : ".$full_name." - Telefon Numarası : ".$phone." - İl : ".$this->get_cities($city_code)." - BBK : ".$door_id
+            Telegram::send(
+                'AltyapıSorgulama',
+                trans(
+                    'telegram.infrastructure',
+                    [
+                        'message' => $message,
+                        'full_name' => $full_name,
+                        'telephone' => $telephone,
+                        'city' => $this->get_cities($city_code),
+                        'bbk' => $door_id
+                    ]
+                )
             );
         }
 
