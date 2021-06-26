@@ -18,7 +18,7 @@ class CreateMokaAutoPaymentsTable extends Migration
             $table->foreignId('sale_id');
             $table->foreignId('payment_id');
             $table->bigInteger('moka_plan_id');
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);
 

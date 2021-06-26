@@ -44,16 +44,23 @@
                                         class="form-control expire-date-mask" placeholder="AA/YY">
                                 </div>
                             </div>
-                            <div class="col-lg-6 payment-types payment-type-4">
+                            <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="inpCVVCode">@lang('fields.card.security_code')</label>
-                                    <input type="text" name="card[security_code]" id="inpCVVCode" class="form-control">
+                                    <label for="inpCCVCode">@lang('fields.card.security_code')</label>
+                                    <input type="text" name="card[security_code]" id="inpCCVCode" class="form-control">
+                                    <div>
+                                        <small>Sadece provizyon için doldurunuz.</small>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group text-right mb-0">
+                            <button id="btnPaymentPreAuth" type="button" class="btn btn-warning">@lang('titles.payment_pre_auth')</button>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
+
                     <button type="button" class="btn btn-danger" data-dismiss="modal">@lang('titles.cancel')</button>
                     <button type="submit" class="btn btn-primary">@lang('fields.send')</button>
                 </div>

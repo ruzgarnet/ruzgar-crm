@@ -24,6 +24,8 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::get('/', [App\Http\Controllers\Admin\MainController::class, 'index'])->name('dashboard');
     Route::get('search', [App\Http\Controllers\Admin\MainController::class, 'search'])->name('search');
     Route::get('infrastructure', [App\Http\Controllers\Admin\MainController::class, 'infrastructure'])->name('infrastructure');
+    Route::post('payment/pre/auth/{payment}', [App\Http\Controllers\Admin\MainController::class, 'create_pre_auth'])->name('payment.pre.auth.create');
+    Route::post('payment/pre/auth/result/{moka_log}', [App\Http\Controllers\Admin\MainController::class, 'payment_pre_auth_result'])->name('payment.pre.auth.result');
     // Main Routes End
 
     // Dealer Routes
@@ -121,6 +123,7 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
     Route::get('subscription/contract/preview/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'preview'])->name('subscription.contract');
     Route::put('subscription/freeze/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'freeze'])->name('subscription.freeze.put');
     Route::put('subscription/unfreeze/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'unFreeze'])->name('subscription.unfreeze.put');
+    Route::put('subscription/cancel_auto_payment/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'cancel_auto_payment'])->name('subscription.cancel_auto_payment');
     // Subscription Routes End
 
     // Payment Routes
@@ -176,12 +179,10 @@ Route::prefix('admin')->middleware('admin.middleware')->name('admin.')->group(fu
 // Request Routes
 // Get district by city id
 Route::get('getDistricts/{id}', [App\Http\Controllers\CityController::class, 'districts'])->name('get.district')->where('id', '[0-9]+');
-
- // Infrastructure Routes
- Route::post('infrastructure/load', [App\Http\Controllers\InfrastructureController::class, 'load'])->name('infrastructure.load');
- Route::post('infrastructure/submit', [App\Http\Controllers\InfrastructureController::class, 'submit'])->name('infrastructure.post');
- // Infrastructure Routes End
-
- Route::match(['get', 'post'], 'payment/result/{payment?}', [App\Http\Controllers\Admin\PaymentController::class, 'payment_result'])->name('payment.result');
- Route::match(['get', 'post'], 'payment/auto/result', [App\Http\Controllers\Admin\PaymentController::class, 'payment_auto_result'])->name('payment.auto.result');
- // Request Routes End
+// Infrastructure Routes
+Route::post('infrastructure/load', [App\Http\Controllers\InfrastructureController::class, 'load'])->name('infrastructure.load');
+Route::post('infrastructure/submit', [App\Http\Controllers\InfrastructureController::class, 'submit'])->name('infrastructure.post');
+// Infrastructure Routes End
+Route::match(['get', 'post'], 'payment/result/{payment?}', [App\Http\Controllers\Admin\PaymentController::class, 'payment_result'])->name('payment.result');
+Route::match(['get', 'post'], 'payment/auto/result', [App\Http\Controllers\Admin\PaymentController::class, 'payment_auto_result'])->name('payment.auto.result');
+// Request Routes End

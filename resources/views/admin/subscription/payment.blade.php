@@ -145,6 +145,7 @@
                                                     @if ($payment->status != 2)
                                                         <button type="button" class="btn btn-primary get-payment-modal-btn"
                                                             data-action="{{ relative_route('admin.payment.received.post', $payment) }}"
+                                                            data-pre-auth-action="{{ relative_route('admin.payment.pre.auth.create', $payment) }}"
                                                             data-price="{{ $payment->price_print }}"
                                                             title="@lang('titles.get_payment')">
                                                             <i class="fas fa-cash-register"></i>

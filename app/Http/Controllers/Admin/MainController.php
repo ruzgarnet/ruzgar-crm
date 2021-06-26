@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Moka;
+use App\Classes\Mutator;
 use App\Classes\SMS_Api;
+use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\FaultRecord;
+use App\Models\MokaLog;
 use App\Models\Payment;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -63,5 +67,87 @@ class MainController extends Controller
         }
 
         return $data;
+    }
+
+    public function create_pre_auth(Request $request, Payment $payment)
+    {
+        $rules["card.number"] = [
+            'required',
+            'numeric'
+        ];
+        $rules["card.full_name"] = [
+            'required',
+            'string',
+            'max:255'
+        ];
+        $rules["card.expire_date"] = [
+            'required',
+            'string'
+        ];
+        $rules["card.security_code"] = [
+            'required',
+            'numeric',
+            'between:100,999'
+        ];
+
+        $validated = $request->validate($rules);
+
+        $expire = Mutator::expire_date($validated["card"]["expire_date"]);
+
+        $card = [
+            'full_name' => $validated["card"]['full_name'],
+            'number' => $validated["card"]['number'],
+            'expire_month' => $expire[0],
+            'expire_year' => $expire[1],
+            'security_code' => $validated['card']["security_code"],
+            'amount' => 1
+        ];
+
+        $hash = [
+            'subscription_no' => $payment->subscription->subscription_no,
+            'payment_created_at' => $payment->created_at
+        ];
+
+        $moka_log = MokaLog::create([
+            'payment_id' => $payment->id,
+            'ip' => $request->ip(),
+            'type' => 7,
+            'response' => null,
+            'trx_code' => null
+        ]);
+
+        $moka = new Moka();
+        $response = $moka->pay(
+            $card,
+            route('admin.payment.pre.auth.result', $moka_log),
+            $hash,
+            [
+                'is_pre_auth' => 1,
+                'pre_auth_price' => 1
+            ]
+        );
+
+        if ($response->Data != null) {
+            $moka_log->update([
+                'response' => $response,
+                'trx_code' => $moka->trx_code
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'payment' => [
+                    'frame' => $response->Data->Url
+                ]
+            ]);
+        } else {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => $response->ResultCode
+                ]
+            ]);
+        }
     }
 }

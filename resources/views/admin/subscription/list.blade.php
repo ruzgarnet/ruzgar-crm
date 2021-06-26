@@ -112,7 +112,7 @@
                                                             <button type="button"
                                                                 class="dropdown-item confirm-modal-btn"
                                                                 data-action="{{ relative_route('admin.subscription.approve.post', $subscription) }}"
-                                                                data-modal="approveSubscription">
+                                                                data-modal="#approveSubscription">
                                                                 <i class="dropdown-icon fas fa-check"></i>
                                                                 @lang('titles.approve')
                                                             </button>
@@ -131,7 +131,6 @@
                                                                 <i class="dropdown-icon fas fa-file-invoice"></i>
                                                                 @lang('tables.payment.title')
                                                             </a>
-
                                                             @if(!$subscription->isChanged())
                                                                 <a target="_blank" class="dropdown-item"
                                                                     href="/contracts/{{ md5($subscription->subscription_no) }}.pdf">
@@ -147,6 +146,16 @@
                                                                 <i class="dropdown-icon fas fa-redo-alt"></i>
                                                                 @lang('titles.reset')
                                                             </button>
+
+                                                            @if($subscription->is_auto())
+                                                                <button type="button"
+                                                                    class="dropdown-item confirm-modal-btn"
+                                                                    data-action="{{ relative_route('admin.subscription.cancel_auto_payment', $subscription) }}"
+                                                                    data-modal="#cancelAutoPayment">
+                                                                    <i class="dropdown-icon fas fa-times"></i>
+                                                                    @lang('titles.cancel_auto_payment')
+                                                                </button>
+                                                            @endif
                                                         @endif
 
                                                     </div>
@@ -213,4 +222,12 @@
         :message="trans('warnings.subscription.reset')"
         :buttonText="trans('titles.reset')"
         buttonType="danger" />
+
+        <x-admin.confirm-modal
+        id="cancelAutoPayment"
+         method="put"
+        :title="trans('titles.cancel_auto_payment')"
+        :message="trans('warnings.subscription.cancel_auto_payment')"
+        :buttonText="trans('titles.cancel_auto_payment')"
+        buttonType="success" />
 @endpush

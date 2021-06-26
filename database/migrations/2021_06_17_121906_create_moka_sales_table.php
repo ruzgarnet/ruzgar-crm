@@ -16,10 +16,9 @@ class CreateMokaSalesTable extends Migration
         Schema::create('moka_sales', function (Blueprint $table) {
             $table->id();
             $table->foreignId("subscription_id");
-            $table->tinyInteger('moka_customer_id');
-            $table->tinyInteger('moka_sale_id');
+            $table->foreignId('moka_customer_id');
+            $table->foreignId('moka_sale_id');
             $table->string('moka_card_token');
-            $table->boolean("active")->default(true);
             $table->timestamp('disabled_at')->nullable()->default(null);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable()->default(null);

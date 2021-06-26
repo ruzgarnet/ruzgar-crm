@@ -44,7 +44,7 @@ class MokaLog extends Model
      * 4 => - Ödeme Planı Ekleme
      * 5 => - Ödeme Planı Cevabı
      * 6 => - Online Satış 3D Hata
-     *
+     * 7 => - Provizyon Çekimi
      *
      * @param boolean $implode
      * @return array|string
