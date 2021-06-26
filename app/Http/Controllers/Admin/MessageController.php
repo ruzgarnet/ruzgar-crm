@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Message;
+use App\Models\Payment;
+use App\Models\PaymentPriceEdit;
 use App\Models\SentMessage;
 use App\Models\Subscription;
 use Exception;
@@ -58,15 +60,12 @@ class MessageController extends Controller
 
         $type = $validated["type"];
 
-        if($type == 1)
-        {
+        if ($type == 1) {
             $validated = $request->validate([
                 'customers' => 'required|array',
                 'customers.*' => 'required|exists:customers,id'
             ]) + $validated;
-        }
-        else if($type == 2)
-        {
+        } else if ($type == 2) {
             $validated = $request->validate([
                 'category_id' => 'required|exists:categories,id'
             ]) + $validated;
@@ -76,31 +75,46 @@ class MessageController extends Controller
 
         $sms = new SMS_Api();
 
-        if($type == 1)
-        {
+        if ($type == 1) {
             $customers = Customer::whereIn('id', $validated["customers"])->get();
             $numbers = [];
-            foreach($customers as $customer)
-            {
+            foreach ($customers as $customer) {
                 $numbers[] = $customer->telephone;
             }
-            dd($numbers);
-        }
-        else if($type == 2)
-        {
+        } else if ($type == 2) {
             $category = Category::find($validated["category_id"]);
             $subscriptions = Subscription::whereIn("service_id", $category->services->pluck('id'))->get();
             $numbers = [];
-            foreach($subscriptions as $subscription)
-            {
+            foreach ($subscriptions as $subscription) {
                 $numbers[] = $subscription->customer->telephone;
             }
-
-            $sms->submit(
+            /*$sms->submit(
                 "RUZGARNET",
                 $message->message,
                 $numbers
-            );
+            );*/
+        } else if ($type == 3) {
+            $subscriptions = Subscription::all();
+            $numbers = [];
+            foreach ($subscriptions as $subscription) {
+                $numbers[] = $subscription->customer->telephone;
+            }
+            /*$sms->submit(
+                "RUZGARNET",
+                $message->message,
+                $numbers
+            );*/
+        } else if ($type == 4) {
+            $numbers = [];
+            $payments = Payment::where("status", "<>", 2)->where('date', date('Y-m-15'))->get();
+            foreach ($payments as $payment) {
+                $numbers[] = $payment->subscription->customer->telephone;
+            }
+            /*$sms->submit(
+                "RUZGARNET",
+                $message->message,
+                $numbers
+            );*/
         }
     }
 
