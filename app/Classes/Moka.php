@@ -131,6 +131,12 @@ class Moka
         if (isset($optional["brand_name"])) {
             $request["PaymentDealerRequest"]["BuyerInformation"] = $optional["brand_name"] . " fatura ödemesidir.";
         }
+        if (isset($optional["is_pre_auth"])) {
+            $request["PaymentDealerRequest"]["IsPreAuth"] = $optional["is_pre_auth"];
+        }
+        if (isset($optional["Amount"])) {
+            $request["PaymentDealerRequest"]["Amount"] = $optional["pre_auth_price"];
+        }
 
         return $this->send($request);
     }
@@ -188,6 +194,69 @@ class Moka
         return $this->send($request);
     }
 
+    public function update_sale(
+        $sale_id,
+        $card_token,
+        $optional = []
+    ) {
+        $this->action = "DealerSale/UpdateSale";
+
+        $request = [
+            'DealerSaleAuthentication' => $this->auth,
+            "DealerSaleRequest" =>  array(
+                "DealerSaleId" => $sale_id,
+                "DefaultCard1Token" => $card_token
+            )
+        ];
+
+        if(isset($optional["end_date"]))
+        {
+            $request["DealerSaleRequest"]["EndDate"] = $optional["end_date"];
+        }
+
+        return $this->send($request);
+    }
+
+    public function update_sale_end_date(
+        $sale_id,
+        $end_date
+    ) {
+        $this->action = "DealerSale/UpdateSale";
+
+        $request = [
+            'DealerSaleAuthentication' => $this->auth,
+            "DealerSaleRequest" =>  array(
+                "DealerSaleId" => $sale_id,
+                "EndDate" => $end_date
+            )
+        ];
+
+        return $this->send($request);
+    }
+
+    public function add_card(
+        $customer_id,
+        $full_name,
+        $number,
+        $month,
+        $year
+    ) {
+        $this->action = "DealerCustomer/AddCard";
+
+        $request = [
+            'DealerCustomerAuthentication' => $this->auth,
+            "DealerCustomerRequest" => array(
+                "DealerCustomerId" => $customer_id,
+                "CardHolderFullName" => $full_name,
+                "CardNumber" => $number,
+                "ExpMonth" => $month,
+                "ExpYear" => $year
+            )
+        ];
+
+        return $this->send($request);
+    }
+
     /**
      * Adds sale to customer
      *
@@ -215,7 +284,7 @@ class Moka
                 "SaleDate" => date('Ymd'),
                 "BeginDate" => $date["start"],
                 "EndDate" => $date["end"],
-                "HowManyTrial" => 1,
+                "HowManyTrial" => 4,
                 "PlanType" => 2,
                 "Description" => "",
                 "DealerCustomerTypeId" => "",
@@ -247,20 +316,42 @@ class Moka
     }
 
     /**
+     * Do Void payment
+     *
+     * @param string $trx_code
+     * @return object|null
+     */
+    public function do_void(
+        string $trx_code
+    ) {
+        $this->action = "PaymentDealer/DoVoid";
+
+        $request = [
+            'PaymentDealerAuthentication' => $this->auth,
+            "PaymentDealerRequest" => [
+                "OtherTrxCode" => $trx_code,
+                "VoidRefundReason" => 2
+            ]
+        ];
+
+        return $this->send($request);
+    }
+
+    /**
      * Refund payment
      *
-     * @param int $order_id
+     * @param string $trx_code
      * @return object|null
      */
     public function refund(
-        int $order_id
+        string $trx_code
     ) {
         $this->action = "PaymentDealer/DoCreateRefundRequest";
 
         $request = [
             'PaymentDealerAuthentication' => $this->auth,
             "PaymentDealerRequest" => [
-                "VirtualPosOrderId" => $order_id
+                "OtherTrxCode" => $trx_code
             ]
         ];
 
@@ -282,6 +373,27 @@ class Moka
             'PaymentDealerAuthentication' => $this->auth,
             "PaymentDealerRequest" => [
                 "PaymentId" => $payment_id
+            ]
+        ];
+
+        return $this->send($request);
+    }
+
+    /**
+     * Get payment detail list
+     *
+     * @param int $plan_id
+     * @return object|null
+     */
+    public function get_payment_plan(
+        int $plan_id
+    ) {
+        $this->action = "/DealerSale/GetPaymentPlan";
+
+        $request = [
+            'DealerSaleAuthentication' => $this->auth,
+            "DealerSaleRequest" => [
+                "DealerPaymentPlanId" => $plan_id
             ]
         ];
 
@@ -329,7 +441,7 @@ class Moka
 
     public static function check_hash($hash_value, $code_for_hash)
     {
-        $hash = hash('sha256', $code_for_hash."T");
+        $hash = hash('sha256', $code_for_hash . "T");
         return $hash == $hash_value ? true : false;
     }
 }
