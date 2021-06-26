@@ -6,7 +6,7 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 
 ### Birincil
 
-- [ ] Otomatik ödemelerin Moka'ya tanımlanması ve indirim
+- [ ] Otomatik ödeme indirimi
 - [ ] Tarife değişiminde otomatik ödemenin uyarlanması
 - [ ] Dinamik mesaj yapısı
 - [ ] Çoklu mesaj yapısı
@@ -41,6 +41,8 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 - [x] Abonelik tekrar aktif etme
 - [x] Toplu ödemeler
 - [x] Otomatik ödeme provizyon
+- [x] Otomatik ödemelerin çekilmesi
+- [x] Otomatik ödemelerin Moka'ya tanımlanması
 
 ## Otomatize İşlemler
 
