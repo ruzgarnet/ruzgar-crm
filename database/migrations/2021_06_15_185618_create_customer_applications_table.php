@@ -40,7 +40,7 @@ class CreateCustomerApplicationsTable extends Migration
                 ->onDelete('CASCADE');
             $table->foreign('customer_id')
                 ->references('id')
-                ->on('staff')
+                ->on('customers')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
             $table->foreign('customer_application_type_id')

@@ -135,11 +135,11 @@ class Subscription extends Model
     /**
      * Sale relationship
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function sales()
     {
-        return $this->hasMany(MokaSale::class);
+        return $this->hasOne(MokaSale::class);
     }
 
     /**
@@ -178,6 +178,18 @@ class Subscription extends Model
     public function currentPayment()
     {
         return Payment::where('subscription_id', $this->id)
+            ->where('date', date('Y-m-15'))
+            ->first();
+    }
+
+    /**
+     * Returns next payment
+     *
+     * @return \App\Models\Payment
+     */
+    public function nextPayment()
+    {
+        return Payment::where('subscription_id', $this->id)
             ->whereNull('paid_at')
             ->orderBy('date', 'ASC')
             ->first();
@@ -190,17 +202,17 @@ class Subscription extends Model
      */
     public function is_auto()
     {
-        return $this->sales()->where("active", true)->count() > 0 ? true : false;
+        return $this->sales()->whereNull("disabled_at")->count() > 0 ? true : false;
     }
 
     /**
      * Get auto payment information
      *
-     * @return void
+     * @return object|null
      */
     public function get_auto()
     {
-        return $this->is_auto() ? $this->sales()->where("active", true)->first() : null;
+        return $this->is_auto() ? $this->sales()->whereNull("disabled_at")->first() : null;
     }
 
     /**

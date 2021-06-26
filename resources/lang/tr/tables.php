@@ -249,6 +249,14 @@ return [
         'delete' => 'Mesaj Sil',
         'info' => 'Mesaj Bilgileri',
         'select' => 'Mesajı Seçiniz',
+        'selects' => [
+            1 => 'Müşteri',
+            2 => 'Kategori',
+            3 => 'Tüm Aboneler',
+            4 => 'Ödemeyenler',
+            5 => 'Gecikme Ücreti Yansıyacaklar'
+        ],
+        'alt_title' => 'Mesaj Tipleri',
         'send_sms' => 'Mesaj Gönder',
         'send_sms_to_number' => 'Mesaj Gönder'
     ],

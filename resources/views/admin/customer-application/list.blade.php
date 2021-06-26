@@ -43,7 +43,7 @@
                                                     </span>
                                                 </a>
                                             @else
-                                                {{ json_decode($customer_application->information)->first_name." ".json_decode($customer_application->information)->last_name }}
+                                            {{ $customer_application->information["first_name"]." ".$customer_application->information["last_name"] }}
                                             @endif
                                         </td>
                                         <td>
@@ -55,7 +55,7 @@
                                                 </span>
                                             </a>
                                         @else
-                                         {{ json_decode($customer_application->information)->telephone }}
+                                         {{ $customer_application->information["telephone"] }}
                                         @endif
 
                                         </td>

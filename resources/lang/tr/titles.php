@@ -39,6 +39,7 @@ return [
     'reset' => 'Sıfırla',
     'unapproved' => 'Onaylanmamış',
     'delete_payment' => 'Ödemeyi Sil',
+    'payment_pre_auth' => 'Provizyon',
 
     'yes' => 'Evet',
     'no' => 'Hayır',
@@ -77,5 +78,7 @@ return [
     'customer_applications' => 'Başvurular',
     'customer_application_types' => 'Başvuru Tipleri',
 
-    'description' => 'Açıklama'
+    'description' => 'Açıklama',
+
+    'cancel_auto_payment' => 'Otomatik Ödemeyi İptal Et'
 ];

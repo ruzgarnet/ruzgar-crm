@@ -28,7 +28,8 @@ return [
         'already_freezed' => 'Abonelik zaten dondurulmuş edilmiş!',
         'freezed' => 'Dondurulumuş abonelikte bu işlemi gerçekleştiremezsiniz!',
         'not_freezed' => 'Bu abonelik dondurulmamış!',
-        'reset' => 'Abonelik bilgilerini sıfırlamak, bu abenolikle ilişkili tüm verileri silecektir. Bu gerçekleştirilirse geri alınamaz!'
+        'reset' => 'Abonelik bilgilerini sıfırlamak, bu abenolikle ilişkili tüm verileri silecektir. Bu gerçekleştirilirse geri alınamaz!',
+        'cancel_auto_payment' => 'İptal etmek istediğinize emin misiniz ?'
     ],
     'reference' => [
         'control_time' => 'Kontrol Edilebilir'

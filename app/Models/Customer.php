@@ -40,6 +40,21 @@ class Customer extends Model
     }
 
     /**
+     * Staff relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function staffs()
+    {
+        return $this->belongsToMany(Staff::class);
+    }
+
+    public function getStaffAttribute()
+    {
+        return $this->staffs()->first();
+    }
+
+    /**
      * Customer info relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -145,5 +160,28 @@ class Customer extends Model
         }
 
         return $success;
+    }
+
+    public function approve()
+    {
+        DB::beginTransaction();
+
+        try {
+            $this->type = 2;
+            $this->save();
+
+            $staff_id = DB::table('customer_staff')->selectRaw('COUNT(*) AS count, staff_id')->groupBy('staff_id')->orderByRaw('COUNT(*)')->first()->staff_id;
+
+            DB::table('customer_staff')->insert([
+                'customer_id' => $this->id,
+                'staff_id' => $staff_id
+            ]);
+
+            DB::commit();
+            return true;
+        } catch (Exception $e) {
+            DB::rollBack();
+            return false;
+        }
     }
 }

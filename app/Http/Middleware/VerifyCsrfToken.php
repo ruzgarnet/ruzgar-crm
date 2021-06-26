@@ -13,6 +13,8 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '/payment/result/*',
-        '/admin/infrastructure/*'
+        '/admin/infrastructure/*',
+        '/payment/auto/result',
+        'admin/payment/pre/auth/result/*'
     ];
 }

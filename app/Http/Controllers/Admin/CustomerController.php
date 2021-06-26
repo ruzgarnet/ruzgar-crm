@@ -7,6 +7,7 @@ use App\Classes\Mutator;
 use App\Models\City;
 use App\Models\Customer;
 use App\Models\Payment;
+use App\Models\Staff;
 use App\Rules\AvailableDistrict;
 use App\Rules\TCNo;
 use App\Rules\Telephone;
@@ -211,8 +212,7 @@ class CustomerController extends Controller
     public function approve(Customer $customer)
     {
         if ($customer) {
-            $customer->type = 2;
-            if ($customer->save()) {
+            if ($customer->approve()) {
                 return response()->json([
                     'success' => true,
                     'toastr' => [

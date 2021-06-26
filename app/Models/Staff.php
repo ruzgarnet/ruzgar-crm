@@ -38,4 +38,14 @@ class Staff extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    /**
+     * Customer relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function customers()
+    {
+        return $this->belongsToMany(Customer::class);
+    }
 }
