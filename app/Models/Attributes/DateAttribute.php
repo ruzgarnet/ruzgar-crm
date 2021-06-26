@@ -16,4 +16,14 @@ trait DateAttribute
     {
         return convert_date($this->date, 'medium');
     }
+
+     /**
+     * Return formatted and translated date
+     *
+     * @return string
+     */
+    public function getDateShortAttribute()
+    {
+        return convert_date($this->date, 'mask');
+    }
 }

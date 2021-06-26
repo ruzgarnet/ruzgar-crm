@@ -183,6 +183,18 @@ class Subscription extends Model
     }
 
     /**
+     * Returns current payment
+     *
+     * @return \App\Models\Payment
+     */
+    public function getCurrentPaymentAttribute()
+    {
+        return Payment::where('subscription_id', $this->id)
+            ->where('date', date('Y-m-15'))
+            ->first();
+    }
+
+    /**
      * Returns next payment
      *
      * @return \App\Models\Payment

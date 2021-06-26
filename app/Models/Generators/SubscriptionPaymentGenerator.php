@@ -41,6 +41,8 @@ trait SubscriptionPaymentGenerator
             }
         }
 
+        $data[] = $this->serviceOption();
+
         $values['service_price'] = $this->service->price;
         $this->values = $values;
 
@@ -193,5 +195,24 @@ trait SubscriptionPaymentGenerator
         return [
             'price' => (float)$this->getOption('modem_price', 0)
         ];
+    }
+
+    public function serviceOption()
+    {
+        $options = $this->service->options;
+        if ($this->commitment == $options["commitment"]) {
+            $price = -1 * ($this->price - $options["price"]);
+
+            $data = [];
+            for ($iteration = 0; $iteration < $options["duration"]; $iteration++) {
+                $data[] = $price;
+            }
+        }
+
+        if($data)
+            return [
+                'payments' => $data
+            ];
+        return [];
     }
 }

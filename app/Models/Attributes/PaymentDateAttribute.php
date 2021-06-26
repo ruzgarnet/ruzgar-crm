@@ -16,4 +16,14 @@ trait PaymentDateAttribute
     {
         return convert_date($this->date, 'month_period');
     }
+
+     /**
+     * Return formatted and translated date
+     *
+     * @return string
+     */
+    public function getDateShortAttribute()
+    {
+        return convert_date($this->date, 'mask');
+    }
 }

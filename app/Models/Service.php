@@ -18,6 +18,10 @@ class Service extends Model
      */
     protected $guarded = [];
 
+    protected $casts = [
+        'options' => 'array'
+    ];
+
     /**
      * Category Relationship
      *
