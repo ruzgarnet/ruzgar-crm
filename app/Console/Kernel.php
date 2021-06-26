@@ -3,6 +3,8 @@
 namespace App\Console;
 
 use App\Classes\Telegram;
+use App\Jobs\CheckPayments;
+use App\Jobs\CheckPenalties;
 use App\Jobs\CreateAutoPayments;
 use App\Jobs\CreatePenaltyPrices;
 use Illuminate\Console\Scheduling\Schedule;
@@ -29,6 +31,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $date = Carbon::now();
+
+        if($date->day == 1)
+        {
+            $schedule->job(new CheckPayments);
+        }
+
+        if($date->day == 23)
+        {
+            $schedule->job(new CheckPenalties);
+        }
 
         // Send auto payment plans to Moka
         if($date->day == 15)
