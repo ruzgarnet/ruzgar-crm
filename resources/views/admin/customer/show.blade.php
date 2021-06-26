@@ -56,6 +56,10 @@
                             <span class="fa-li"><i class="fas fa-map-marker-alt"></i></span>
                             {{ $customer->customerInfo->address }}
                         </li>
+                        <li title="@lang('fields.staff')">
+                            <span class="fa-li"><i class="fas fa-stop"></i></span>
+                            {{ $customer->staff->full_name }}
+                        </li>
                     </ul>
                 </div>
             </div>

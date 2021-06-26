@@ -24,6 +24,7 @@
                                     <th scope="col">@lang('fields.name')</th>
                                     <th scope="col">@lang('fields.telephone')</th>
                                     <th scope="col">@lang('fields.city')</th>
+                                    <th scope="col">@lang('fields.staff')</th>
                                     <th scope="col">@lang('fields.actions')</th>
                                 </tr>
                             </thead>
@@ -46,6 +47,13 @@
                                         <td data-filter="0{{ $customer->telephone }}">{{ $customer->telephone_print }}
                                         </td>
                                         <td>{{ $customer->customerInfo->city->name }}</td>
+                                        <td>
+                                            @if ($customer->staff)
+                                                {{ $customer->staff->full_name }}
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="buttons">
                                                 <a href="{{ route('admin.customer.edit', $customer) }}"
@@ -97,7 +105,44 @@
                 columnDefs: [{
                     "type": "num",
                     "targets": 0
-                }]
+                },{ "orderable": false, "targets": [1, 2, 3, 4, 5, 6] }],
+                initComplete: function () {
+                    this.api().columns().every( function () {
+                        var column = this;
+                        if(column[0][0] != 0 && column[0][0] != 1 && column[0][0] != 2 && column[0][0] != 3 && column[0][0] != 6)
+                        {
+                            var select = $('<select class="form-control" style="width:80px;"><option value="">Tümü</option></select>')
+                            .appendTo( $(column.header()).empty() )
+                            .on( 'change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search( val ? '^'+val+'$' : '', true, false )
+                                    .draw();
+                            } );
+
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append( '<option value="'+d+'">'+d+'</option>' )
+                            } );
+                        }
+                        if(column[0][0] == 1)
+                        {
+                            $('<input style="width:90px;" type="text" class="form-control" placeholder="Ara" />')
+                            .appendTo( $(column.header()).empty() )
+                            .on( 'input', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search('^'+val, true, false)
+                                    .draw();
+                            } );
+                        }
+                    } );
+                }
             });
         })
 
