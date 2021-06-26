@@ -83,7 +83,7 @@ class Payment extends Model
      * 5 => Auto Payment                - Otomatik Ödeme
      *
      * @param bool $implode
-     * @return array
+     * @return array|string
      */
     public static function getTypes($implode = false)
     {

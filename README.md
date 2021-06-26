@@ -24,6 +24,7 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 - [ ] Sorgulanan altyapı bilgilerini kayda aktarma
 - [ ] Site yönetimi için modül yapısının tasarlanması
 - [ ] Sistem içi talep/istek yapısı
+- [ ] Müşterilere özel notlar tutulabilmesi
 
 ## Yapılanlar
 

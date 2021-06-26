@@ -41,7 +41,7 @@
                                                 </a>
                                                 <button type="button" class="btn btn-danger confirm-modal-btn"
                                                     data-action="{{ relative_route('admin.user.delete', $user) }}"
-                                                    data-modal="delete" title="@lang('titles.delete')">
+                                                    data-modal="#delete" title="@lang('titles.delete')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>

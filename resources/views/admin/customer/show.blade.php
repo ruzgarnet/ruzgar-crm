@@ -142,7 +142,7 @@
                                                     <button type="button"
                                                         class="dropdown-item confirm-modal-btn"
                                                         data-action="{{ relative_route('admin.subscription.approve.post', $subscription) }}"
-                                                        data-modal="approveSubscription">
+                                                        data-modal="#approveSubscription">
                                                         <i class="dropdown-icon fas fa-check"></i>
                                                         @lang('titles.approve')
                                                     </button>
@@ -150,7 +150,7 @@
                                                     <button type="button"
                                                         class="dropdown-item confirm-modal-btn"
                                                         data-action="{{ relative_route('admin.subscription.delete', $subscription) }}"
-                                                        data-modal="delete">
+                                                        data-modal="#delete">
                                                         <i class="dropdown-icon fas fa-trash"></i>
                                                         @lang('titles.delete')
                                                     </button>
@@ -173,7 +173,7 @@
                                                     <button type="button"
                                                         class="dropdown-item confirm-modal-btn"
                                                         data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
-                                                        data-modal="unApproveSubscription">
+                                                        data-modal="#unApproveSubscription">
                                                         <i class="dropdown-icon fas fa-redo-alt"></i>
                                                         @lang('titles.reset')
                                                     </button>
@@ -217,7 +217,7 @@
                                                         <button type="button"
                                                             class="dropdown-item confirm-modal-btn"
                                                             data-action="{{ relative_route('admin.subscription.unfreeze.put', $subscription) }}"
-                                                            data-modal="unFreezeSubscription">
+                                                            data-modal="#unFreezeSubscription">
                                                             <i class="dropdown-icon fas fa-retweet"></i>
                                                             @lang('titles.unfreeze_subscription')
                                                         </button>
