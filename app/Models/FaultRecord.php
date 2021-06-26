@@ -16,6 +16,10 @@ class FaultRecord extends Model
      */
     protected $guarded = [];
 
+    protected $casts = [
+        'files' => 'array'
+    ];
+
     /**
      * Customer Relationship
      *

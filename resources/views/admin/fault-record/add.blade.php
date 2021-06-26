@@ -41,6 +41,11 @@
                             <textarea name="description" id="txtDescription" class="form-control"
                                 rows="3"></textarea>
                         </div>
+
+                        <div class="form-group">
+                            <label for="files">@lang('fields.file')</label>
+                            <input type="file" name="files[]" class="form-control" multiple>
+                        </div>
                     </div>
                     <div class="card-footer text-right">
                         <button type="submit" class="btn btn-primary">@lang('fields.send')</button>

@@ -49,7 +49,21 @@
                         <div class="form-group">
                             <label for="txtDescription">@lang('fields.description')</label>
                             <textarea name="description" id="txtDescription" class="form-control"
-                                rows="3">{{ $faultRecord->description }}</textarea>
+                                rows="3" readonly>{{ $faultRecord->description }}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtSolutionDetail">Not</label>
+                            <textarea name="solution_detail" id="txtSolutionDetail" class="form-control"
+                                rows="3" placeholder="">{{ $faultRecord->solution_detail }}</textarea>
+                        </div>
+
+                        <div class="d-flex flex-row">
+                            @foreach ($faultRecord->files as $file)
+                                <a target="_blank" href="/storage/{{ $file }}">
+                                    <img width="50" class="mx-2" src="/storage/{{ $file }}" alt="">
+                                </a>
+                            @endforeach
                         </div>
                     </div>
                     <div class="card-footer text-right">
