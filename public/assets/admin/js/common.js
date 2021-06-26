@@ -105,6 +105,7 @@ $(function () {
                         $("body").append(
                             `<div id="paymentFrameModal">
                                 <div class="frame-body">
+                                    <button type="button" class="btn-close-payment-modal close">&times;</button>
                                     <iframe src="${payment.frame}">
                                 </div>
                             </div>`
@@ -118,6 +119,13 @@ $(function () {
                 }
             },
         });
+    });
+
+    $(document).on('click', '.btn-close-payment-modal', function(){
+        $('#paymentFrameModal, .payment-frame-backdrop').fadeOut(500);
+        setTimeout(function(){
+            $('#paymentFrameModal, .payment-frame-backdrop').remove();
+        }, 550);
     });
 
     /**
@@ -191,6 +199,32 @@ $(function () {
 
         form.find(".payment-types").hide();
         form.find(".payment-type-" + val).show();
+    });
+
+    /**
+     * Change message view when type changed
+     */
+     $(document).on("input", "#messageForm #slcType", function () {
+        let form = $("#messageForm"),
+            val = $(this).val();
+
+        form.find(".message-types").hide();
+        form.find(".message-type-" + val).show();
+    });
+
+    /**
+     * Update form action for payment pre auth
+     */
+    $(document).on("click", "#btnPaymentPreAuth", function (e) {
+        e.preventDefault();
+
+        let button = $(this),
+            action = button.prop("action"),
+            pre_auth_action = button.prop("pre-auth-action"),
+            form = button.parents('form');
+        form.prop('action', pre_auth_action);
+        form.trigger('submit');
+        form.prop('action', action);
     });
 
     /**
@@ -324,4 +358,3 @@ function unMask(form) {
         });
     }
 }
-

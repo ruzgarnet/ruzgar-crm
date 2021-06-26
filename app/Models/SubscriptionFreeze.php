@@ -54,7 +54,7 @@ class SubscriptionFreeze extends Model
             $subscription->status = 4;
             $subscription->save();
 
-            $payment = $subscription->currentPayment();
+            $payment = $subscription->nextPayment();
 
             $new_price = $payment->price / 2;
 
@@ -94,7 +94,7 @@ class SubscriptionFreeze extends Model
             $freeze->unfreezed_at = DB::raw('current_timestamp()');
             $freeze->save();
 
-            $payment = $subscription->currentPayment();
+            $payment = $subscription->nextPayment();
 
             $new_price = $payment->price * 2;
 

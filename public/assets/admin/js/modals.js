@@ -9,8 +9,8 @@ $(function () {
             modal = button.data("modal"),
             action = button.data("action");
 
-        $("#" + modal + "Form").prop("action", action);
-        $("#" + modal + "Modal").modal("show");
+        $(modal + "Form").prop("action", action);
+        $(modal + "Modal").modal("show");
     });
 
     /**
@@ -20,11 +20,14 @@ $(function () {
     $(document).on("click", ".get-payment-modal-btn", function () {
         let button = $(this),
             action = button.data("action"),
-            price = button.data("price");
+            price = button.data("price"),
+            pre_auth = button.data('pre-auth-action');
 
         $("#paymentForm").prop("action", action);
         $("#paymentModal").modal("show");
         $("#inpPrice").val(price);
+        $("#btnPaymentPreAuth").prop('action', action);
+        $("#btnPaymentPreAuth").prop('pre-auth-action', pre_auth);
     });
 
     /**

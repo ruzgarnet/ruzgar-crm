@@ -60,6 +60,7 @@ return [
         'referenced' => 'Referans işlemi gerçekleştirildi. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
         'freezing' => 'Dondurma işlemi başlatıldı. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
         'price_freezed' => 'Dondurma işleminden dolayı ücreti düşürülmüştür. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
-        'freezing' => 'Dondurma işlemi kaldırıldı. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.'
+        'freezing' => 'Dondurma işlemi kaldırıldı. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
+        'penalty' => ':price TL gecikme ücreti yansıtılmıştır. Bu mesaj sistem tarafından olarak tanımlanmıştır.'
     ]
 ];
