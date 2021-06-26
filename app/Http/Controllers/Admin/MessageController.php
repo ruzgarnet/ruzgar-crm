@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\SMS_Api;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Message;
+use App\Models\SentMessage;
+use App\Models\Subscription;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class MessageController extends Controller
@@ -27,6 +34,74 @@ class MessageController extends Controller
     public function create()
     {
         return view('admin.message.add');
+    }
+
+    public function send()
+    {
+        return view("admin.message.send_sms", ["customers" => Customer::all(), "messages" => Message::all(), 'categories' => Category::all()]);
+    }
+
+    /*
+        1 => 'Müşteri',
+        2 => 'Kategori',
+        3 => 'Tüm Aboneler',
+        4 => 'Ödemeyenler',
+        5 => 'Gecikme Ücreti Yansıyacaklar'
+    */
+
+    public function submit(Request $request)
+    {
+        $validated = $request->validate([
+            'type' => 'required|in:1,2,3,4,5',
+            'message_id' => 'required|exists:messages,id'
+        ]);
+
+        $type = $validated["type"];
+
+        if($type == 1)
+        {
+            $validated = $request->validate([
+                'customers' => 'required|array',
+                'customers.*' => 'required|exists:customers,id'
+            ]) + $validated;
+        }
+        else if($type == 2)
+        {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:categories,id'
+            ]) + $validated;
+        }
+
+        $message = Message::find($validated["message_id"]);
+
+        $sms = new SMS_Api();
+
+        if($type == 1)
+        {
+            $customers = Customer::whereIn('id', $validated["customers"])->get();
+            $numbers = [];
+            foreach($customers as $customer)
+            {
+                $numbers[] = $customer->telephone;
+            }
+            dd($numbers);
+        }
+        else if($type == 2)
+        {
+            $category = Category::find($validated["category_id"]);
+            $subscriptions = Subscription::whereIn("service_id", $category->services->pluck('id'))->get();
+            $numbers = [];
+            foreach($subscriptions as $subscription)
+            {
+                $numbers[] = $subscription->customer->telephone;
+            }
+
+            $sms->submit(
+                "RUZGARNET",
+                $message->message,
+                $numbers
+            );
+        }
     }
 
     /**

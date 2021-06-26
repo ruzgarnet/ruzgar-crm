@@ -13,6 +13,8 @@
                         <div class="card-header-buttons">
                             <a href="{{ route('admin.messages') }}" class="btn btn-primary"><i
                                     class="fas fa-sm fa-list-ul"></i> @lang('tables.message.title')</a>
+                                    <a href="{{ route('admin.message.send') }}" class="btn btn-primary"><i
+                                        class="fas fa-sm fa-paper-plane"></i> @lang('tables.message.send_sms')</a>
                         </div>
                     </div>
                     <div class="card-body">

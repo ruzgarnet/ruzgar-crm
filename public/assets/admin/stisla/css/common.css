@@ -229,6 +229,7 @@ button.dropdown-item {
     margin-bottom: 0;
 }
 
-/* .select2-hidden-accessible {
-    width: 1px !important;
-} */
+#messageForm .message-types {
+    display: none;
+}
+

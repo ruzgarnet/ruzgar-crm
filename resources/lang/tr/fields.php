@@ -202,5 +202,6 @@ return [
 
     'payment' => 'Ödeme',
     'customer_application' => 'Başvuru',
-    'type' => 'Tip'
+    'type' => 'Tip',
+    'select_send_type' => 'Gönderilecekler'
 ];

@@ -184,17 +184,27 @@ trait ViewAttributes
             // ],
             // Product and Service Header End
 
+            // Message Header
+            [
+                'header' =>  trans('tables.message.title')
+            ],
+            // Message Header End
+
             // Message Fields
             [
-                'title' => trans('tables.message.title'),
-                'route' => 'admin.messages',
-                'icon' => 'fas fa-sms',
-                'actions' => [
-                    'add' => 'admin.message.add'
-                ]
-            ]
+                'title' => trans('tables.message.send_sms'),
+                'route' => 'admin.message.send',
+                'icon' => 'fas fa-paper-plane'
+            ],
             // Message Field End
 
+            // Message Type Fields
+            [
+                'title' => trans('tables.message.alt_title'),
+                'route' => 'admin.messages',
+                'icon' => 'fas fa-sms'
+            ]
+            // Message Type Fields End
         ];
 
         // Find active routes for view
