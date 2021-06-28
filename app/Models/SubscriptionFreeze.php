@@ -89,10 +89,13 @@ class SubscriptionFreeze extends Model
             $subscription->status = 1;
             $subscription->save();
 
-            $freeze = $subscription->freeze;
-            $freeze->unfreeze_staff = $staff_id;
-            $freeze->unfreezed_at = DB::raw('current_timestamp()');
-            $freeze->save();
+            $freezes = $subscription->freeze()->whereNull('unfreezed_at')->get();
+
+            foreach ($freezes as $freeze) {
+                $freeze->unfreeze_staff = $staff_id;
+                $freeze->unfreezed_at = DB::raw('current_timestamp()');
+                $freeze->save();
+            }
 
             $payment = $subscription->nextPayment();
 
@@ -112,6 +115,7 @@ class SubscriptionFreeze extends Model
             return true;
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             return false;
         }
     }

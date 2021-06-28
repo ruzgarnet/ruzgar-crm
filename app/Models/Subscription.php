@@ -257,6 +257,7 @@ class Subscription extends Model
             return true;
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             return false;
         }
     }

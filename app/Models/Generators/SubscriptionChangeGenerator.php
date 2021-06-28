@@ -79,12 +79,25 @@ trait SubscriptionChangeGenerator
             ->get();
 
         $data = [];
-        foreach ($payments as $payment) {
-            $data[] = [
-                'subscription_id' => $changed_id,
-                'date' => $payment->date,
-                'price' => $payment->price - $subscription->price + $price
-            ];
+        foreach ($payments as $index => $payment) {
+            $new_price = $payment->price - $subscription->price + $price;
+
+            if ($subscription->getValue("campaign_price")) {
+                if ($payment->price == $subscription->getValue("campaign_price") && $index != 0) {
+                    $payment->delete();
+                    $new_price = false;
+                } else {
+                    $new_price = $payment->price - $subscription->price + $price + (float)$subscription->getValue("campaign_price");
+                }
+            }
+
+            if ($new_price) {
+                $data[] = [
+                    'subscription_id' => $changed_id,
+                    'date' => $payment->date,
+                    'price' => $new_price
+                ];
+            }
         }
 
         return $data;

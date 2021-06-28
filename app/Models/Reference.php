@@ -79,9 +79,11 @@ class Reference extends Model
         try {
             if ($data['status'] == 2) {
                 $subscription = $this->reference;
-                $payment = $subscription->currentPayment();
+                $payment = $subscription->nextPayment();
 
-                $reference_price = $payment->price - $subscription->price + setting('reference.price', 10);
+                $reference_price = $payment->price - $subscription->price + setting('reference.price', 9.9);
+                if($reference_price <= 0)
+                    $reference_price = setting('reference.price', 9.9);
 
                 PaymentPriceEdit::create([
                     'payment_id' => $payment->id,
@@ -104,6 +106,7 @@ class Reference extends Model
             return true;
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             return false;
         }
     }
