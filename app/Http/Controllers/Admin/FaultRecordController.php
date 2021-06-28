@@ -49,8 +49,11 @@ class FaultRecordController extends Controller
         $validated = $request->validate($this->rules() + ['files.*' => 'required|file|image']);
         $files = [];
         $validated["serial_number"] = Generator::serialNumber();
-        foreach ($request->file('files') as $key => $file) {
-            $files[] = str_replace("public/", "", $request->file('files.' . $key)->store('public/files'));
+
+        if ($request->input('files')) {
+            foreach ($request->input('files') as $key => $file) {
+                $files[] = str_replace("public/", "", $request->file('files.' . $key)->store('public/files'));
+            }
         }
 
         $customer = Customer::find($validated["customer_id"]);
@@ -68,10 +71,12 @@ class FaultRecordController extends Controller
             )
         );
 
-        Telegram::send_photo(
-            "RüzgarTeknik",
-            "storage/" . $files[0]
-        );
+        if (!empty($files)) {
+            Telegram::send_photo(
+                "RüzgarTeknik",
+                "storage/" . $files[0]
+            );
+        }
 
         Telegram::send(
             "RüzgarTeknik",
@@ -141,8 +146,7 @@ class FaultRecordController extends Controller
         $validated["staff_id"] = $request->user()->staff_id;
         $old_status = $faultRecord->status;
         if ($faultRecord->update($validated)) {
-            if($old_status != $faultRecord->status)
-            {
+            if ($old_status != $faultRecord->status) {
                 Telegram::send(
                     "RüzgarTeknik",
                     trans(
@@ -151,7 +155,7 @@ class FaultRecordController extends Controller
                             'id_no' => $faultRecord->customer->identification_number,
                             'full_name' => $faultRecord->customer->full_name,
                             'serial_number' => $faultRecord->serial_number,
-                            'status' => trans('tables.fault.record.status.'.$validated["status"]),
+                            'status' => trans('tables.fault.record.status.' . $validated["status"]),
                             'description' => $validated["solution_detail"],
                             'username' => $request->user()->username
                         ]
