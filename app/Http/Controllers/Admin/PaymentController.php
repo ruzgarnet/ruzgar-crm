@@ -16,6 +16,7 @@ use App\Models\PaymentCancellation;
 use App\Models\PaymentCreate;
 use App\Models\PaymentDelete;
 use App\Models\Subscription;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -149,12 +150,15 @@ class PaymentController extends Controller
                             $card_token
                         );
                     } else {
+                        $error = str_replace('.', '_', $result->ResultCode);
+                        $message = trans("moka.{$error}");
+
                         return response()->json([
                             'error' => true,
                             'toastr' => [
                                 'type' => 'error',
                                 'title' => trans('response.title.error'),
-                                'message' => trans('warnings.payment.add_card_failure')
+                                'message' => $message
                             ]
                         ]);
                     }
@@ -212,10 +216,10 @@ class PaymentController extends Controller
                     );
 
                     MokaSale::where("subscription_id", $payment->subscription->id)
-                    ->whereNull("disabled_at")
-                    ->update([
-                        'disabled_at' => DB::raw('current_timestamp()')
-                    ]);
+                        ->whereNull("disabled_at")
+                        ->update([
+                            'disabled_at' => DB::raw('current_timestamp()')
+                        ]);
 
                     MokaSale::create([
                         'subscription_id' => $payment->subscription->id,
@@ -269,31 +273,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * Send sale plan to moka for test
-     *
-     * @param Payment $payment
-     * @return void
-     */
-    public function send_auto(Payment $payment)
-    {
-        $auto = $payment->subscription->get_auto();
-        $moka = new Moka();
-        $result = $moka->add_payment_plan(
-            $auto->moka_sale_id,
-            date('Ymd', strtotime(' + 1 day')),
-            0.01
-        );
-
-        if (isset($result->Data->DealerPaymentPlanId)) {
-            MokaAutoPayment::create([
-                'sale_id' => $auto->id,
-                'payment_id' => $payment->id,
-                'moka_plan_id' => $result->Data->DealerPaymentPlanId
-            ]);
-        }
-    }
-
-    /**
      * Get plan payment info from Moka
      *
      * @param Request $request
@@ -308,19 +287,17 @@ class PaymentController extends Controller
         ];
 
         $plan = MokaAutoPayment::where("moka_plan_id", $request->input('DealerPaymentPlanId'))->first();
-        if($plan)
-        {
+        if ($plan) {
             $moka = new Moka();
             $payment_detail = $moka->get_payment_detail($request->input('DealerPaymentId'));
 
-            if($plan->payment->status == 2)
-            {
+            if ($plan->payment->status == 2) {
                 $result = $moka->do_void(
                     $payment_detail->Data->PaymentDetail->OtherTrxCode
                 );
 
                 $success = false;
-                if($result->Data != null && isset($result->Data->IsSuccessful) && (boolean)$result->Data->IsSuccessful)
+                if ($result->Data != null && isset($result->Data->IsSuccessful) && (bool)$result->Data->IsSuccessful)
                     $success = true;
 
                 MokaRefund::create([
@@ -329,14 +306,11 @@ class PaymentController extends Controller
                     'price' => (float)$request->input('Amount'),
                     'status' => $success
                 ]);
-            }
-            else
-            {
+            } else {
                 $payment_plan = $moka->get_payment_plan($request->input('DealerPaymentPlanId'));
                 $plan->status = $payment_plan->Data->PlanStatus;
                 $plan->save();
-                if($payment_plan->Data->PlanStatus == 1)
-                {
+                if ($payment_plan->Data->PlanStatus == 1) {
                     $plan->payment->type = 5;
                     $plan->payment->status = 2;
                     $plan->payment->save();
@@ -402,6 +376,95 @@ class PaymentController extends Controller
         } else {
             $payment->mokaPayment->delete();
             return "Başarısız";
+        }
+    }
+
+    /**
+     * Create Moka payment instance for pre auth
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Payment $payment
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function create_pre_auth(Request $request, Payment $payment)
+    {
+        $rules["card.number"] = [
+            'required',
+            'numeric'
+        ];
+        $rules["card.full_name"] = [
+            'required',
+            'string',
+            'max:255'
+        ];
+        $rules["card.expire_date"] = [
+            'required',
+            'string'
+        ];
+        $rules["card.security_code"] = [
+            'required',
+            'numeric',
+            'between:100,999'
+        ];
+
+        $validated = $request->validate($rules);
+
+        $expire = Mutator::expire_date($validated["card"]["expire_date"]);
+
+        $card = [
+            'full_name' => $validated["card"]['full_name'],
+            'number' => $validated["card"]['number'],
+            'expire_month' => $expire[0],
+            'expire_year' => $expire[1],
+            'security_code' => $validated['card']["security_code"],
+            'amount' => 1
+        ];
+
+        $hash = [
+            'subscription_no' => $payment->subscription->subscription_no,
+            'payment_created_at' => $payment->created_at
+        ];
+
+        $moka_log = MokaLog::create([
+            'payment_id' => $payment->id,
+            'ip' => $request->ip(),
+            'type' => 7,
+            'response' => null,
+            'trx_code' => null
+        ]);
+
+        $moka = new Moka();
+        $response = $moka->pay(
+            $card,
+            route('payment.pre.auth.result', $moka_log),
+            $hash,
+            [
+                'is_pre_auth' => 1,
+                'pre_auth_price' => 1
+            ]
+        );
+
+        if ($response->Data != null) {
+            $moka_log->update([
+                'response' => $response,
+                'trx_code' => $moka->trx_code
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'payment' => [
+                    'frame' => $response->Data->Url
+                ]
+            ]);
+        } else {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => $response->ResultCode
+                ]
+            ]);
         }
     }
 
@@ -493,7 +556,6 @@ class PaymentController extends Controller
                 'lump_sum_value' => 'required'
             ]);
 
-
             $iteration = 0;
             for ($iteration = 0; $iteration < $validated["lump_sum_value"]; $iteration++) {
                 $temporary = [
@@ -501,7 +563,7 @@ class PaymentController extends Controller
                     'price' => $validated['price'],
                     'date' => date('Y-m-15', strtotime($validated['date'] . ' + ' . ($iteration + 1) . ' month')),
                     'status' => 2,
-                    'type' => 1
+                    'type' => 3
                 ];
 
                 Payment::create($temporary);
@@ -614,6 +676,37 @@ class PaymentController extends Controller
                 'message' => trans('response.delete.error')
             ]
         ]);
+    }
+
+
+    public function FunctionName(Subscription $subscription)
+    {
+        try {
+            MokaSale::where("subscription_id", $subscription->id)
+                ->whereNull("disabled_at")
+                ->update([
+                    'disabled_at' => DB::raw('current_timestamp()')
+                ]);
+
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.payment.auto.cancel.success')
+                ],
+                'reload' => true
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('response.payment.auto.cancel.error')
+                ]
+            ]);
+        }
     }
 
     /**

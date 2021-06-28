@@ -28,12 +28,12 @@
                         <div class="form-group">
                             <label for="inpCardNumber">@lang('fields.card.number')</label>
                             <input type="text" name="card[number]" id="inpCardNumber"
-                                class="form-control credit-card-mask">
+                                class="form-control credit-card-mask" autocomplete="off">
                         </div>
 
                         <div class="form-group">
                             <label for="inpFullName">@lang('fields.card.name_surname')</label>
-                            <input type="text" name="card[full_name]" id="inpFullName" class="form-control">
+                            <input type="text" name="card[full_name]" id="inpFullName" class="form-control" autocomplete="off">
                         </div>
 
                         <div class="row">
@@ -41,20 +41,20 @@
                                 <div class="form-group">
                                     <label for="inpCardExpireDate">@lang('fields.card.expire_date')</label>
                                     <input type="text" name="card[expire_date]" id="inpCardExpireDate"
-                                        class="form-control expire-date-mask" placeholder="AA/YY">
+                                        class="form-control expire-date-mask" placeholder="AA/YY" autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="inpCCVCode">@lang('fields.card.security_code')</label>
-                                    <input type="text" name="card[security_code]" id="inpCCVCode" class="form-control">
-                                    <div>
+                                    <input type="text" name="card[security_code]" id="inpCCVCode" class="form-control" autocomplete="off">
+                                    <div class="payment-types payment-type-5">
                                         <small>Sadece provizyon için doldurunuz.</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group text-right mb-0">
+                        <div class="form-group text-right mb-0 payment-types payment-type-5">
                             <button id="btnPaymentPreAuth" type="button" class="btn btn-warning">@lang('titles.payment_pre_auth')</button>
                         </div>
                     </div>

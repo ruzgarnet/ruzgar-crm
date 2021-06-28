@@ -212,7 +212,7 @@ class Subscription extends Model
      *
      * @return boolean
      */
-    public function is_auto()
+    public function isAuto()
     {
         return $this->sales()->whereNull("disabled_at")->count() > 0 ? true : false;
     }
@@ -222,9 +222,9 @@ class Subscription extends Model
      *
      * @return object|null
      */
-    public function get_auto()
+    public function getAuto()
     {
-        return $this->is_auto() ? $this->sales()->whereNull("disabled_at")->first() : null;
+        return $this->isAuto() ? $this->sales()->whereNull("disabled_at")->first() : null;
     }
 
     /**
@@ -348,6 +348,20 @@ class Subscription extends Model
     public function isChanged()
     {
         return $this->status == 2 ? true : false;
+    }
+
+    /**
+     * Check this row changed
+     *
+     * @return boolean
+     */
+    public function isChangedNew()
+    {
+        $row = DB::table('subscription_changes')
+            ->where('changed_id', $this->id)
+            ->count();
+
+        return $row > 0 ? true : false;
     }
 
     /**

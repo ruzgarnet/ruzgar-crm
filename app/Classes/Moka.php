@@ -258,6 +258,26 @@ class Moka
     }
 
     /**
+     * Remove card
+     *
+     * @param string $card_token
+     * @return object|null
+     */
+    public function remove_card(string $card_token)
+    {
+        $this->action = "DealerCustomer/RemoveCard";
+
+        $request = [
+            'DealerCustomerAuthentication' => $this->auth,
+            "DealerCustomerRequest" => [
+                "CardToken" => $card_token
+            ]
+        ];
+
+        return $this->send($request);
+    }
+
+    /**
      * Adds sale to customer
      *
      * @param array $customer

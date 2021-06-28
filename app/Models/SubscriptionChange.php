@@ -70,6 +70,26 @@ class SubscriptionChange extends Model
 
             Reference::change($subscription->id, $changedSubscription->id);
 
+
+            $sales = MokaSale::where('subscription_id', $subscription->id)->whereNull('disabled_at')->get();
+            if ($sales->count()) {
+                if ($sales) {
+                    foreach ($sales as $sale) {
+                        $sale->disablet_at = DB::raw('current_timestamp()');
+                        $sale->save();
+                    }
+                }
+                $sale = $sales->last();
+
+
+                MokaSale::create([
+                    'subscription_id' => $changedSubscription->id,
+                    'moka_customer_id' => $sale->customer_id,
+                    'moka_sale_id' => $sale->moka_sale_id,
+                    'moka_card_token' => $sale->moka_card_token
+                ]);
+            }
+
             DB::commit();
             return true;
         } catch (Exception $e) {

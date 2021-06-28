@@ -161,6 +161,7 @@ return [
     'payment_date' => 'Ödeme Tarihi',
     'advance_paymented_price' => 'Peşin Ödenen Tutar',
     'payable' => 'Ödenecek',
+    'auto_paymented' => 'Otomatik Ödeme Tanımlanmış',
     // Change Service
     'changed_service' => 'Değiştirilmiş Hizmet',
     'change_service_payment' => 'Hizmet Değişim Ücreti',

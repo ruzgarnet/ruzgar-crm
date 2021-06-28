@@ -155,6 +155,7 @@
                                                         @lang('titles.delete')
                                                     </button>
                                                 @endif
+
                                                 @if ($subscription->approved_at)
                                                     <a href="{{ route('admin.subscription.payments', $subscription) }}"
                                                         class="dropdown-item">
@@ -194,6 +195,16 @@
                                                         <i class="dropdown-icon fas fa-coins"></i>
                                                         @lang('titles.edit_subscription_price')
                                                     </button>
+
+                                                    @if ($subscription->isAuto())
+                                                        <button type="button"
+                                                            class="dropdown-item confirm-modal-btn"
+                                                            data-action="{{ relative_route('admin.subscription.cancel_auto_payment', $subscription) }}"
+                                                            data-modal="#cancelAutoPayment">
+                                                            <i class="dropdown-icon fas fa-wallet"></i>
+                                                            @lang('titles.cancel_auto_payment')
+                                                        </button>
+                                                    @endif
 
                                                     <button type="button"
                                                         class="dropdown-item cancel-subscription-modal-btn"
@@ -319,6 +330,9 @@
                         <div class="card list subs-payments subs-{{ $subscription->id }}-payments">
                             <div class="card-header">
                                 <h4>@lang('tables.payment.title')</h4>
+                                @if ($subscription->isAuto())
+                                    <span class="badge badge-primary" style="margin-right: auto;">@lang('fields.auto_paymented')</span>
+                                @endif
                                 <h4>{{ $subscription->service->name }}
                                     ({{ $subscription->price_print }})</h4>
                             </div>
@@ -362,8 +376,7 @@
                                                     <td>
                                                         <div class="buttons">
                                                             @if ($payment->paid_at == null)
-                                                                <button type="button"
-                                                                    class="btn btn-primary edit-payment-modal-btn"
+                                                                <button type="button" class="btn btn-primary edit-payment-modal-btn"
                                                                     data-action="{{ relative_route('admin.payment.price.put', $payment) }}"
                                                                     data-price="{{ $payment->price }}"
                                                                     title="@lang('titles.edit_payment')">
@@ -372,14 +385,22 @@
                                                             @endif
 
                                                             @if ($payment->status != 2)
-                                                                <button type="button"
-                                                                    class="btn btn-primary un-approved-element get-payment-modal-btn"
+                                                                <button type="button" class="btn btn-primary get-payment-modal-btn"
                                                                     data-action="{{ relative_route('admin.payment.received.post', $payment) }}"
+                                                                    data-pre-auth-action="{{ relative_route('payment.pre.auth.create', $payment) }}"
                                                                     data-price="{{ $payment->price_print }}"
                                                                     title="@lang('titles.get_payment')">
                                                                     <i class="fas fa-cash-register"></i>
                                                                 </button>
                                                             @endif
+
+                                                            <button type="button" class="btn btn-danger delete-payment-modal-btn"
+                                                                data-action="{{ relative_route('admin.subscription.payment.delete', $payment) }}"
+                                                                data-subscription="{{ $subscription->select_print }}"
+                                                                data-payment="{{ $payment->date_print }}"
+                                                                title="@lang('titles.delete_payment')">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -427,6 +448,8 @@
     @include('admin.modals.edit-subscription-price')
     @include('admin.modals.cancel-subscription')
     @include('admin.modals.freeze-subscription')
+    @include('admin.modals.create-payment')
+    @include('admin.modals.delete-payment')
 
     <x-admin.confirm-modal
         id="delete"
@@ -457,6 +480,14 @@
         method="put"
         :title="trans('titles.actions.approve.subscription')"
         :message="trans('warnings.approve.subscription')"
+        :buttonText="trans('titles.approve')"
+        buttonType="success" />
+
+    <x-admin.confirm-modal
+        id="cancelAutoPayment"
+        method="put"
+        :title="trans('titles.cancel_auto_payment')"
+        :message="trans('warnings.payment.cancel_auto_payment')"
         :buttonText="trans('titles.approve')"
         buttonType="success" />
 @endpush

@@ -72,6 +72,12 @@
                                                         @lang('titles.unapproved')
                                                     </button>
                                                 @endif
+
+                                                @if($subscription->isChangedNew())
+                                                    <button type="button" class="btn btn-info">
+                                                        @lang('fields.changed_service')
+                                                    </button>
+                                                @endif
 											</div>
                                         </td>
                                         <td>{{ $subscription->price_print }}</td>
@@ -131,7 +137,7 @@
                                                                 <i class="dropdown-icon fas fa-file-invoice"></i>
                                                                 @lang('tables.payment.title')
                                                             </a>
-                                                            @if(!$subscription->isChanged())
+                                                            @if(!$subscription->isChangedNew())
                                                                 <a target="_blank" class="dropdown-item"
                                                                     href="/contracts/{{ md5($subscription->subscription_no) }}.pdf">
                                                                     <i class="dropdown-icon fas fa-file-contract"></i>
@@ -146,16 +152,6 @@
                                                                 <i class="dropdown-icon fas fa-redo-alt"></i>
                                                                 @lang('titles.reset')
                                                             </button>
-
-                                                            @if($subscription->is_auto())
-                                                                <button type="button"
-                                                                    class="dropdown-item confirm-modal-btn"
-                                                                    data-action="{{ relative_route('admin.subscription.cancel_auto_payment', $subscription) }}"
-                                                                    data-modal="#cancelAutoPayment">
-                                                                    <i class="dropdown-icon fas fa-times"></i>
-                                                                    @lang('titles.cancel_auto_payment')
-                                                                </button>
-                                                            @endif
                                                         @endif
 
                                                     </div>
@@ -222,12 +218,4 @@
         :message="trans('warnings.subscription.reset')"
         :buttonText="trans('titles.reset')"
         buttonType="danger" />
-
-        <x-admin.confirm-modal
-        id="cancelAutoPayment"
-         method="put"
-        :title="trans('titles.cancel_auto_payment')"
-        :message="trans('warnings.subscription.cancel_auto_payment')"
-        :buttonText="trans('titles.cancel_auto_payment')"
-        buttonType="success" />
 @endpush

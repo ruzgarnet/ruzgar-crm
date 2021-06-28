@@ -40,6 +40,9 @@ return [
     'unapproved' => 'Onaylanmamış',
     'delete_payment' => 'Ödemeyi Sil',
     'payment_pre_auth' => 'Provizyon',
+    'cancel_auto_payment' => 'Otomatik Ödemeyi İptal Et',
+    'details' => 'Detaylar',
+    'subscription_info' => 'Abonelik Bilgileri',
 
     'yes' => 'Evet',
     'no' => 'Hayır',
@@ -79,6 +82,4 @@ return [
     'customer_application_types' => 'Başvuru Tipleri',
 
     'description' => 'Açıklama',
-
-    'cancel_auto_payment' => 'Otomatik Ödemeyi İptal Et'
 ];

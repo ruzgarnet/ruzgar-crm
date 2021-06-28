@@ -50,9 +50,18 @@ return [
             'success' => 'Abonelik başarıyla iptal edildi.',
             'error' => 'Abonenin iptal edilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
         ],
-        'cancel' => [
+        'freeze' => [
             'success' => 'Abonelik başarıyla donduruldu.',
             'error' => 'Abonenin dondurulurken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
+        ]
+    ],
+
+    'payment' => [
+        'auto' => [
+            'cancel' => [
+                'success' => 'Otomatik ödeme başarıyla iptal edildi.',
+                'error' => 'Otomatik ödeme iptal edilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
+            ]
         ]
     ],
 

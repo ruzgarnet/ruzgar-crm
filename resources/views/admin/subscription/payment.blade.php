@@ -10,6 +10,9 @@
                     <h4>@lang('tables.subscription.info')</h4>
 
                     <div class="card-header-buttons">
+                        <a href="{{ route('admin.customer.show', $subscription->customer) }}" class="btn btn-primary"><i
+                            class="fas fa-sm fa-id-card"></i> @lang('titles.details')</a>
+
                         <a class="btn btn-primary create-payment-modal-btn"
                             data-action="{{ relative_route('admin.subscription.payment.create', $subscription) }}"
                             title="@lang('titles.subscription.create_payment')"
@@ -17,9 +20,10 @@
                             @lang('tables.subscription.create_payment')</a>
 
                         <button class="btn btn-primary" type="button" data-toggle="collapse"
-                            data-target="#subscriptionDetails" aria-expanded="false" aria-controls="subscriptionDetails"><i
+                            data-target="#subscriptionDetails" aria-expanded="false" aria-controls="subscriptionDetails"
+                            title="@lang('titles.accessibility.collapse.subscription_info')"><i
                                 class="fas fa-sm fa-clipboard-list"></i>
-                            @lang('titles.accessibility.collapse.subscription_info')</button>
+                            @lang('titles.subscription_info')</button>
 
                         <a href="{{ route('admin.subscriptions') }}" class="btn btn-primary"><i
                                 class="fas fa-sm fa-list-ul"></i> @lang('tables.subscription.title')</a>
@@ -101,6 +105,9 @@
                 <div class="card list">
                     <div class="card-header">
                         <h4>@lang('tables.payment.title')</h4>
+                        @if ($subscription->isAuto())
+                            <span class="badge badge-primary" style="margin-right: auto;">@lang('fields.auto_paymented')</span>
+                        @endif
                         <h4>{{ $subscription->customer->full_name }} - {{ $subscription->service->name }}
                             ({{ $subscription->price_print }})</h4>
                     </div>
@@ -145,7 +152,7 @@
                                                     @if ($payment->status != 2)
                                                         <button type="button" class="btn btn-primary get-payment-modal-btn"
                                                             data-action="{{ relative_route('admin.payment.received.post', $payment) }}"
-                                                            data-pre-auth-action="{{ relative_route('admin.payment.pre.auth.create', $payment) }}"
+                                                            data-pre-auth-action="{{ relative_route('payment.pre.auth.create', $payment) }}"
                                                             data-price="{{ $payment->price_print }}"
                                                             title="@lang('titles.get_payment')">
                                                             <i class="fas fa-cash-register"></i>

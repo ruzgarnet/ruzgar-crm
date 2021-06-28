@@ -104,16 +104,19 @@ class SubscriptionController extends Controller
         ]);
     }
 
+    /**
+     * Cancel auto payment
+     *
+     * @param \App\Models\Subscription $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function cancel_auto_payment(Subscription $subscription)
     {
-        $auto_payment = $subscription->get_auto();
+        $auto_payment = $subscription->getAuto();
         $auto_payment->disabled_at = DB::raw('current_timestamp()');
 
         $moka = new Moka();
-        $result = $moka->update_sale_end_date(
-            $auto_payment->moka_sale_id,
-            date('Ymd', strtotime('+ 1 day'))
-        );
+        $moka->remove_card($auto_payment->moka_card_token);
 
         if ($auto_payment->save()) {
             return response()->json([

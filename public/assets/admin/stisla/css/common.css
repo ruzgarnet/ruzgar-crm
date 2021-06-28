@@ -233,3 +233,15 @@ button.dropdown-item {
     display: none;
 }
 
+#paymentFrameModal .frame-body {
+    position: relative;
+}
+
+#paymentFrameModal .frame-body .close {
+    position: absolute;
+    top: -35px;
+    right: -35px;
+    text-shadow: 0 1px 0 #000;
+    color: #fff;
+    font-size: 30px;
+}

@@ -15,7 +15,9 @@ return [
     'payment' => [
         'not_allowed_received_date' => 'Ödeme yapamazsınız.',
         'successful' => "Ödeme alındı.",
-        'is_already_auto' => "Bu ödeme zaten otomatik ödeme olarak tanımlanmıştır."
+        'is_already_auto' => "Bu ödeme zaten otomatik ödeme olarak tanımlanmıştır.",
+        'cancel_auto_payment' => 'Otomatik ödemeyi iptal etmek üzeresiniz. Bu işlemi gerçekleştirirseniz geri alamazsınız. Lütfen işlemi gerçekleştirmeden önce tekrar düşününüz.',
+        'add_auto_payment_failure' => 'Otomatik ödeme tanımlanırken bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
     ],
     'subscription' => [
         'not_approved' => 'Onaylanmamış abonelikte bu işlemi gerçekleştiremezsiniz!',
