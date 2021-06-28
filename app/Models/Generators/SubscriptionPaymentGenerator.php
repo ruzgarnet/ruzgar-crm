@@ -162,30 +162,6 @@ trait SubscriptionPaymentGenerator
     }
 
     /**
-     * Summer campaing variables
-     *
-     * @param int $value
-     * @return array
-     */
-    public function summer_campaing_payment($value)
-    {
-        $payment = (float)setting('service.summer.campaing.payment');
-
-        if ($value == 1) {
-            return ['payment' => $payment];
-        }
-
-        $data = [];
-        for ($i = 0; $i < $value - 1; $i++) {
-            $data[] = $payment / ($value - 1);
-        }
-
-        return [
-            'payments' => $data
-        ];
-    }
-
-    /**
      * Modem Price Variables
      *
      * @return array

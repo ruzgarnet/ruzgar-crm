@@ -45,7 +45,7 @@ class SubscriptionPriceEdit extends Model
      * @param array $data
      * @return boolean
      */
-    public function edit_price(Subscription $subscription, array $data)
+    public static function edit_price(Subscription $subscription, array $data)
     {
         DB::beginTransaction();
         try {

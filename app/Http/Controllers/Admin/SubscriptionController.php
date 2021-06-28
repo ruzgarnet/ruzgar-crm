@@ -14,6 +14,7 @@ use App\Models\Payment;
 use App\Models\Service;
 use App\Models\Subscription;
 use App\Models\SubscriptionFreeze;
+use App\Models\SubscriptionPriceEdit;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -370,7 +371,7 @@ class SubscriptionController extends Controller
             'description' => $validated['description']
         ];
 
-        if ($subscription->edit_price($data)) {
+        if (SubscriptionPriceEdit::edit_price($subscription, $data)) {
             return response()->json([
                 'success' => true,
                 'toastr' => [

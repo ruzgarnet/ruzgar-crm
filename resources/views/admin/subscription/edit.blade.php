@@ -44,7 +44,9 @@
                         </div>
                         <div class="form-group">
                             <label for="txtAddress">@lang('fields.address')</label>
-                            <textarea name="options[address]" id="txtAddress" rows="2" placeholder="@lang('fields.subscription_address_placeholder')" class="form-control" v-model="address"></textarea>
+                            <textarea name="options[address]" id="txtAddress" rows="2"
+                                placeholder="@lang('fields.subscription_address_placeholder')" class="form-control"
+                                v-model="address"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-lg-3">
@@ -98,7 +100,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4" v-if="hasOption('modem_payments') && (modem != 1 && modem != 4 && modem != 5)">
+                            <div class="col-lg-4"
+                                v-if="hasOption('modem_payments') && (modem != 1 && modem != 4 && modem != 5)">
                                 <div class="form-group">
                                     <label for="slcModemPayment">@lang('fields.modem_payment')</label>
                                     <select name="options[modem_payment]" id="slcModemPayment" class="custom-select"
@@ -127,8 +130,8 @@
                             <div class="col-lg-4" v-if="hasOption('modem_model') && modem != 1 && modem != 4">
                                 <div class="form-group">
                                     <label for="slcModemModel">@lang('fields.modem_model')</label>
-                                    <select name="options[modem_model]" id="slcModemModel" class="custom-select"
-                                        v-select="" v-model="modem_model">
+                                    <select name="options[modem_model]" id="slcModemModel" class="custom-select" v-select=""
+                                        v-model="modem_model">
                                         <option v-for="option in options.modem_model" :value="option.value"
                                             v-text="option.title">
                                         </option>
@@ -151,18 +154,6 @@
                                     <select name="options[setup_payment]" id="slcSetupPayment" class="custom-select"
                                         v-model="setup_payment" v-select="">
                                         <option v-for="option in options.setup_payments" :value="option.value"
-                                            v-text="option.title">
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4" v-if="hasOption('summer_campaing_payments')">
-                                <div class="form-group">
-                                    <label for="slcCampaingPayment">@lang('fields.summer_campaing_payment', ['price' =>
-                                        print_money(setting('service.summer.campaing.payment'))])</label>
-                                    <select name="options[summer_campaing_payment]" id="slcCampaingPayment"
-                                        class="custom-select" v-model="summer_campaing_payment" v-select="">
-                                        <option v-for="option in options.summer_campaing_payments" :value="option.value"
                                             v-text="option.title">
                                         </option>
                                     </select>
@@ -250,16 +241,15 @@
                 setup_payment: {{ $subscription->options['setup_payment'] ?? 0 }},
                 modem_serial: '{{ $subscription->options['modem_serial'] ?? '' }}',
                 pre_payment: {{ $subscription->options['pre_payment'] ?? 0 }},
-                summer_campaing_payment: {{ $subscription->options['summer_campaing_payment'] ?? 0 }},
                 modem_payment: {{ $subscription->options['modem_payment'] ?? 0 }},
                 modem_model: {{ $subscription->options['modem_model'] ?? 0 }},
-                address:{{ $subscription->options['address'] ?? "" }}
+                address: '{{ $subscription->options['address'] ?? '' }}'
             },
             methods: {
                 changeService: function() {
                     this.category = this.services[this.service].category;
                     this.options = this.fields[this.category];
-                    this.price = this.services[this.service].category;
+                    this.price = this.services[this.service].price;
 
                     if (this.hasOption('commitments')) {
                         this.duration = this.options.commitments[0].value;
@@ -271,10 +261,6 @@
 
                     if (this.hasOption('modem_payments')) {
                         this.modem_payment = this.options.modem_payments[0].value;
-                    }
-
-                    if (this.hasOption('summer_campaing_payments')) {
-                        this.modem = this.options.summer_campaing_payments[0].value;
                     }
 
                     if (this.hasOption('modem_model')) {
@@ -316,26 +302,26 @@
                 let selects = document.querySelectorAll("select");
                 if (selects) {
                     selects.forEach(function(select, index) {
+                        let selectedIndex = select.selectedIndex;
                         for (let option in select.options) {
                             select.options.item(option).removeAttribute("selected");
                         }
-                        if (select.options.item(select.selectedIndex)) {
+                        if (select.options.item(selectedIndex)) {
                             select.options
-                                .item(select.selectedIndex)
+                                .item(selectedIndex)
                                 .setAttribute("selected", true);
                         }
                     })
                 }
 
                 // Change selected options and trigger event
-                $('#slcService').val(this.service);
+                $('#slcService').val({{ $subscription->service_id }});
                 $('#slcService').trigger('change');
 
                 // Change selected options and trigger event
-                $('#slcCustomer').val(this.customer);
+                $('#slcCustomer').val({{ $subscription->customer_id }});
                 $('#slcCustomer').trigger('change');
             }
         })
-
     </script>
 @endpush
