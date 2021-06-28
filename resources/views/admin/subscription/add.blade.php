@@ -152,18 +152,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4" v-if="hasOption('summer_campaing_payments')">
-                                <div class="form-group">
-                                    <label for="slcCampaingPayment">@lang('fields.summer_campaing_payment', ['price' =>
-                                        print_money(setting('service.summer.campaing.payment'))])</label>
-                                    <select name="options[summer_campaing_payment]" id="slcCampaingPayment"
-                                        class="custom-select" v-select="">
-                                        <option v-for="option in options.summer_campaing_payments" :value="option.value"
-                                            v-text="option.title">
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="col-lg-4" v-if="hasOption('pre_payment')">
                                 <div class="form-group">
                                     <label for="chkPrePayment">@lang('fields.payment_type')</label>
@@ -259,10 +247,6 @@
 
                     if (this.hasOption('modem_payments')) {
                         this.modem_payment = this.options.modem_payments[0].value;
-                    }
-
-                    if (this.hasOption('summer_campaing_payments')) {
-                        this.modem = this.options.summer_campaing_payments[0].value;
                     }
 
                     if (this.hasOption('modem_model')) {

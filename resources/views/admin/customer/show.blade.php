@@ -67,7 +67,7 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-pills" id="subsTab" role="tablist">
-                            @foreach ($customer->subscriptions as $subscription)
+                            @foreach ($customer->subscriptions()->orderBy('id', 'desc')->get() as $subscription)
                                 <li class="nav-item w-50 mb-2">
                                     <a class="nav-link customer-subs-tab text-center @if ($loop->first) active @endif"
                                         id="subs-tab-{{ $subscription->id }}" data-toggle="tab"
@@ -91,7 +91,7 @@
         @if ($customer->subscriptions->count() > 0)
             <div class="col-lg-6">
                 <div class="tab-content" id="subsTabContent">
-                    @foreach ($customer->subscriptions as $subscription)
+                    @foreach ($customer->subscriptions()->orderBy('id', 'desc')->get() as $subscription)
                         @if ($subscription->approved_at == null)
                             @php $subscription->generatePayments(); @endphp
                         @endif
@@ -314,7 +314,7 @@
             </div>
 
             <div class="col-lg-12">
-                @foreach ($customer->subscriptions as $subscription)
+                @foreach ($customer->subscriptions()->orderBy('id', 'desc')->get() as $subscription)
                     @if ($subscription->payments->count())
                         <div class="card list subs-payments subs-{{ $subscription->id }}-payments">
                             <div class="card-header">

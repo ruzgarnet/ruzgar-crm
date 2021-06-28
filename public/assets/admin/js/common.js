@@ -121,10 +121,10 @@ $(function () {
         });
     });
 
-    $(document).on('click', '.btn-close-payment-modal', function(){
-        $('#paymentFrameModal, .payment-frame-backdrop').fadeOut(500);
-        setTimeout(function(){
-            $('#paymentFrameModal, .payment-frame-backdrop').remove();
+    $(document).on("click", ".btn-close-payment-modal", function () {
+        $("#paymentFrameModal, .payment-frame-backdrop").fadeOut(500);
+        setTimeout(function () {
+            $("#paymentFrameModal, .payment-frame-backdrop").remove();
         }, 550);
     });
 
@@ -204,7 +204,7 @@ $(function () {
     /**
      * Change message view when type changed
      */
-     $(document).on("input", "#messageForm #slcType", function () {
+    $(document).on("input", "#messageForm #slcType", function () {
         let form = $("#messageForm"),
             val = $(this).val();
 
@@ -221,10 +221,10 @@ $(function () {
         let button = $(this),
             action = button.prop("action"),
             pre_auth_action = button.prop("pre-auth-action"),
-            form = button.parents('form');
-        form.prop('action', pre_auth_action);
-        form.trigger('submit');
-        form.prop('action', action);
+            form = button.parents("form");
+        form.prop("action", pre_auth_action);
+        form.trigger("submit");
+        form.prop("action", action);
     });
 
     /**

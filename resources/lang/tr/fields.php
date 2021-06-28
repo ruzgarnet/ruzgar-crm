@@ -145,13 +145,6 @@ return [
         3 => "İlk iki aya yansıt",
         4 => "İlk üç aya yansıt"
     ],
-    // Summer Campaing
-    "summer_campaing_payment" => 'Yaz Kampanyası Ücreti (:price) Ödeme Şekli',
-    "summer_campaing_payments" => [
-        1 => "Peşin",
-        2 => "İlk aya yansıt",
-        3 => "İlk iki aya yansıt",
-    ],
     // Other Options
     'lump_sum' => 'Toplu Ödeme',
     'month' => 'Ay',
