@@ -179,10 +179,21 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
 // Request Routes
 // Get district by city id
 Route::get('getDistricts/{id}', [App\Http\Controllers\CityController::class, 'districts'])->name('get.district')->where('id', '[0-9]+');
+
 // Infrastructure Routes
 Route::post('infrastructure/load', [App\Http\Controllers\InfrastructureController::class, 'load'])->name('infrastructure.load');
 Route::post('infrastructure/submit', [App\Http\Controllers\InfrastructureController::class, 'submit'])->name('infrastructure.post');
 // Infrastructure Routes End
+
+// API Routes
+Route::post('payment/get', [App\Http\Controllers\APIController::class, 'get_payment_list'])->name('get.payment.list');
+Route::get('payment/pay', [App\Http\Controllers\APIController::class, 'pay'])->name('payment.pay');
+// API Routes End
+
+// Payment Routes
+Route::post('payment/pre/auth/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'create_pre_auth'])->name('payment.pre.auth.create');
+Route::post('payment/pre/auth/result/{moka_log}', [App\Http\Controllers\Admin\PaymentController::class, 'payment_pre_auth_result'])->name('payment.pre.auth.result');
 Route::match(['get', 'post'], 'payment/result/{payment?}', [App\Http\Controllers\Admin\PaymentController::class, 'payment_result'])->name('payment.result');
 Route::match(['get', 'post'], 'payment/auto/result', [App\Http\Controllers\Admin\PaymentController::class, 'payment_auto_result'])->name('payment.auto.result');
+// Payment Routes End
 // Request Routes End

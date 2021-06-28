@@ -32,25 +32,25 @@ class Kernel extends ConsoleKernel
     {
         $date = Carbon::now();
 
-        if($date->day == 1)
-        {
+        if ($date->day == 1) {
             $schedule->job(new CheckPayments);
         }
 
-        if($date->day == 23)
-        {
+        if ($date->day == 23) {
             $schedule->job(new CheckPenalties);
         }
 
         // Send auto payment plans to Moka
-        if($date->day == 15)
-        {
+        if ($date->day == 15) {
             $schedule->job(new CreateAutoPayments);
         }
 
         // Add penalty prices
-        if($date->day == setting("payment.penalty.day", 23))
-        {
+        $payment_penalty_date = setting("payment.penalty.day", 23);
+        if (!is_numeric($payment_penalty_date)) {
+            $payment_penalty_date = 23;
+        }
+        if ($date->day == $payment_penalty_date) {
             $schedule->job(new CreatePenaltyPrices);
         }
     }
@@ -62,7 +62,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
