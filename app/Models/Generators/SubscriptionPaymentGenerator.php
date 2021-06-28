@@ -41,7 +41,12 @@ trait SubscriptionPaymentGenerator
             }
         }
 
-        $data[] = $this->serviceOption();
+        if($service_option = $this->service->options)
+        {
+            $data[] = $this->serviceOption();
+            $values["campaign_price"] = $service_option["price"];
+            $values["duration"] = $service_option["duration"];
+        }
 
         $values['service_price'] = $this->service->price;
         $this->values = $values;
@@ -162,30 +167,6 @@ trait SubscriptionPaymentGenerator
     }
 
     /**
-     * Summer campaing variables
-     *
-     * @param int $value
-     * @return array
-     */
-    public function summer_campaing_payment($value)
-    {
-        $payment = (float)setting('service.summer.campaing.payment');
-
-        if ($value == 1) {
-            return ['payment' => $payment];
-        }
-
-        $data = [];
-        for ($i = 0; $i < $value - 1; $i++) {
-            $data[] = $payment / ($value - 1);
-        }
-
-        return [
-            'payments' => $data
-        ];
-    }
-
-    /**
      * Modem Price Variables
      *
      * @return array
@@ -200,12 +181,15 @@ trait SubscriptionPaymentGenerator
     public function serviceOption()
     {
         $options = $this->service->options;
-        if ($this->commitment == $options["commitment"]) {
-            $price = -1 * ($this->price - $options["price"]);
+        $data = [];
+        if($this->commitment != null && isset($options["commitment"]))
+        {
+            if ($this->commitment == $options["commitment"]) {
+                $price = -1 * ($this->price - $options["price"]);
 
-            $data = [];
-            for ($iteration = 0; $iteration < $options["duration"]; $iteration++) {
-                $data[] = $price;
+                for ($iteration = 0; $iteration < $options["duration"]; $iteration++) {
+                    $data[] = $price;
+                }
             }
         }
 
