@@ -170,7 +170,12 @@ class Customer extends Model
             $this->type = 2;
             $this->save();
 
-            $staff_id = DB::table('customer_staff')->selectRaw('COUNT(*) AS count, staff_id')->groupBy('staff_id')->orderByRaw('COUNT(*)')->first()->staff_id;
+            $staff_id = DB::table('staff')->select("id")->whereRaw('id NOT IN (SELECT staff_id FROM customer_staff)')->limit(1)->first()->id ?? null;
+
+            if($staff_id == null)
+            {
+                $staff_id = DB::table('customer_staff')->selectRaw('COUNT(*) AS count, staff_id')->groupBy('staff_id')->orderByRaw('COUNT(*)')->first()->staff_id;
+            }
 
             DB::table('customer_staff')->insert([
                 'customer_id' => $this->id,
@@ -181,6 +186,7 @@ class Customer extends Model
             return true;
         } catch (Exception $e) {
             DB::rollBack();
+
             return false;
         }
     }
