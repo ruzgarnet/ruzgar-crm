@@ -32,7 +32,7 @@
                             <select name="customer_id" id="slcCustomer" class="custom-select selectpicker">
                                 <option selected disabled>@lang('tables.customer.select')</option>
                                 @foreach ($customers as $customer)
-                                    <option value="{{ $customer->id }}">{{ $customer->full_name }}</option>
+                                    <option value="{{ $customer->id }}">{{ $customer->select_print }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -164,6 +164,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="slcReferences">@lang('fields.reference')</label>
+                                    <select name="reference_id" id="slcReferences" class="custom-select selectpicker">
+                                        <option selected disabled>@lang('tables.reference.select')</option>
+                                        @foreach ($subscriptions as $subscription)
+                                            <option value="{{ $subscription->id }}">{{ $subscription->reference_print }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer text-right">
                         <button type="submit" class="btn btn-primary">@lang('fields.send')</button>
@@ -285,6 +299,5 @@
                 }
             }
         })
-
     </script>
 @endpush

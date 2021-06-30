@@ -65,7 +65,7 @@ class SubscriptionCancellation extends Model
                 ->whereNull('paid_at')
                 ->delete();
 
-            $subscription->freeze()->whereNull('unfreezed_at')->update(['unfreezed_at' => DB::raw('current_timestamp()')]);
+            $subscription->freezes()->whereNull('unfreezed_at')->update(['unfreezed_at' => DB::raw('current_timestamp()')]);
 
             DB::commit();
             return true;

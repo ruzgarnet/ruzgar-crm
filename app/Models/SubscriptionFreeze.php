@@ -89,7 +89,7 @@ class SubscriptionFreeze extends Model
             $subscription->status = 1;
             $subscription->save();
 
-            $freezes = $subscription->freeze()->whereNull('unfreezed_at')->get();
+            $freezes = $subscription->freezes()->whereNull('unfreezed_at')->get();
 
             foreach ($freezes as $freeze) {
                 $freeze->unfreeze_staff = $staff_id;

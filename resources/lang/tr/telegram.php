@@ -9,5 +9,7 @@ return [
     'add_fault_record_description' => "Arıza İçeriği Aşağıdaki Şekildedir \n\":description\"",
     'edit_fault_record' => ":serial_number [:status] \nAbone : :id_no - :full_name \nDetay : :description \nKullanıcı : :username",
     'infrastructure' => ":message \nAdı Soyadı : :full_name \nTelefon Numarası : :telephone \nİl : :city \nBBK : :bbk",
-    'application_cancel' => "Yeni bir iptal başvurusu oluşturuldu. \nAdı Soyadı : :full_name \nTelefon Numarası : :telephone"
+    'application_cancel' => "Yeni bir iptal başvurusu oluşturuldu. \nAdı Soyadı : :full_name \nTelefon Numarası : :telephone",
+    'add_freeze' => "Yeni bir dondurma işlemi gerçekleştirildi. \nMüşteri : :full_name \nTarife : :subsciption \nPersonel : :username",
+    'unfreeze' => "Dondurulan abonelik aktif edildi. \nMüşteri : :full_name \nTarife : :subsciption \nPersonel : :username"
 ];

@@ -51,6 +51,9 @@
                                                 <span class="reference-subscription">
                                                     {{ $reference->reference->select_print }}
                                                 </span>
+                                                @if (!$reference->reference->isActive())
+                                                    <span class="badge badge-danger">@lang('fields.not_active')</span>
+                                                @endif
                                             </a>
                                         </td>
                                         <td>
@@ -59,6 +62,9 @@
                                                 <span class="referenced-subscription">
                                                     {{ $reference->referenced->select_print }}
                                                 </span>
+                                                @if (!$reference->referenced->isActive())
+                                                    <span class="badge badge-danger">@lang('fields.not_active')</span>
+                                                @endif
                                             </a>
                                         </td>
                                         <td>

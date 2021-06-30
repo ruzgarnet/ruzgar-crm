@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\SubscriptionChange;
 use App\Models\Customer;
 use App\Models\Payment;
+use App\Models\Reference;
 use App\Models\Service;
 use App\Models\Subscription;
 use App\Models\SubscriptionFreeze;
@@ -84,7 +85,22 @@ class SubscriptionController extends Controller
             $validated['end_date'] = null;
         }
 
-        if (Subscription::create($validated)) {
+        $reference_id = null;
+        if (isset($validated['reference_id']) && $validated['reference_id'] != null) {
+            $reference_id = $validated['reference_id'];
+            unset($validated['reference_id']);
+        }
+
+        if ($subscription = Subscription::create($validated)) {
+            if ($reference_id) {
+                $data = [
+                    'reference_id' => $reference_id,
+                    'referenced_id' => $subscription->id
+                ];
+
+                Reference::create($data);
+            }
+
             return response()->json([
                 'toastr' => [
                     'type' => 'success',
@@ -253,65 +269,63 @@ class SubscriptionController extends Controller
      */
     public function approve(Subscription $subscription)
     {
-        if ($subscription) {
-            if ($subscription->approved_at) {
-                return response()->json([
-                    'error' => true,
-                    'toastr' => [
-                        'type' => 'error',
-                        'title' => trans('response.title.error'),
-                        'message' => trans('warnings.approved.subscription')
-                    ]
-                ]);
-            }
-
-            if ($subscription->approve_subscription()) {
-
-                Telegram::send(
-                    'AboneTamamlanan',
-                    trans(
-                        'telegram.add_subscription',
-                        [
-                            'full_name' => $subscription->customer->full_name,
-                            'id_no' => $subscription->customer->identification_number,
-                            'username' => $subscription->staff->full_name,
-                            'customer_staff' => $subscription->customer->staff->full_name
-                        ]
-                    )
-                );
-
-                $pdf = Pdf::loadView("pdf.contract.{$subscription->service->category->contractType->view}", [
-                    'subscription' => $subscription,
-                    'device_brand' => 'Huawei',
-                    'device_model' => 'HGS',
-                    'barcode' => Generator::barcode($subscription->subscription_no)
-                ]);
-                $path = "contracts/" . md5($subscription->subscription_no) . ".pdf";
-                if (!file_exists(public_path('contracts'))) {
-                    mkdir(public_path('contracts'), 0755, true);
-                }
-                $pdf->save($path);
-
-                return response()->json([
-                    'success' => true,
-                    'toastr' => [
-                        'type' => 'success',
-                        'title' => trans('response.title.approve.subscription'),
-                        'message' => trans('response.approve.subscription.success')
-                    ],
-                    'reload' => true
-                ]);
-            }
-
+        if ($subscription->approved_at) {
             return response()->json([
                 'error' => true,
                 'toastr' => [
                     'type' => 'error',
-                    'title' => trans('response.title.approve.subscription'),
-                    'message' => trans('response.approve.subscription.error')
+                    'title' => trans('response.title.error'),
+                    'message' => trans('warnings.approved.subscription')
                 ]
             ]);
         }
+
+        if ($subscription->approve_subscription()) {
+
+            Telegram::send(
+                'AboneTamamlanan',
+                trans(
+                    'telegram.add_subscription',
+                    [
+                        'full_name' => $subscription->customer->full_name,
+                        'id_no' => $subscription->customer->identification_number,
+                        'username' => $subscription->staff->full_name,
+                        'customer_staff' => $subscription->customer->staff->full_name
+                    ]
+                )
+            );
+
+            $pdf = Pdf::loadView("pdf.contract.{$subscription->service->category->contractType->view}", [
+                'subscription' => $subscription,
+                'device_brand' => 'Huawei',
+                'device_model' => 'HGS',
+                'barcode' => Generator::barcode($subscription->subscription_no)
+            ]);
+            $path = "contracts/" . md5($subscription->subscription_no) . ".pdf";
+            if (!file_exists(public_path('contracts'))) {
+                mkdir(public_path('contracts'), 0755, true);
+            }
+            $pdf->save($path);
+
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.approve.subscription'),
+                    'message' => trans('response.approve.subscription.success')
+                ],
+                'reload' => true
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.approve.subscription'),
+                'message' => trans('response.approve.subscription.error')
+            ]
+        ]);
     }
 
     /**
@@ -599,9 +613,14 @@ class SubscriptionController extends Controller
         $validated['subscription_id'] = $subscription->id;
 
         if (SubscriptionFreeze::freeze($subscription, $validated)) {
-            // TODO Change group for production
-            // FIXME Named groups
-            Telegram::send('1046241971', 'freeze');
+            Telegram::send(
+                'Test',
+                trans('telegram.add_freeze', [
+                    'full_name' => $subscription->customer->full_name,
+                    'subsciption' => $subscription->service->name,
+                    'username' => $request->user()->staff->full_name
+                ])
+            );
 
             return response()->json([
                 'success' => true,
@@ -660,9 +679,14 @@ class SubscriptionController extends Controller
         $staff_id = $request->user()->staff_id;
 
         if (SubscriptionFreeze::unFreeze($subscription, $staff_id)) {
-            // TODO Change group for production
-            // FIXME Named groups
-            Telegram::send('1046241971', 'unfreeze');
+            Telegram::send(
+                'Test',
+                trans('telegram.unfreeze', [
+                    'full_name' => $subscription->customer->full_name,
+                    'subsciption' => $subscription->service->name,
+                    'username' => $request->user()->staff->full_name
+                ])
+            );
 
             return response()->json([
                 'success' => true,
@@ -711,7 +735,8 @@ class SubscriptionController extends Controller
 
         $data = [
             'services' => Service::where('status', 1)->orderByRaw('name * 1')->get(),
-            'customers' => Customer::where('type', 2)->orderBy('id', 'DESC')->get(),
+            'customers' => Customer::where('type', '<>', 1)->orderBy('id', 'DESC')->get(),
+            'subscriptions' => Subscription::where('status', 1)->orderBy('id', 'DESC')->get(),
             'option_fields' => $option_fields,
             'service_props' => $service_props
         ];
@@ -736,12 +761,18 @@ class SubscriptionController extends Controller
             'customer_id' => [
                 'required',
                 Rule::exists('customers', 'id')->where(function ($query) {
-                    return $query->where('type', 2);
+                    return $query->where('type', '<>', 1);
                 })
             ],
             'start_date' => 'required|date',
             'price' => 'required|numeric',
-            'options.address' => 'nullable|string|max:255'
+            'options.address' => 'nullable|string|max:255',
+            'reference_id' => [
+                'nullable',
+                Rule::exists('subscriptions', 'id')->where(function ($query) {
+                    return $query->where('status', 1);
+                })
+            ],
         ];
     }
 

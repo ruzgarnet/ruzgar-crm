@@ -11,6 +11,7 @@ use App\Models\Attributes\PriceAttribute;
 use App\Models\Attributes\StartDateAttribute;
 use App\Models\Attributes\SubscriptionAddressAttribute;
 use App\Models\Attributes\SubscriptionContractPrintAttribute;
+use App\Models\Attributes\SubscriptionReferencePrintAttribute;
 use App\Models\Attributes\SubscriptionSelectPrintAttribute;
 use App\Models\Attributes\SubscriptionServicePrintAttribute;
 use App\Models\Generators\SubscriptionPaymentGenerator;
@@ -33,7 +34,8 @@ class Subscription extends Model
         SubscriptionAddressAttribute,
         SubscriptionSelectPrintAttribute,
         SubscriptionContractPrintAttribute,
-        SubscriptionServicePrintAttribute;
+        SubscriptionServicePrintAttribute,
+        SubscriptionReferencePrintAttribute;
 
     /**
      * All fields fillable
@@ -127,9 +129,19 @@ class Subscription extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function freeze()
+    public function freezes()
     {
         return $this->hasMany(SubscriptionFreeze::class);
+    }
+
+    /**
+     * Get freeze info
+     *
+     * @return \App\Models\SubscriptionFreeze
+     */
+    public function getFreezeAttribute()
+    {
+        return $this->freezes()->latest()->first();
     }
 
     /**
@@ -257,7 +269,6 @@ class Subscription extends Model
             return true;
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e);
             return false;
         }
     }
