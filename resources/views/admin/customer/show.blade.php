@@ -199,10 +199,10 @@
                                                     @if ($subscription->isAuto())
                                                         <button type="button"
                                                             class="dropdown-item confirm-modal-btn"
-                                                            data-action="{{ relative_route('admin.subscription.cancel_auto_payment', $subscription) }}"
+                                                            data-action="{{ relative_route('admin.subscription.cancel.auto.payment', $subscription) }}"
                                                             data-modal="#cancelAutoPayment">
                                                             <i class="dropdown-icon fas fa-wallet"></i>
-                                                            @lang('titles.cancel_auto_payment')
+                                                            @lang('titles.cancel.auto.payment')
                                                         </button>
                                                     @endif
 
@@ -486,8 +486,8 @@
     <x-admin.confirm-modal
         id="cancelAutoPayment"
         method="put"
-        :title="trans('titles.cancel_auto_payment')"
-        :message="trans('warnings.payment.cancel_auto_payment')"
+        :title="trans('titles.cancel.auto.payment')"
+        :message="trans('warnings.payment.cancel.auto.payment')"
         :buttonText="trans('titles.approve')"
         buttonType="success" />
 @endpush

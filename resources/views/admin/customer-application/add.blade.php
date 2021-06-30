@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <form method="POST" action="{{ relative_route('admin.customer_application.add.post') }}">
+            <form method="POST" action="{{ relative_route('admin.customer.application.add.post') }}">
                 <div class="card form">
                     <div class="card-header">
                         <h4>@lang('tables.customer_application.add')</h4>

@@ -14,7 +14,7 @@
                             class="fas fa-sm fa-id-card"></i> @lang('titles.details')</a>
 
                         <a class="btn btn-primary create-payment-modal-btn"
-                            data-action="{{ relative_route('admin.subscription.payment.create', $subscription) }}"
+                            data-action="{{ relative_route('admin.subscription.payment.add', $subscription) }}"
                             title="@lang('titles.subscription.create_payment')"
                             data-subscription="{{ $subscription->select_print }}"><i class="fas fa-sm fa-plus"></i>
                             @lang('tables.subscription.create_payment')</a>

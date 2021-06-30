@@ -10,7 +10,7 @@
                     <h4>@lang('tables.customer_application_type.title')</h4>
 
                     <div class="card-header-buttons">
-                        <a href="{{ route('admin.customer_application_type.add') }}" class="btn btn-primary"><i
+                        <a href="{{ route('admin.customer.application.type.add') }}" class="btn btn-primary"><i
                                 class="fas fa-sm fa-plus"></i> @lang('tables.customer_application_type.add')</a>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                                         <td>{{ $customer_application_type->title }}</td>
                                         <td>
                                             <div class="buttons">
-                                                <a href="{{ route('admin.customer_application_type.edit', $customer_application_type) }}"
+                                                <a href="{{ route('admin.customer.application.type.edit', $customer_application_type) }}"
                                                     class="btn btn-primary" title="@lang('titles.edit')">
                                                     <i class="fas fa-edit"></i>
                                                 </a>

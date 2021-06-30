@@ -10,7 +10,7 @@
                     <h4>@lang('tables.customer_application.title')</h4>
 
                     <div class="card-header-buttons">
-                        <a href="{{ route('admin.customer_application.add') }}" class="btn btn-primary"><i
+                        <a href="{{ route('admin.customer.application.add') }}" class="btn btn-primary"><i
                                 class="fas fa-sm fa-plus"></i> @lang('tables.customer_application.add')</a>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                                         <td>{{ $customer_application->created_at }}</td>
                                         <td>
                                             <div class="buttons">
-                                                <a href="{{ route('admin.customer_application.edit', $customer_application) }}"
+                                                <a href="{{ route('admin.customer.application.edit', $customer_application) }}"
                                                     class="btn btn-primary" title="@lang('titles.edit')">
                                                     <i class="fas fa-edit"></i>
                                                 </a>

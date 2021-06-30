@@ -141,7 +141,7 @@ class CustomerApplicationController extends Controller
                     'title' => trans('response.title.success'),
                     'message' => trans('response.insert.success')
                 ],
-                'redirect' => relative_route('admin.customer_applications')
+                'redirect' => relative_route('admin.customer.applications')
             ]);
         }
 
@@ -205,7 +205,7 @@ class CustomerApplicationController extends Controller
                     'title' => trans('response.title.success'),
                     'message' => trans('response.edit.success')
                 ],
-                'redirect' => relative_route('admin.customer_applications')
+                'redirect' => relative_route('admin.customer.applications')
             ]);
         }
 

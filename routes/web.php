@@ -24,8 +24,6 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\MainController::class, 'index'])->name('dashboard');
     Route::get('search', [App\Http\Controllers\Admin\MainController::class, 'search'])->name('search');
     Route::get('infrastructure', [App\Http\Controllers\Admin\MainController::class, 'infrastructure'])->name('infrastructure');
-    Route::post('payment/pre/auth/{payment}', [App\Http\Controllers\Admin\MainController::class, 'create_pre_auth'])->name('payment.pre.auth.create');
-    Route::post('payment/pre/auth/result/{moka_log}', [App\Http\Controllers\Admin\MainController::class, 'payment_pre_auth_result'])->name('payment.pre.auth.result');
     // Main Routes End
 
     // Dealer Routes
@@ -123,14 +121,14 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     Route::get('subscription/contract/preview/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'preview'])->name('subscription.contract');
     Route::put('subscription/freeze/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'freeze'])->name('subscription.freeze.put');
     Route::put('subscription/unfreeze/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'unFreeze'])->name('subscription.unfreeze.put');
-    Route::put('subscription/cancel_auto_payment/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'cancel_auto_payment'])->name('subscription.cancel_auto_payment');
+    Route::put('subscription/cancel_auto_payment/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'cancel.auto.payment'])->name('subscription.cancel.auto.payment');
     // Subscription Routes End
 
     // Payment Routes
     Route::post('payment/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'received'])->name('payment.received.post');
     Route::put('payment/price/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'price'])->name('payment.price.put');
     Route::get('payment/auto/request/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'send_auto'])->name('payment.auto.request');
-    Route::post('payment/add/{subscription}', [App\Http\Controllers\Admin\PaymentController::class, 'store'])->name('subscription.payment.create');
+    Route::post('payment/add/{subscription}', [App\Http\Controllers\Admin\PaymentController::class, 'store'])->name('subscription.payment.add');
     Route::post('payment/cancel/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'cancel'])->name('subscription.payment.cancel');
     Route::delete('payment/delete/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'destroy'])->name('subscription.payment.delete');
     // Payment Routes End
@@ -159,19 +157,19 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     // Fault Type Routes End
 
     // Customer Application Routes
-    Route::get('customer_applications', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'index'])->name('customer_applications');
-    Route::get('customer_application/add', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'create'])->name('customer_application.add');
-    Route::post('customer_application/add', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'store'])->name('customer_application.add.post');
-    Route::get('customer_application/edit/{customer_application}', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'edit'])->name('customer_application.edit');
-    Route::post('customer_application/edit/{customer_application}', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'update'])->name('customer_application.edit.post');
+    Route::get('customer_applications', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'index'])->name('customer.applications');
+    Route::get('customer_application/add', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'create'])->name('customer.application.add');
+    Route::post('customer_application/add', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'store'])->name('customer.application.add.post');
+    Route::get('customer_application/edit/{customer_application}', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'edit'])->name('customer.application.edit');
+    Route::post('customer_application/edit/{customer_application}', [App\Http\Controllers\Admin\CustomerApplicationController::class, 'update'])->name('customer.application.edit.post');
     // Customer Application Routes End
 
     // Customer Application Routes
-    Route::get('customer_application_types', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'index'])->name('customer_application_types');
-    Route::get('customer_application_type/add', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'create'])->name('customer_application_type.add');
-    Route::post('customer_application_type/add', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'store'])->name('customer_application_type.add.post');
-    Route::get('customer_application_type/edit/{customer_application_type}', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'edit'])->name('customer_application_type.edit');
-    Route::put('customer_application_type/edit/{customer_application_type}', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'update'])->name('customer_application_type.edit.put');
+    Route::get('customer_application_types', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'index'])->name('customer.application.types');
+    Route::get('customer_application_type/add', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'create'])->name('customer.application.type.add');
+    Route::post('customer_application_type/add', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'store'])->name('customer.application.type.add.post');
+    Route::get('customer_application_type/edit/{customer_application_type}', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'edit'])->name('customer.application.type.edit');
+    Route::put('customer_application_type/edit/{customer_application_type}', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'update'])->name('customer.application.type.edit.put');
     // Customer Application Routes End
 
 });

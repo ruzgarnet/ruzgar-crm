@@ -40,17 +40,11 @@ trait ViewAttributes
                 'title' => trans('tables.customer.title'),
                 'route' => 'admin.customers',
                 'icon' => 'fas fa-users',
-                'actions' => [
-                    'add' => 'admin.customer.add'
-                ]
             ],
             [
                 'title' => trans('tables.subscription.title'),
                 'route' => 'admin.subscriptions',
                 'icon' => 'fas fa-wifi',
-                'actions' => [
-                    'add' => 'admin.subscription.add'
-                ]
             ],
             // Customer Field End
 
@@ -63,12 +57,12 @@ trait ViewAttributes
             // Customers Applications Field End
             [
                 'title' => trans('titles.customer_applications'),
-                'route' => 'admin.customer_applications',
+                'route' => 'admin.customer.applications',
                 'icon' => 'fas fa-sun'
             ],
             [
                 'title' => trans('titles.customer_application_types'),
-                'route' => 'admin.customer_application_types',
+                'route' => 'admin.customer.application.types',
                 'icon' => 'fas fa-moon'
             ],
             // Customers Applications Field End
@@ -84,17 +78,11 @@ trait ViewAttributes
                 'title' => trans('tables.fault.record.title'),
                 'route' => 'admin.fault.records',
                 'icon' => 'fas fa-tools',
-                'actions' => [
-                    'add' => 'admin.fault_record.add'
-                ]
             ],
             [
                 'title' => trans('tables.fault.type.title'),
                 'route' => 'admin.fault.types',
                 'icon' => 'fas fa-toolbox',
-                'actions' => [
-                    'add' => 'admin.fault_type.add'
-                ]
             ],
             // Fault Fields End
 
@@ -123,25 +111,16 @@ trait ViewAttributes
                 'title' => trans('tables.contract_type.title'),
                 'route' => 'admin.contract.types',
                 'icon' => 'fas fa-file-signature',
-                'actions' => [
-                    'add' => 'admin.contract.type.add'
-                ]
             ],
             [
                 'title' => trans('tables.category.title'),
                 'route' => 'admin.categories',
                 'icon' => 'fas fa-archive',
-                'actions' => [
-                    'add' => 'admin.category.add'
-                ]
             ],
             [
                 'title' => trans('tables.service.title'),
                 'route' => 'admin.services',
                 'icon' => 'fas fa-ethernet',
-                'actions' => [
-                    'add' => 'admin.service.add'
-                ]
             ],
             // Product Fields End
 
@@ -156,25 +135,16 @@ trait ViewAttributes
                 'title' => trans('tables.dealer.title'),
                 'route' => 'admin.dealers',
                 'icon' => 'fas fa-store',
-                'actions' => [
-                    'add' => 'admin.dealer.add'
-                ]
             ],
             [
                 'title' => trans('tables.staff.title'),
                 'route' => 'admin.staffs',
                 'icon' => 'fas fa-user-tie',
-                'actions' => [
-                    'add' => 'admin.staff.add'
-                ]
             ],
             [
                 'title' => trans('tables.user.title'),
                 'route' => 'admin.users',
                 'icon' => 'fas fa-user',
-                'actions' => [
-                    'add' => 'admin.user.add'
-                ]
             ],
             // Company Field End
 
