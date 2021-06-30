@@ -14,6 +14,6 @@ trait PersonSelectPrintAttribute
      */
     public function getSelectPrintAttribute()
     {
-        return "{$this->full_name} {$this->identification_secret}";
+        return "{$this->full_name} - {$this->identification_secret}";
     }
 }

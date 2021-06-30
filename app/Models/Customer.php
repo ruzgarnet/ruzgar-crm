@@ -49,8 +49,26 @@ class Customer extends Model
         return $this->belongsToMany(Staff::class);
     }
 
+    /**
+     * Get staff
+     *
+     * @return \App\Models\Staff
+     */
     public function getStaffAttribute()
     {
+        if (!$this->staffs()->count()) {
+            $staff_id = DB::table('staff')->select('id')->whereRaw('id NOT IN (SELECT staff_id FROM customer_staff)')->limit(1)->first()->id ?? null;
+
+            if ($staff_id == null) {
+                $staff_id = DB::table('customer_staff')->selectRaw('COUNT(*) AS count, staff_id')->groupBy('staff_id')->orderByRaw('COUNT(*)')->first()->staff_id;
+            }
+
+            DB::table('customer_staff')->insert([
+                'customer_id' => $this->id,
+                'staff_id' => $staff_id
+            ]);
+        }
+
         return $this->staffs()->first();
     }
 
@@ -162,6 +180,11 @@ class Customer extends Model
         return $success;
     }
 
+    /**
+     * Approve customer
+     *
+     * @return boolean
+     */
     public function approve()
     {
         DB::beginTransaction();
@@ -170,10 +193,9 @@ class Customer extends Model
             $this->type = 2;
             $this->save();
 
-            $staff_id = DB::table('staff')->select("id")->whereRaw('id NOT IN (SELECT staff_id FROM customer_staff)')->limit(1)->first()->id ?? null;
+            $staff_id = DB::table('staff')->select('id')->whereRaw('id NOT IN (SELECT staff_id FROM customer_staff)')->limit(1)->first()->id ?? null;
 
-            if($staff_id == null)
-            {
+            if ($staff_id == null) {
                 $staff_id = DB::table('customer_staff')->selectRaw('COUNT(*) AS count, staff_id')->groupBy('staff_id')->orderByRaw('COUNT(*)')->first()->staff_id;
             }
 
@@ -186,7 +208,6 @@ class Customer extends Model
             return true;
         } catch (Exception $e) {
             DB::rollBack();
-
             return false;
         }
     }

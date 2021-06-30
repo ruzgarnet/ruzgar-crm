@@ -263,7 +263,7 @@ $(function () {
         if (val.length > 0) {
             fields.addClass("loading");
             search_timeout = setTimeout(function () {
-                $.ajax("/admin/search", {
+                $.ajax("/search", {
                     type: "GET",
                     data: {
                         q: val,

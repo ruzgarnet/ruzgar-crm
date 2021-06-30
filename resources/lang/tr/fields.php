@@ -10,6 +10,7 @@ return [
     'option' => 'Seçenek',
     'define' => 'Tanımla',
     'reset' => 'Sıfırla',
+    'not_active' => 'Aktif Değil',
     // Global Attributes End
 
     // Identity Attributes
@@ -114,8 +115,11 @@ return [
         0 => 'Taahhütsüz',
         6 => '6 Ay',
         12 => '12 Ay',
+        15 => '15 Ay',
         24 => '24 Ay',
         27 => '27 Ay',
+        30 => '30 Ay',
+        36 => '36 Ay',
     ],
     // Modem
     "modem" => 'Modem',

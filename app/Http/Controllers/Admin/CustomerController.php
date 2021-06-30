@@ -211,18 +211,16 @@ class CustomerController extends Controller
      */
     public function approve(Customer $customer)
     {
-        if ($customer) {
-            if ($customer->approve()) {
-                return response()->json([
-                    'success' => true,
-                    'toastr' => [
-                        'type' => 'success',
-                        'title' => trans('response.title.approve.customer'),
-                        'message' => trans('response.approve.customer.success')
-                    ],
-                    'reload' => true
-                ]);
-            }
+        if ($customer->approve()) {
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.approve.customer'),
+                    'message' => trans('response.approve.customer.success')
+                ],
+                'reload' => true
+            ]);
         }
 
         return response()->json([
