@@ -28,7 +28,8 @@ class Telegram
         'RüzgarTeknik' => '-1001270493121',
         'RüzgarCELLKotaSorgulama' => '-1001470398107',
         'SözleşmesiSonaErecekler' => '-1001172443073',
-        'BayiSatışlar' => '-1001412338702'
+        'BayiSatışlar' => '-1001412338702',
+        'Test' => '-562316544'
     ];
 
     /**
