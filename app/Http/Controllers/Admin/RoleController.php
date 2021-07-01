@@ -26,7 +26,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('admin.role.add', ['abilities' => Ability::all()->groupBy('group')->orderBy('group')]);
+        return view('admin.role.add', ['abilities' => Ability::all()->groupBy('group')]);
     }
 
     /**
