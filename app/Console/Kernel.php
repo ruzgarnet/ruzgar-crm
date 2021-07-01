@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Classes\Telegram;
+use App\Jobs\CheckHalfPayments;
 use App\Jobs\CheckPayments;
 use App\Jobs\CheckPenalties;
 use App\Jobs\CreateAutoPayments;
@@ -34,6 +34,10 @@ class Kernel extends ConsoleKernel
 
         if ($date->day == 1) {
             $schedule->job(new CheckPayments);
+        }
+
+        if ($date->day == 10) {
+            $schedule->job(new CheckHalfPayments);
         }
 
         if ($date->day == 23) {

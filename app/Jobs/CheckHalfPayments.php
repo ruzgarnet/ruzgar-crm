@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Classes\Messages;
 use App\Classes\SMS_Api;
 use App\Models\Message;
-use App\Models\Payment;
 use App\Models\Subscription;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -14,7 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CheckPayments implements ShouldQueue
+class CheckHalfPayments implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -39,7 +38,7 @@ class CheckPayments implements ShouldQueue
         $subscriptions = Subscription::join('payments', 'subscriptions.id', 'payments.subscription_id')
             ->whereNotNull('subscriptions.approved_at')
             ->whereIn('subscriptions.status', [1, 2, 4])
-            ->whereRaw('(TIMESTAMPDIFF(MONTH, `approved_at`, NOW()) >= 1 OR DAYOFMONTH(`approved_at`) < 25)')
+            ->whereRaw('(TIMESTAMPDIFF(MONTH, `subscriptions`.`approved_at`, NOW()) < 1 AND DAYOFMONTH(`subscriptions`.`approved_at`) >= 25)')
             ->where('payments.date', date('Y-m-15'))
             ->get();
 
