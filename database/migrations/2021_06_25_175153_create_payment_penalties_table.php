@@ -16,6 +16,8 @@ class CreatePaymentPenaltiesTable extends Migration
         Schema::create('payment_penalties', function (Blueprint $table) {
             $table->id();
             $table->foreignId('payment_id');
+            $table->unsignedDecimal('old_price');
+            $table->unsignedDecimal('new_price');
             $table->timestamp('created_at')->useCurrent();
 
             $table->foreign('payment_id')

@@ -30,23 +30,29 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // FIXME REFUSE MULTIPLE JOBS
         $date = Carbon::now();
 
-        if ($date->day == 1) {
-            $schedule->job(new CheckPayments);
-        }
+        if ($date->hour >= 10) {
+            // Fatura oluşturuldu
+            if ($date->day == 1) {
+                $schedule->job(new CheckPayments);
+            }
 
-        if ($date->day == 10) {
-            $schedule->job(new CheckHalfPayments);
-        }
+            // Yarı fatura oluşturuldu
+            if ($date->day == 10) {
+                $schedule->job(new CheckHalfPayments);
+            }
 
-        if ($date->day == 23) {
-            $schedule->job(new CheckPenalties);
-        }
+            // Ceza ödemeleri kontrol edildi
+            if ($date->day == 23) {
+                $schedule->job(new CheckPenalties);
+            }
 
-        // Send auto payment plans to Moka
-        if ($date->day == 15) {
-            $schedule->job(new CreateAutoPayments);
+            // Otomatik ödemeler Moka'ya aktarıldı
+            if ($date->day == 15) {
+                $schedule->job(new CreateAutoPayments);
+            }
         }
 
         // Add penalty prices

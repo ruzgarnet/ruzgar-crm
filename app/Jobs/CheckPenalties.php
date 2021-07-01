@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Classes\Messages;
 use App\Classes\SMS_Api;
 use App\Models\Message;
-use App\Models\Payment;
 use App\Models\Subscription;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -16,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 
 class CheckPenalties implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, CheckJob;
 
     /**
      * Create a new job instance.
@@ -35,22 +34,28 @@ class CheckPenalties implements ShouldQueue
      */
     public function handle()
     {
-        $messages = [];
+        if ($this->check('CheckPenalties')) {
+            $messages = [];
 
-        $message = Message::find(10);
+            $message = Message::find(10);
 
-        $subscriptions = Subscription::join('payments', 'subscriptions.id', 'payments.subscription_id')->where("payments.status", "<>", 2)->where('payments.date', date('Y-m-15'))->get();
+            $subscriptions = Subscription::join('payments', 'subscriptions.id', 'payments.subscription_id')
+                ->where('payments.status', '<>', 2)
+                ->where('payments.date', date('Y-m-15'))
+                ->get();
 
-        $messages = (new Messages())->multiMessage(
-            $message->message,
-            $subscriptions
-        );
+            $messages = (new Messages())->multiMessage(
+                $message->message,
+                $subscriptions
+            );
 
-        dd($messages);
-        // $sms = new SMS_Api();
-        // $sms->submitMulti(
-        //     'RUZGARNET',
-        //     $messages
-        // );
+            $sms = new SMS_Api();
+            $sms->submitMulti(
+                'RUZGARNET',
+                $messages
+            );
+
+            $this->insertJob('CheckPenalties');
+        }
     }
 }

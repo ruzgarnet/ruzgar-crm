@@ -15,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 
 class CheckHalfPayments implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, CheckJob;
 
     /**
      * Create a new job instance.
@@ -34,25 +34,29 @@ class CheckHalfPayments implements ShouldQueue
      */
     public function handle()
     {
-        $messages = [];
-        $subscriptions = Subscription::join('payments', 'subscriptions.id', 'payments.subscription_id')
-            ->whereNotNull('subscriptions.approved_at')
-            ->whereIn('subscriptions.status', [1, 2, 4])
-            ->whereRaw('(TIMESTAMPDIFF(MONTH, `subscriptions`.`approved_at`, NOW()) < 1 AND DAYOFMONTH(`subscriptions`.`approved_at`) >= 25)')
-            ->where('payments.date', date('Y-m-15'))
-            ->get();
+        if ($this->check('CheckHalfPayments')) {
+            $messages = [];
+            $subscriptions = Subscription::join('payments', 'subscriptions.id', 'payments.subscription_id')
+                ->whereNotNull('subscriptions.approved_at')
+                ->whereIn('subscriptions.status', [1, 2, 4])
+                ->whereRaw('(TIMESTAMPDIFF(MONTH, `subscriptions`.`approved_at`, NOW()) < 1 AND DAYOFMONTH(`subscriptions`.`approved_at`) >= 25)')
+                ->where('payments.date', date('Y-m-15'))
+                ->get();
 
-        $message = Message::find(2);
+            $message = Message::find(2);
 
-        $messages = (new Messages())->multiMessage(
-            $message->message,
-            $subscriptions
-        );
+            $messages = (new Messages())->multiMessage(
+                $message->message,
+                $subscriptions
+            );
 
-        $sms = new SMS_Api();
-        $sms->submitMulti(
-            'RUZGARNET',
-            $messages
-        );
+            $sms = new SMS_Api();
+            $sms->submitMulti(
+                'RUZGARNET',
+                $messages
+            );
+
+            $this->insertJob('CheckHalfPayments');
+        }
     }
 }

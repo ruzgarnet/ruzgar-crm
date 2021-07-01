@@ -16,7 +16,7 @@ use Illuminate\Queue\SerializesModels;
 
 class CreateAutoPayments implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, CheckJob;
 
     /**
      * Create a new job instance.
@@ -35,33 +35,37 @@ class CreateAutoPayments implements ShouldQueue
      */
     public function handle()
     {
-        try {
-            $moka = new Moka();
+        if ($this->check('CreateAutoPayments')) {
+            try {
+                $moka = new Moka();
 
-            $moka_sales = MokaSale::whereNull("disabled_at")->get();
-            foreach ($moka_sales as $sale) {
-                $payment = $sale->subscription->currentPayment();
-                if ($payment->status != 2 && !$payment->mokaAutoPayment) {
-                    $result = $moka->add_payment_plan(
-                        $sale->moka_sale_id,
-                        date('Ymd', strtotime(' + 1 day')),
-                        $payment->price
-                    );
+                $moka_sales = MokaSale::whereNull("disabled_at")->get();
+                foreach ($moka_sales as $sale) {
+                    $payment = $sale->subscription->currentPayment();
+                    if ($payment->status != 2 && !$payment->mokaAutoPayment) {
+                        $result = $moka->add_payment_plan(
+                            $sale->moka_sale_id,
+                            date('Ymd', strtotime(' + 1 day')),
+                            $payment->price
+                        );
 
-                    if (isset($result->Data->DealerPaymentPlanId)) {
-                        MokaAutoPayment::create([
-                            'sale_id' => $sale->id,
-                            'payment_id' => $payment->id,
-                            'moka_plan_id' => $result->Data->DealerPaymentPlanId
-                        ]);
+                        if (isset($result->Data->DealerPaymentPlanId)) {
+                            MokaAutoPayment::create([
+                                'sale_id' => $sale->id,
+                                'payment_id' => $payment->id,
+                                'moka_plan_id' => $result->Data->DealerPaymentPlanId
+                            ]);
+                        }
                     }
                 }
+
+                $this->insertJob('CreateAutoPayments');
+            } catch (Exception $e) {
+                Telegram::send(
+                    'OtomatikHatası',
+                    'Otomatik Hata : ' . $e->getMessage()
+                );
             }
-        } catch (Exception $e) {
-            Telegram::send(
-                'OtomatikHatası',
-                'Otomatik Hata : ' . $e->getMessage()
-            );
         }
     }
 }

@@ -10,10 +10,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class CreatePenaltyPrices implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, CheckJob;
 
     /**
      * Create a new job instance.
@@ -32,20 +33,31 @@ class CreatePenaltyPrices implements ShouldQueue
      */
     public function handle()
     {
-        $payments = Payment::where("status", "<>", 2)->where('date', date('Y-m-15'))->get();
-        foreach ($payments as $payment) {
-            $new_price = $payment->price + setting("payment.penalty.price", 44.9);
+        if ($this->check('CreatePenaltyPrices')) {
+            $payments = Payment::where("status", "<>", 2)->where('date', date('Y-m-15'))->get();
 
-            PaymentPriceEdit::create([
-                'payment_id' => $payment->id,
-                'staff_id' => null,
-                'old_price' => $payment->price,
-                'new_price' => $new_price,
-                'description' => trans('response.system.penalty', ["price" => setting("payment.penalty.price", 44.9)])
-            ]);
+            foreach ($payments as $payment) {
+                $new_price = $payment->price + setting('payment.penalty.price', 44.9);
 
-            $payment->price = $new_price;
-            $payment->save();
+                PaymentPriceEdit::create([
+                    'payment_id' => $payment->id,
+                    'staff_id' => null,
+                    'old_price' => $payment->price,
+                    'new_price' => $new_price,
+                    'description' => trans('response.system.penalty', ['price' => setting('payment.penalty.price', 44.9)])
+                ]);
+
+                DB::table('payment_penalties')->insert([
+                    'payment_id' => $payment->id,
+                    'old_price' => $payment->price,
+                    'new_price' => $new_price
+                ]);
+
+                $payment->price = $new_price;
+                $payment->save();
+            }
+
+            $this->insertJob('CreatePenaltyPrices');
         }
     }
 }

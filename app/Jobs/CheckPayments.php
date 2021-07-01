@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Classes\Messages;
 use App\Classes\SMS_Api;
 use App\Models\Message;
-use App\Models\Payment;
 use App\Models\Subscription;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -16,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 
 class CheckPayments implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, CheckJob;
 
     /**
      * Create a new job instance.
@@ -35,25 +34,29 @@ class CheckPayments implements ShouldQueue
      */
     public function handle()
     {
-        $messages = [];
-        $subscriptions = Subscription::join('payments', 'subscriptions.id', 'payments.subscription_id')
-            ->whereNotNull('subscriptions.approved_at')
-            ->whereIn('subscriptions.status', [1, 2, 4])
-            ->whereRaw('(TIMESTAMPDIFF(MONTH, `approved_at`, NOW()) >= 1 OR DAYOFMONTH(`approved_at`) < 25)')
-            ->where('payments.date', date('Y-m-15'))
-            ->get();
+        if ($this->check('CheckPayments')) {
+            $messages = [];
+            $subscriptions = Subscription::join('payments', 'subscriptions.id', 'payments.subscription_id')
+                ->whereNotNull('subscriptions.approved_at')
+                ->whereIn('subscriptions.status', [1, 2, 4])
+                ->whereRaw('(TIMESTAMPDIFF(MONTH, `approved_at`, NOW()) >= 1 OR DAYOFMONTH(`approved_at`) < 25)')
+                ->where('payments.date', date('Y-m-15'))
+                ->get();
 
-        $message = Message::find(2);
+            $message = Message::find(2);
 
-        $messages = (new Messages())->multiMessage(
-            $message->message,
-            $subscriptions
-        );
+            $messages = (new Messages())->multiMessage(
+                $message->message,
+                $subscriptions
+            );
 
-        $sms = new SMS_Api();
-        $sms->submitMulti(
-            'RUZGARNET',
-            $messages
-        );
+            $sms = new SMS_Api();
+            $sms->submitMulti(
+                'RUZGARNET',
+                $messages
+            );
+
+            $this->insertJob('CheckPayments');
+        }
     }
 }
