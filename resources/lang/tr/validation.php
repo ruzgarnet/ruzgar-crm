@@ -219,7 +219,8 @@ return [
         'download' => 'İndirme hızı',
         'upload' => 'Yükleme hızı',
         'original_price' => 'Kampanyasız fiyatı',
-        'fault_type_id' => 'Arıza kayıt tipi'
+        'fault_type_id' => 'Arıza kayıt tipi',
+        'role_id' => 'Yetki'
     ],
 
 ];

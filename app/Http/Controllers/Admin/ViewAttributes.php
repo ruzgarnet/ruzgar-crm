@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -31,7 +32,8 @@ trait ViewAttributes
 
             // Customers and Orders Header
             [
-                'header' =>  trans('titles.customers_and_orders')
+                'header' =>  trans('titles.customers_and_orders'),
+                'subRoutes' => ['customers', 'subscriptions']
             ],
             // Customers and Orders Header End
 
@@ -50,7 +52,8 @@ trait ViewAttributes
 
             // Customers Applications Header
             [
-                'header' =>  trans('titles.customer_applications')
+                'header' =>  trans('titles.customer_applications'),
+                'subRoutes' => ['customers_applications', 'customers_application_types']
             ],
             // Customers Applications Header End
 
@@ -67,11 +70,12 @@ trait ViewAttributes
             ],
             // Customers Applications Field End
 
-            // Customers and Orders Header
+            // Fault Header
             [
-                'header' =>  trans('titles.fault_records')
+                'header' =>  trans('titles.fault_records'),
+                'subRoutes' => ['fault_records', 'fault_record_types']
             ],
-            // Customers and Orders Header End
+            // Fault Header End
 
             // Fault Fields
             [
@@ -86,9 +90,33 @@ trait ViewAttributes
             ],
             // Fault Fields End
 
+            // Message Header
+            [
+                'header' =>  trans('tables.message.title'),
+                'subRoutes' => ['messages']
+            ],
+            // Message Header End
+
+            // Message Fields
+            [
+                'title' => trans('tables.message.send_sms'),
+                'route' => 'admin.message.send',
+                'icon' => 'fas fa-paper-plane'
+            ],
+            // Message Field End
+
+            // Message Type Fields
+            [
+                'title' => trans('tables.message.alt_title'),
+                'route' => 'admin.messages',
+                'icon' => 'fas fa-sms'
+            ],
+            // Message Type Fields End
+
             // Campaings Header
             [
-                'header' =>  trans('titles.campaings')
+                'header' =>  trans('titles.campaings'),
+                'subRoutes' => ['references']
             ],
             // Campaings Header End
 
@@ -102,7 +130,8 @@ trait ViewAttributes
 
             // Product and Service Header
             [
-                'header' =>  trans('titles.services')
+                'header' =>  trans('titles.services'),
+                'subRoutes' => ['contract_types', 'categories', 'services']
             ],
             // Product and Service Header End
 
@@ -126,7 +155,8 @@ trait ViewAttributes
 
             // Company Header
             [
-                'header' =>  trans('titles.company.title')
+                'header' =>  trans('titles.company.title'),
+                'subRoutes' => ['dealers', 'staffs', 'roles', 'users']
             ],
             // Company Header End
 
@@ -142,44 +172,34 @@ trait ViewAttributes
                 'icon' => 'fas fa-user-tie',
             ],
             [
+                'title' => trans('tables.role.title'),
+                'route' => 'admin.roles',
+                'icon' => 'fas fa-key',
+            ],
+            [
                 'title' => trans('tables.user.title'),
                 'route' => 'admin.users',
                 'icon' => 'fas fa-user',
-            ],
-            // Company Field End
-
-            // Product and Service Header
-            // [
-            //     'header' =>  trans('titles.other')
-            // ],
-            // Product and Service Header End
-
-            // Message Header
-            [
-                'header' =>  trans('tables.message.title')
-            ],
-            // Message Header End
-
-            // Message Fields
-            [
-                'title' => trans('tables.message.send_sms'),
-                'route' => 'admin.message.send',
-                'icon' => 'fas fa-paper-plane'
-            ],
-            // Message Field End
-
-            // Message Type Fields
-            [
-                'title' => trans('tables.message.alt_title'),
-                'route' => 'admin.messages',
-                'icon' => 'fas fa-sms'
             ]
-            // Message Type Fields End
+            // Company Field End
         ];
 
-        // Find active routes for view
+        // Current route name
         $route = Route::currentRouteName();
+        $user = Request::user();
 
+        // Check abilities
+        foreach ($data as $key => $item) {
+            if (isset($item['subRoutes']) && is_array($item['subRoutes'])) {
+                $data[$key]['can'] = $user->permissionGroup($item['subRoutes']);
+            } else if (isset($item['route']) && $user->permission($item['route'])) {
+                $data[$key]['can'] = true;
+            } else {
+                $data[$key]['can'] = false;
+            }
+        }
+
+        // Find active class
         foreach ($data as $key => $item) {
             if (isset($item['submenu'])) {
                 $active = false;

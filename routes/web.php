@@ -24,6 +24,7 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\MainController::class, 'index'])->name('dashboard');
     Route::get('search', [App\Http\Controllers\Admin\MainController::class, 'search'])->name('search');
     Route::get('infrastructure', [App\Http\Controllers\Admin\MainController::class, 'infrastructure'])->name('infrastructure');
+    Route::get('/cant', [App\Http\Controllers\Admin\MainController::class, 'cant'])->name('cant');
     // Main Routes End
 
     // Dealer Routes
@@ -127,7 +128,6 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     // Payment Routes
     Route::post('payment/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'received'])->name('payment.received.post');
     Route::put('payment/price/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'price'])->name('payment.price.put');
-    Route::get('payment/auto/request/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'send_auto'])->name('payment.auto.request');
     Route::post('payment/add/{subscription}', [App\Http\Controllers\Admin\PaymentController::class, 'store'])->name('subscription.payment.add');
     Route::post('payment/cancel/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'cancel'])->name('subscription.payment.cancel');
     Route::delete('payment/delete/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'destroy'])->name('subscription.payment.delete');
@@ -172,6 +172,13 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     Route::put('customer_application_type/edit/{customer_application_type}', [App\Http\Controllers\Admin\CustomerApplicationTypeController::class, 'update'])->name('customer.application.type.edit.put');
     // Customer Application Routes End
 
+    // Role Routes
+    Route::get('roles', [App\Http\Controllers\Admin\RoleController::class, 'index'])->name('roles');
+    Route::get('role/add', [App\Http\Controllers\Admin\RoleController::class, 'create'])->name('role.add');
+    Route::post('role/add', [App\Http\Controllers\Admin\RoleController::class, 'store'])->name('role.add.post');
+    Route::get('role/edit/{role}', [App\Http\Controllers\Admin\RoleController::class, 'edit'])->name('role.edit');
+    Route::put('role/edit/{role}', [App\Http\Controllers\Admin\RoleController::class, 'update'])->name('role.edit.put');
+    // Role Routes End
 });
 
 // Request Routes

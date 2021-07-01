@@ -245,3 +245,20 @@ button.dropdown-item {
     color: #fff;
     font-size: 30px;
 }
+
+.ability-group {
+    margin-bottom: 25px;
+    border: 1px solid #ddd;
+    background-color: #fafafa;
+    padding: 15px;
+}
+
+.ability-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.custom-checkbox {
+    margin: 0 15px 5px;
+}

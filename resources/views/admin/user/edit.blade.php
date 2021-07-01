@@ -27,6 +27,14 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="slcRole">@lang('fields.role')</label>
+                            <select name="role_id" id="slcRole" class="custom-select selectpicker">
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->id }}" @if ($user->role_id == $role->id) selected @endif>{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="inpUsername">@lang('fields.username')</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -57,8 +65,7 @@
                                         <i class="fas fa-key"></i>
                                     </div>
                                 </div>
-                                <input type="password" name="password" id="inpPassword" class="form-control slug-input"
-                                    data-lower="off">
+                                <input type="password" name="password" id="inpPassword" class="form-control">
                             </div>
                         </div>
                     </div>

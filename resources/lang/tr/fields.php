@@ -61,6 +61,7 @@ return [
     'username' => 'Kullanıcı Adı',
     'email' => 'E-Posta Adresi',
     'password' => 'Şifre',
+    'role' => 'Yetki',
     // Auth|User Attributes End
 
     // Date Attributes

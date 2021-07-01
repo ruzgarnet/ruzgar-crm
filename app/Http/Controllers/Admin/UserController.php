@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,7 +29,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.add', ['staffs' => Staff::whereNull('released_at')->get()]);
+        return view('admin.user.add', [
+            'staffs' => Staff::whereNull('released_at')->get(),
+            'roles' => Role::all()
+        ]);
     }
 
     /**
@@ -72,7 +76,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.user.edit', ['user' => $user, 'staffs' => Staff::whereNull('released_at')->get()]);
+        return view('admin.user.edit', [
+            'user' => $user,
+            'staffs' => Staff::whereNull('released_at')->get(),
+            'roles' => Role::all()
+        ]);
     }
 
     /**
@@ -173,7 +181,11 @@ class UserController extends Controller
                 'email',
                 'unique' => Rule::unique('users', 'email')
             ],
-            'password' => 'required|min:4|max:255'
+            'password' => 'required|min:4|max:255',
+            'role_id' => [
+                'required',
+                Rule::exists('roles', 'id')
+            ]
         ];
     }
 }

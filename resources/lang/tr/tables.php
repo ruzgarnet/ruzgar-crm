@@ -28,7 +28,8 @@ return [
         'edit' => 'Bayi Düzenle',
         'delete' => 'Bayi Sil',
         'info' => 'Bayi Bilgileri',
-        'select' => 'Bayi Seçiniz'
+        'select' => 'Bayi Seçiniz',
+        'list' => 'Bayileri Listele'
     ],
     // Dealer Fields End
 
@@ -42,6 +43,7 @@ return [
         'delete' => 'Personel Sil',
         'info' => 'Personel Bilgileri',
         'select' => 'Personel Seç',
+        'list' => 'Personelleri Listele'
     ],
     // Staff Fields End
 
@@ -54,6 +56,7 @@ return [
         'edit' => 'Kullanıcı Düzenle',
         'delete' => 'Kullanıcı Sil',
         'info' => 'Kullanıcı Bilgileri',
+        'list' => 'Kullanıcıları Listele'
     ],
     // User Fields End
 
@@ -66,11 +69,14 @@ return [
         'edit' => 'Müşteri Düzenle',
         'delete' => 'Müşteri Sil',
         'info' => 'Müşteri Bilgileri',
+        'show' => 'Müşteri Detayları',
+        'list' => 'Müşterileri Listele',
         'types' => [
             1 => 'Önkayıt',
             2 => 'Onaylanmış'
         ],
-        'select' => 'Müşteri Seç'
+        'select' => 'Müşteri Seç',
+        'approve' => 'Müşteri Onayla'
     ],
     // Customer Fields End
 
@@ -83,7 +89,8 @@ return [
         'edit' => 'Sözleşme Tipi Düzenle',
         'delete' => 'Sözleşme Tipi Sil',
         'info' => 'Sözleşme Tipi Bilgileri',
-        'select' => 'Sözleşme Tipi Seç',
+        'list' => 'Sözleşme Tiplerini Listele',
+        'select' => 'Sözleşme Tipi Seç'
     ],
     // Contract Type Fields End
 
@@ -96,6 +103,7 @@ return [
         'edit' => 'Kategori Düzenle',
         'delete' => 'Kategori Sil',
         'info' => 'Kategori Bilgileri',
+        'list' => 'Kategorileri Listele',
         'types' => [
             1 => 'Ürün',
             2 => 'Hizmet'
@@ -118,6 +126,7 @@ return [
         'edit' => 'Ürün Düzenle',
         'delete' => 'Ürün Sil',
         'info' => 'Ürün Bilgileri',
+        'list' => 'Ürünleri Listele',
         'select' => 'Ürün Seçiniz',
         'status' => [
             1 => 'Aktif',
@@ -135,6 +144,7 @@ return [
         'edit' => 'Hizmet Düzenle',
         'delete' => 'Hizmet Sil',
         'info' => 'Hizmet Bilgileri',
+        'list' => 'Hizmetleri Listele',
         'select' => 'Hizmet Seçiniz',
         'status' => [
             1 => 'Aktif',
@@ -152,6 +162,7 @@ return [
         'edit' => 'Abonelik Düzenle',
         'delete' => 'Abonelik Sil',
         'info' => 'Abonelik Bilgileri',
+        'list' => 'Abonelikleri Listele',
         'select' => 'Abonelik Seçiniz',
         'change_service' => 'Abone Hizmeti Değiştir',
         'types' => [
@@ -165,7 +176,22 @@ return [
             3 => 'İptal Edilmiş',
             4 => 'Dondurulmuş'
         ],
-        'create_payment' => 'Fatura Oluştur'
+        'create_payment' => 'Fatura Oluştur',
+        'approve' => 'Abonelik Onayla',
+        'unapprove' => 'Abonelik Sıfırla',
+        'payments' => 'Ödemeleri Listele',
+        'price' => 'Abonelik Ücreti Düzenle',
+        'change' => 'Tarife Değiştir',
+        'cancel' => 'Abonelik İptali',
+        'contract' => 'Sözleşme Görüntüle',
+        'freeze' => 'Abonelik Dondurma',
+        'unfreeze' => 'Abonelik Aktif Etme',
+        'cancel_auto_payment' => 'Otomatik ödemeyi iptal et',
+        'payment' => [
+            'add' => 'Fatura Ekle',
+            'cancel' => 'Fatura İptal Et',
+            'delete' => 'Fatura Sil'
+        ]
     ],
     // Subscription Fields End
 
@@ -178,6 +204,7 @@ return [
         'edit' => 'Ödeme Düzenle',
         'delete' => 'Ödeme Sil',
         'info' => 'Ödeme Bilgileri',
+        'list' => 'Ödemeleri Listele',
         'select' => 'Ödeme Seçiniz',
         'status' => [
             1 => 'Sisteme Tanımlandı',
@@ -191,7 +218,9 @@ return [
             3 => 'Havale/EFT',
             4 => 'Kredi/Banka Kartı (Online)',
             5 => 'Otomatik Ödeme'
-        ]
+        ],
+        'received' => 'Ödeme Al',
+        'price' => 'Ücret Düzenle',
     ],
     // Payment Fields End
 
@@ -204,6 +233,7 @@ return [
         'edit' => 'Başvuru Düzenle',
         'delete' => 'Başvuru Sil',
         'info' => 'Başvuru Bilgileri',
+        'list' => 'Başvuruları Listele',
         'select' => 'Başvuru Seçiniz',
         'status' => [
             1 => 'Sisteme Tanımlandı',
@@ -217,7 +247,8 @@ return [
             3 => 'Tarife Yükseltme',
             4 => 'Dondurma',
             5 => 'İstek/Öneri/Şikayet'
-        ]
+        ],
+
     ],
     // Customer Application End
 
@@ -230,6 +261,7 @@ return [
         'edit' => 'Başvuru Tipini Düzenle',
         'delete' => 'Başvuru Tipini Sil',
         'info' => 'Başvuru Tipi Bilgileri',
+        'list' => 'Başvuru Tiplerini Listele',
         'select' => 'Başvuru Tipini Seçiniz',
         'status' => [
             1 => 'Aktif',
@@ -248,6 +280,7 @@ return [
         'edit' => 'Mesaj Düzenle',
         'delete' => 'Mesaj Sil',
         'info' => 'Mesaj Bilgileri',
+        'list' => 'Mesajları Listele',
         'select' => 'Mesajı Seçiniz',
         'selects' => [
             1 => 'Müşteri',
@@ -258,7 +291,8 @@ return [
         ],
         'alt_title' => 'Mesaj Tipleri',
         'send_sms' => 'Mesaj Gönder',
-        'send_sms_to_number' => 'Mesaj Gönder'
+        'send_sms_to_number' => 'Mesaj Gönder',
+        'send' => 'Mesaj Gönder'
     ],
     // Message Fields End
 
@@ -271,6 +305,7 @@ return [
         'edit' => 'Referans Düzenle',
         'delete' => 'Referans Sil',
         'info' => 'Referans Bilgileri',
+        'list' => 'Referansları Listele',
         'select' => 'Referansı Seçiniz',
         'status' => [
             'titles' => [
@@ -314,6 +349,7 @@ return [
             'edit' => 'Arıza Tipi Düzenle',
             'delete' => 'Arıza Tipi Sil',
             'info' => 'Arıza Tipi Bilgileri',
+            'list' => 'Arıza Tiplerini Listele',
             'types' => [
                 1 => 'Ürün',
                 2 => 'Hizmet'
@@ -336,6 +372,7 @@ return [
             'edit' => 'Arıza Kaydı Düzenle',
             'delete' => 'Arıza Kaydı Sil',
             'info' => 'Arıza Kaydı Bilgileri',
+            'list' => 'Arıza Kayıtlarını Listele',
             'types' => [
                 1 => 'Ürün',
                 2 => 'Hizmet'
@@ -368,5 +405,19 @@ return [
             1 => 'Hatalı',
             2 => 'Hatasız'
         ]
-    ]
+    ],
+
+    // Role Fields
+    'role' => [
+        'title' => 'Yetkiler',
+        'singular' => 'Yetki',
+        'plural' => 'Yetkiler',
+        'add' => 'Yetki Ekle',
+        'edit' => 'Yetki Düzenle',
+        'delete' => 'Yetki Sil',
+        'info' => 'Yetki Bilgileri',
+        'list' => 'Yetikleri Listele',
+        'select' => 'Yetki Seç',
+    ],
+    // Role Fields End
 ];

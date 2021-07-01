@@ -1,15 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
-use App\Classes\Moka;
-use App\Classes\Mutator;
-use App\Classes\SMS_Api;
-use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\FaultRecord;
-use App\Models\MokaLog;
 use App\Models\Payment;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -31,6 +25,11 @@ class MainController extends Controller
         return view('admin.dashboard', $data);
     }
 
+    /**
+     * Infrastructure page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function infrastructure()
     {
         return view('admin.infrastructure');
@@ -67,5 +66,15 @@ class MainController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * Not permission page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function cant()
+    {
+        return view('admin.cant');
     }
 }

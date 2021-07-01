@@ -8,7 +8,7 @@ if (!function_exists('relative_route')) {
      * Generate the relative path to a named route.
      *
      * @param  array|string  $name
-     * @param  mixed  $parameters
+     * @param  array|object  $parameters
      * @return string
      */
     function relative_route($name, $parameters = [])
@@ -36,7 +36,7 @@ if (!function_exists('convert_date')) {
      * Date converts
      *
      * @param string $date
-     * @param mixed|null $type mysql | mysql_time | mask | mask_time | medium | large
+     * @param mixed|null $type mysql | mysql_time | mask | mask_time | month_period | medium | large
      * @return string
      */
     function convert_date($date, $type = null)

@@ -82,4 +82,7 @@ return [
     'customer_application_types' => 'Başvuru Tipleri',
 
     'description' => 'Açıklama',
+
+    'no_permission' => 'Yetki Yok',
+    'return_home' => 'Anasayfaya Dön'
 ];

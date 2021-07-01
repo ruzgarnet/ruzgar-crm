@@ -35,5 +35,6 @@ return [
     ],
     'reference' => [
         'control_time' => 'Kontrol Edilebilir'
-    ]
+    ],
+    'no_permission' => 'Bu işlemi gerçekleştirmek için yetkiniz bulunmamaktadır.'
 ];
