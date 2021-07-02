@@ -10,6 +10,7 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 - [ ] Tarife değişiminde otomatik ödemenin uyarlanması
 - [ ] Çoklu mesaj yapısı
 - [ ] Yetki sistemi
+- [ ] Müşteri temsilcileri sadece kendi müşterilerini görecek şekilde uyarlanacak
 
 ### İkincil
 
