@@ -64,6 +64,8 @@ $(function () {
                     }
                 }
 
+                // TODO Add responses for 401, 403, 500 errors
+
                 // Remove disabled submits
                 form.find("[type='submit']").prop("disabled", false);
             },
