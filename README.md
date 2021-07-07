@@ -4,26 +4,14 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 
 ## Yapılacaklar
 
-### Birincil
-
 - [ ] Otomatik ödeme indirimi
 - [ ] Tarife değişiminde otomatik ödemenin uyarlanması
-- [ ] Çoklu mesaj yapısı
-- [ ] Yetki sistemi
-
-### İkincil
-
-- [ ] Arıza kayıtları geliştirmesi
-- [ ] Ödenmemiş faturalara gecikme tutarı yansıtma
-- [ ] Hizmetlerde seçenek yapısının geliştirilmesi
+- [ ] Ayarların düzenlenmesi
+- [ ] Abonelik uzatması
 - [ ] Rapor sayfaları
-
-## Yapılabilecekler
-
-- [ ] Sorgulanan altyapı bilgilerini kayda aktarma
-- [ ] Site yönetimi için modül yapısının tasarlanması
 - [ ] Sistem içi talep/istek yapısı
 - [ ] Müşterilere özel notlar tutulabilmesi
+- [ ] Dinamik DataTable
 
 ## Yapılanlar
 
@@ -45,6 +33,11 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 - [x] Otomatik ödemelerin Moka'ya tanımlanması
 - [x] Dinamik mesaj yapısı
 - [x] Hizmetlerde kampanyalı ücret yapısı
+- [x] Arıza kayıtları geliştirmesi
+- [x] Ödenmemiş faturalara gecikme tutarı yansıtma
+- [x] Hizmetlerde seçenek yapısının geliştirilmesi
+- [x] Çoklu mesaj yapısı
+- [x] Yetki sistemi
 
 ## Otomatize İşlemler
 
