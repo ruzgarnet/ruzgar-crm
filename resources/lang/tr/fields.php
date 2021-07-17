@@ -11,6 +11,7 @@ return [
     'define' => 'Tanımla',
     'reset' => 'Sıfırla',
     'not_active' => 'Aktif Değil',
+    'campaing' => 'Kampanya',
     // Global Attributes End
 
     // Identity Attributes
@@ -101,8 +102,10 @@ return [
     'parent_category' => 'Üst Kategori',
     'contract_type' => 'Sözleşme Tipi',
     'category_type' => 'Kategori Tipi',
-    'contract' => "Sözleşme",
+    'contract' => 'Sözleşme',
     'contract_preview' => 'Sözleşme Önizlemesi',
+    'campaing_price' => 'Kampanya Tutarı',
+    'campaing_duration' => 'Kampanya Süresi (Ay)',
     // Category|Product|Service Attributes
 
     // Subscription Attributes
@@ -130,7 +133,13 @@ return [
         2 => "ADSL (:price)",
         3 => "VDSL (:price)",
         4 => "Fiber",
-        5 => "Uydu Modem"
+        5 => "Uydu Modem",
+        6 => "3G veya 4.5G Modem"
+    ],
+    'devices' => [
+        'modem_serial' => "Cihaz Seri Numarası",
+        'modem_model' => "Cihaz Modeli",
+        'modem_brand' => "Cihaz Markası",
     ],
     'modem_price' => "Modem Kira Ücreti",
     "modem_payment" => 'Modem Ücreti Ödeme Şekli',
@@ -145,6 +154,7 @@ return [
     'setup' => 'Kurulum',
     "setup_payment" => 'Kurulum/Aktivasyon Ücreti (:price) Ödeme Şekli',
     "setup_payments" => [
+        0 => "Yok",
         1 => "Peşin",
         2 => "İlk aya yansıt",
         3 => "İlk iki aya yansıt",
@@ -202,5 +212,7 @@ return [
     'payment' => 'Ödeme',
     'customer_application' => 'Başvuru',
     'type' => 'Tip',
-    'select_send_type' => 'Gönderilecekler'
+    'select_send_type' => 'Gönderilecekler',
+
+    'request_role' => 'Talep Birimi'
 ];

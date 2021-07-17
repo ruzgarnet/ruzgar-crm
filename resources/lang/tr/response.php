@@ -66,10 +66,11 @@ return [
     ],
 
     'system' => [
-        'referenced' => 'Referans işlemi gerçekleştirildi. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
+        'referenced' => 'Referans işlemi onaylandı. Ücreti :price TL\'ye göre uyarlandı. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
         'freezing' => 'Dondurma işlemi başlatıldı. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
         'price_freezed' => 'Dondurma işleminden dolayı ücreti düşürülmüştür. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
         'freezing' => 'Dondurma işlemi kaldırıldı. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
-        'penalty' => ':price TL gecikme ücreti yansıtılmıştır. Bu mesaj sistem tarafından olarak tanımlanmıştır.'
+        'penalty' => ':price TL gecikme ücreti yansıtılmıştır. Bu mesaj sistem tarafından olarak tanımlanmıştır.',
+        'auto_payment_discount' => ':price TL otomatik ödeme indirimi düşürülmüş. Bu mesaj sistem tarafından olarak tanımlanmıştır.'
     ]
 ];
