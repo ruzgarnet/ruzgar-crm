@@ -21,7 +21,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">@lang('fields.name')</th>
-                                    <th scope="col">@lang('fields.slug')</th>
+                                    <th scope="col">@lang('fields.original_price')</th>
                                     <th scope="col">@lang('fields.price')</th>
                                     <th scope="col">@lang('fields.actions')</th>
                                 </tr>
@@ -31,7 +31,7 @@
                                     <tr data-id="{{ $service->id }}">
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $service->name }}</td>
-                                        <td>{{ $service->slug }}</td>
+                                        <td>{{ print_money($service->original_price) }}</td>
                                         <td>{{ $service->price_print }}</td>
                                         <td>
                                             <div class="buttons">

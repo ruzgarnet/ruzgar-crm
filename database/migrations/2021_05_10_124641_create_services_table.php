@@ -21,8 +21,8 @@ class CreateServicesTable extends Migration
             $table->string('slug', 255)->unique();
             $table->unsignedDecimal('price');
             $table->unsignedDecimal('original_price');
-            $table->unsignedTinyInteger('download');
-            $table->unsignedTinyInteger('upload');
+            $table->unsignedSmallInteger('download');
+            $table->unsignedSmallInteger('upload');
             $table->text('content');
             $table->unsignedTinyInteger('status')->default(1);
             $table->string('meta_title', 255)->nullable()->default(null);

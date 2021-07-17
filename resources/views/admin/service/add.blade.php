@@ -73,6 +73,41 @@
                                 </div>
                             </div>
                         </div>
+                        <div>
+                            <h4 class="text-primary">@lang('fields.campaing')</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="slcOptionsCommitment">@lang('fields.commitment')</label>
+                                    <select name="options[commitment]" id="slcOptionsCommitment" class="custom-select">
+                                        <option selected value="">@lang('fields.commitment_period')</option>
+                                        @foreach (trans('fields.commitments') as $key => $commitment)
+                                            <option value="{{ $key }}">{{ $commitment }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="inpOptionsPrice">@lang('fields.campaing_price')</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₺</div>
+                                        </div>
+                                        <input type="number" name="options[price]" id="inpOptionsPrice" class="form-control money-input" min="0" step=".01">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="inpOptionsDuration">@lang('fields.campaing_duration')</label>
+                                    <div class="input-group">
+                                        <input type="number" name="options[duration]" id="inpOptionsDuration" class="form-control money-input" min="0" step="1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">

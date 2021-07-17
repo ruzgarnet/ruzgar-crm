@@ -31,4 +31,25 @@ class Service extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * Get option if is exists by key
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getOption(string $key, $default = false)
+    {
+        if (
+            $this->options != null &&
+            is_array($this->options) && 
+            is_string($key) &&
+            isset($this->options[$key]) &&
+            !empty($this->options[$key])
+        ) {
+            return $this->options[$key];
+        }
+        return $default;
+    }
 }

@@ -205,7 +205,10 @@ return [
             'pre_payment' => 'Ön ödeme',
             'campaing_payment' => 'Kampanya ücreti ödeme şekli',
             'modem_model' => 'Modem marka ve modeli',
-            'address' => 'Adres'
+            'address' => 'Adres',
+            'commitment' => 'Kampanya taahhüt şartı',
+            'price' => 'Kampanya tutarı',
+            'duration' => 'Kampanya süresi'
         ],
         'card' => [
             'number' => 'Kart numarası',
