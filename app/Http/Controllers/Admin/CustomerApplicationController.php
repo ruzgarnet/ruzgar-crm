@@ -77,23 +77,22 @@ class CustomerApplicationController extends Controller
         $request["customer_application_type_id"] = $validated["customer_application_type_id"];
         $request["description"] = $validated["description"];
         $request["staff_id"] = $validated["staff_id"];
+        $request["files"] = "[]";
+
         if ($customer_application = CustomerApplication::create($request)) {
             if ($validated["customer_application_type_id"] == 1) {
-                if($validated["customer_id"] == null)
-                {
+                if ($validated["customer_id"] == null) {
                     Telegram::send(
                         "İptalİşlemler",
                         trans(
                             'telegram.application_cancel',
                             [
-                                'full_name' => $customer_application->information["first_name"]." ".$customer_application->information["last_name"],
+                                'full_name' => $customer_application->information["first_name"] . " " . $customer_application->information["last_name"],
                                 'telephone' => $customer_application->information["telephone"]
                             ]
                         )
                     );
-                }
-                else
-                {
+                } else {
                     Telegram::send(
                         "İptalİşlemler",
                         trans(
@@ -106,33 +105,43 @@ class CustomerApplicationController extends Controller
                     );
                 }
             } else if ($validated["customer_application_type_id"] == 2) {
-                if($validated["customer_id"] == null)
-                {
+                if ($validated["customer_id"] == null) {
                     Telegram::send(
                         "KaliteKontrolEkibi",
+                        "[TARİFE YÜKSELTME] \nAdı Soyadı : " . $customer_application->information["first_name"] . " " . $customer_application->information["last_name"] . "\nTelefon Numarası : " . $customer_application->information["telephone"]
+                    );
+                } else {
+                    Telegram::send(
+                        "KaliteKontrolEkibi",
+                        "[TARİFE YÜKSELTME] \nAdı Soyadı : " . $customer_application->customer->full_name . "\nTelefon Numarası : " . $customer_application->customer->telephone
+                    );
+                }
+            } else if ($validated["customer_application_type_id"] == 3) {
+                if ($validated["customer_id"] == null) {
+                    Telegram::send(
+                        "BizSiziArayalım",
                         trans(
-                            'telegram.application_cancel',
+                            'telegram.application_subscription',
                             [
-                                'full_name' => $customer_application->information["first_name"]." ".$customer_application->information["last_name"],
-                                'telephone' => $customer_application->information["telephone"]
+                                'full_name' => $customer_application->information["first_name"] . " " . $customer_application->information["last_name"],
+                                'telephone' => $customer_application->information["telephone"],
+                                'username' => $customer_application->staff->full_name
                             ]
                         )
                     );
-                }
-                else
-                {
+                } else {
                     Telegram::send(
-                        "KaliteKontrolEkibi",
+                        "BizSiziArayalım",
                         trans(
-                            'telegram.application_cancel',
+                            'telegram.application_subscription',
                             [
                                 'full_name' => $customer_application->customer->full_name,
-                                'telephone' => $customer_application->customer->telephone
+                                'telephone' => $customer_application->customer->telephone,
+                                'username' => $customer_application->staff->full_name
                             ]
                         )
                     );
                 }
-            } else {
             }
             return response()->json([
                 'success' => true,
