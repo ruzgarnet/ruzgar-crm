@@ -61,6 +61,10 @@
                             {{ $customer->staff->full_name }}
                         </li>
                     </ul>
+
+                    <div class="text-right">
+                        <a class="btn btn-primary" href="{{ route('activities', $customer) }}" role="button">Müşteri Hareketleri</a>
+                    </div>
                 </div>
             </div>
             @if ($customer->subscriptions->count() > 0)
@@ -170,14 +174,6 @@
                                                             @lang('fields.contract')
                                                         </a>
                                                     @endif
-
-                                                    <button type="button"
-                                                        class="dropdown-item confirm-modal-btn"
-                                                        data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
-                                                        data-modal="#unApproveSubscription">
-                                                        <i class="dropdown-icon fas fa-redo-alt"></i>
-                                                        @lang('titles.reset')
-                                                    </button>
                                                 @endif
                                                 @if($subscription->isActive())
                                                     <a href="{{ route('admin.reference.add', $subscription) }}"
@@ -202,7 +198,7 @@
                                                             data-action="{{ relative_route('admin.subscription.cancel.auto.payment', $subscription) }}"
                                                             data-modal="#cancelAutoPayment">
                                                             <i class="dropdown-icon fas fa-wallet"></i>
-                                                            @lang('titles.cancel.auto.payment')
+                                                            @lang('titles.cancel_auto_payment')
                                                         </button>
                                                     @endif
 
@@ -247,11 +243,13 @@
                                         </div>
                                     </div>
                                     <ul class="fa-ul subscription-list mb-0">
-                                        <li>
-                                            <span class="fa-li"><i class="fas fa-map-marker-alt"></i></span>
-                                            <div><b>@lang('fields.bbk_code')</b></div>
-                                            <div>{{ $subscription->bbk_code }}<div>
-                                        </li>
+                                        @if ($subscription->bbk_code)
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-map-marker-alt"></i></span>
+                                                <div><b>@lang('fields.bbk_code')</b></div>
+                                                <div>{{ $subscription->bbk_code }}<div>
+                                            </li>
+                                        @endif
                                         <li>
                                             <span class="fa-li"><i class="fas fa-calendar-alt"></i></span>
                                             <div><b>@lang('fields.subscription_duration')</b></div>
@@ -272,7 +270,7 @@
                                         @if ($subscription->approved_at != null)
                                             <li>
                                                 <span class="fa-li"><i class="fas fa-calendar-check"></i></span>
-                                                <div><b>@lang('fields.subscription_date')</b></div>
+                                                <div><b>@lang('fields.subscription_date') (Aktivasyon Tarihi)</b></div>
                                                 <div>{{ $subscription->approved_at_print }}</div>
                                             </li>
                                         @endif
@@ -286,16 +284,18 @@
                                             <div><b>@lang('fields.price')</b></div>
                                             <div>{{ $subscription->price_print }}</div>
                                         </li>
-                                        <li>
-                                            <span class="fa-li"><i class="fas fa-receipt"></i></span>
-                                            <div><b>@lang('fields.advance_paymented_price')</b></div>
-                                            <div>
-                                                {{ $subscription->payment_print }}
-                                                @if ($subscription->approved_at == null)
-                                                    <span>(@lang('fields.payable'))</span>
-                                                @endif
-                                            </div>
-                                        </li>
+                                        @if ($subscription->payment != 0)
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-receipt"></i></span>
+                                                <div><b>@lang('fields.advance_paymented_price')</b></div>
+                                                <div>
+                                                    {{ $subscription->payment_print }}
+                                                    @if ($subscription->approved_at == null)
+                                                        <span>(@lang('fields.payable'))</span>
+                                                    @endif
+                                                </div>
+                                            </li>
+                                        @endif
                                         <li>
                                             <span class="fa-li"><i class="fas fa-network-wired"></i></span>
                                             <a href="#setupDetails_{{ $subscription->id }}" data-toggle="collapse"
@@ -382,6 +382,13 @@
                                                                     title="@lang('titles.edit_payment')">
                                                                     <i class="fas fa-file-invoice-dollar"></i>
                                                                 </button>
+
+                                                                <button type="button" class="btn btn-primary confirm-modal-btn"
+                                                                    data-action="{{relative_route('admin.message.send.payment', $payment) }}"
+                                                                    data-modal="#approveMessage"
+                                                                    title="@lang('titles.send_payment_message')">
+                                                                    <i class="fas fa-envelope"></i>
+                                                                </button>
                                                             @endif
 
                                                             @if ($payment->status != 2)
@@ -463,17 +470,9 @@
         id="approveSubscription"
         method="put"
         :title="trans('titles.actions.approve.subscription')"
-        :message="trans('warnings.approve.customer')"
+        :message="trans('warnings.approve.subscription')"
         :buttonText="trans('titles.approve')"
         buttonType="success" />
-
-    <x-admin.confirm-modal
-        id="unApproveSubscription"
-        method="put"
-        :title="trans('titles.actions.reset.subscription')"
-        :message="trans('warnings.subscription.reset')"
-        :buttonText="trans('titles.reset')"
-        buttonType="danger" />
 
     <x-admin.confirm-modal
         id="unFreezeSubscription"
@@ -486,8 +485,16 @@
     <x-admin.confirm-modal
         id="cancelAutoPayment"
         method="put"
-        :title="trans('titles.cancel.auto.payment')"
-        :message="trans('warnings.payment.cancel.auto.payment')"
+        :title="trans('titles.cancel_auto_payment')"
+        :message="trans('warnings.payment.cancel_auto_payment')"
+        :buttonText="trans('titles.approve')"
+        buttonType="success" />
+
+    <x-admin.confirm-modal
+        id="approveMessage"
+        method="get"
+        :title="trans('titles.actions.approve.message')"
+        :message="trans('warnings.approve.message')"
         :buttonText="trans('titles.approve')"
         buttonType="success" />
 @endpush
