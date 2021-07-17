@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Classes\Telegram;
 use App\Models\Attributes\PaidAtAttribute;
+use App\Models\Attributes\PaymentCategoryAttribute;
 use App\Models\Attributes\PaymentDateAttribute;
 use App\Models\Attributes\PriceAttribute;
 use Exception;
@@ -13,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class Payment extends Model
 {
-    use HasFactory, PriceAttribute, PaymentDateAttribute, PaidAtAttribute;
+    use HasFactory, PriceAttribute, PaymentDateAttribute, PaidAtAttribute, PaymentCategoryAttribute;
 
     /**
      * All fields fillable
@@ -109,6 +111,16 @@ class Payment extends Model
     }
 
     /**
+     * Check paided
+     *
+     * @return boolean
+     */
+    public function isPaid()
+    {
+        return !($this->type == NULL || $this->paid_at == NULL);
+    }
+
+    /**
      * Receive payment
      *
      * @param array $data
@@ -116,67 +128,75 @@ class Payment extends Model
      */
     public function receive(array $data)
     {
-        DB::beginTransaction();
-        try {
-            $date = Carbon::parse($this->date);
-            $month = Carbon::now()->format('m');
+        if (!$this->isPaid()) {
+            DB::beginTransaction();
+            try {
+                $date = Carbon::parse($this->date);
+                $month = Carbon::now()->format('m');
 
-            $this->type = $data['type'];
-            $this->status = 2;
-            $this->paid_at = DB::raw('current_timestamp()');
+                $this->type = $data['type'];
+                $this->status = 2;
+                $this->paid_at = DB::raw('current_timestamp()');
 
-            $this->save();
+                $this->save();
 
-            $count = self::where('subscription_id', $this->subscription_id)
-                ->whereNull('paid_at')
-                ->whereDate(
-                    'date',
-                    '>',
-                    Carbon::parse('last day of this month')->format('Y-m-d')
-                )
-                ->count();
+                $count = self::where('subscription_id', $this->subscription_id)
+                    ->whereNull('paid_at')
+                    ->whereDate(
+                        'date',
+                        '>',
+                        Carbon::parse('last day of this month')->format('Y-m-d')
+                    )
+                    ->count();
 
-            if ($this->subscription->isFreezed()) {
-                if ($count > 1) {
-                    // If new payment exists change price for freeze
-                    $next_payment = $this->subscription->currentPayment();
-                    $old_price = $next_payment->price;
-                    $next_payment->price = $old_price / 2;
-                    $new_price = $old_price / 2;
-                    $next_payment->save();
-                } else {
-                    // If new payment not exists add new payment for freeze
-                    $old_price = $this->subscription->price;
-                    $new_price = $old_price / 2;
+                if ($this->subscription->isFreezed()) {
+                    if ($count > 1) {
+                        // If new payment exists change price for freeze
+                        $next_payment = $this->subscription->currentPayment();
+                        $old_price = $next_payment->price;
+                        $next_payment->price = $old_price / 2;
+                        $new_price = $old_price / 2;
+                        $next_payment->save();
+                    } else {
+                        // If new payment not exists add new payment for freeze
+                        $old_price = $this->subscription->price;
+                        $new_price = $old_price / 2;
 
-                    $next_payment = self::create([
+                        $next_payment = self::create([
+                            'subscription_id' => $this->subscription_id,
+                            'status' => 1,
+                            'date' => $date->addMonth(1),
+                            'price' => $new_price
+                        ]);
+                    }
+
+                    PaymentPriceEdit::create([
+                        'payment_id' => $next_payment->id,
+                        'old_price' => $old_price,
+                        'new_price' => $new_price,
+                        'description' => trans('response.system.price_freezed')
+                    ]);
+                } else if ($count < 1 && $this->subscription->isActive()) {
+                    self::create([
                         'subscription_id' => $this->subscription_id,
                         'status' => 1,
                         'date' => $date->addMonth(1),
-                        'price' => $new_price
+                        'price' => $this->subscription->price
                     ]);
                 }
 
-                PaymentPriceEdit::create([
-                    'payment_id' => $next_payment->id,
-                    'old_price' => $old_price,
-                    'new_price' => $new_price,
-                    'description' => trans('response.system.price_freezed')
-                ]);
-            } else if ($count < 1 && $this->subscription->isActive()) {
-                self::create([
-                    'subscription_id' => $this->subscription_id,
-                    'status' => 1,
-                    'date' => $date->addMonth(1),
-                    'price' => $this->subscription->price
-                ]);
-            }
+                DB::commit();
+                return true;
+            } catch (Exception $e) {
+                DB::rollBack();
 
-            DB::commit();
-            return true;
-        } catch (Exception $e) {
-            DB::rollBack();
-            return false;
+                Telegram::send(
+                    "Test",
+                    "Payment Model, receive method error : " . $e->getMessage()
+                );
+
+                return false;
+            }
         }
     }
 
