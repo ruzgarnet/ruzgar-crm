@@ -60,6 +60,7 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     Route::get('customer/edit/{customer}', [App\Http\Controllers\Admin\CustomerController::class, 'edit'])->name('customer.edit');
     Route::put('customer/edit/{customer}', [App\Http\Controllers\Admin\CustomerController::class, 'update'])->name('customer.edit.put');
     Route::put('customer/approve/{customer}', [App\Http\Controllers\Admin\CustomerController::class, 'approve'])->name('customer.approve.post');
+    Route::get('activities/{customer}', [App\Http\Controllers\Admin\ActivityController::class, 'index'])->name('activities');
     //  Customer Routes End
 
     // Contract Type Routes
