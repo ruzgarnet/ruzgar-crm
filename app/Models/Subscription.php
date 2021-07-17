@@ -147,11 +147,11 @@ class Subscription extends Model
     /**
      * Sale relationship
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function sales()
     {
-        return $this->hasOne(MokaSale::class);
+        return $this->hasMany(MokaSale::class);
     }
 
     /**
@@ -161,7 +161,7 @@ class Subscription extends Model
      */
     public static function getActive()
     {
-        return self::where('status', 1)->get();
+        return self::whereIn('status', [0, 1])->get();
     }
 
     /**
@@ -213,10 +213,19 @@ class Subscription extends Model
      */
     public function nextPayment()
     {
-        return Payment::where('subscription_id', $this->id)
+        $payment = Payment::where('subscription_id', $this->id)
             ->whereNull('paid_at')
             ->orderBy('date', 'ASC')
             ->first();
+
+        if (!$payment) {
+            return Payment::create([
+                'subscription_id' => $this->id,
+                'price' => $this->price,
+                'date' => Carbon::now()->startOfMonth()->addMonth(1)->format('Y-m-15')
+            ]);
+        }
+        return $payment;
     }
 
     /**
@@ -240,6 +249,24 @@ class Subscription extends Model
     }
 
     /**
+     * Check pre auto defined
+     *
+     * @return boolean
+     */
+    public function isPreAuto()
+    {
+        $subscriptions = $this->customer->subscriptions;
+
+        foreach ($subscriptions as $subscription) {
+            if ($subscription->sales()->count() > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Approve and add first payment(s)
      *
      * @return boolean
@@ -250,7 +277,6 @@ class Subscription extends Model
         try {
             $this->approved_at = DB::raw('current_timestamp()');
             $this->status = 1;
-            $this->subscription_no = Generator::subscriptionNo();
 
             $payments = $this->generatePayments();
 

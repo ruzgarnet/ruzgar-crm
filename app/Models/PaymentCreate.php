@@ -29,6 +29,16 @@ class PaymentCreate extends Model
     }
 
     /**
+     * Staff relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function staff()
+    {
+        return $this->belongsTo(Staff::class);
+    }
+
+    /**
      * Add new payment and store logs
      *
      * @param array $data
