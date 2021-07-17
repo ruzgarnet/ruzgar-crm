@@ -9,6 +9,9 @@ return [
         'title' => 'Şirket',
     ],
 
+    'system' => 'Sistem',
+    'support' => 'Destek',
+    'request_messages' => 'Yetkili Talep',
     'product_and_services' => 'Ürün ve Hizmetler',
     'services' => 'Hizmetler',
     'customers_and_orders' => 'Müşteriler ve Satışlar',
@@ -43,7 +46,7 @@ return [
     'cancel_auto_payment' => 'Otomatik Ödemeyi İptal Et',
     'details' => 'Detaylar',
     'subscription_info' => 'Abonelik Bilgileri',
-
+    'send_payment_message' => 'Mesaj Gönder',
     'yes' => 'Evet',
     'no' => 'Hayır',
 
@@ -57,7 +60,8 @@ return [
         'delete' => 'Silme İşlemi',
         'approve' => [
             'customer' => 'Müşteri Onayı',
-            'subscription' => 'Abonelik Onayı'
+            'subscription' => 'Abonelik Onayı',
+            'message' => 'Mesaj Gönder'
         ],
         'reset' => [
             'subscription' => 'Aboneliği Sıfırla'
@@ -84,5 +88,16 @@ return [
     'description' => 'Açıklama',
 
     'no_permission' => 'Yetki Yok',
-    'return_home' => 'Anasayfaya Dön'
+    'return_home' => 'Anasayfaya Dön',
+
+
+    'subscriptioncancel' => 'Abonelik İptali',
+    'subscriptionchange' => 'Abonelik Değişim',
+    'subscriptionfreeze' => 'Abonelik Dondurma',
+    'subscriptionpriceedit' => 'Abone Ücret Düzeltme',
+
+    'paymentcancel' => 'Ödeme İptali',
+    'paymentpriceedit' => 'Ödeme Ücret Düzeltme',
+    'paymentcreate' => ' Ödeme Oluşturma',
+    'paymentdelete' => 'Ödeme Silme'
 ];

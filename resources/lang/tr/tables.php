@@ -1,6 +1,13 @@
 <?php
 
 return [
+    // Main Fields
+    'main' => [
+        'title' => 'Ana İşlemler',
+        'report' => 'Rapor'
+    ],
+    // Main Fields End
+
     // City Fields
     'city' => [
         'title' => 'İl',
@@ -164,7 +171,7 @@ return [
         'info' => 'Abonelik Bilgileri',
         'list' => 'Abonelikleri Listele',
         'select' => 'Abonelik Seçiniz',
-        'change_service' => 'Abone Hizmeti Değiştir',
+        'change_service' => 'Tarife Değiştirme',
         'types' => [
             1 => 'Aktif Abonelik',
             2 => 'Hazırlık Aşamasında'
@@ -213,11 +220,13 @@ return [
         ],
         'select_type' => 'Ödeme Tipini Seçiniz',
         'types' => [
+            0 => 'Ödenememiş',
             1 => 'Nakit',
             2 => 'Kredi/Banka Kartı (Pos)',
             3 => 'Havale/EFT',
             4 => 'Kredi/Banka Kartı (Online)',
-            5 => 'Otomatik Ödeme'
+            5 => 'Otomatik Ödeme',
+            6 => 'Nakit (Ön Ödeme)'
         ],
         'received' => 'Ödeme Al',
         'price' => 'Ücret Düzenle',
@@ -420,4 +429,27 @@ return [
         'select' => 'Yetki Seç',
     ],
     // Role Fields End
+
+    // Request Fields
+    'request' => [
+        'message' => [
+            'status'=>[
+                1 => 'Aktif',
+                2 => 'Beklemede',
+                3 => 'Tamamlandı'
+            ],
+        'title' => 'Talepler',
+        'singular' => 'Talep',
+        'plural' => 'Talepler',
+        'add' => 'Talep Ekle',
+        'edit' => 'Talep Düzenle',
+        'delete' => 'talep Sil',
+        'info' => 'Talep Bilgileri',
+        'list' => 'Talep Listele',
+        'select' => 'Talep Seçiniz',
+        'role' => 'Birim Seçiniz',
+
+        ],
+    ],
+    // Message Fields End
 ];

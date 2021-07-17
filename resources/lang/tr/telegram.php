@@ -10,6 +10,10 @@ return [
     'edit_fault_record' => ":serial_number [:status] \nAbone : :id_no - :full_name \nDetay : :description \nKullanıcı : :username",
     'infrastructure' => ":message \nAdı Soyadı : :full_name \nTelefon Numarası : :telephone \nİl : :city \nBBK : :bbk",
     'application_cancel' => "Yeni bir iptal başvurusu oluşturuldu. \nAdı Soyadı : :full_name \nTelefon Numarası : :telephone",
+    'application_subscription' => "Adı Soyadı :full_name \nTelefon Numarası : :telephone \n:username",
     'add_freeze' => "Yeni bir dondurma işlemi gerçekleştirildi. \nMüşteri : :full_name \nTarife : :subsciption \nPersonel : :username",
-    'unfreeze' => "Dondurulan abonelik aktif edildi. \nMüşteri : :full_name \nTarife : :subsciption \nPersonel : :username"
+    'unfreeze' => "Dondurulan abonelik aktif edildi. \nMüşteri : :full_name \nTarife : :subsciption \nPersonel : :username",
+    'add_request_message' => " :username adlı kullanıcı tarafından :role yetkili kişiler için bir talep oluşturuldu. \nDurumu : :status ",
+    'edit_request_message' => " :username adlı kullanıcı tarafından açılan talepde :user adlı kişi işlem yaptı. \nDurumu : :status ",
+    'edit_fault' => ":full_name adlı müşterimiz tarafından oluşturulan :serial_number seri numaralı arıza kaydının durumu :status olarak değiştirildi. \nDetay : :detail \nİşlemi Gerçekleştiren Kullanıcı : :username"
 ];
