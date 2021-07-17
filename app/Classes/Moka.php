@@ -14,7 +14,7 @@ class Moka
      *
      * @var string $moka_url
      */
-    private string $moka_url = "https://service.moka.com/";
+    private string $moka_url = 'https://service.moka.com/';
 
     /**
      * Moka Authentication Fields
@@ -28,14 +28,14 @@ class Moka
      *
      * @var string $action
      */
-    private string $action = "";
+    private string $action = '';
 
     /**
      * Trx Code
      *
      * @var string $trx_code
      */
-    public string $trx_code = "";
+    public string $trx_code = '';
 
     public function __construct()
     {
@@ -43,7 +43,7 @@ class Moka
         $username = env('MOKA_USERNAME');
         $password = env('MOKA_PASSWORD');
 
-        $check_key = hash("sha256", $dealer_code . "MK" . $username . "PD" . $password);
+        $check_key = hash('sha256', $dealer_code . 'MK' . $username . 'PD' . $password);
 
         $this->auth = [
             'DealerCode' => $dealer_code,
@@ -83,7 +83,7 @@ class Moka
      */
     private function url()
     {
-        return trim($this->moka_url, "/") . "/" . trim($this->action, "/");
+        return trim($this->moka_url, '/') . '/' . trim($this->action, '/');
     }
 
     /**
@@ -101,41 +101,41 @@ class Moka
         array $hash,
         array $optional = []
     ) {
-        $this->action = "PaymentDealer/DoDirectPaymentThreeD";
+        $this->action = 'PaymentDealer/DoDirectPaymentThreeD';
 
         $request = [
             'PaymentDealerAuthentication' => $this->auth,
-            "PaymentDealerRequest" => [
-                "CardHolderFullName" => $card["full_name"],
-                "CardNumber" => $card["number"],
-                "ExpMonth" => $card["expire_month"],
-                "ExpYear" => $card["expire_year"],
-                "CvcNumber" => $card["security_code"],
-                "Amount" => $card["amount"],
-                "Currency" => "TL",
-                "InstallmentNumber" => "1",
-                "ClientIP" => $_SERVER['REMOTE_ADDR'],
-                "OtherTrxCode" => $this->generate_unique_code(
-                    $hash["subscription_no"],
-                    $hash["payment_created_at"]
+            'PaymentDealerRequest' => [
+                'CardHolderFullName' => $card['full_name'],
+                'CardNumber' => $card['number'],
+                'ExpMonth' => $card['expire_month'],
+                'ExpYear' => $card['expire_year'],
+                'CvcNumber' => $card['security_code'],
+                'Amount' => $card['amount'],
+                'Currency' => 'TL',
+                'InstallmentNumber' => '1',
+                'ClientIP' => $_SERVER['REMOTE_ADDR'],
+                'OtherTrxCode' => $this->generate_unique_code(
+                    $hash['subscription_no'],
+                    $hash['payment_created_at']
                 ),
-                "IsPreAuth" => 0,
-                "ReturnHash" => 1,
-                "IsPoolPayment" => 0,
-                "Software" => "RüzgarNET",
-                "RedirectUrl" => $uri,
-                "RedirectType" => 1
+                'IsPreAuth' => 0,
+                'ReturnHash' => 1,
+                'IsPoolPayment' => 0,
+                'Software' => 'RüzgarNET',
+                'RedirectUrl' => $uri,
+                'RedirectType' => 1
             ]
         ];
 
-        if (isset($optional["brand_name"])) {
-            $request["PaymentDealerRequest"]["BuyerInformation"] = $optional["brand_name"] . " fatura ödemesidir.";
+        if (isset($optional['brand_name'])) {
+            $request['PaymentDealerRequest']['BuyerInformation'] = $optional['brand_name'] . ' fatura ödemesidir.';
         }
-        if (isset($optional["is_pre_auth"])) {
-            $request["PaymentDealerRequest"]["IsPreAuth"] = $optional["is_pre_auth"];
+        if (isset($optional['is_pre_auth'])) {
+            $request['PaymentDealerRequest']['IsPreAuth'] = $optional['is_pre_auth'];
         }
-        if (isset($optional["Amount"])) {
-            $request["PaymentDealerRequest"]["Amount"] = $optional["pre_auth_price"];
+        if (isset($optional['Amount'])) {
+            $request['PaymentDealerRequest']['Amount'] = $optional['pre_auth_price'];
         }
 
         return $this->send($request);
@@ -152,20 +152,20 @@ class Moka
         array $customer,
         array $card
     ) {
-        $this->action = "DealerCustomer/AddCustomerWithCard";
+        $this->action = 'DealerCustomer/AddCustomerWithCard';
 
         $request = [
             'DealerCustomerAuthentication' => $this->auth,
-            "DealerCustomerRequest" => [
-                "CustomerCode" => $customer["id"],
-                "FirstName" => $customer["first_name"],
-                "LastName" => $customer["last_name"],
-                'Phone' => $customer["telephone"],
-                "CardHolderFullName" => $card["full_name"],
-                "CardNumber" => $card["number"],
-                "ExpMonth" => $card["expire_month"],
-                "ExpYear" => $card["expire_year"],
-                "CardName" => $customer["first_name"] . ' ' . $customer["last_name"] . ' Kredi/Banka Kartı'
+            'DealerCustomerRequest' => [
+                'CustomerCode' => $customer['id'],
+                'FirstName' => $customer['first_name'],
+                'LastName' => $customer['last_name'],
+                'Phone' => $customer['telephone'],
+                'CardHolderFullName' => $card['full_name'],
+                'CardNumber' => $card['number'],
+                'ExpMonth' => $card['expire_month'],
+                'ExpYear' => $card['expire_year'],
+                'CardName' => $customer['first_name'] . ' ' . $customer['last_name'] . ' Kredi/Banka Kartı'
             ]
         ];
 
@@ -180,60 +180,112 @@ class Moka
      */
     public function get_sale_payment_list(int $sale_id)
     {
-        $this->action = "DealerSale/GetPaymentPlanList";
+        $this->action = 'DealerSale/GetPaymentPlanList';
 
         $request = [
             'DealerSaleAuthentication' => $this->auth,
-            "DealerSaleRequest" => [
-                "DealerSaleId" => $sale_id,
-                "PaymentPlanPaymentDateStart" => "20180622",
-                "PaymentPlanPaymentDateEnd" => date('Ymd')
+            'DealerSaleRequest' => [
+                'DealerSaleId' => $sale_id,
+                'PaymentPlanPaymentDateStart' => '20180622',
+                'PaymentPlanPaymentDateEnd' => date('Ymd')
             ]
         ];
 
         return $this->send($request);
     }
 
+    /**
+     * Update sale's card_token or end date
+     *
+     * @param int $sale_id
+     * @param array $optional
+     * @return object|false|null
+     */
     public function update_sale(
         $sale_id,
-        $card_token,
         $optional = []
     ) {
-        $this->action = "DealerSale/UpdateSale";
+        $this->action = 'DealerSale/UpdateSale';
+
+        if (count(array_filter($optional)) > 0) {
+            $request = [
+                'DealerSaleAuthentication' => $this->auth,
+                'DealerSaleRequest' =>  array(
+                    'DealerSaleId' => $sale_id
+                )
+            ];
+
+            if (isset($optional['begin_date'])) {
+                $request['DealerSaleRequest']['BeginDate'] = $optional['begin_date'];
+            }
+            if (isset($optional['end_date'])) {
+                $request['DealerSaleRequest']['EndDate'] = $optional['end_date'];
+            }
+            if (isset($optional['card_token'])) {
+                $request['DealerSaleRequest']['DefaultCard1Token'] = $optional['card_token'];
+            }
+
+            return $this->send($request);
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete sale
+     *
+     * @param int $sale_id
+     * @return object|null
+     */
+    public function delete_sale(
+        $sale_id
+    ) {
+        $this->action = '/DealerSale/DeleteSale';
 
         $request = [
             'DealerSaleAuthentication' => $this->auth,
-            "DealerSaleRequest" =>  array(
-                "DealerSaleId" => $sale_id,
-                "DefaultCard1Token" => $card_token
-            )
+            'DealerSaleRequest' => [
+                'DealerSaleId' => $sale_id
+            ]
         ];
-
-        if(isset($optional["end_date"]))
-        {
-            $request["DealerSaleRequest"]["EndDate"] = $optional["end_date"];
-        }
 
         return $this->send($request);
     }
 
+    /**
+     * Update sale's end date
+     *
+     * @param int $sale_id
+     * @param string $end_date
+     * @return object|null
+     */
     public function update_sale_end_date(
         $sale_id,
         $end_date
     ) {
-        $this->action = "DealerSale/UpdateSale";
+        $this->action = 'DealerSale/UpdateSale';
 
         $request = [
             'DealerSaleAuthentication' => $this->auth,
-            "DealerSaleRequest" =>  array(
-                "DealerSaleId" => $sale_id,
-                "EndDate" => $end_date
-            )
+            'DealerSaleRequest' => [
+                'DealerSaleId' => $sale_id,
+                'EndDate' => $end_date
+            ]
         ];
 
         return $this->send($request);
     }
 
+    /**
+     * Add new card to customer
+     *
+     * @param int $customer_id
+     * @param string $full_name
+     * @param string $number
+     * @param string $number
+     * @param string $month
+     * @return object|null
+     */
     public function add_card(
         $customer_id,
         $full_name,
@@ -241,17 +293,37 @@ class Moka
         $month,
         $year
     ) {
-        $this->action = "DealerCustomer/AddCard";
+        $this->action = 'DealerCustomer/AddCard';
 
         $request = [
             'DealerCustomerAuthentication' => $this->auth,
-            "DealerCustomerRequest" => array(
-                "DealerCustomerId" => $customer_id,
-                "CardHolderFullName" => $full_name,
-                "CardNumber" => $number,
-                "ExpMonth" => $month,
-                "ExpYear" => $year
-            )
+            'DealerCustomerRequest' => [
+                'DealerCustomerId' => $customer_id,
+                'CardHolderFullName' => $full_name,
+                'CardNumber' => $number,
+                'ExpMonth' => $month,
+                'ExpYear' => $year
+            ]
+        ];
+
+        return $this->send($request);
+    }
+
+    /**
+     * Remove payment plan
+     *
+     * @param int $payment_plan_id
+     * @return object|null
+     */
+    public function remove_plan(int $payment_plan_id)
+    {
+        $this->action = '/DealerSale/DeletePaymentPlan';
+
+        $request = [
+            'DealerSaleAuthentication' => $this->auth,
+            'DealerSaleRequest' => [
+                'DealerPaymentPlanId' => $payment_plan_id
+            ]
         ];
 
         return $this->send($request);
@@ -265,12 +337,12 @@ class Moka
      */
     public function remove_card(string $card_token)
     {
-        $this->action = "DealerCustomer/RemoveCard";
+        $this->action = 'DealerCustomer/RemoveCard';
 
         $request = [
             'DealerCustomerAuthentication' => $this->auth,
-            "DealerCustomerRequest" => [
-                "CardToken" => $card_token
+            'DealerCustomerRequest' => [
+                'CardToken' => $card_token
             ]
         ];
 
@@ -290,25 +362,25 @@ class Moka
         array $subscription,
         array $date
     ) {
-        $this->action = "DealerSale/AddSale";
+        $this->action = 'DealerSale/AddSale';
 
         $request = [
             'DealerSaleAuthentication' => $this->auth,
-            "DealerSaleRequest" => [
-                "DealerCustomerId" => $customer["moka_id"],
-                "ProductCode" => $subscription["service_code"],
-                "Amount" => $subscription["amount"],
-                "Currency" => "TL",
-                "InstallmentNumber" => 1,
-                "DealerSaleScheduleId" => "",
-                "SaleDate" => date('Ymd'),
-                "BeginDate" => $date["start"],
-                "EndDate" => $date["end"],
-                "HowManyTrial" => 4,
-                "PlanType" => 2,
-                "Description" => "",
-                "DealerCustomerTypeId" => "",
-                "DefaultCard1Token" => $customer["card_token"]
+            'DealerSaleRequest' => [
+                'DealerCustomerId' => $customer['moka_id'],
+                'ProductCode' => $subscription['service_code'],
+                'Amount' => $subscription['amount'],
+                'Currency' => 'TL',
+                'InstallmentNumber' => 1,
+                'DealerSaleScheduleId' => '',
+                'SaleDate' => date('Ymd'),
+                'BeginDate' => $date['start'],
+                'EndDate' => $date['end'],
+                'HowManyTrial' => 4,
+                'PlanType' => 2,
+                'Description' => '',
+                'DealerCustomerTypeId' => '',
+                'DefaultCard1Token' => $customer['card_token']
             ]
         ];
 
@@ -323,12 +395,12 @@ class Moka
      */
     public function get_sale(int $sale_id)
     {
-        $this->action = "DealerSale/GetSale";
+        $this->action = 'DealerSale/GetSale';
 
         $request = [
             'DealerSaleAuthentication' => $this->auth,
-            "DealerSaleRequest" => [
-                "DealerSaleId" => $sale_id
+            'DealerSaleRequest' => [
+                'DealerSaleId' => $sale_id
             ]
         ];
 
@@ -344,13 +416,13 @@ class Moka
     public function do_void(
         string $trx_code
     ) {
-        $this->action = "PaymentDealer/DoVoid";
+        $this->action = 'PaymentDealer/DoVoid';
 
         $request = [
             'PaymentDealerAuthentication' => $this->auth,
-            "PaymentDealerRequest" => [
-                "OtherTrxCode" => $trx_code,
-                "VoidRefundReason" => 2
+            'PaymentDealerRequest' => [
+                'OtherTrxCode' => $trx_code,
+                'VoidRefundReason' => 2
             ]
         ];
 
@@ -366,12 +438,12 @@ class Moka
     public function refund(
         string $trx_code
     ) {
-        $this->action = "PaymentDealer/DoCreateRefundRequest";
+        $this->action = 'PaymentDealer/DoCreateRefundRequest';
 
         $request = [
             'PaymentDealerAuthentication' => $this->auth,
-            "PaymentDealerRequest" => [
-                "OtherTrxCode" => $trx_code
+            'PaymentDealerRequest' => [
+                'OtherTrxCode' => $trx_code
             ]
         ];
 
@@ -387,12 +459,33 @@ class Moka
     public function get_payment_detail(
         int $payment_id
     ) {
-        $this->action = "PaymentDealer/GetDealerPaymentTrxDetailList";
+        $this->action = 'PaymentDealer/GetDealerPaymentTrxDetailList';
 
         $request = [
             'PaymentDealerAuthentication' => $this->auth,
-            "PaymentDealerRequest" => [
-                "PaymentId" => $payment_id
+            'PaymentDealerRequest' => [
+                'PaymentId' => $payment_id
+            ]
+        ];
+
+        return $this->send($request);
+    }
+
+    /**
+     * Get payment detail list
+     *
+     * @param string $other_trx_code
+     * @return object|null
+     */
+    public function get_payment_detail_by_other_trx(
+        string $other_trx_code
+    ) {
+        $this->action = 'PaymentDealer/GetDealerPaymentTrxDetailList';
+
+        $request = [
+            'PaymentDealerAuthentication' => $this->auth,
+            'PaymentDealerRequest' => [
+                'OtherTrxCode' => $other_trx_code
             ]
         ];
 
@@ -408,12 +501,12 @@ class Moka
     public function get_payment_plan(
         int $plan_id
     ) {
-        $this->action = "/DealerSale/GetPaymentPlan";
+        $this->action = '/DealerSale/GetPaymentPlan';
 
         $request = [
             'DealerSaleAuthentication' => $this->auth,
-            "DealerSaleRequest" => [
-                "DealerPaymentPlanId" => $plan_id
+            'DealerSaleRequest' => [
+                'DealerPaymentPlanId' => $plan_id
             ]
         ];
 
@@ -431,12 +524,12 @@ class Moka
         string $payment_date,
         $amount
     ) {
-        $this->action = "/DealerSale/AddPaymentPlan";
+        $this->action = '/DealerSale/AddPaymentPlan';
 
         $request = [
             'DealerSaleAuthentication' => $this->auth,
-            "DealerSaleRequest" => [
-                "DealerSaleId" => $sale_id,
+            'DealerSaleRequest' => [
+                'DealerSaleId' => $sale_id,
                 'PaymentDate' => $payment_date,
                 'Amount' => $amount
             ]
@@ -454,14 +547,20 @@ class Moka
      */
     private function generate_unique_code($subscription_no, $payment_created_at)
     {
-        // $this->trx_code = substr(hash('sha256', $subscription_no . "-" . date('YmdHi', strtotime($payment_created_at)) . "-" . date('YmdHi')), 0, 32);
-        $this->trx_code = Generator::trxCode($subscription_no, $payment_created_at);
+        $this->trx_code = substr(hash('sha256', $subscription_no . '-' . date('YmdHi', strtotime($payment_created_at)) . '-' . date('YmdHi')), 0, 32);
         return $this->trx_code;
     }
 
-    public static function check_hash($hash_value, $code_for_hash)
+    /**
+     * Check hash
+     *
+     * @param string $hash_value
+     * @param string $code_for_hash
+     * @return boolean
+     */
+    public static function check_hash(string $hash_value, string $code_for_hash)
     {
-        $hash = hash('sha256', $code_for_hash . "T");
+        $hash = hash('sha256', $code_for_hash . 'T');
         return $hash == $hash_value ? true : false;
     }
 }
