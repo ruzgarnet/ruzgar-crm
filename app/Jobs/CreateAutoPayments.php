@@ -42,27 +42,37 @@ class CreateAutoPayments implements ShouldQueue
                 $moka_sales = MokaSale::whereNull("disabled_at")->get();
                 foreach ($moka_sales as $sale) {
                     $payment = $sale->subscription->currentPayment();
-                    if ($payment->status != 2 && !$payment->mokaAutoPayment) {
-                        $result = $moka->add_payment_plan(
-                            $sale->moka_sale_id,
-                            date('Ymd', strtotime(' + 1 day')),
-                            $payment->price
-                        );
+                    if($payment)
+                    {
+                        if ($payment->status != 2 && !$payment->mokaAutoPayment()->count()) {
+                            $result = $moka->add_payment_plan(
+                                $sale->moka_sale_id,
+                                date('Ymd', strtotime(' + 1 day')),
+                                $payment->price
+                            );
 
-                        if (isset($result->Data->DealerPaymentPlanId)) {
-                            MokaAutoPayment::create([
-                                'sale_id' => $sale->id,
-                                'payment_id' => $payment->id,
-                                'moka_plan_id' => $result->Data->DealerPaymentPlanId
-                            ]);
+                            if (isset($result->Data->DealerPaymentPlanId)) {
+                                MokaAutoPayment::create([
+                                    'sale_id' => $sale->id,
+                                    'payment_id' => $payment->id,
+                                    'moka_plan_id' => $result->Data->DealerPaymentPlanId
+                                ]);
+                            }
                         }
+                    }
+                    else
+                    {
+                        Telegram::send(
+                            'Test',
+                            'Otomatik Eksik : ' . $sale->subscription_id
+                        );
                     }
                 }
 
                 $this->insertJob('CreateAutoPayments');
             } catch (Exception $e) {
                 Telegram::send(
-                    'OtomatikHatası',
+                    'Test',
                     'Otomatik Hata : ' . $e->getMessage()
                 );
             }

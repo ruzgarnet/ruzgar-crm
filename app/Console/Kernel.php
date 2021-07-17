@@ -2,9 +2,13 @@
 
 namespace App\Console;
 
+use App\Jobs\CheckAutoPayments;
 use App\Jobs\CheckHalfPayments;
+use App\Jobs\CheckMessageList;
 use App\Jobs\CheckPayments;
+use App\Jobs\CheckPaymentsForSMS;
 use App\Jobs\CheckPenalties;
+use App\Jobs\CheckSMSList;
 use App\Jobs\CreateAutoPayments;
 use App\Jobs\CreatePenaltyPrices;
 use Illuminate\Console\Scheduling\Schedule;
@@ -33,9 +37,11 @@ class Kernel extends ConsoleKernel
         // FIXME REFUSE MULTIPLE JOBS
         $date = Carbon::now();
 
+        $schedule->job(new CheckMessageList);
+
         if ($date->hour >= 10) {
             // Fatura oluşturuldu
-            if ($date->day == 1) {
+            if ($date->day == 1 || $date->day == 10) {
                 $schedule->job(new CheckPayments);
             }
 
@@ -48,11 +54,31 @@ class Kernel extends ConsoleKernel
             if ($date->day == 23) {
                 $schedule->job(new CheckPenalties);
             }
+        }
 
+        if(($date->hour > 12 && $date->hour < 14) && $date->minute > 29)
+        {
+            if($date->day == 15)
+            {
+                $schedule->job(new CheckPayments);
+            }
+            if($date->day == 16)
+            {
+                $schedule->job(new CheckPaymentsForSMS);
+            }
+        }
+
+        if($date->hour == 22)
+        {
             // Otomatik ödemeler Moka'ya aktarıldı
-            if ($date->day == 15) {
+            if ($date->day == 14) {
                 $schedule->job(new CreateAutoPayments);
             }
+        }
+
+        if(in_array($date->day, [15, 16, 17, 18]) && ($date->hour == 19))
+        {
+            $schedule->job(new CheckAutoPayments);
         }
 
         // Add penalty prices

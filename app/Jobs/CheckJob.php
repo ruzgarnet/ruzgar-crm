@@ -16,7 +16,7 @@ trait CheckJob
     {
         $count = DB::table('jobs')
             ->where('job', $job)
-            ->whereRaw('DATEFORMAT(created_date, "%Y-%m-%d") = DATEFORMAT(NOW(), "%Y-%m-%d")')
+            ->whereRaw('DATE_FORMAT(created_at, "%Y-%m-%d") = DATE_FORMAT(NOW(), "%Y-%m-%d")')
             ->count();
 
         return $count > 0 ? false : true;
@@ -31,7 +31,7 @@ trait CheckJob
     public function insertJob($job)
     {
         if ($this->check($job)) {
-            return DB::table('job')->insert(['job' => $job]);
+            return DB::table('jobs')->insert(['job' => $job]);
         }
         return false;
     }
