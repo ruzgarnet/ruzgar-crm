@@ -45,8 +45,9 @@ $(function () {
                 form.find(".is-invalid").removeClass("is-invalid");
             },
             error: function (xhr) {
+                let status = xhr.status;
                 // 422 = validation failed
-                if (xhr.status === 422) {
+                if (status === 422) {
                     let response = xhr.responseJSON;
 
                     for (let field in response.errors) {
@@ -62,9 +63,32 @@ $(function () {
                             </div>`
                         );
                     }
+
+                    iziToast.error({
+                        title: "Veriler",
+                        message: "Gönderdiğiniz değerler arasında hatalı/eksik olanlar var. Lütfen değerleri kontrol edip tekrar deneyiniz.",
+                        position: "topRight",
+                        timeout: 3000,
+                    });
                 }
 
-                // TODO Add responses for 401, 403, 500 errors
+                if (status === 403) {
+                    iziToast.error({
+                        title: "Yetki",
+                        message: "Bu işlemi gerçekleştirmek için yetkiniz bulunmamaktadır.",
+                        position: "topRight",
+                        timeout: 3000,
+                    });
+                }
+
+                if (status >= 500) {
+                    iziToast.error({
+                        title: "Sunucu",
+                        message: "Sunucuda bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.",
+                        position: "topRight",
+                        timeout: 3000,
+                    });
+                }
 
                 // Remove disabled submits
                 form.find("[type='submit']").prop("disabled", false);
@@ -274,13 +298,12 @@ $(function () {
                     success: function (result) {
                         if (result.length > 0) {
                             result.forEach(function (row) {
-                                customers.append(`
-                                    <div class="search-item">
+                                customers.append(
+                                    `<div class="search-item">
                                         <a href="${row.link}">
                                             ${row.title}
                                         </a>
-                                    </div>
-                                `);
+                                    </div>`);
                             });
                             fields.addClass("results");
                         } else {
