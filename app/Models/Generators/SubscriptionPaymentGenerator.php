@@ -20,87 +20,92 @@ trait SubscriptionPaymentGenerator
         $data = [];
         $values = [];
 
-        foreach ($this->options as $key => $value) {
-            if (method_exists($this, $key)) {
-                $row = $this->{$key}($value);
-                $data[] = $row;
+        if ($this->options) {
+            foreach ($this->options as $key => $value) {
+                if (method_exists($this, $key)) {
+                    $row = $this->{$key}($value);
+                    $data[] = $row;
 
-                if (array_key_exists('payment', $row)) {
-                    $values[$key] = $row['payment'];
-                }
-                if (array_key_exists('price', $row)) {
-                    $values[$key] = $row['price'];
-                }
-                if (array_key_exists('payments', $row)) {
-                    $total = 0;
-                    foreach ($row['payments'] as $payment) {
-                        $total += $payment;
+                    if (array_key_exists('payment', $row)) {
+                        $values[$key] = $row['payment'];
                     }
-                    $values[$key] = $total;
+                    if (array_key_exists('price', $row)) {
+                        $values[$key] = $row['price'];
+                    }
+                    if (array_key_exists('payments', $row)) {
+                        $total = 0;
+                        foreach ($row['payments'] as $payment) {
+                            $total += $payment;
+                        }
+                        $values[$key] = $total;
+                    }
                 }
             }
-        }
 
-        if($service_option = $this->service->options)
-        {
-            $data[] = $this->serviceOption();
-            $values["campaign_price"] = $service_option["price"];
-            $values["duration"] = $service_option["duration"];
-        }
-
-        $values['service_price'] = $this->service->price;
-        $this->values = $values;
-
-        $data = collect($data);
-
-        $this->payment = $data->sum("payment");
-        $this->price += $data->sum("price");
-
-        $payment_variables = $data->filter(function ($value) {
-            return in_array("payments", array_keys($value));
-        })->pluck("payments");
-
-        $months = $payment_variables->map(function ($item) {
-            return count($item);
-        })->max();
-
-        $date_append = 1;
-
-        if ($this->getOption('pre_payment')) {
-            if ($months < 2) {
-                $months = 2;
+            if ($service_option = $this->service->options) {
+                $data[] = $this->serviceOption();
+                $values["campaign_price"] = $service_option["price"];
+                $values["duration"] = $service_option["duration"];
             }
-            $date_append = 0;
-        }
 
-        if ($months == 0) {
-            $months = 1;
-        }
+            $values['service_price'] = $this->service->price;
+            if (in_array($this->commitment, [0, 12])) {
+                $values['service_price'] += 10;
+            }
 
-        $payments = [];
-        for ($i = 0; $i < $months; $i++) {
-            $payments[$i]["price"] = (float)$this->price;
-        }
+            $this->values = $values;
 
-        foreach ($payment_variables->toArray() as $values) {
-            foreach ($values as $index => $value) {
-                $payments[$index]["price"] += (float)$value;
+            $data = collect($data);
+
+            $this->payment = $data->sum("payment");
+            $this->price += $data->sum("price");
+
+            $payment_variables = $data->filter(function ($value) {
+                return in_array("payments", array_keys($value));
+            })->pluck("payments");
+
+            $months = $payment_variables->map(function ($item) {
+                return count($item);
+            })->max();
+
+            $date_append = 1;
+
+            if ($this->getOption('pre_payment')) {
+                if ($months < 2) {
+                    $months = 2;
+                }
+                $date_append = 0;
+            }
+
+            if ($months == 0) {
+                $months = 1;
+            }
+
+            $payments = [];
+            for ($i = 0; $i < $months; $i++) {
+                $payments[$i]["price"] = (float)$this->price;
+            }
+
+            foreach ($payment_variables->toArray() as $values) {
+                foreach ($values as $index => $value) {
+                    $payments[$index]["price"] += (float)$value;
+                }
+            }
+
+            foreach ($payments as $index => $value) {
+                $payments[$index]["subscription_id"] = $this->id;
+                $payments[$index]["date"] = Carbon::now()->startOfMonth()->addMonth($date_append)->format('Y-m-15');
+                $date_append++;
+            }
+
+            if ($this->getOption('pre_payment')) {
+                $payments[0]['paid_at'] = DB::raw('current_timestamp()');
+                $payments[0]['type'] = 6;
+                $payments[0]['status'] = 2;
             }
         }
 
-        foreach ($payments as $index => $value) {
-            $payments[$index]["subscription_id"] = $this->id;
-            $payments[$index]["date"] = Carbon::now()->startOfMonth()->addMonth($date_append)->format('Y-m-15');
-            $date_append++;
-        }
-
-        if ($this->getOption('pre_payment')) {
-            $payments[0]['paid_at'] = DB::raw('current_timestamp()');
-            $payments[0]['type'] = 1;
-            $payments[0]['status'] = 2;
-        }
-
-        return $payments;
+        return $payments ?? [];
     }
 
     /**
@@ -112,6 +117,10 @@ trait SubscriptionPaymentGenerator
     public function setup_payment($value)
     {
         $payment = (float)setting('service.setup.payment');
+
+        if ($value == 0) {
+            return [];
+        }
 
         if ($value == 1) {
             return ['payment' => $payment];
@@ -182,8 +191,7 @@ trait SubscriptionPaymentGenerator
     {
         $options = $this->service->options;
         $data = [];
-        if($this->commitment != null && isset($options["commitment"]))
-        {
+        if ($this->commitment != null && isset($options["commitment"])) {
             if ($this->commitment == $options["commitment"]) {
                 $price = -1 * ($this->price - $options["price"]);
 
@@ -193,7 +201,7 @@ trait SubscriptionPaymentGenerator
             }
         }
 
-        if($data)
+        if ($data)
             return [
                 'payments' => $data
             ];
