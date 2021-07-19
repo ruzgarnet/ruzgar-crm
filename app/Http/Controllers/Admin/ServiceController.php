@@ -47,6 +47,8 @@ class ServiceController extends Controller
 
         $validated = $request->validate($this->rules());
 
+        $validated['options'] = !empty(array_filter($validated['options'])) ? array_filter($validated['options']) : null;
+
         if (Service::create($validated)) {
             return response()->json([
                 'success' => true,
@@ -102,6 +104,8 @@ class ServiceController extends Controller
         $rules['slug']['unique'] = Rule::unique('services', 'slug')->ignore($service->id);
 
         $validated = $request->validate($rules);
+
+        $validated['options'] = !empty(array_filter($validated['options'])) ? array_filter($validated['options']) : null;
 
         if ($service->update($validated)) {
             return response()->json([
@@ -160,8 +164,28 @@ class ServiceController extends Controller
             'meta_description' => 'nullable|string|max:255',
             'meta_keywords' => 'nullable|string|max:255',
             'original_price' => 'required|numeric|between:0,1000000',
-            'download' => 'required|numeric|between:0,1000000',
-            'upload' => 'required|numeric|between:0,1000000',
+            'download' => 'required|numeric|between:0,65535',
+            'upload' => 'required|numeric|between:0,65535',
+            'options' => 'nullable|array',
+            'options.commitment' => [
+                'nullable',
+                'required_with:options.price',
+                'required_with:options.duration',
+                Rule::in(array_keys(trans('fields.commitments')))
+            ],
+            'options.price' => [
+                'nullable',
+                'numeric',
+                'required_with:options.commitment',
+                'required_with:options.duration'
+            ],
+            'options.duration' => [
+                'nullable',
+                'numeric',
+                'min:1',
+                'required_with:options.commitment',
+                'required_with:options.price'   
+            ]
         ];
     }
 }
