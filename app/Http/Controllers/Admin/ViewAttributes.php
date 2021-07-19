@@ -18,7 +18,7 @@ trait ViewAttributes
     public static function sideNav()
     {
         $data = [
-            // Admin Fields
+            // Main Fields
             [
                 'title' => trans('titles.admin.dashboard'),
                 'route' => 'admin.dashboard',
@@ -27,8 +27,9 @@ trait ViewAttributes
             [
                 'title' => trans('titles.infrastructure'),
                 'route' => 'admin.infrastructure',
-                'icon' => 'fas fa-file'
+                'icon' => 'fas fa-network-wired'
             ],
+            // Main Fields End
 
             // Customers and Orders Header
             [
@@ -50,68 +51,30 @@ trait ViewAttributes
             ],
             // Customer Field End
 
-            // Customers Applications Header
+            // Support Header
             [
-                'header' =>  trans('titles.customer_applications'),
-                'subRoutes' => ['customers_applications', 'customers_application_types']
+                'header' =>  trans('titles.support'),
+                'subRoutes' => ['customers_applications', 'fault_records']
             ],
-            // Customers Applications Header End
+            // Support Header End
 
-            // Customers Applications Field End
-            [
-                'title' => trans('titles.customer_applications'),
-                'route' => 'admin.customer.applications',
-                'icon' => 'fas fa-sun'
-            ],
-            [
-                'title' => trans('titles.customer_application_types'),
-                'route' => 'admin.customer.application.types',
-                'icon' => 'fas fa-moon'
-            ],
-            // Customers Applications Field End
-
-            // Fault Header
-            [
-                'header' =>  trans('titles.fault_records'),
-                'subRoutes' => ['fault_records', 'fault_record_types']
-            ],
-            // Fault Header End
-
-            // Fault Fields
-            [
-                'title' => trans('tables.fault.record.title'),
-                'route' => 'admin.fault.records',
-                'icon' => 'fas fa-tools',
-            ],
-            [
-                'title' => trans('tables.fault.type.title'),
-                'route' => 'admin.fault.types',
-                'icon' => 'fas fa-toolbox',
-            ],
-            // Fault Fields End
-
-            // Message Header
-            [
-                'header' =>  trans('tables.message.title'),
-                'subRoutes' => ['messages']
-            ],
-            // Message Header End
-
-            // Message Fields
+            // Support Field End
             [
                 'title' => trans('tables.message.send_sms'),
                 'route' => 'admin.message.send',
                 'icon' => 'fas fa-paper-plane'
             ],
-            // Message Field End
-
-            // Message Type Fields
             [
-                'title' => trans('tables.message.alt_title'),
-                'route' => 'admin.messages',
-                'icon' => 'fas fa-sms'
+                'title' => trans('titles.customer_applications'),
+                'route' => 'admin.customer.applications',
+                'icon' => 'fas fa-clipboard'
             ],
-            // Message Type Fields End
+            [
+                'title' => trans('tables.fault.record.title'),
+                'route' => 'admin.fault.records',
+                'icon' => 'fas fa-tools',
+            ],
+            // Message Field End
 
             // Campaings Header
             [
@@ -127,6 +90,26 @@ trait ViewAttributes
                 'icon' => 'fas fa-people-arrows'
             ],
             // Campaing Field End
+
+            // Payments Header
+            [
+                'header' =>  trans('tables.payment.singular'),
+                'subRoutes' => ['payments']
+            ],
+            // Payments Header End
+
+            // Payments Fields
+            [
+                'title' => trans('tables.payment.plural'),
+                'route' => 'admin.payments',
+                'icon' => 'fas fa-lira-sign',
+            ],
+            [
+                'title' => trans('tables.main.report'),
+                'route' => 'admin.report',
+                'icon' => 'fas fa-folder-open',
+            ],
+            // Payments Fields End
 
             // Product and Service Header
             [
@@ -152,6 +135,36 @@ trait ViewAttributes
                 'icon' => 'fas fa-ethernet',
             ],
             // Product Fields End
+
+            // System Header
+            [
+                'header' =>  trans('titles.system'),
+                'subRoutes' => ['customer_application_types', 'fault_types', 'messages']
+            ],
+            // System Header End
+
+            // System Fields
+            [
+                'title' => trans('titles.request_messages'),
+                'route' => 'admin.request.messages',
+                'icon' => 'fas fa-level-up-alt'
+            ],
+            [
+                'title' => trans('titles.customer_application_types'),
+                'route' => 'admin.customer.application.types',
+                'icon' => 'fas fa-clipboard'
+            ],
+            [
+                'title' => trans('tables.fault.type.title'),
+                'route' => 'admin.fault.types',
+                'icon' => 'fas fa-toolbox',
+            ],
+            [
+                'title' => trans('tables.message.alt_title'),
+                'route' => 'admin.messages',
+                'icon' => 'fas fa-sms'
+            ],
+            // System Fields End
 
             // Company Header
             [
