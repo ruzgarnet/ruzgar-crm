@@ -1,26 +1,19 @@
-# ruzgarnet.com.tr
+# RÜZGAR CRM
 
 RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme projesi.
 
 ## Yapılacaklar
 
-- [ ] Otomatik ödeme indirimi
-- [ ] Tarife değişiminde otomatik ödemenin uyarlanması
 - [ ] Ayarların düzenlenmesi
 - [ ] Abonelik uzatması
-- [ ] Çoklu mesaj yapısı
-- [ ] Yetki sistemi
 - [ ] Müşteri temsilcileri sadece kendi müşterilerini görecek şekilde uyarlanacak
-
-### İkincil
-
-- [ ] Arıza kayıtları geliştirmesi
-- [ ] Ödenmemiş faturalara gecikme tutarı yansıtma
-- [ ] Hizmetlerde seçenek yapısının geliştirilmesi
-- [ ] Rapor sayfaları
-- [ ] Sistem içi talep/istek yapısı
+- [ ] Site yönetimi için modül yapısının tasarlanması
 - [ ] Müşterilere özel notlar tutulabilmesi
-- [ ] Dinamik DataTable
+
+## Kontrol Edilecekler
+- [ ] Ödenmemiş faturalara gecikme tutarı yansıtma
+- [ ] Tarife değişiminde otomatik ödemenin uyarlanması
+- [ ] Hizmetlerde kampanya yapısı güncellendi
 
 ## Yapılanlar
 
@@ -42,11 +35,12 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 - [x] Otomatik ödemelerin Moka'ya tanımlanması
 - [x] Dinamik mesaj yapısı
 - [x] Hizmetlerde kampanyalı ücret yapısı
-- [x] Arıza kayıtları geliştirmesi
-- [x] Ödenmemiş faturalara gecikme tutarı yansıtma
-- [x] Hizmetlerde seçenek yapısının geliştirilmesi
-- [x] Çoklu mesaj yapısı
+- [x] Otomatik ödeme indirimi
 - [x] Yetki sistemi
+- [x] Arıza kayıtları geliştirmesi
+- [x] Hizmetlerde seçenek yapısının geliştirilmesi
+- [x] Rapor sayfaları
+- [x] Sistem içi talep/istek yapısı
 
 ## Otomatize İşlemler
 
@@ -57,4 +51,4 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 ## İyileştirmeler/Fikirler
 
 - [ ] Responseler için class yapısı
-- [ ] Datatable için dinamik sorgu yapısı
+- [x] Datatable için dinamik sorgu yapısı
