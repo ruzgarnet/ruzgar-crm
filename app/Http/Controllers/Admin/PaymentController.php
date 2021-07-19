@@ -6,6 +6,7 @@ use App\Classes\Moka;
 use App\Classes\Mutator;
 use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
+use App\Models\Message;
 use App\Models\MokaAutoPayment;
 use App\Models\MokaLog;
 use App\Models\MokaPayment;
@@ -15,6 +16,8 @@ use App\Models\Payment;
 use App\Models\PaymentCancellation;
 use App\Models\PaymentCreate;
 use App\Models\PaymentDelete;
+use App\Models\SentMessage;
+use App\Models\Service;
 use App\Models\Subscription;
 use Exception;
 use Illuminate\Http\Request;
@@ -428,49 +431,62 @@ class PaymentController extends Controller
      */
     public function payment_auto_result(Request $request)
     {
-        $data = [
-            "method" => $request->method(),
-            "ip" => $request->ip(),
-            "values" => $request->all()
-        ];
+        echo "OK";
 
-        $plan = MokaAutoPayment::where("moka_plan_id", $request->input('DealerPaymentPlanId'))->first();
-        if ($plan) {
-            $moka = new Moka();
-            $payment_detail = $moka->get_payment_detail($request->input('DealerPaymentId'));
+        try
+        {
+            $data = [
+                "method" => $request->method(),
+                "ip" => $request->ip(),
+                "values" => $request->all()
+            ];
+            $plan_id = (int)$request->input('DealerPaymentPlanId');
+            $plan = MokaAutoPayment::where("moka_plan_id", $plan_id)->first();
+            if ($plan) {
+                $moka = new Moka();
+                $payment_detail = $moka->get_payment_detail($request->input('DealerPaymentId'));
 
-            if ($plan->payment->status == 2) {
-                $result = $moka->do_void(
-                    $payment_detail->Data->PaymentDetail->OtherTrxCode
-                );
+                if ($plan->payment->status == 2 && $plan->payment->type != 5) {
+                    $result = $moka->do_void(
+                        $payment_detail->Data->PaymentDetail->OtherTrxCode
+                    );
 
-                $success = false;
-                if ($result->Data != null && isset($result->Data->IsSuccessful) && (bool)$result->Data->IsSuccessful)
-                    $success = true;
+                    $success = false;
+                    if ($result->Data != null && isset($result->Data->IsSuccessful) && (bool)$result->Data->IsSuccessful)
+                        $success = true;
 
-                MokaRefund::create([
-                    'payment_id' => $plan->payment->id,
-                    'auto_payment_id' => $plan->id,
-                    'price' => (float)$request->input('Amount'),
-                    'status' => $success
-                ]);
-            } else {
-                $payment_plan = $moka->get_payment_plan($request->input('DealerPaymentPlanId'));
-                $plan->status = $payment_plan->Data->PlanStatus;
-                $plan->save();
-                if ($payment_plan->Data->PlanStatus == 1) {
-                    $plan->payment->type = 5;
-                    $plan->payment->status = 2;
-                    $plan->payment->save();
+                    MokaRefund::create([
+                        'payment_id' => $plan->payment->id,
+                        'auto_payment_id' => $plan->id,
+                        'price' => (float)$request->input('Amount'),
+                        'status' => $success
+                    ]);
+                } else {
+                    if ($payment_detail->Data->PaymentDetail->PaymentStatus == 2 && $payment_detail->Data->PaymentDetail->TrxStatus == 1) {
+                        $plan->status = 1;
+                        $plan->save();
+
+                        $plan->payment->receive([
+                            'type' => 5
+                        ]);
+                    } else {
+                        $plan->status = 4;
+                        $plan->save();
+                    }
                 }
             }
+
+            DB::table('auto_results')->insert([
+                'response' => json_encode($data),
+            ]);
         }
-
-        DB::table('auto_results')->insert([
-            'response' => json_encode($data),
-        ]);
-
-        return "OK";
+        catch(Exception $e)
+        {
+            Telegram::send(
+                "Test",
+                $e->getMessage()
+            );
+        }
     }
 
     /**
@@ -482,48 +498,82 @@ class PaymentController extends Controller
      */
     public function payment_result(Request $request, Payment $payment)
     {
-        // TODO Print result response
-        $data = $request->all();
+        try {
+            $data = $request->all();
 
-        $moka_transaction = $payment->mokaPayment;
-        MokaLog::insert([
-            [
-                'payment_id' => $payment->id,
-                'ip' => $request->ip(),
-                'response' => json_encode($moka_transaction->response),
-                'trx_code' => $moka_transaction->trx_code,
-                'type' => 6
-            ], [
-                'payment_id' => $payment->id,
-                'ip' => $request->ip(),
-                'response' => json_encode($data),
-                'trx_code' => $moka_transaction->trx_code,
-                'type' => 6
-            ]
-        ]);
+            $trx_code = $data["trxCode"];
 
-        if (isset($data["hashValue"])) {
-            if (
-                isset($moka_transaction) &&
-                Moka::check_hash(
-                    $data["hashValue"],
-                    $moka_transaction->response["Data"]["CodeForHash"]
-                )
-            ) {
-                $payment->receive([
-                    'type' => 4
+            $moka_transaction = $payment->mokaPayment;
+            $moka_transaction->moka_trx_code = $trx_code;
+            $moka_transaction->save();
+
+            if ($moka_transaction) {
+                MokaLog::insert([
+                    [
+                        'payment_id' => $payment->id,
+                        'ip' => $request->ip(),
+                        'response' => json_encode($moka_transaction->response),
+                        'trx_code' => $moka_transaction->trx_code,
+                        'type' => 6
+                    ], [
+                        'payment_id' => $payment->id,
+                        'ip' => $request->ip(),
+                        'response' => json_encode($data),
+                        'trx_code' => $moka_transaction->trx_code,
+                        'type' => 6
+                    ]
                 ]);
 
-                $moka_transaction->moka_trx_code = $data["trxCode"];
-                $moka_transaction->save();
+                if (
+                    isset($data["hashValue"]) &&
+                    isset($moka_transaction) &&
+                    Moka::check_hash(
+                        $data["hashValue"],
+                        $moka_transaction->response["Data"]["CodeForHash"]
+                    )
+                ) {
+                    $payment->receive([
+                        'type' => 4
+                    ]);
 
-                return "Başarılı";
+                    Telegram::send(
+                        "RüzgarNETÖdeme",
+                        "Başarılı bir ödeme gerçekleştirildi. \nT.C. Kimlik Numarası : " . $payment->subscription->customer->identification_number . " \nAdı Soyadı : " . $payment->subscription->customer->full_name . " \nTutar : " . $payment->price . " \nMarka : " . $payment->subscription->service->category->name
+                    );
+
+                    return view('admin.response', ["response" => 1]);
+                } else {
+                    $moka = new Moka();
+                    $result = $moka->get_payment_detail_by_other_trx($moka_transaction->trx_code);
+
+                    if (
+                        $result->Data->PaymentDetail->PaymentStatus == 2 &&
+                        $result->Data->PaymentDetail->TrxStatus == 1
+                    ) {
+                        $payment->receive([
+                            'type' => 4
+                        ]);
+
+                        Telegram::send(
+                            "RüzgarNETÖdeme",
+                            "Başarılı bir ödeme gerçekleştirildi. \nT.C. Kimlik Numarası : " . $payment->subscription->customer->identification_number . " \nAdı Soyadı : " . $payment->subscription->customer->full_name . " \nTutar : " . $payment->price . " \nMarka : " . $payment->subscription->service->category->name
+                        );
+
+                        return view('admin.response', ["response" => 1]);
+                    } else {
+                        MokaPayment::where('payment_id', $payment->id)->delete();
+                        return view('admin.response', ["response" => 0]);
+                    }
+                }
             }
-            $payment->mokaPayment->delete();
-            return "Başarısız";
-        } else {
-            $payment->mokaPayment->delete();
-            return "Başarısız";
+
+            MokaPayment::where('payment_id', $payment->id)->delete();
+            return view('admin.response', ["response" => 0]);
+        } catch (Exception $e) {
+            Telegram::send(
+                "Test",
+                $e->getMessage()
+            );
         }
     }
 
@@ -551,8 +601,7 @@ class PaymentController extends Controller
         ];
         $rules["card.security_code"] = [
             'required',
-            'numeric',
-            'between:100,999'
+            'string'
         ];
 
         $validated = $request->validate($rules);
@@ -701,7 +750,8 @@ class PaymentController extends Controller
                 'price' => 'required|numeric',
                 'date' => 'required',
                 'is_lump_sum' => 'required',
-                'lump_sum_value' => 'required'
+                'lump_sum_value' => 'required',
+                'status' => 'required'
             ]);
 
             $iteration = 0;
@@ -710,8 +760,8 @@ class PaymentController extends Controller
                     'subscription_id' => $subscription->id,
                     'price' => $validated['price'],
                     'date' => date('Y-m-15', strtotime($validated['date'] . ' + ' . ($iteration + 1) . ' month')),
-                    'status' => 2,
-                    'type' => 3
+                    'status' => $validated["status"],
+                    'type' => null
                 ];
 
                 Payment::create($temporary);
@@ -800,7 +850,6 @@ class PaymentController extends Controller
                         "payment_id" => $payment->id,
                         "description" => $validated["description"],
                         "username" => $request->user()->username
-
                     ]
                 )
             );
@@ -824,37 +873,6 @@ class PaymentController extends Controller
                 'message' => trans('response.delete.error')
             ]
         ]);
-    }
-
-
-    public function FunctionName(Subscription $subscription)
-    {
-        try {
-            MokaSale::where("subscription_id", $subscription->id)
-                ->whereNull("disabled_at")
-                ->update([
-                    'disabled_at' => DB::raw('current_timestamp()')
-                ]);
-
-            return response()->json([
-                'success' => true,
-                'toastr' => [
-                    'type' => 'success',
-                    'title' => trans('response.title.success'),
-                    'message' => trans('response.payment.auto.cancel.success')
-                ],
-                'reload' => true
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => true,
-                'toastr' => [
-                    'type' => 'error',
-                    'title' => trans('response.title.error'),
-                    'message' => trans('response.payment.auto.cancel.error')
-                ]
-            ]);
-        }
     }
 
     /**

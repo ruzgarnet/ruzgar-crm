@@ -26,14 +26,14 @@
 
                     <div class="payment-types payment-type-4 payment-type-5">
                         <div class="form-group">
-                            <label for="inpCardNumber">@lang('fields.card.number')</label>
-                            <input type="text" name="card[number]" id="inpCardNumber"
-                                class="form-control credit-card-mask" autocomplete="off">
+                            <label for="inpFullName">@lang('fields.card.name_surname')</label>
+                            <input type="text" name="card[full_name]" id="inpFullName" class="form-control" autocomplete="off">
                         </div>
 
                         <div class="form-group">
-                            <label for="inpFullName">@lang('fields.card.name_surname')</label>
-                            <input type="text" name="card[full_name]" id="inpFullName" class="form-control" autocomplete="off">
+                            <label for="inpCardNumber">@lang('fields.card.number')</label>
+                            <input type="text" name="card[number]" id="inpCardNumber"
+                                class="form-control credit-card-mask" autocomplete="off">
                         </div>
 
                         <div class="row">
@@ -54,13 +54,22 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="payment-types payment-type-4">
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="auto_payment" class="custom-control-input" id="chkAutoPayment" checked>
+                                    <label class="custom-control-label" for="chkAutoPayment">Otomatik ödeme tanımla.</label>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group text-right mb-0 payment-types payment-type-5">
                             <button id="btnPaymentPreAuth" type="button" class="btn btn-warning">@lang('titles.payment_pre_auth')</button>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-
                     <button type="button" class="btn btn-danger" data-dismiss="modal">@lang('titles.cancel')</button>
                     <button type="submit" class="btn btn-primary">@lang('fields.send')</button>
                 </div>
