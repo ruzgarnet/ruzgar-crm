@@ -7,7 +7,7 @@
         </ul>
         <div class="search-element">
             <input class="form-control" name="q" id="inpSearch" type="search" placeholder="Ara" aria-label="Ara"
-                data-width="250">
+                data-width="250" autocomplete="off">
             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
             <div class="search-backdrop"></div>
             <div class="search-result">

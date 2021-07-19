@@ -35,7 +35,7 @@
                         </div>
                         <div class="form-group">
                             <label for="slcCustomer">@lang('fields.customer')</label>
-                            <select name="customer_id" id="slcCustomer" class="custom-select selectpicker" v-select=""
+                            <select name="customer_id" id="slcCustomer" class="custom-select selectpicker"
                                 v-model="customer">
                                 @foreach ($customers as $customer)
                                     <option value="{{ $customer->id }}" @if ($subscription->customer_id == $customer->id) selected @endif>{{ $customer->full_name }}</option>
@@ -100,33 +100,21 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4"
-                                v-if="hasOption('modem_payments') && (modem != 1 && modem != 4 && modem != 5)">
-                                <div class="form-group">
-                                    <label for="slcModemPayment">@lang('fields.modem_payment')</label>
-                                    <select name="options[modem_payment]" id="slcModemPayment" class="custom-select"
-                                        v-model="modem_payment" v-select="">
-                                        <option v-for="option in options.modem_payments" :value="option.value"
-                                            v-text="option.title">
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4" v-if="hasOption('modem_price') && (modem == 5 || modem == 4)">
+                            <div class="col-lg-4" v-if="hasOption('modem_price') && modem != 1">
                                 <div class="form-group">
                                     <label for="inpModemPrice">@lang('fields.modem_price')</label>
                                     <input type="number" name="options[modem_price]" v-model="modem_price"
                                         id="inpModemPrice" step="0.01" class="form-control">
                                 </div>
                             </div>
-                            <div class="w-100"></div>
-                            <div class="col-lg-4" v-if="modem && (modem != 5 && modem != 1)">
+                            <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="inpBBKCode">@lang('fields.bbk_code')</label>
                                     <input type="text" name="bbk_code" id="inpBBKCode" class="form-control"
                                         value="{{ $subscription->bbk_code }}">
                                 </div>
                             </div>
+                            <div class="w-100"></div>
                             <div class="col-lg-4" v-if="hasOption('modem_model') && modem != 1 && modem != 4">
                                 <div class="form-group">
                                     <label for="slcModemModel">@lang('fields.modem_model')</label>
@@ -138,14 +126,29 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4"
-                                v-if="hasOption('modem_serial') && (modem == 2 || modem == 3 || modem == 5)">
-                                <div class="form-group">
-                                    <label for="inpModemSerial">@lang('fields.modem_serial')</label>
-                                    <input type="text" name="options[modem_serial]" id="inpModemSerial" class="form-control"
-                                        v-model="modem_serial">
+                            @for($i = 0; $i < 3; $i++)
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="inpModemModel">@lang('fields.devices.modem_brand')</label>
+                                        <input type="text" name="options[devices][modem_brand][{{ $i }}]" id="inpModemModel"
+                                            class="form-control" value="@isset($devices['modem_brand'][$i]) {{ $devices['modem_brand'][$i] }} @endisset">
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="inpModemModel">@lang('fields.devices.modem_serial')</label>
+                                        <input type="text" name="options[devices][modem_serial][{{ $i }}]" id="inpModemModel"
+                                            class="form-control" value="@isset($devices['modem_serial'][$i]) {{ $devices['modem_serial'][$i] }}  @endisset">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="inpModemModel">@lang('fields.devices.modem_model')</label>
+                                        <input type="text" name="options[devices][modem_model][{{ $i }}]" id="inpModemModel"
+                                            class="form-control" value="@isset($devices['modem_model'][$i]) {{ $devices['modem_model'][$i] }} @endisset">
+                                    </div>
+                                </div>
+                            @endfor
                             <div class="w-100"></div>
                             <div class="col-lg-4" v-if="hasOption('setup_payments')">
                                 <div class="form-group">
@@ -168,9 +171,23 @@
                                         <label class="custom-control-label"
                                             for="chkPrePayment">@lang('fields.pre_payment')</label>
                                     </div>
+                                    <div>(Öde Kullan)</div>
                                 </div>
                             </div>
                         </div>
+
+                        @if (in_array(Request::user()->role_id, [1]))
+                            <div class="form-group">
+                                <label for="slcReferences">@lang('fields.reference')</label>
+                                <select name="reference_id" id="slcReferences" class="custom-select selectpicker">
+                                    <option selected disabled>@lang('tables.reference.select')</option>
+                                    @foreach ($subscriptions as $subscription)
+                                        <option value="{{ $subscription->id }}">{{ $subscription->reference_print }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
                     </div>
                     <div class="card-footer text-right">
                         @if (!$subscription->approved_at)
@@ -237,11 +254,10 @@
                 category: '{{ $subscription->service->category->key }}',
                 startDate: '{{ convert_date($subscription->start_date, 'mask') }}',
                 duration: {{ $subscription->commitment }},
-                modem: {{ $subscription->options['modem'] ?? 0 }},
+                modem: {{ $subscription->options['modem'] ?? 1 }},
                 setup_payment: {{ $subscription->options['setup_payment'] ?? 0 }},
                 modem_serial: '{{ $subscription->options['modem_serial'] ?? '' }}',
                 pre_payment: {{ $subscription->options['pre_payment'] ?? 0 }},
-                modem_payment: {{ $subscription->options['modem_payment'] ?? 0 }},
                 modem_model: {{ $subscription->options['modem_model'] ?? 0 }},
                 address: '{{ $subscription->options['address'] ?? '' }}'
             },
@@ -259,10 +275,6 @@
                         this.modem = this.options.modems[0].value;
                     }
 
-                    if (this.hasOption('modem_payments')) {
-                        this.modem_payment = this.options.modem_payments[0].value;
-                    }
-
                     if (this.hasOption('modem_model')) {
                         this.modem = this.options.modem_model[0].value;
                     }
@@ -274,13 +286,6 @@
                         }
                     }
                     return false;
-                }
-            },
-            watch: {
-                modem: function() {
-                    if (this.hasOption('modem_payments')) {
-                        this.modem_payment = this.options.modem_payments[0].value;
-                    }
                 }
             },
             computed: {

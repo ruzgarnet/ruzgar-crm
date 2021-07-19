@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Messages;
 use App\Classes\SMS_Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -25,7 +26,9 @@ class MessageController extends Controller
      */
     public function index()
     {
-        return view('admin.message.list', ['messages' => Message::orderBy('id', 'DESC')->get()]);
+        return view('admin.message.list', [
+            'messages' => Message::orderBy('id', 'DESC')->get()
+        ]);
     }
 
     /**
@@ -38,9 +41,18 @@ class MessageController extends Controller
         return view('admin.message.add');
     }
 
+    /**
+     * Show the form for sending messages.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function send()
     {
-        return view("admin.message.send_sms", ["customers" => Customer::all(), "messages" => Message::all(), 'categories' => Category::all()]);
+        return view("admin.message.send_sms", [
+            "customers" => Customer::all(),
+            "messages" => Message::all(),
+            'categories' => Category::all()
+        ]);
     }
 
     /*
@@ -71,7 +83,9 @@ class MessageController extends Controller
             ]) + $validated;
         }
 
-        $message = Message::find($validated["message_id"]);
+        $messages = [];
+        $message = Message::find($validated["message_id"])->message;
+        $message_formatter = new Messages();
 
         $sms = new SMS_Api();
 
@@ -79,42 +93,171 @@ class MessageController extends Controller
             $customers = Customer::whereIn('id', $validated["customers"])->get();
             $numbers = [];
             foreach ($customers as $customer) {
-                $numbers[] = $customer->telephone;
+                $messages[] = [
+                    $customer->telephone,
+                    $message_formatter->generate(
+                        $message,
+                        [
+                            'ad_soyad' => $customer->full_name,
+                            'ay' => date('m'),
+                            'yil' => date('Y'),
+                            'referans_kodu' => $customer->reference_code
+                        ]
+                    )
+                ];
             }
         } else if ($type == 2) {
             $category = Category::find($validated["category_id"]);
             $subscriptions = Subscription::whereIn("service_id", $category->services->pluck('id'))->get();
             $numbers = [];
             foreach ($subscriptions as $subscription) {
-                $numbers[] = $subscription->customer->telephone;
+                $messages[] = [
+                    $subscription->customer->telephone,
+                    $message_formatter->generate(
+                        $message,
+                        [
+                            'ad_soyad' => $subscription->customer->full_name,
+                            'ay' => date('m'),
+                            'yil' => date('Y'),
+                            'referans_kodu' => $subscription->customer->reference_code
+                        ]
+                    )
+                ];
             }
-            /*$sms->submit(
-                "RUZGARNET",
-                $message->message,
-                $numbers
-            );*/
         } else if ($type == 3) {
             $subscriptions = Subscription::all();
             $numbers = [];
             foreach ($subscriptions as $subscription) {
-                $numbers[] = $subscription->customer->telephone;
+                $messages[] = [
+                    $subscription->customer->telephone,
+                    $message_formatter->generate(
+                        $message,
+                        [
+                            'ad_soyad' => $subscription->customer->full_name,
+                            'ay' => date('m'),
+                            'yil' => date('Y'),
+                            'referans_kodu' => $subscription->customer->reference_code
+                        ]
+                    )
+                ];
             }
-            /*$sms->submit(
-                "RUZGARNET",
-                $message->message,
-                $numbers
-            );*/
         } else if ($type == 4) {
             $numbers = [];
             $payments = Payment::where("status", "<>", 2)->where('date', date('Y-m-15'))->get();
             foreach ($payments as $payment) {
-                $numbers[] = $payment->subscription->customer->telephone;
+                $messages[] = [
+                    $payment->subscription->customer->telephone,
+                    $message_formatter->generate(
+                        $message,
+                        [
+                            'ad_soyad' => $payment->subscription->customer->full_name,
+                            'ay' => date('m'),
+                            'yil' => date('Y'),
+                            'referans_kodu' => $payment->subscription->customer->reference_code
+                        ]
+                    )
+                ];
             }
-            /*$sms->submit(
-                "RUZGARNET",
-                $message->message,
-                $numbers
-            );*/
+        }
+
+        $sms->submitMulti(
+            "RUZGARNET",
+            $messages
+        );
+
+        return response()->json([
+            'success' => true,
+            'toastr' => [
+                'type' => 'success',
+                'title' => trans('response.title.success'),
+                'message' => trans('response.insert.success')
+            ],
+            'redirect' => relative_route('admin.messages')
+        ]);
+    }
+
+    public function send_sms_spesific(Request $request)
+    {
+        $validated = $request->validate(
+            [
+                'telephone' => 'required',
+                'message_id' => 'required'
+            ]
+        );
+
+        $message_formatter = new Message();
+
+        $message = Message::find($validated["message_id"]);
+        $sms = new SMS_Api();
+
+
+        if($sms->submit('RUZGARNET',$message->message,[$validated["telephone"]])){
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.insert.success')
+                ],
+                'reload' => true
+            ]);
+        }
+        else{
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('response.insert.error')
+                ]
+            ]);
+        }
+
+        if($message)
+        {
+            SentMessage::create(
+                [
+                    'phone' => $validated["telephone"],
+                    'message' => $message->message
+                ]
+            );
+        }
+    }
+
+    public function send_sms_payment(Payment $payment)
+    {
+        $message_formatter = new Message();
+
+        $name = $payment->subscription->customer->full_name;
+        $phone = $payment->subscription->customer->telephone;
+        $price = $payment->price;
+        $date = $payment->date_print;
+
+        if(SentMessage::create(
+            [
+                'phone' => $phone,
+                'message' => $name.' isimli değerli müşterimiz '.$price.'TL tutarındaki faturanızın son ödeme tarihi 15 '.$date.' dır. +45 TL hizmet bedeli ödememek ve yasal yaptırımlarla karşılaşmamak için lütfen ödemenizi gerçekleştiriniz.Ödeme yapmanız için Hesap bilgilerimiz; HALKBANK HESAP ADI: AKARNET TELEKOM Sanayi Ticaret Limited Şirketi İBAN NO: TR85 0001 2009 6890 0010 2609 33 ACIKLAMA: ABONE İSİM SOYİSİM VE TC YAZILMALIDIR.HESAP ADI DOĞRU VE EKSİKSİZ YAZILMALIDIR.'
+            ]
+        )){
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.insert.success')
+                ],
+                'reload' => true
+            ]);
+        }
+        else{
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => trans('response.insert.error')
+                ]
+            ]);
         }
     }
 

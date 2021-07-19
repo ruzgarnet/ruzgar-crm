@@ -22,7 +22,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="slcCustomerApplicationType">@lang('fields.fault_type')</label>
+                            <label for="slcCustomerApplicationType">@lang('fields.type')</label>
                             <select name="customer_application_type_id" id="slcCustomerApplicationType" class="custom-select selectpicker">
                                 <option selected disabled>@lang('tables.fault.type.select')</option>
                                 @foreach ($customer_application_types as $customer_application_type)

@@ -29,6 +29,18 @@
                         <textarea name="description" id="txtCreatePaymentDescription" class="form-control" rows="3"></textarea>
                     </div>
 
+                    <div class="form-group">
+                        <label for="slcStatus">@lang('fields.status')</label>
+                        <select name="status" id="slcStatus" class="custom-select">
+                            <option title="Durum" selected disabled>Seçiniz</option>
+                            @foreach ($statuses as $index => $status)
+                                <option value="{{ $index }}" title="{{ $status }}">
+                                    {{ $status }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">

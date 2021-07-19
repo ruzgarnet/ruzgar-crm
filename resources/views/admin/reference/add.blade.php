@@ -23,7 +23,7 @@
                                 <option selected disabled>@lang('tables.subscription.select')</option>
                                 @foreach ($subscriptions as $row)
                                     @if ($row->id != $subscription->id)
-                                        <option value="{{ $row->id }}">{{ $row->select_print }}</option>
+                                        <option value="{{ $row->id }}">{{ $row->reference_print }}</option>
                                     @endif
                                 @endforeach
                             </select>

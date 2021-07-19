@@ -55,15 +55,17 @@
                         <div class="form-group">
                             <label for="txtSolutionDetail">Not</label>
                             <textarea name="solution_detail" id="txtSolutionDetail" class="form-control"
-                                rows="3" placeholder="">{{ $faultRecord->solution_detail }}</textarea>
+                                rows="3" placeholder="">{{ $faultRecord->solution_detail ?? "" }}</textarea>
                         </div>
 
                         <div class="d-flex flex-row">
-                            @foreach ($faultRecord->files as $file)
-                                <a target="_blank" href="/storage/{{ $file }}">
-                                    <img width="50" class="mx-2" src="/storage/{{ $file }}" alt="">
-                                </a>
-                            @endforeach
+                            @if (is_array($faultRecord->files))
+                                @foreach ($faultRecord->files as $file)
+                                    <a target="_blank" href="/storage/{{ $file }}">
+                                        <img width="50" class="mx-2" src="/storage/{{ $file }}" alt="">
+                                    </a>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                     <div class="card-footer text-right">

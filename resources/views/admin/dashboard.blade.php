@@ -6,6 +6,7 @@
     </div>
 
     <div class="row">
+        @if (request()->user()->username == "engin" || request()->user()->username == "admin")
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
             <div class="card card-statistic-1">
                 <div class="card-icon bg-primary">
@@ -37,6 +38,7 @@
                 </div>
             </div>
         </div>
+        @endif
 
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
             <div class="card card-statistic-1">
@@ -53,22 +55,23 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
-            <div class="card card-statistic-1">
-                <div class="card-icon bg-warning">
-                    <i class="fas fa-lira-sign"></i>
-                </div>
-                <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>Bu Ayın Tahsilatı</h4>
+        @if (request()->user()->username == "admin" || request()->user()->username == "engin")
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-warning">
+                        <i class="fas fa-lira-sign"></i>
                     </div>
-                    <div class="card-body">
-                        {{ print_money($total['payment']) }}
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>Bu Ayın Tahsilatı</h4>
+                        </div>
+                        <div class="card-body">
+                            {{ print_money($total['payment']) }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         <div class="col-lg-12">
             <div class="card list">

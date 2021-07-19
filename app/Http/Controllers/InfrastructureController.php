@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Classes\SMS_Api;
 use App\Classes\Telegram;
+use App\Models\Message;
+use App\Models\SentMessage;
 use Illuminate\Http\Request;
 
 class InfrastructureController extends Controller
@@ -156,17 +158,17 @@ class InfrastructureController extends Controller
             $port_speed = 0;
             $message .= "Kullanıcı fiber altyapıya sahiptir.";
         }
-        /*
-            [ADSL - 17] | [VDSL - 85]
-            Adı Soyadı : ÜMİT DEMİRCİ - Telefon Numarası : 5511265786 - İl : İSTANBUL - BBK : 19889031
-        */
+
         if ($port_statu) {
-            // $sms = new SMS_Api();
-            // $sms->submit(
-            //     "RUZGARNET",
-            // 	"Binanızda RüzgarNET olarak hizmetimiz mevcuttur. İsterseniz, www.ruzgarnet.com.tr websitemiz üzerinden inceleyip, abone olabilirsiniz. Sizleri de MUTLU abonelerimiz arasında görmekten gurur duyarız. RUZGARNET 0216 205 06 06",
-            // 	array($phone)
-            // );
+
+            SentMessage::create(
+                [
+                    'full_name' => $full_name,
+                    'phone' => $telephone,
+                    'message_id' => Message::where('key', 'INFRASTRUCTURE')->get()[0]->id,
+                    'staff_id' => $request->user()->staff_id
+                ]
+            );
 
             Telegram::send(
                 'AltyapıSorgulama',

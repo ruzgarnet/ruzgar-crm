@@ -1,16 +1,39 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
+use App\Classes\Generator;
+use App\Classes\Messages;
+use App\Classes\Moka;
+use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
+use App\Jobs\CheckAutoPayments;
+use App\Jobs\CreateAutoPayments;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\FaultRecord;
+use App\Models\Message;
+use App\Models\MokaAutoPayment;
+use App\Models\MokaPayment;
+use App\Models\MokaSale;
 use App\Models\Payment;
+use App\Models\SentMessage;
 use App\Models\Subscription;
+use App\Models\SubscriptionCancellation;
+use App\Models\SubscriptionChange;
+use App\Models\SubscriptionFreeze;
+use App\Models\User;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class MainController extends Controller
 {
+    /**
+     * Dashboard page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
         $data = [
@@ -18,9 +41,12 @@ class MainController extends Controller
                 'customer' => Customer::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->count(),
                 'subscription' => Subscription::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->count(),
                 'faultRecord' => FaultRecord::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->count(),
-                'payment' => Payment::whereBetween('date', [date('Y-m-d H:i', strtotime('first day of this month')), date('Y-m-d H:i', strtotime('first day of next month'))])->sum('price')
+                'payment' => Payment::where('status', '2')
+                    ->where('type', '<>', 6)
+                    ->whereBetween('date', [date('Y-m-01'), date('Y-m-t')])
+                    ->sum('price'),
             ],
-            'subscriptions' => Subscription::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->limit(20)->get()
+            'subscriptions' => Subscription::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->limit(10)->get()
         ];
         return view('admin.dashboard', $data);
     }

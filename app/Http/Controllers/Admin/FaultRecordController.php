@@ -46,7 +46,7 @@ class FaultRecordController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate($this->rules() + ['files.*' => 'required|file|image']);
+        $validated = $request->validate($this->rules() + ['files.*' => 'required|file|image', 'description' => 'required|string']);
         $files = [];
         $validated["serial_number"] = Generator::serialNumber();
 
@@ -143,7 +143,6 @@ class FaultRecordController extends Controller
         $rules["status"] = 'required';
         $rules['solution_detail'] = 'required|string';
         $validated = $request->validate($rules);
-        $validated["staff_id"] = $request->user()->staff_id;
         $old_status = $faultRecord->status;
         if ($faultRecord->update($validated)) {
             if ($old_status != $faultRecord->status) {
@@ -203,8 +202,7 @@ class FaultRecordController extends Controller
                 Rule::exists('fault_types', 'id')->where(function ($query) {
                     return $query->where('status', 1);
                 })
-            ],
-            'description' => 'required|string'
+            ]
         ];
     }
 }
