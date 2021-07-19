@@ -8,8 +8,17 @@
             <div class="card list">
                 <div class="card-header">
                     <h4>@lang('tables.subscription.title')</h4>
-
                     <div class="card-header-buttons">
+                        <span>
+                            <select id="slcStatus" class="custom-select">
+                                <option value="">Tümü</option>
+                                <option value="0">Onaylanmamış</option>
+                                <option value="1">Onaylandı</option>
+                                <option value="2">Hizmeti Değiştirildi</option>
+                                <option value="3">İptal Edildi</option>
+                                <option value="4">Donduruldu</option>
+                            </select>
+                        </span>
                         <a href="{{ route('admin.subscription.add') }}" class="btn btn-primary"><i
                                 class="fas fa-sm fa-plus"></i> @lang('tables.subscription.add')</a>
                     </div>
@@ -25,142 +34,11 @@
                                     <th scope="col"></th>
                                     <th scope="col">@lang('fields.price')</th>
                                     <th scope="col">@lang('fields.subscription_duration')</th>
+                                    <th scope="col">Satış</th>
                                     <th scope="col">@lang('fields.actions')</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($subscriptions as $subscription)
-                                    <tr data-id="{{ $subscription->id }}"
-                                        class="{{ $subscription->approved_at == null ? 'un-approved-row' : 'approved-row' }}">
-                                        <th scope="row">{{ $loop->iteration }}</th>
-                                        <td>
-                                            <a
-                                                href="{{ route('admin.customer.show', $subscription->customer_id) }}">{{ $subscription->customer->full_name }}</a>
-                                        </td>
-                                        <td>{{ $subscription->service->name }}</td>
-                                        <td>
-                                            <div class="buttons">
-												@if ($subscription->isCanceled())
-													<button type="button" class="btn btn-danger btn-sm"
-														data-toggle="popover" data-html="true"
-														data-content="<b>Tarih:</b> {{ convert_date($subscription->cancellation->created_at, 'large') }} <br>
-																														<b>Personel</b>: {{ $subscription->cancellation->staff->full_name }} <br>
-																														<b>Sebep</b>: {{ $subscription->cancellation->description }}">
-														@lang('titles.cancel')
-													</button>
-												@endif
-
-												@if ($subscription->isChanged())
-													<a class="btn btn-info btn-sm" title="@lang('fields.changed_service')"
-														href="{{ route('admin.subscription.payments', $subscription->getChanged()) }}">
-														{{ $subscription->getChanged()->service->name }}
-													</a>
-												@endif
-
-                                                @if ($subscription->isFreezed())
-													<button type="button" class="btn btn-warning btn-sm"
-														data-toggle="popover" data-html="true"
-														data-content="<b>Tarih:</b> {{ convert_date($subscription->freeze->created_at, 'large') }} <br>
-																														<b>Personel</b>: {{ $subscription->freeze->staff->full_name }} <br>
-																														<b>Sebep</b>: {{ $subscription->freeze->description }}">
-														@lang('titles.freezed')
-													</button>
-												@endif
-
-                                                @if (!$subscription->approved_at)
-                                                    <button type="button" class="btn btn-secondary">
-                                                        @lang('titles.unapproved')
-                                                    </button>
-                                                @endif
-
-                                                @if($subscription->isChangedNew())
-                                                    <button type="button" class="btn btn-info">
-                                                        @lang('fields.changed_service')
-                                                    </button>
-                                                @endif
-											</div>
-                                        </td>
-                                        <td>{{ $subscription->price_print }}</td>
-                                        <td>
-                                            {{ convert_date($subscription->start_date, 'medium') }}
-                                            -
-                                            @if ($subscription->end_date)
-                                                {{ convert_date($subscription->end_date, 'medium') }}
-                                            @else
-                                                <span class="badge badge-primary">@lang('fields.commitless')</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="buttons">
-                                                {{-- FIXME prepare for production --}}
-                                                <div class="dropdown">
-                                                    <button class="btn btn-primary dropdown-toggle" type="button"
-                                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
-                                                        @lang('fields.actions')
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right"
-                                                        aria-labelledby="dropdownMenuButton">
-
-                                                        @if ($subscription->status == 0)
-                                                            <a href="{{ route('admin.subscription.edit', $subscription) }}"
-                                                                class="dropdown-item">
-                                                                <i class="dropdown-icon fas fa-edit"></i>
-                                                                @lang('titles.edit')
-                                                            </a>
-
-                                                            <a target="_blank" class="dropdown-item"
-                                                                href="{{ route('admin.subscription.contract', $subscription) }}">
-                                                                <i class="dropdown-icon fas fa-file-contract"></i>
-                                                                @lang('fields.contract_preview')
-                                                            </a>
-
-                                                            <button type="button"
-                                                                class="dropdown-item confirm-modal-btn"
-                                                                data-action="{{ relative_route('admin.subscription.approve.post', $subscription) }}"
-                                                                data-modal="#approveSubscription">
-                                                                <i class="dropdown-icon fas fa-check"></i>
-                                                                @lang('titles.approve')
-                                                            </button>
-
-                                                            <button type="button"
-                                                                class="dropdown-item confirm-modal-btn"
-                                                                data-action="{{ relative_route('admin.subscription.delete', $subscription) }}"
-                                                                data-modal="#delete">
-                                                                <i class="dropdown-icon fas fa-trash"></i>
-                                                                @lang('titles.delete')
-                                                            </button>
-                                                        @endif
-                                                        @if ($subscription->approved_at)
-                                                            <a href="{{ route('admin.subscription.payments', $subscription) }}"
-                                                                class="dropdown-item">
-                                                                <i class="dropdown-icon fas fa-file-invoice"></i>
-                                                                @lang('tables.payment.title')
-                                                            </a>
-                                                            @if(!$subscription->isChangedNew())
-                                                                <a target="_blank" class="dropdown-item"
-                                                                    href="/contracts/{{ md5($subscription->subscription_no) }}.pdf">
-                                                                    <i class="dropdown-icon fas fa-file-contract"></i>
-                                                                    @lang('fields.contract')
-                                                                </a>
-                                                            @endif
-
-                                                            <button type="button"
-                                                                class="dropdown-item confirm-modal-btn"
-                                                                data-action="{{ relative_route('admin.subscription.unapprove.post', $subscription) }}"
-                                                                data-modal="#unApproveSubscription">
-                                                                <i class="dropdown-icon fas fa-redo-alt"></i>
-                                                                @lang('titles.reset')
-                                                            </button>
-                                                        @endif
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -181,41 +59,51 @@
     <script>
         $(function() {
             $("#dataTable").dataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "/subscription/list",
                 language: {
                     url: '/assets/admin/vendor/datatables/i18n/tr.json'
                 },
+                dom: 'ftipPr',
                 columnDefs: [{
                     "type": "num",
                     "targets": 0
-                }]
+                }, {
+                    "orderable": false,
+                    "targets": [0, 1, 2, 3, 4, 5, 6]
+                }],
+                initComplete: function() {
+                    this.api().columns().every(function() {
+                        var column = this;
+                        if (column[0][0] != 0 && column[0][0] != 1 && column[0][0] != 2 &&
+                            column[0][0] != 4 && column[0][0] != 5 && column[0][0] != 7 &&
+                            column[0][0] != 12) {
+                            var select = $('#slcStatus')
+                            .on('change', function() {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val, true, false)
+                                    .draw();
+                            });
+                        }
+                    });
+                }
             });
         })
-
     </script>
 @endpush
 
 @push('modal')
-    <x-admin.confirm-modal
-        id="delete"
-        method="delete"
-        :title="trans('titles.actions.delete')"
-        :message="trans('warnings.delete')"
-        :buttonText="trans('titles.delete')"
-        buttonType="danger" />
+    <x-admin.confirm-modal id="delete" method="delete" :title="trans('titles.actions.delete')"
+        :message="trans('warnings.delete')" :buttonText="trans('titles.delete')" buttonType="danger" />
 
-    <x-admin.confirm-modal
-        id="approveSubscription"
-        method="put"
-        :title="trans('titles.actions.approve.subscription')"
-        :message="trans('warnings.approve.subscription')"
-        :buttonText="trans('titles.approve')"
-        buttonType="success" />
+    <x-admin.confirm-modal id="approveSubscription" method="put" :title="trans('titles.actions.approve.subscription')"
+        :message="trans('warnings.approve.subscription')" :buttonText="trans('titles.approve')" buttonType="success" />
 
-    <x-admin.confirm-modal
-        id="unApproveSubscription"
-        method="put"
-        :title="trans('titles.actions.reset.subscription')"
-        :message="trans('warnings.subscription.reset')"
-        :buttonText="trans('titles.reset')"
-        buttonType="danger" />
+    <x-admin.confirm-modal id="unApproveSubscription" method="put" :title="trans('titles.actions.reset.subscription')"
+        :message="trans('warnings.subscription.reset')" :buttonText="trans('titles.reset')" buttonType="danger" />
 @endpush

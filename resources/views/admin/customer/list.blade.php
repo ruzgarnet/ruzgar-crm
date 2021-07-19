@@ -15,7 +15,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div>
                         <table class="table table-striped" id="dataTable">
                             <thead>
                                 <tr>
@@ -29,55 +29,55 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($customers as $customer)
-                                    <tr data-id="{{ $customer->id }}"
-                                        class="{{ $customer->type == 1 ? 'un-approved-row' : 'approved-row' }}">
-                                        <th scope="row">{{ $loop->iteration }}</th>
-                                        <td>
-                                            <span class="d-inline-block text-center">
-                                                {{ $customer->identification_secret }}
-                                                @if ($customer->type == 1)
-                                                    <div class="customer-type customer-type-{{ $customer->type }}">
-                                                        @lang("tables.customer.types.{$customer->type}")
-                                                    </div>
+                                    {{-- @foreach ($customers as $customer)
+                                        <tr data-id="{{ $customer->id }}"
+                                            class="{{ $customer->type == 1 ? 'un-approved-row' : 'approved-row' }}">
+                                            <th scope="row">{{ $loop->iteration }}</th>
+                                            <td>
+                                                <span class="d-inline-block text-center">
+                                                    {{ $customer->identification_secret }}
+                                                    @if ($customer->type == 1)
+                                                        <div class="customer-type customer-type-{{ $customer->type }}">
+                                                            @lang("tables.customer.types.{$customer->type}")
+                                                        </div>
+                                                    @endif
+                                                </span>
+                                            </td>
+                                            <td>{{ $customer->full_name }}</td>
+                                            <td data-filter="0{{ $customer->telephone }}">{{ $customer->telephone_print }}
+                                            </td>
+                                            <td>{{ $customer->customerInfo->city->name }}</td>
+                                            <td>
+                                                @if ($customer->staff)
+                                                    {{ $customer->staff->full_name }}
+                                                @else
+                                                    -
                                                 @endif
-                                            </span>
-                                        </td>
-                                        <td>{{ $customer->full_name }}</td>
-                                        <td data-filter="0{{ $customer->telephone }}">{{ $customer->telephone_print }}
-                                        </td>
-                                        <td>{{ $customer->customerInfo->city->name }}</td>
-                                        <td>
-                                            @if ($customer->staff)
-                                                {{ $customer->staff->full_name }}
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="buttons">
-                                                <a href="{{ route('admin.customer.edit', $customer) }}"
-                                                    class="btn btn-primary" title="@lang('titles.edit')">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="buttons">
+                                                    <a href="{{ route('admin.customer.edit', $customer) }}"
+                                                        class="btn btn-primary" title="@lang('titles.edit')">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
 
-                                                <a href="{{ route('admin.customer.show', $customer) }}"
-                                                    class="btn btn-primary" title="@lang('titles.show')">
-                                                    <i class="fas fa-file"></i>
-                                                </a>
+                                                    <a href="{{ route('admin.customer.show', $customer) }}"
+                                                        class="btn btn-primary" title="@lang('titles.show')">
+                                                        <i class="fas fa-file"></i>
+                                                    </a>
 
-                                                @if ($customer->type == 1)
-                                                    <button type="button"
-                                                        class="btn btn-success confirm-modal-btn"
-                                                        data-action="{{ route('admin.customer.approve.post', $customer) }}"
-                                                        data-modal="#approveCustomer" title="@lang('titles.approve')">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                                    @if ($customer->type == 1)
+                                                        <button type="button"
+                                                            class="btn btn-success confirm-modal-btn"
+                                                            data-action="{{ route('admin.customer.approve.post', $customer) }}"
+                                                            data-modal="#approveCustomer" title="@lang('titles.approve')">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach --}}
                             </tbody>
                         </table>
                     </div>
@@ -99,50 +99,17 @@
     <script>
         $(function() {
             $("#dataTable").dataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "/customer/list",
                 language: {
                     url: '/assets/admin/vendor/datatables/i18n/tr.json'
                 },
+                dom:'ftip',
                 columnDefs: [{
                     "type": "num",
                     "targets": 0
-                },{ "orderable": false, "targets": [1, 2, 3, 4, 5, 6] }],
-                initComplete: function () {
-                    this.api().columns().every( function () {
-                        var column = this;
-                        if(column[0][0] != 0 && column[0][0] != 1 && column[0][0] != 2 && column[0][0] != 3 && column[0][0] != 6)
-                        {
-                            var select = $('<select class="form-control" style="width:80px;"><option value="">Tümü</option></select>')
-                            .appendTo( $(column.header()).empty() )
-                            .on( 'change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search( val ? '^'+val+'$' : '', true, false )
-                                    .draw();
-                            } );
-
-                            column.data().unique().sort().each( function ( d, j ) {
-                                select.append( '<option value="'+d+'">'+d+'</option>' )
-                            } );
-                        }
-                        if(column[0][0] == 1)
-                        {
-                            $('<input style="width:90px;" type="text" class="form-control" placeholder="Ara" />')
-                            .appendTo( $(column.header()).empty() )
-                            .on( 'input', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search('^'+val, true, false)
-                                    .draw();
-                            } );
-                        }
-                    } );
-                }
+                },{ "orderable": false, "targets": [0, 1, 2, 3, 4, 5, 6] }],
             });
         })
 

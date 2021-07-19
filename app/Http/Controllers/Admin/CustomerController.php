@@ -27,6 +27,59 @@ class CustomerController extends Controller
     }
 
     /**
+     * Get a listing of the resource.
+     *
+     * @return array
+     */
+    public function list(Request $request)
+    {
+        $offset = $request->input('start');
+        $limit = $request->input('length');
+        $draw = $request->input('draw');
+        $search = $request->input('search');
+
+        if ($search["value"]) {
+            $customers = Customer::where("first_name", "LIKE", $search["value"] . "%")->orderBy('id', 'desc')->offset($offset)->limit($limit)->get();
+            $no = Customer::where("first_name", "LIKE", $search["value"] . "%")->orderBy('id', 'desc')->get();
+        } else {
+            $customers = Customer::offset($offset)->limit($limit)->orderBy('id', 'desc')->get();
+            $no = Customer::orderBy('id', 'desc')->get();
+        }
+
+        $data = [];
+        foreach ($customers as $customer) {
+            $data[] = [
+                0 => $customer->id,
+                1 => $customer->identification_number,
+                2 => $customer->full_name,
+                3 => $customer->telephone,
+                4 => $customer->customerInfo->city->name,
+                5 => $customer->staff->full_name,
+                6 => '<div class="buttons">
+                    <a href="' . route('admin.customer.edit', $customer) . '"
+                        class="btn btn-primary" title="' . trans('title.edit') . '">
+                        <i class="fas fa-edit"></i>
+                    </a>
+
+                    <a href="' . route('admin.customer.show', $customer) . '"
+                        class="btn btn-primary" title="' . trans('title.show') . '">
+                        <i class="fas fa-file"></i>
+                    </a>
+                </div>'
+            ];
+        }
+
+        $data = [
+            'draw' => $draw,
+            'recordsTotal' => Customer::all()->count(),
+            'recordsFiltered' => $no->count(),
+            'data' => $data
+        ];
+
+        return $data;
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Contracts\View\View
@@ -91,7 +144,8 @@ class CustomerController extends Controller
     {
         $data = [
             'paymentTypes' => Payment::getTypes(),
-            'customer' => $customer
+            'customer' => $customer,
+            'statuses' => Payment::getStatus()
         ];
         return view('admin.customer.show', $data);
     }
@@ -133,7 +187,7 @@ class CustomerController extends Controller
         // Ignored uniques
         $rules['email']['unique']                 = Rule::unique('customers', 'email')->ignore($customer->id);
         $rules['telephone']['unique']             = Rule::unique('customers', 'telephone')->ignore($customer->id);
-        $rules['secondary_telephone']['unique']   = Rule::unique('customer_info', 'secondary_telephone')->ignore($customer->id);
+        $rules['secondary_telephone']['unique']   = Rule::unique('customer_info', 'secondary_telephone')->ignore($customer->customerInfo->id);
         $rules['identification_number']['unique'] = Rule::unique('customers', 'identification_number')->ignore($customer->id);
 
         $validated = $request->validate($rules);

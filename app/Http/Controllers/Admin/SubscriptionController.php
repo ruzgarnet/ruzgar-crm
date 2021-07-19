@@ -10,8 +10,10 @@ use App\Models\SubscriptionCancellation;
 use App\Models\Category;
 use App\Models\SubscriptionChange;
 use App\Models\Customer;
+use App\Models\Message;
 use App\Models\Payment;
 use App\Models\Reference;
+use App\Models\SentMessage;
 use App\Models\Service;
 use App\Models\Subscription;
 use App\Models\SubscriptionFreeze;
@@ -32,7 +34,156 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        return view('admin.subscription.list', ['subscriptions' => Subscription::orderBy('id', 'DESC')->get()]);
+        return view('admin.subscription.list', [
+            'subscriptions' => Subscription::orderBy('id', 'DESC')->get(),
+            'statuses' => trans('subscription.status'),
+            'services' => Service::select('id', 'name')->get()
+        ]);
+    }
+
+    /**
+     * Get a listing of the resource.
+     *
+     * @return array
+     */
+    public function list(Request $request)
+    {
+        $offset = $request->input('start');
+        $limit = $request->input('length');
+        $draw = $request->input('draw');
+        $status = $request->input('columns.3.search.value');
+
+        if ($status == "") {
+            $subscriptions = Subscription::offset($offset)->limit($limit)->orderBy('id', 'desc')->get();
+            $no = Subscription::orderBy('id', 'desc')->get();
+        } else {
+            $subscriptions = Subscription::offset($offset)->where("status", $status)->limit($limit)->orderBy('id', 'desc')->get();
+            $no = Subscription::where("status", $status)->orderBy('id', 'desc')->get();
+        }
+
+        $data = [];
+        foreach ($subscriptions as $subscription) {
+            $html = '<div class="buttons">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    ' . trans('fields.actions') . '
+                </button>
+                <div class="dropdown-menu dropdown-menu-right"
+                    aria-labelledby="dropdownMenuButton">';
+
+            if ($subscription->status == 0) {
+                $html .= ' <a href="' . route('admin.subscription.edit', $subscription) . '"
+                        class="dropdown-item">
+                        <i class="dropdown-icon fas fa-edit"></i>
+                        ' . trans('titles.edit') . '
+                    </a>
+
+                    <a target="_blank" class="dropdown-item"
+                        href="' . route('admin.subscription.contract', $subscription) . '">
+                        <i class="dropdown-icon fas fa-file-contract"></i>
+                        ' . trans('fields.contract_preview') . '
+                    </a>
+
+                    <button type="button"
+                        class="dropdown-item confirm-modal-btn"
+                        data-action="' . relative_route('admin.subscription.approve.post', $subscription) . '"
+                        data-modal="#approveSubscription">
+                        <i class="dropdown-icon fas fa-check"></i>
+                        ' . trans('titles.approve') . '
+                    </button>
+
+                    <button type="button"
+                        class="dropdown-item confirm-modal-btn"
+                        data-action="' . relative_route('admin.subscription.delete', $subscription) . '"
+                        data-modal="#delete">
+                        <i class="dropdown-icon fas fa-trash"></i>
+                        ' . trans('titles.delete') . '
+                    </button>';
+            }
+            if ($subscription->approved_at) {
+                $html .= '<a href="' . route('admin.subscription.payments', $subscription) . '"
+                    class="dropdown-item">
+                    <i class="dropdown-icon fas fa-file-invoice"></i>
+                    ' . trans('tables.payment.title') . '
+                </a>';
+            }
+
+            if (!$subscription->isChangedNew()) {
+                $html .= '<a target="_blank" class="dropdown-item"
+                    href="/contracts/' . md5($subscription->subscription_no) . '.pdf">
+                    <i class="dropdown-icon fas fa-file-contract"></i>
+                    ' . trans('fields.contract') . '
+                </a>';
+            }
+
+            $html .= '</div>
+                </div>
+            </div>';
+
+            $status_html = '<div class="buttons">';
+            if ($subscription->isCanceled()) {
+                $status_html .= '<button type="button" class="btn btn-danger btn-sm"
+                data-toggle="popover" data-html="true"
+                data-content="<b>Tarih:</b>' . convert_date($subscription->cancellation->created_at, 'large') . '<br>
+                <b>Personel</b>: ' . $subscription->cancellation->staff->full_name . '<br>
+                <b>Sebep</b>: ' . $subscription->cancellation->description . '">
+                ' . trans('titles.cancel') . '
+                </button>';
+            }
+
+            if ($subscription->isChanged()) {
+                $status_html .= '<a class="btn btn-info btn-sm" title="' . trans('fields.changed_service') . '"
+                    href="' . route('admin.subscription.payments', $subscription->getChanged()) . '">
+                    ' . $subscription->getChanged()->service->name . '
+                </a>';
+            }
+
+            if ($subscription->isFreezed()) {
+                $status_html .= '<button type="button" class="btn btn-warning btn-sm"
+                    data-toggle="popover" data-html="true"
+                    data-content="<b>Tarih:</b>' . convert_date($subscription->freeze->created_at, 'large') . '<br>
+                    <b>Personel</b>: {{ $subscription->freeze->staff->full_name }} <br>
+                    <b>Sebep</b>: {{ $subscription->freeze->description }}">
+                    ' . trans('titles.freezed') . '
+                </button>';
+            }
+
+            if (!$subscription->approved_at) {
+                $status_html .= '<button type="button" class="btn btn-secondary">
+                    ' . trans('titles.unapproved') . '
+                </button>';
+            }
+
+            if ($subscription->isChangedNew()) {
+                $status_html .= '<button type="button" class="btn btn-info">
+                    ' . trans('fields.changed_service') . '
+                </button>';
+            }
+
+            $status_html .= '</div>';
+
+            $data[] = [
+                0 => $subscription->id,
+                1 => '<a href="' . route('admin.customer.show', $subscription->customer_id) . '">' . $subscription->customer->full_name . '</a>',
+                2 => $subscription->service->name,
+                3 => $status_html,
+                4 => print_money($subscription->price),
+                5 => convert_date($subscription->start_date, 'medium') . "-" . convert_date($subscription->end_date, 'medium'),
+                6 => $subscription->staff->full_name ?? "-",
+                7 => $html
+            ];
+        }
+
+        $data = array(
+            'draw' => $draw,
+            'recordsTotal' => Subscription::all()->count(),
+            'recordsFiltered' => $no->count(),
+            'data' => $data
+        );
+
+        return $data;
     }
 
     /**
@@ -53,9 +204,14 @@ class SubscriptionController extends Controller
      */
     public function preview(Subscription $subscription)
     {
+        $devices = $subscription->getOption("devices") ?? null;
+        if (!$subscription->approved_at)
+            $subscription->generatePayments();
+
         $pdf = Pdf::loadView("pdf.contract.{$subscription->service->category->contractType->view}", [
             'subscription' => $subscription,
-            'barcode' => Generator::barcode("0000000000")
+            'barcode' => Generator::barcode($subscription->subscription_no),
+            'devices' => $devices
         ]);
         return $pdf->stream();
     }
@@ -91,6 +247,8 @@ class SubscriptionController extends Controller
             unset($validated['reference_id']);
         }
 
+        $validated["subscription_no"] = Generator::subscriptionNo();
+
         if ($subscription = Subscription::create($validated)) {
             if ($reference_id) {
                 $data = [
@@ -100,6 +258,19 @@ class SubscriptionController extends Controller
 
                 Reference::create($data);
             }
+
+            Telegram::send(
+                'AboneTamamlanan',
+                trans(
+                    'telegram.add_subscription',
+                    [
+                        'full_name' => $subscription->customer->full_name,
+                        'id_no' => $subscription->customer->identification_number,
+                        'username' => $subscription->staff->full_name,
+                        'customer_staff' => $subscription->customer->staff->full_name
+                    ]
+                )
+            );
 
             return response()->json([
                 'toastr' => [
@@ -141,7 +312,7 @@ class SubscriptionController extends Controller
                     'title' => trans('response.title.success'),
                     'message' => trans('response.edit.success')
                 ],
-                'redirect' => relative_route('admin.subscriptions')
+                'reload' => true
             ]);
         }
 
@@ -162,7 +333,14 @@ class SubscriptionController extends Controller
      */
     public function edit(Subscription $subscription)
     {
-        $data = array_merge($this->viewData(), ['subscription' => $subscription]);
+        $devices = $subscription->getOption("devices") ?? [];
+        $data = array_merge(
+            $this->viewData(),
+            [
+                'subscription' => $subscription,
+                'devices' => $devices
+            ]
+        );
 
         return view('admin.subscription.edit', $data);
     }
@@ -198,7 +376,36 @@ class SubscriptionController extends Controller
             $validated['end_date'] = null;
         }
 
+        if (
+            !in_array($subscription->commitment, [0, 12]) &&
+            in_array($validated["commitment"], [0, 12])
+        ) {
+            $validated["price"] += 10;
+        } else if (
+            in_array($subscription->commitment, [0, 12]) &&
+            !in_array($validated["commitment"], [0, 12])
+        ) {
+            $validated["price"] -= 10;
+        }
+
+        $reference_id = null;
+        if (isset($validated['reference_id']) && $validated['reference_id'] != null) {
+            $reference_id = $validated['reference_id'];
+            unset($validated['reference_id']);
+        }
+
         if ($subscription->update($validated)) {
+            if ($reference_id != null) {
+                Reference::where('referenced_id', $subscription->id)->delete();
+
+                $data = [
+                    'reference_id' => $reference_id,
+                    'referenced_id' => $subscription->id
+                ];
+
+                Reference::create($data);
+            }
+
             return response()->json([
                 'success' => true,
                 'toastr' => [
@@ -281,25 +488,36 @@ class SubscriptionController extends Controller
         }
 
         if ($subscription->approve_subscription()) {
+            SentMessage::insert([
+                [
+                    'customer_id' => $subscription->customer->id,
+                    'message_id' => 10
+                ],
+                [
+                    'customer_id' => $subscription->customer->id,
+                    'message_id' => 11
+                ]
+            ]);
 
-            Telegram::send(
-                'AboneTamamlanan',
-                trans(
-                    'telegram.add_subscription',
-                    [
-                        'full_name' => $subscription->customer->full_name,
-                        'id_no' => $subscription->customer->identification_number,
-                        'username' => $subscription->staff->full_name,
-                        'customer_staff' => $subscription->customer->staff->full_name
-                    ]
-                )
-            );
+            SentMessage::insert([
+                [
+                    'customer_id' => $subscription->customer->id,
+                    'message_id' => 12,
+                    'delivery_date' => date('Y-m-d 11:00', strtotime(' +1 day '))
+                ],
+                [
+                    'customer_id' => $subscription->customer->id,
+                    'message_id' => 13,
+                    'delivery_date' => date('Y-m-d 11:00', strtotime(' +1 week '))
+                ]
+            ]);
 
             $pdf = Pdf::loadView("pdf.contract.{$subscription->service->category->contractType->view}", [
                 'subscription' => $subscription,
                 'device_brand' => 'Huawei',
                 'device_model' => 'HGS',
-                'barcode' => Generator::barcode($subscription->subscription_no)
+                'barcode' => Generator::barcode($subscription->subscription_no),
+                'devices' => $subscription->getOption("devices") ?? []
             ]);
             $path = "contracts/" . md5($subscription->subscription_no) . ".pdf";
             if (!file_exists(public_path('contracts'))) {
@@ -483,7 +701,7 @@ class SubscriptionController extends Controller
                     'title' => trans('response.title.success'),
                     'message' => trans('response.subscription.change.success')
                 ],
-                'redirect' => relative_route('admin.subscriptions')
+                'redirect' => relative_route('admin.customer.show', $subscription->customer)
             ]);
         }
 
@@ -769,8 +987,8 @@ class SubscriptionController extends Controller
             'options.address' => 'nullable|string|max:255',
             'reference_id' => [
                 'nullable',
-                Rule::exists('subscriptions', 'id')->where(function ($query) {
-                    return $query->where('status', 1);
+                Rule::exists('customers', 'reference_code')->where(function ($query) {
+                    return $query;
                 })
             ],
         ];
@@ -805,9 +1023,19 @@ class SubscriptionController extends Controller
 
             foreach ($options as $key => $value) {
                 if ($key == 'modem_serial') {
-                    if (request()->input('options.modem') && in_array(request()->input('options.modem'), [2, 3, 5])) {
-                        $optionRules['options.modem_serial'] = [
-                            'required',
+                    if (request()->input('options.modem') && in_array(request()->input('options.modem'), [2, 3, 5, 6])) {
+                        $optionRules['options.devices.modem_brand.*'] = [
+                            'nullable',
+                            'string',
+                            'max:255'
+                        ];
+                        $optionRules['options.devices.modem_serial.*'] = [
+                            'nullable',
+                            'string',
+                            'max:255'
+                        ];
+                        $optionRules['options.devices.modem_model.*'] = [
+                            'nullable',
                             'string',
                             'max:255'
                         ];
@@ -817,7 +1045,7 @@ class SubscriptionController extends Controller
                         'nullable',
                         'boolean'
                     ];
-                } else if ($key == 'modem_price' && request()->input("options.modem") == 5) {
+                } else if ($key == 'modem_price' && request()->input("options.modem") != 1) {
                     $optionRules["options.modem_price"] = [
                         'required',
                         'numeric'
@@ -840,19 +1068,10 @@ class SubscriptionController extends Controller
                         $option = "options.{$option}";
                     }
 
-                    if ($key == 'modem_payments') {
-                        if (!in_array(request()->input("options.modem"), [1, 4, 5])) {
-                            $optionRules[$option] = [
-                                'required',
-                                Rule::in($value)
-                            ];
-                        }
-                    } else {
-                        $optionRules[$option] = [
-                            'required',
-                            Rule::in($value)
-                        ];
-                    }
+                    $optionRules[$option] = [
+                        'required',
+                        Rule::in($value)
+                    ];
                 }
             }
         }

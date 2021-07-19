@@ -25,230 +25,218 @@ use Illuminate\Validation\Rule;
 class PaymentController extends Controller
 {
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function index()
+    {
+        return view(
+            'admin.payment.list',
+            [
+                'statuses' => trans('tables.payment.status'),
+                'services' => Service::all()
+            ]
+        );
+    }
+
+    /**
+     * Get a listing of the resource.
+     *
+     * @return array
+     */
+    public function list(Request $request)
+    {
+        $data = [];
+
+        $offset = $request->input('start');
+        $limit = $request->input('length');
+        $draw = $request->input('draw');
+        $date = str_replace("\\", "", $request->input('columns.4.search.value'));
+        $status = $request->input('columns.5.search.value');
+        $type = $request->input('columns.6.search.value');
+        $service_id = $request->input('columns.2.search.value');
+
+        $payments = Payment::orderBy('payments.id', 'desc');
+        $no = Payment::orderBy('payments.id', 'desc');
+
+        if ($service_id != "") {
+            $payments = $payments
+                ->join('subscriptions', 'subscriptions.id', 'payments.subscription_id')
+                ->whereRaw("subscriptions.service_id = " . $service_id);
+            $no = $no
+                ->join('subscriptions', 'subscriptions.id', 'payments.subscription_id')
+                ->whereRaw("subscriptions.service_id = " . $service_id);
+        }
+
+        if ($date != "") {
+            $payments = $payments->where("payments.date", $date);
+            $no = $no->where("payments.date", $date);
+        }
+
+        if ($status != "") {
+            $payments = $payments->where("payments.status", $status);
+            $no = $no->where("payments.status", $status);
+        }
+
+        if ($type != "") {
+            $payments = $payments->where("payments.type", $type);
+            $no = $no->where("payments.type", $type);
+        }
+
+        $payments = $payments->offset($offset)->limit($limit)->get();
+        $no = $no->get();
+
+
+        foreach ($payments as $payment) {
+            if ($payment->type) {
+                $type = trans('tables.payment.types.' . $payment->type);
+            } else {
+                $type = "";
+            }
+
+            $data[] = [
+                0 => $payment->id,
+                1 => '<a href="' . route('admin.customer.show', $payment->subscription->customer_id) . '">' . $payment->subscription->customer->full_name . '</a>',
+                2 => $payment->subscription->service->name,
+                3 => print_money($payment->price),
+                4 => convert_date($payment->date, "mask"),
+                5 => trans('tables.payment.status.' . $payment->status),
+                6 => $type
+            ];
+        }
+
+        $data = array(
+            'draw' => $draw,
+            'recordsTotal' => Payment::all()->count(),
+            'recordsFiltered' => $no->count(),
+            'data' => $data
+        );
+
+        return $data;
+    }
+
+    /**
      * Receives payment
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Payment $payment
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function received(Request $request, Payment $payment)
     {
-        $rules = $this->rules();
+        if (!$payment->isPaid()) {
+            $rules = $this->rules();
 
-        if (in_array($request->input('type'), [4, 5])) {
-            $rules["card.number"] = [
-                'required',
-                'numeric'
-            ];
-            $rules["card.full_name"] = [
-                'required',
-                'string',
-                'max:255'
-            ];
-            $rules["card.expire_date"] = [
-                'required',
-                'string'
-            ];
-            $rules["card.security_code"] = [
-                'required',
-                'numeric',
-                'between:100,999'
-            ];
-        }
-
-        $validated = $request->validate($rules);
-
-        $date = Carbon::parse($payment->date);
-        $month = Carbon::now()->format("m");
-
-        // TODO remove env conditions for product
-        if (env('APP_ENV') == 'local' || $date->format('m') == $month) {
-            if ($request->input('type') == 4) {
-                $expire = Mutator::expire_date($validated["card"]["expire_date"]);
-
-                $card = [
-                    'full_name' => $validated["card"]['full_name'],
-                    'number' => $validated["card"]['number'],
-                    'expire_month' => $expire[0],
-                    'expire_year' => $expire[1],
-                    'security_code' => $validated["card"]['security_code'],
-                    'amount' => $payment->price
+            if (in_array($request->input('type'), [4, 5])) {
+                $rules["card.number"] = [
+                    'required',
+                    'numeric'
                 ];
-
-                $hash = [
-                    'subscription_no' => $payment->subscription->subscription_no,
-                    'payment_created_at' => $payment->created_at
+                $rules["card.full_name"] = [
+                    'required',
+                    'string',
+                    'max:255'
                 ];
+                $rules["card.expire_date"] = [
+                    'required',
+                    'string'
+                ];
+                $rules["card.security_code"] = [
+                    'required',
+                    'string'
+                ];
+            }
 
-                $moka = new Moka();
-                $response = $moka->pay(
-                    $card,
-                    route('payment.result', $payment),
-                    $hash
-                );
+            $validated = $request->validate($rules);
 
-                if ($response->Data != null) {
-                    MokaPayment::create([
+            $date = Carbon::parse($payment->date);
+            $month = Carbon::now()->format("m");
+
+            MokaPayment::where('payment_id', $payment->id)->delete();
+
+            if (env('APP_ENV') == 'local' || $date->format('m') == $month) {
+                if ($request->input('type') == 4) {
+                    $expire = Mutator::expire_date($validated["card"]["expire_date"]);
+
+                    $card = [
+                        'full_name' => $validated["card"]['full_name'],
+                        'number' => $validated["card"]['number'],
+                        'expire_month' => $expire[0],
+                        'expire_year' => $expire[1],
+                        'security_code' => $validated["card"]['security_code'],
+                        'amount' => $payment->price
+                    ];
+
+                    $hash = [
+                        'subscription_no' => $payment->subscription->subscription_no,
+                        'payment_created_at' => $payment->created_at
+                    ];
+
+                    $moka = new Moka();
+                    $response = $moka->pay(
+                        $card,
+                        route('payment.result', $payment),
+                        $hash
+                    );
+
+                    if ($response->Data != null) {
+                        MokaPayment::create([
+                            'payment_id' => $payment->id,
+                            'response' => $response,
+                            'trx_code' => $moka->trx_code
+                        ]);
+
+                        if ($request->input('auto_payment')) {
+                            $this->define_auto_payment($payment, $validated);
+                        }
+
+                        return response()->json([
+                            'success' => true,
+                            'payment' => [
+                                'frame' => $response->Data->Url
+                            ]
+                        ]);
+                    }
+
+                    MokaLog::create([
                         'payment_id' => $payment->id,
+                        'ip' => $request->ip(),
                         'response' => $response,
                         'trx_code' => $moka->trx_code
                     ]);
 
                     return response()->json([
-                        'success' => true,
-                        'payment' => [
-                            'frame' => $response->Data->Url
+                        'error' => true,
+                        'toastr' => [
+                            'type' => 'error',
+                            'title' => trans('response.title.error'),
+                            'message' => $response->ResultCode
                         ]
                     ]);
+                } else if ($request->input('type') == 5) {
+                    return $this->define_auto_payment($payment, $validated);
                 }
 
-                MokaLog::create([
-                    'payment_id' => $payment->id,
-                    'ip' => $request->ip(),
-                    'response' => $response,
-                    'trx_code' => $moka->trx_code
-                ]);
+                if ($payment->receive($validated)) {
+                    return response()->json([
+                        'success' => true,
+                        'toastr' => [
+                            'type' => 'success',
+                            'title' => trans('response.title.success'),
+                            'message' => trans('warnings.payment.successful')
+                        ],
+                        'reload' => true
+                    ]);
+                }
 
                 return response()->json([
                     'error' => true,
                     'toastr' => [
                         'type' => 'error',
                         'title' => trans('response.title.error'),
-                        'message' => $response->ResultCode
+                        'message' => trans('response.edit.error')
                     ]
-                ]);
-            } else if ($request->input('type') == 5) {
-
-                $expire = Mutator::expire_date($validated["card"]["expire_date"]);
-
-                $card = [
-                    'full_name' => $validated["card"]['full_name'],
-                    'number' => $validated["card"]['number'],
-                    'expire_month' => $expire[0],
-                    'expire_year' => $expire[1],
-                    'amount' => $payment->price
-                ];
-
-                $sale = MokaSale::where("subscription_id", $payment->subscription->id)->first();
-
-                $moka = new Moka();
-                if ($sale) {
-                    $customer_id = $sale->moka_customer_id;
-                    $result = $moka->add_card(
-                        $customer_id,
-                        $card["full_name"],
-                        $card["number"],
-                        $expire[0],
-                        $expire[1]
-                    );
-
-                    if ($result->Data != null) {
-                        $card_token = $result->Data->CardList[0]->CardToken;
-
-                        $moka->update_sale(
-                            $sale->moka_sale_id,
-                            $card_token
-                        );
-                    } else {
-                        $error = str_replace('.', '_', $result->ResultCode);
-                        $message = trans("moka.{$error}");
-
-                        return response()->json([
-                            'error' => true,
-                            'toastr' => [
-                                'type' => 'error',
-                                'title' => trans('response.title.error'),
-                                'message' => $message
-                            ]
-                        ]);
-                    }
-                } else {
-                    $results = $moka->create_customer(
-                        [
-                            'id' => md5($payment->subscription->subscription_no),
-                            'first_name' => $payment->subscription->customer->first_name,
-                            'last_name' => $payment->subscription->customer->last_name,
-                            'telephone' => $payment->subscription->customer->telephone
-                        ],
-                        [
-                            'full_name' => $card["full_name"],
-                            'number' => $card["number"],
-                            'expire_month' => $expire[0],
-                            'expire_year' => $expire[1]
-                        ]
-                    );
-
-                    if ($results->Data != null) {
-                        $customer_id = $results->Data->DealerCustomer->DealerCustomerId;
-                        $card_token = $results->Data->CardList[0]->CardToken;
-                    } else {
-                        return response()->json([
-                            'error' => true,
-                            'toastr' => [
-                                'type' => 'error',
-                                'title' => trans('response.title.error'),
-                                'message' => trans('warnings.payment.add_customer_failure')
-                            ]
-                        ]);
-                    }
-                }
-
-                if ($customer_id && $card_token) {
-                    $dates = [
-                        'start' => date('Ymd')
-                    ];
-
-                    if ($payment->subscription->end_date)
-                        $dates["end"] = date('Ymd', strtotime($payment->subscription->end_date));
-                    else
-                        $dates["end"] = "";
-
-                    $sale_response = $moka->add_sale(
-                        [
-                            'moka_id' => $customer_id,
-                            'card_token' => $card_token
-                        ],
-                        [
-                            'service_code' => $payment->subscription->service->model,
-                            'amount' => $payment->subscription->price
-                        ],
-                        $dates
-                    );
-
-                    MokaSale::where("subscription_id", $payment->subscription->id)
-                        ->whereNull("disabled_at")
-                        ->update([
-                            'disabled_at' => DB::raw('current_timestamp()')
-                        ]);
-
-                    MokaSale::create([
-                        'subscription_id' => $payment->subscription->id,
-                        'moka_customer_id' => $customer_id,
-                        'moka_sale_id' => $sale_response->Data->DealerSaleId,
-                        'moka_card_token' => $card_token
-                    ]);
-                }
-
-                return response()->json([
-                    'success' => true,
-                    'toastr' => [
-                        'type' => 'success',
-                        'title' => trans('response.title.success'),
-                        'message' => "Otomatik Ödeme"
-                    ],
-                    'reload' => true
-                ]);
-            }
-
-            if ($payment->receive($validated)) {
-                return response()->json([
-                    'success' => true,
-                    'toastr' => [
-                        'type' => 'success',
-                        'title' => trans('response.title.success'),
-                        'message' => trans('warnings.payment.successful')
-                    ],
-                    'reload' => true
                 ]);
             }
 
@@ -257,18 +245,178 @@ class PaymentController extends Controller
                 'toastr' => [
                     'type' => 'error',
                     'title' => trans('response.title.error'),
-                    'message' => trans('response.edit.error')
+                    'message' => trans('warnings.payment.not_allowed_received_date')
                 ]
             ]);
         }
+    }
+
+    /**
+     * Receives payment
+     *
+     * @param  \App\Models\Payment $payment
+     * @param  array $data
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function define_auto_payment(Payment $payment, array $data)
+    {
+        $expire = Mutator::expire_date($data["card"]["expire_date"]);
+
+        $card = [
+            'full_name' => $data["card"]['full_name'],
+            'number' => $data["card"]['number'],
+            'expire_month' => $expire[0],
+            'expire_year' => $expire[1],
+            'amount' => $payment->price
+        ];
+
+        $sale = MokaSale::where("subscription_id", $payment->subscription->id)->orderByDesc('id')->first();
+        $moka = new Moka();
+
+        if ($sale) {
+            $moka->remove_card($sale->moka_card_token);
+
+            $customer_id = $sale->moka_customer_id;
+            $result = $moka->add_card(
+                $customer_id,
+                $card["full_name"],
+                $card["number"],
+                $expire[0],
+                $expire[1]
+            );
+
+            if ($result->Data != null) {
+                $card_token = $result->Data->CardList[0]->CardToken;
+
+                $moka->update_sale(
+                    $sale->moka_sale_id,
+                    [
+                        'card_token' => $card_token
+                    ]
+                );
+            } else {
+                $error = str_replace('.', '_', $result->ResultCode);
+                $message = trans("moka.{$error}");
+
+
+                return response()->json([
+                    'error' => true,
+                    'toastr' => [
+                        'type' => 'error',
+                        'title' => trans('response.title.error'),
+                        'message' => $message
+                    ]
+                ]);
+            }
+        } else {
+            $results = $moka->create_customer(
+                [
+                    'id' => md5($payment->subscription->subscription_no),
+                    'first_name' => $payment->subscription->customer->first_name,
+                    'last_name' => $payment->subscription->customer->last_name,
+                    'telephone' => $payment->subscription->customer->telephone
+                ],
+                [
+                    'full_name' => $card["full_name"],
+                    'number' => $card["number"],
+                    'expire_month' => $expire[0],
+                    'expire_year' => $expire[1]
+                ]
+            );
+
+            if ($results->Data != null) {
+                $customer_id = $results->Data->DealerCustomer->DealerCustomerId;
+                $card_token = $results->Data->CardList[0]->CardToken;
+            } else {
+                return response()->json([
+                    'error' => true,
+                    'toastr' => [
+                        'type' => 'error',
+                        'title' => trans('response.title.error'),
+                        'message' => trans('warnings.payment.add_customer_failure')
+                    ]
+                ]);
+            }
+        }
+
+        if ($customer_id && $card_token) {
+            if ($sale) {
+                $sale_id = $sale->moka_sale_id;
+            } else {
+                $dates = [
+                    'start' => date('Ymd')
+                ];
+
+                if ($payment->subscription->end_date)
+                    $dates["end"] = date('Ymd', strtotime($payment->subscription->end_date));
+                else
+                    $dates["end"] = "";
+
+                $sale_response = $moka->add_sale(
+                    [
+                        'moka_id' => $customer_id,
+                        'card_token' => $card_token
+                    ],
+                    [
+                        'service_code' => $payment->subscription->service->model,
+                        'amount' => $payment->subscription->price
+                    ],
+                    $dates
+                );
+
+                $sale_id = $sale_response->Data->DealerSaleId;
+            }
+
+            MokaSale::where("subscription_id", $payment->subscription->id)
+                ->whereNull("disabled_at")
+                ->update([
+                    'disabled_at' => DB::raw('current_timestamp()')
+                ]);
+
+            MokaSale::create([
+                'subscription_id' => $payment->subscription->id,
+                'moka_customer_id' => $customer_id,
+                'moka_sale_id' => $sale_id,
+                'moka_card_token' => $card_token
+            ]);
+        }
+
+        if (!$payment->subscription->isPreAuto()) {
+            $next_payment = $payment->subscription->nextPayment();
+
+            $auto_discount = setting('auto.define.price', 9.9);
+            if (!is_numeric($auto_discount)) {
+                $auto_discount = 9.9;
+            }
+
+            $data = [
+                'payment_id' => $payment->id,
+                'staff_id' => null,
+                'old_price' => $next_payment->price,
+                'new_price' => $next_payment->price - $auto_discount,
+                'description' => trans('response.system.auto_payment_discount', ['price' => $auto_discount])
+            ];
+
+            if (!$payment->isPaid()) {
+                $payment->edit_price($data);
+            }
+        }
+
+        SentMessage::insert(
+            [
+                'customer_id' => $payment->subscription->customer->id,
+                'message_id' => 15
+            ]
+        );
 
         return response()->json([
-            'error' => true,
+            'success' => true,
             'toastr' => [
-                'type' => 'error',
-                'title' => trans('response.title.error'),
-                'message' => trans('warnings.payment.not_allowed_received_date')
-            ]
+                'type' => 'success',
+                'title' => trans('response.title.success'),
+                'message' => "Otomatik Ödeme"
+            ],
+            'reload' => true
         ]);
     }
 
