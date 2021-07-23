@@ -75,6 +75,16 @@ class Payment extends Model
     }
 
     /**
+     * Payment penalty relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function penalty()
+    {
+        return $this->hasOne(PaymentPenalty::class);
+    }
+
+    /**
      * Get payment type id's
      * For titles use language files => tables.{table_name|model_name}.types.{type_id}
      *
@@ -118,6 +128,16 @@ class Payment extends Model
     public function isPaid()
     {
         return !($this->type == NULL || $this->paid_at == NULL);
+    }
+
+    /**
+     * Check penalty
+     *
+     * @return boolean
+     */
+    public function isPenalty()
+    {
+        return $this->penalty()->count() > 0 ? true : false;
     }
 
     /**
