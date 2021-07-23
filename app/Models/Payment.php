@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Classes\Messages;
 use App\Classes\Telegram;
 use App\Models\Attributes\PaidAtAttribute;
 use App\Models\Attributes\PaymentCategoryAttribute;
@@ -205,6 +206,22 @@ class Payment extends Model
                     ]);
                 }
 
+                $text = Message::find(16)->message;
+                $text = (new Messages)->generate(
+                    $text,
+                    [
+                        "tarih" => date('d/m/Y', strtotime($this->date)),
+                        "tutar" => $this->price
+                    ]
+                );
+
+                SentMessage::insert(
+                    [
+                        'customer_id' => $this->subscription->customer->id,
+                        'message' => $text
+                    ]
+                );
+
                 DB::commit();
                 return true;
             } catch (Exception $e) {
@@ -212,7 +229,7 @@ class Payment extends Model
 
                 Telegram::send(
                     "Test",
-                    "Payment Model, receive method error : " . $e->getMessage()
+                    $e->getMessage()."receive"
                 );
 
                 return false;
