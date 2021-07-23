@@ -8,14 +8,18 @@ return [
     	'not_paided' => 'Ödenmemiş',
     	'auto' => 'Otomatik Ödeme',
     	'no_auto' => 'Normal Ödeme',
-    	'avarage' => 'Abone Başına Ortalama Tutar'
+    	'avarage' => 'Abone Başına Ortalama Tutar',
+    	'penalty_price' => 'Gecikme Ücreti Tutarı'
     ],
     'counts' => [
 		'title' => 'Ödemeler',
 		'payments' => 'Toplam',
 		'auto' => 'Tanımlanmış Otomatik Ödeme',
 		'paided' => 'Ödenen',
-		'not_paided' => 'Ödenmemiş'
+		'not_paided' => 'Ödenmemiş',
+		'penalty' => 'Gecikme Ücreti Yansıtılmış',
+		'penalty_paided' => 'Gecikme Ücreti Ödenmiş',
+		'penalty_not_paided' => 'Gecikme Ücreti Ödenmemiş'
     ],
     'types' => [
     	'title' => 'Ödeme Tiplerine Göre Tutarlar'

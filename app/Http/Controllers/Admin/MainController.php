@@ -126,6 +126,7 @@ class MainController extends Controller
             'not_paided' => 0,
             'auto' => 0,
             'no_auto' => 0,
+            'penalty_price' => 0,
         ];
 
         $subscriptions = [
@@ -161,6 +162,9 @@ class MainController extends Controller
             'auto' => 0,
             'paided' => 0,
             'not_paided' => 0,
+            'penalty' => 0,
+            'penalty_paided' => 0,
+            'penalty_not_paided' => 0
         ];
 
         $types = [
@@ -180,12 +184,16 @@ class MainController extends Controller
                 'not_paided' => 0,
                 'auto' => 0,
                 'no_auto' => 0,
+                'penalty_price' => 0,
             ],
             'counts' => [
                 'payments' => 0,
                 'auto' => 0,
                 'paided' => 0,
                 'not_paided' => 0,
+                'penalty' => 0,
+                'penalty_paided' => 0,
+                'penalty_not_paided' => 0
             ],
             'types' => [
                 0 => 0,
@@ -214,11 +222,21 @@ class MainController extends Controller
                     $categories[$category]['totals']['paided'] += $price;
                     $categories[$category]['counts']['paided']++;
                 }
+
+                if ($payment->isPenalty()) {
+                    $counts['penalty_paided']++;
+                    $categories[$category]['counts']['penalty_paided']++;
+                }
             } else {
                 $totals['not_paided'] += $price;
                 $counts['not_paided']++;
                 $categories[$category]['totals']['not_paided'] += $price;
                 $categories[$category]['counts']['not_paided']++;
+
+                if ($payment->isPenalty()) {
+                    $counts['penalty_not_paided']++;
+                    $categories[$category]['counts']['penalty_not_paided']++;
+                }
             }
 
             if ($payment->subscription->isAuto()) {
@@ -231,13 +249,25 @@ class MainController extends Controller
                 $categories[$category]['totals']['no_auto'] += $price;
             }
 
+
+            if ($payment->isPenalty()) {
+                $totals['penalty_price'] += $payment->penalty->penalty_price;
+                $counts['penalty']++;
+                $categories[$category]['totals']['penalty_price'] += $payment->penalty->penalty_price;
+                $categories[$category]['counts']['penalty']++;
+            }
+
             $types[$type] += $price;
-            $totals['price'] += $price;
-            $counts['payments']++;
+            if ($type != 6) {
+                $totals['price'] += $price;
+                $counts['payments']++;
+            }
 
             $categories[$category]['types'][$type] += $price;
-            $categories[$category]['totals']['price'] += $price;
-            $categories[$category]['counts']['payments']++;
+            if ($type != 6) {
+                $categories[$category]['totals']['price'] += $price;
+                $categories[$category]['counts']['payments']++;
+            }
         }
 
         foreach ($categories as $categoryKey => $values) {
