@@ -431,38 +431,67 @@ class PaymentController extends Controller
      */
     public function payment_auto_result(Request $request)
     {
-        echo "OK";
+        echo 'OK';
 
-        try
-        {
+        try {
             $data = [
-                "method" => $request->method(),
-                "ip" => $request->ip(),
-                "values" => $request->all()
+                'method' => $request->method(),
+                'ip' => $request->ip(),
+                'values' => $request->all()
             ];
+
             $plan_id = (int)$request->input('DealerPaymentPlanId');
             $plan = MokaAutoPayment::where("moka_plan_id", $plan_id)->first();
+
             if ($plan) {
                 $moka = new Moka();
                 $payment_detail = $moka->get_payment_detail($request->input('DealerPaymentId'));
 
-                if ($plan->payment->status == 2 && $plan->payment->type != 5) {
-                    $result = $moka->do_void(
-                        $payment_detail->Data->PaymentDetail->OtherTrxCode
-                    );
+                if (
+                    $plan->payment->status == 2 &&
+                    $plan->payment->type != 5 &&
+                    !$plan->isRefund()
+                ) {
+                    if (
+                        isset($payment_detail->Data->PaymentDetail->OtherTrxCode) && 
+                        !empty($payment_detail->Data->PaymentDetail->OtherTrxCode) &&
+                    ) {
+                        $refundType = 1;
 
-                    $success = false;
-                    if ($result->Data != null && isset($result->Data->IsSuccessful) && (bool)$result->Data->IsSuccessful)
-                        $success = true;
+                        $result = $moka->do_void(
+                            $payment_detail->Data->PaymentDetail->OtherTrxCode
+                        );
 
-                    MokaRefund::create([
-                        'payment_id' => $plan->payment->id,
-                        'auto_payment_id' => $plan->id,
-                        'price' => (float)$request->input('Amount'),
-                        'status' => $success
-                    ]);
+                        if ($result->Data == null) {
+                            $refundType = 2;
+                            $result = $moka->refund($payment_detail->Data->PaymentDetail->OtherTrxCode);
+                        }
+
+                        $success = false;
+                        if ($result->Data != null && isset($result->Data->IsSuccessful) && (bool)$result->Data->IsSuccessful)
+                            $success = true;
+
+                        $plan->status = 5;
+                        $plan->save();
+
+                        MokaRefund::updateOrCreate(
+                            [
+                                'auto_payment_id' => $plan->id
+                            ],
+                            [
+                                'payment_id' => $plan->payment->id,
+                                'auto_payment_id' => $plan->id,
+                                'price' => $plan->payment->price,
+                                'status' => $success,
+                                'type' => $refundType
+                            ]
+                        );
+                    }
                 } else {
-                    if ($payment_detail->Data->PaymentDetail->PaymentStatus == 2 && $payment_detail->Data->PaymentDetail->TrxStatus == 1) {
+                    if (
+                        $payment_detail->Data->PaymentDetail->PaymentStatus == 2 &&
+                        $payment_detail->Data->PaymentDetail->TrxStatus == 1
+                    ) {
                         $plan->status = 1;
                         $plan->save();
 
@@ -479,12 +508,10 @@ class PaymentController extends Controller
             DB::table('auto_results')->insert([
                 'response' => json_encode($data),
             ]);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             Telegram::send(
                 "Test",
-                $e->getMessage()
+                "Payment Controller - Payment Auto Result Method : \n" . $e->getMessage()
             );
         }
     }

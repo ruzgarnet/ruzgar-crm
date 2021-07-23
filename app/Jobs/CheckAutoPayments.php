@@ -50,7 +50,8 @@ class CheckAutoPayments implements ShouldQueue
                         if (
                             $payment_plan->Data->PlanStatus == 1 &&
                             $plan->payment->status == 2 &&
-                            $plan->payment->type != 5
+                            $plan->payment->type != 5 && 
+                            !$plan->isRefund()
                         ) {
                             $payment_detail = $moka->get_payment_detail($payment_plan->Data->DealerPaymentId);
 
@@ -64,7 +65,7 @@ class CheckAutoPayments implements ShouldQueue
                                     $payment_detail->Data->PaymentDetail->OtherTrxCode
                                 );
 
-                                if (!$plan->isRefund() && $result->Data == null) {
+                                if ($result->Data == null) {
                                     $refundType = 2;
                                     $result = $moka->refund($payment_detail->Data->PaymentDetail->OtherTrxCode);
                                 }
