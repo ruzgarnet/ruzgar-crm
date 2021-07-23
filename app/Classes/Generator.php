@@ -131,6 +131,7 @@ class Generator
      */
     public static function trxCode($subscription_no, $payment_created_at)
     {
-        return substr(hash('sha256', $subscription_no . "-" . date('YmdHi', strtotime($payment_created_at)) . "-" . date('YmdHi')), 0, 32);
+        $string = $subscription_no . "-" . date('YmdHi', strtotime($payment_created_at)) . "-" . date('YmdHis') . rand(100, 999);
+        return substr(hash('sha256', $string), 0, 32);
     }
 }

@@ -547,7 +547,8 @@ class Moka
      */
     private function generate_unique_code($subscription_no, $payment_created_at)
     {
-        $this->trx_code = substr(hash('sha256', $subscription_no . '-' . date('YmdHi', strtotime($payment_created_at)) . '-' . date('YmdHi')), 0, 32);
+        $string = $subscription_no . "-" . date('YmdHi', strtotime($payment_created_at)) . "-" . date('YmdHis') . rand(100, 999);
+        $this->trx_code = substr(hash('sha256', $string), 0, 32);
         return $this->trx_code;
     }
 
