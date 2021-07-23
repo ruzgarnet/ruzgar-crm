@@ -11,8 +11,8 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 - [ ] Müşterilere özel notlar tutulabilmesi
 
 ## Kontrol Edilecekler
-- [ ] Ödenmemiş faturalara gecikme tutarı yansıtma
-- [ ] Tarife değişiminde otomatik ödemenin uyarlanması
+- [x] Ödenmemiş faturalara gecikme tutarı yansıtma
+- [x] Tarife değişiminde otomatik ödemenin uyarlanması
 - [ ] Hizmetlerde kampanya yapısı güncellendi
 
 ## Yapılanlar
