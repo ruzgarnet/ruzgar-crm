@@ -2,6 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Classes\Messages;
+use App\Classes\SMS_Api;
+use App\Models\Message;
 use App\Models\Payment;
 use App\Models\PaymentPriceEdit;
 use Illuminate\Bus\Queueable;
@@ -33,31 +36,59 @@ class CreatePenaltyPrices implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->check('CreatePenaltyPrices')) {
-            $payments = Payment::where("status", "<>", 2)->where('date', date('Y-m-15'))->get();
+        try {
+            $messages = [];
+            $message_formatter = new Messages();
+            $sms = new SMS_Api();
+            $message = Message::find(7);
 
-            foreach ($payments as $payment) {
-                $new_price = $payment->price + setting('payment.penalty.price', 44.9);
+            if ($this->check('CreatePenaltyPrices')) {
+                $payments = Payment::where("status", "<>", 2)->where('date', date('Y-m-15'))->get();
 
-                PaymentPriceEdit::create([
-                    'payment_id' => $payment->id,
-                    'staff_id' => null,
-                    'old_price' => $payment->price,
-                    'new_price' => $new_price,
-                    'description' => trans('response.system.penalty', ['price' => setting('payment.penalty.price', 44.9)])
-                ]);
+                foreach ($payments as $payment) {
+                    if (!$payment->isPenalty()) {
+                        $new_price = $payment->price + setting('payment.penalty.price', 44.9);
 
-                DB::table('payment_penalties')->insert([
-                    'payment_id' => $payment->id,
-                    'old_price' => $payment->price,
-                    'new_price' => $new_price
-                ]);
+                        PaymentPriceEdit::create([
+                            'payment_id' => $payment->id,
+                            'staff_id' => null,
+                            'old_price' => $payment->price,
+                            'new_price' => $new_price,
+                            'description' => trans('response.system.penalty', ['price' => setting('payment.penalty.price', 44.9)])
+                        ]);
 
-                $payment->price = $new_price;
-                $payment->save();
+                        DB::table('payment_penalties')->insert([
+                            'payment_id' => $payment->id
+                        ]);
+
+                        $payment->price = $new_price;
+                        $payment->penalty = 1;
+                        $payment->save();
+
+                        $messages[] = [
+                            $payment->subscription->customer->telephone,
+                            $message_formatter->generate(
+                                $message->message,
+                                [
+                                    'ay' => date('m'),
+                                    'yil' => date('Y'),
+                                    'ad_soyad' => $payment->subscription->customer->full_name,
+                                    'tarih' => date('d/m/Y', strtotime($payment->date))
+                                ]
+                            )
+                        ];
+                    }
+                }
+
+                $sms->submitMulti(
+                    "RUZGARNET",
+                    $messages
+                );
+
+                $this->insertJob('CreatePenaltyPrices');
             }
-
-            $this->insertJob('CreatePenaltyPrices');
+        } catch (Exception $e) {
+            Telegram::send('Test', "Create Penalty Price Job \n" . $e->getMessage());
         }
     }
 }
