@@ -9,6 +9,8 @@
 
 .card-header-buttons {
     margin: 0 -7.5px;
+    display: flex;
+    align-items: center;
 }
 
 .card-header-buttons > * {

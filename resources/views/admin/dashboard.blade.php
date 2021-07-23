@@ -7,47 +7,47 @@
 
     <div class="row">
         @if (request()->user()->username == "engin" || request()->user()->username == "admin")
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
-            <div class="card card-statistic-1">
-                <div class="card-icon bg-primary">
-                    <i class="far fa-user"></i>
-                </div>
-                <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>Müşteri Sayısı</h4>
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-primary">
+                        <i class="far fa-user"></i>
                     </div>
-                    <div class="card-body">
-                        {{ $total['customer']}}
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>Müşteri Sayısı</h4>
+                        </div>
+                        <div class="card-body">
+                            {{ $total['customer']}}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
-            <div class="card card-statistic-1">
-                <div class="card-icon bg-info">
-                    <i class="fas fa-wifi"></i>
-                </div>
-                <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>Abonelik Sayısı</h4>
+            <div class="col-md-6 col-sm-6 col-12">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-info">
+                        <i class="fas fa-wifi"></i>
                     </div>
-                    <div class="card-body">
-                        {{ $total['subscription'] }}
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>Abonelik Sayısı</h4>
+                        </div>
+                        <div class="card-body">
+                            {{ $total['subscription'] }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         @endif
 
-        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+        <div class="col-md-6 col-sm-6 col-12">
             <div class="card card-statistic-1">
                 <div class="card-icon bg-danger">
                     <i class="fas fa-toolbox"></i>
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Arıza Kayıt Sayısı</h4>
+                        <h4>Aktif Arıza Kaydı</h4>
                     </div>
                     <div class="card-body">
                         {{ $total['faultRecord'] }}
@@ -55,8 +55,9 @@
                 </div>
             </div>
         </div>
+
         @if (request()->user()->username == "admin" || request()->user()->username == "engin")
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
+            <div class="col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
                     <div class="card-icon bg-warning">
                         <i class="fas fa-lira-sign"></i>
@@ -147,6 +148,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 @endsection

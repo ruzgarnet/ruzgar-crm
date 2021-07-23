@@ -14,6 +14,7 @@
                 </div>
                 <div class="card-body">
                     <div>
+                        {{-- <a class="btn btn-success" href="{{route('admin.excel')}}" role="button">EXCEL</a> --}}
                         <table class="table table-striped" id="dataTable">
                             <thead>
                                 <tr>

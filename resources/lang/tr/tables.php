@@ -359,10 +359,6 @@ return [
             'delete' => 'Arıza Tipi Sil',
             'info' => 'Arıza Tipi Bilgileri',
             'list' => 'Arıza Tiplerini Listele',
-            'types' => [
-                1 => 'Ürün',
-                2 => 'Hizmet'
-            ],
             'status' => [
                 1 => 'Aktif',
                 2 => 'Kapalı'
@@ -382,10 +378,6 @@ return [
             'delete' => 'Arıza Kaydı Sil',
             'info' => 'Arıza Kaydı Bilgileri',
             'list' => 'Arıza Kayıtlarını Listele',
-            'types' => [
-                1 => 'Ürün',
-                2 => 'Hizmet'
-            ],
             'status' => [
                 1 => 'Sisteme Tanımlandı',
                 2 => 'Müşteri Temsilcisine Aktarıldı',
