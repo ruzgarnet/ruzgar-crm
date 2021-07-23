@@ -35,10 +35,10 @@ class CheckAutoPayments implements ShouldQueue
      */
     public function handle()
     {
-        if (true) {
+        if ($this->check('CheckAutoPayments')) {
             try {
                 $moka = new Moka();
-                $plans = MokaAutoPayment::where('status', 0)->offset(0)->limit(300)->get();
+                $plans = MokaAutoPayment::whereNotIn('status', [1, 3, 5, 6])->get();
 
                 foreach ($plans as $plan) {
                     $payment_plan = $moka->get_payment_plan($plan->moka_plan_id);
@@ -53,11 +53,21 @@ class CheckAutoPayments implements ShouldQueue
                             $plan->payment->type != 5
                         ) {
                             $payment_detail = $moka->get_payment_detail($payment_plan->Data->DealerPaymentId);
-                            dump($payment_detail);
-                            if (isset($payment_detail->Data->PaymentDetail->OtherTrxCode) && !empty($payment_detail->Data->PaymentDetail->OtherTrxCode)) {
+
+                            if (
+                                isset($payment_detail->Data->PaymentDetail->OtherTrxCode) && 
+                                !empty($payment_detail->Data->PaymentDetail->OtherTrxCode)
+                            ) {
+                                $refundType = 1;
+
                                 $result = $moka->do_void(
                                     $payment_detail->Data->PaymentDetail->OtherTrxCode
                                 );
+
+                                if (!$plan->isRefund() && $result->Data == null) {
+                                    $refundType = 2;
+                                    $result = $moka->refund($payment_detail->Data->PaymentDetail->OtherTrxCode);
+                                }
 
                                 $success = false;
                                 if ($result->Data != null && isset($result->Data->IsSuccessful) && (bool)$result->Data->IsSuccessful)
@@ -66,20 +76,23 @@ class CheckAutoPayments implements ShouldQueue
                                 $plan->status = 5;
                                 $plan->save();
 
-                                MokaRefund::create([
-                                    'payment_id' => $plan->payment->id,
-                                    'auto_payment_id' => $plan->id,
-                                    'price' => $plan->payment->price,
-                                    'status' => $success
-                                ]);
+                                MokaRefund::updateOrCreate(
+                                    [
+                                        'auto_payment_id' => $plan->id
+                                    ],
+                                    [
+                                        'payment_id' => $plan->payment->id,
+                                        'auto_payment_id' => $plan->id,
+                                        'price' => $plan->payment->price,
+                                        'status' => $success,
+                                        'type' => $refundType
+                                    ]
+                                );
                             }
-                        }
-                        else if($payment_plan->Data->PlanStatus == 0)
-                        {
+                        } else if($payment_plan->Data->PlanStatus == 0) {
                             $plan->status = 6;
                             $plan->save();
-                        }
-                        else {
+                        } else {
                             if ($payment_plan->Data->PlanStatus == 1) {
                                 $plan->payment->receive([
                                     'type' => 5
@@ -91,11 +104,12 @@ class CheckAutoPayments implements ShouldQueue
                         $plan->save();
                     }
                 }
+
                 $this->insertJob('CheckAutoPayments');
             } catch (Exception $e) {
                 Telegram::send(
-                    "Test",
-                    $e->getMessage()
+                    'Test',
+                    "Check Auto Payment Job : \n " . $e->getMessage()
                 );
             }
         }

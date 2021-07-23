@@ -16,7 +16,7 @@ class MokaRefund extends Model
      */
     protected $guarded = [];
 
-     /**
+    /**
      * Payment relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -26,7 +26,7 @@ class MokaRefund extends Model
         return $this->belongsTo(Payment::class);
     }
 
- /**
+    /**
      * Moka Auto Payment relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
