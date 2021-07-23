@@ -626,6 +626,26 @@ class APIController extends Controller
 
             $payment = Payment::find($validated["payment_id"]);
 
+            $moka = new Moka();
+
+            if ($payment->mokaPayment) {
+                $payment_detail = $moka->get_payment_detail_by_other_trx($payment->mokaPayment->trx_code);
+
+                if (
+                    $payment_detail->Data->PaymentDetail->PaymentStatus == 2 &&
+                    $payment_detail->Data->PaymentDetail->TrxStatus == 1
+                ) {
+                    $payment->receive([
+                        'type' => 4
+                    ]);
+
+                    return response()->json([
+                        'error' => true,
+                        'message' => "Lütfen ödemenizi tekrar sorgulayınız."
+                    ]);
+                }
+            }
+
             MokaPayment::where('payment_id', $payment->id)->delete();
 
             $card = [
@@ -652,7 +672,13 @@ class APIController extends Controller
             if ($response->Data != null) {
                 MokaPayment::create([
                     'payment_id' => $payment->id,
-                    'response' => $response,
+                    'trx_code' => $moka->trx_code
+                ]);
+
+                MokaLog::create([
+                    'payment_id' => $payment->id,
+                    'ip' => $request->ip(),
+                    'response' => ['init' => $response],
                     'trx_code' => $moka->trx_code
                 ]);
 
@@ -699,20 +725,54 @@ class APIController extends Controller
         $validated = $request->validate([
             'identification_number' => 'string|numeric'
         ]);
+
         $identification_number = $request->input('identification_number');
 
         if (!Customer::where("identification_number", $identification_number)->count() > 0) {
             $payment_list["error"] = true;
             $payment_list["message"] = "Bu T.C. kimlik numarasına ait abonelik kaydı bulunamadı.";
         } else {
+            $customer = Customer::where('identification_number', $identification_number)->first();
+            $moka = new Moka();
+            foreach ($customer->subscriptions as $subscription) {
+                if ($payment = $subscription->currentPayment()) {
+                    if ($payment->mokaPayment) {
+
+                        $payment_detail = $moka->get_payment_detail_by_other_trx(
+                            $payment->mokaPayment->trx_code
+                        );
+
+                        if (
+                            $payment_detail->Data->PaymentDetail->PaymentStatus == 2 &&
+                            $payment_detail->Data->PaymentDetail->TrxStatus == 1
+                        ) {
+                            $payment->receive([
+                                'type' => 4
+                            ]);
+
+                            Telegram::send(
+                                'RüzgarNETÖdeme',
+                                trans('telegram.payment_received', [
+                                    'id_no' => $payment->subscription->customer->identification_number,
+                                    'full_name' => $payment->subscription->customer->full_name,
+                                    'price' => $payment->price,
+                                    'category' => $payment->subscription->service->category->name
+                                ])
+                            );
+                        }
+                    }
+                }
+            }
+            
             $payments = Subscription::select('payments.id', 'payments.subscription_id', 'payments.price', 'payments.date', 'customers.first_name', 'customers.last_name', 'customers.telephone')
-                ->join('payments', 'subscriptions.id', 'payments.subscription_id')
-                ->join('customers', 'customers.id', 'subscriptions.customer_id')
-                ->where([
-                    'payments.date' => date('Y-m-15'),
-                    'customers.identification_number' => $identification_number,
-                    'subscriptions.status' => 1,
-                ])->whereNull("paid_at")->get();
+                    ->join('payments', 'subscriptions.id', 'payments.subscription_id')
+                    ->join('customers', 'customers.id', 'subscriptions.customer_id')
+                    ->where([
+                        'payments.date' => date('Y-m-15'),
+                        'customers.identification_number' => $identification_number,
+                        'subscriptions.status' => 1,
+                    ])->whereNull("paid_at")->get();
+
             $payment_list = [];
 
             if (count($payments) > 0) {

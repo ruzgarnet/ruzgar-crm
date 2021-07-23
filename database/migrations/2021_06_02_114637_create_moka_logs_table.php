@@ -18,6 +18,7 @@ class CreateMokaLogsTable extends Migration
             $table->foreignId('payment_id');
             $table->ipAddress('ip');
             $table->string('trx_code')->nullable()->default(null);
+            $table->string('moka_trx_code')->nullable()->default(null);
             $table->json('response')->nullable()->default(null);
             $table->unsignedTinyInteger('type')->default(1);
             $table->unsignedTinyInteger('status')->default(1);

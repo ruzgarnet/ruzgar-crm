@@ -60,8 +60,8 @@ class PaymentController extends Controller
         $type = $request->input('columns.6.search.value');
         $service_id = $request->input('columns.2.search.value');
 
-        $payments = Payment::orderBy('payments.id', 'desc');
-        $no = Payment::orderBy('payments.id', 'desc');
+        $payments = Payment::selectRaw("payments.*")->orderBy('payments.id', 'desc');
+        $no = Payment::selectRaw("payments.*")->orderBy('payments.id', 'desc');
 
         if ($service_id != "") {
             $payments = $payments
@@ -124,7 +124,7 @@ class PaymentController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Payment $payment
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function received(Request $request, Payment $payment)
     {
@@ -151,14 +151,34 @@ class PaymentController extends Controller
                 ];
             }
 
+            $moka = new Moka();
+
+            if ($payment->mokaPayment) {
+                $payment_detail = $moka->get_payment_detail_by_other_trx($payment->mokaPayment->trx_code);
+
+                if (
+                    $payment_detail->Data->PaymentDetail->PaymentStatus == 2 &&
+                    $payment_detail->Data->PaymentDetail->TrxStatus == 1
+                ) {
+                    $payment->receive([
+                        'type' => 4
+                    ]);
+
+                    return response()->json([
+                        'success' => true,
+                        'reload' => true
+                    ]);
+                }
+            }
+
+            MokaPayment::where('payment_id', $payment->id)->delete();
+
             $validated = $request->validate($rules);
 
             $date = Carbon::parse($payment->date);
             $month = Carbon::now()->format("m");
 
-            MokaPayment::where('payment_id', $payment->id)->delete();
-
-            if (env('APP_ENV') == 'local' || $date->format('m') == $month) {
+            if (env('APP_ENV') == 'production') {
                 if ($request->input('type') == 4) {
                     $expire = Mutator::expire_date($validated["card"]["expire_date"]);
 
@@ -176,7 +196,6 @@ class PaymentController extends Controller
                         'payment_created_at' => $payment->created_at
                     ];
 
-                    $moka = new Moka();
                     $response = $moka->pay(
                         $card,
                         route('payment.result', $payment),
@@ -186,7 +205,13 @@ class PaymentController extends Controller
                     if ($response->Data != null) {
                         MokaPayment::create([
                             'payment_id' => $payment->id,
-                            'response' => $response,
+                            'trx_code' => $moka->trx_code
+                        ]);
+
+                        MokaLog::create([
+                            'payment_id' => $payment->id,
+                            'ip' => $request->ip(),
+                            'response' => ['init' => $response],
                             'trx_code' => $moka->trx_code
                         ]);
 
@@ -214,7 +239,7 @@ class PaymentController extends Controller
                         'toastr' => [
                             'type' => 'error',
                             'title' => trans('response.title.error'),
-                            'message' => $response->ResultCode
+                            'message' => trans('moka.' . str_replace('.', '_', $response->ResultCode))
                         ]
                     ]);
                 } else if ($request->input('type') == 5) {
@@ -454,7 +479,7 @@ class PaymentController extends Controller
                 ) {
                     if (
                         isset($payment_detail->Data->PaymentDetail->OtherTrxCode) && 
-                        !empty($payment_detail->Data->PaymentDetail->OtherTrxCode) &&
+                        !empty($payment_detail->Data->PaymentDetail->OtherTrxCode)
                     ) {
                         $refundType = 1;
 
@@ -521,11 +546,13 @@ class PaymentController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Payment $payment
-     * @return void
+     * @return \Illuminate\Contracts\View\View
      */
     public function payment_result(Request $request, Payment $payment)
     {
         try {
+            $success = false;
+
             $data = $request->all();
 
             $trx_code = $data["trxCode"];
@@ -534,73 +561,56 @@ class PaymentController extends Controller
             $moka_transaction->moka_trx_code = $trx_code;
             $moka_transaction->save();
 
+            $moka_log = MokaLog::where('trx_code', $moka_transaction->trx_code)->first();
+            $moka_log->moka_trx_code = $trx_code;
+            $init_response = $moka_log->response['init'];
+            $moka_log->response = [
+                'init' => $init_response,
+                'result' => $data
+            ];
+            $moka_log->save();
+
             if ($moka_transaction) {
-                MokaLog::insert([
-                    [
-                        'payment_id' => $payment->id,
-                        'ip' => $request->ip(),
-                        'response' => json_encode($moka_transaction->response),
-                        'trx_code' => $moka_transaction->trx_code,
-                        'type' => 6
-                    ], [
-                        'payment_id' => $payment->id,
-                        'ip' => $request->ip(),
-                        'response' => json_encode($data),
-                        'trx_code' => $moka_transaction->trx_code,
-                        'type' => 6
-                    ]
-                ]);
+                $moka = new Moka();
+                $result = $moka->get_payment_detail_by_other_trx($moka_transaction->trx_code);
+
+                $moka_log->response = [
+                    'init' => $init_response, 
+                    'result' => $data,
+                    'control' => $result
+                ];
+                $moka_log->save();
 
                 if (
-                    isset($data["hashValue"]) &&
-                    isset($moka_transaction) &&
-                    Moka::check_hash(
-                        $data["hashValue"],
-                        $moka_transaction->response["Data"]["CodeForHash"]
-                    )
+                    $result->Data->PaymentDetail->PaymentStatus == 2 &&
+                    $result->Data->PaymentDetail->TrxStatus == 1
                 ) {
                     $payment->receive([
                         'type' => 4
                     ]);
 
                     Telegram::send(
-                        "RüzgarNETÖdeme",
-                        "Başarılı bir ödeme gerçekleştirildi. \nT.C. Kimlik Numarası : " . $payment->subscription->customer->identification_number . " \nAdı Soyadı : " . $payment->subscription->customer->full_name . " \nTutar : " . $payment->price . " \nMarka : " . $payment->subscription->service->category->name
+                        'RüzgarNETÖdeme',
+                        trans('telegram.payment_received', [
+                            'id_no' => $payment->subscription->customer->identification_number,
+                            'full_name' => $payment->subscription->customer->full_name,
+                            'price' => $payment->price,
+                            'category' => $payment->subscription->service->category->name
+                        ])
                     );
 
-                    return view('admin.response', ["response" => 1]);
-                } else {
-                    $moka = new Moka();
-                    $result = $moka->get_payment_detail_by_other_trx($moka_transaction->trx_code);
-
-                    if (
-                        $result->Data->PaymentDetail->PaymentStatus == 2 &&
-                        $result->Data->PaymentDetail->TrxStatus == 1
-                    ) {
-                        $payment->receive([
-                            'type' => 4
-                        ]);
-
-                        Telegram::send(
-                            "RüzgarNETÖdeme",
-                            "Başarılı bir ödeme gerçekleştirildi. \nT.C. Kimlik Numarası : " . $payment->subscription->customer->identification_number . " \nAdı Soyadı : " . $payment->subscription->customer->full_name . " \nTutar : " . $payment->price . " \nMarka : " . $payment->subscription->service->category->name
-                        );
-
-                        return view('admin.response', ["response" => 1]);
-                    } else {
-                        MokaPayment::where('payment_id', $payment->id)->delete();
-                        return view('admin.response', ["response" => 0]);
-                    }
+                    $success = true;
                 }
             }
 
-            MokaPayment::where('payment_id', $payment->id)->delete();
-            return view('admin.response', ["response" => 0]);
+            return view('admin.response', ['response' => $success]);
         } catch (Exception $e) {
             Telegram::send(
-                "Test",
-                $e->getMessage()
+                'Test',
+                "Payment Controller - Payment Result Method : \n" . $e->getMessage()
             );
+
+            return view('admin.response', ['response' => false]);
         }
     }
 
