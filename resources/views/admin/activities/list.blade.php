@@ -123,7 +123,7 @@
                                     <div class="mb-2">
                                     <span class="text-job text-primary">{{$paymentprizeedit->created_at}}</span>
                                     <span class="bullet"></span>
-                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$paymentprizeedit->staff->full_name}}</a>
+                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$paymentprizeedit->staff->full_name ?? 'Sistem'}}</a>
 
                                     </div>
                                     <p>{{$paymentprizeedit->description}}</p>

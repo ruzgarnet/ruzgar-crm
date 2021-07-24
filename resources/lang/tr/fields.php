@@ -22,6 +22,7 @@ return [
     'identification_number' => 'Kimlik Numarası',
     'gender' => 'Cinsiyet',
     'genders' => [
+        0 => 'Belirtilmemiş',
         1 => 'Erkek',
         2 => 'Kadın'
     ],

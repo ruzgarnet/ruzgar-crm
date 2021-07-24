@@ -205,6 +205,9 @@ class SubscriptionController extends Controller
      */
     public function preview(Subscription $subscription)
     {
+        if(in_array($subscription->commitment, [0, 12]))
+            $subscription->service->price += 10;
+
         $devices = $subscription->getOption("devices") ?? null;
         if (!$subscription->approved_at)
             $subscription->generatePayments();
@@ -579,6 +582,23 @@ class SubscriptionController extends Controller
         $data = [
             'paymentTypes' => Payment::getTypes(),
             'subscription' => $subscription,
+            'statuses' => trans('tables.payment.status'),
+            'types' => trans('tables.payment.types')
+        ];
+        return view('admin.subscription.payment', $data);
+    }
+
+    /**
+     * Show payments
+     *
+     * @param Payment $payment
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function get_payments(Payment $payment)
+    {
+        $data = [
+            'paymentTypes' => Payment::getTypes(),
+            'subscription' => $payment->subscription,
             'statuses' => trans('tables.payment.status'),
             'types' => trans('tables.payment.types')
         ];

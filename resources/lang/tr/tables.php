@@ -80,7 +80,8 @@ return [
         'list' => 'Müşterileri Listele',
         'types' => [
             1 => 'Önkayıt',
-            2 => 'Onaylanmış'
+            2 => 'Onaylanmış',
+            3 => 'Eski Sistemden Aktarılan'
         ],
         'select' => 'Müşteri Seç',
         'approve' => 'Müşteri Onayla'

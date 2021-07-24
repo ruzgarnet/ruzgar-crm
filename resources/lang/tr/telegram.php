@@ -16,5 +16,5 @@ return [
     'add_request_message' => " :username adlı kullanıcı tarafından :role yetkili kişiler için bir talep oluşturuldu. \nDurumu : :status ",
     'edit_request_message' => " :username adlı kullanıcı tarafından açılan talepde :user adlı kişi işlem yaptı. \nDurumu : :status ",
     'edit_fault' => ":full_name adlı müşterimiz tarafından oluşturulan :serial_number seri numaralı arıza kaydının durumu :status olarak değiştirildi. \nDetay : :detail \nİşlemi Gerçekleştiren Kullanıcı : :username",
-    'payment_received' => "Başarılı bir ödeme gerçekleştirildi. \nT.C. Kimlik Numarası : :id_no \nAdı Soyadı : :full_name \nTutar : :price \nMarka : :category"
+    'payment_received' => "Başarılı bir ödeme gerçekleştirildi. \nT.C. Kimlik Numarası : :id_no \nAdı Soyadı : :full_name \nTutar : :price TL \nMarka : :category"
 ];
