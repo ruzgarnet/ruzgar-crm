@@ -14,7 +14,7 @@
                 </div>
                 <div class="card-body">
                     <div>
-                        {{-- <a class="btn btn-success" href="{{route('admin.excel')}}" role="button">EXCEL</a> --}}
+                        <a class="btn btn-success" href="{{ route('admin.excel') }}" role="button">EXCEL</a>
                         <table class="table table-striped" id="dataTable">
                             <thead>
                                 <tr>
@@ -27,9 +27,7 @@
                                     <th scope="col">@lang('fields.type')</th>
                                 </tr>
                             </thead>
-                            <tbody>
-
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>

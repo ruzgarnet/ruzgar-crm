@@ -56,16 +56,14 @@ class SubscriptionCancellation extends Model
             $subscription->status = 3;
             $subscription->save();
 
-            $dateAppend = $subscription->getOption('pre_payment') ? 0 : 1;
-
             Reference::cancel($subscription, $data['staff_id']);
 
             Payment::where('subscription_id', $subscription->id)
-                ->where('date', '>', Carbon::now()->addMonth($dateAppend)->lastOfMonth()->format('Y-m-d'))
                 ->whereNull('paid_at')
                 ->delete();
 
             $subscription->freezes()->whereNull('unfreezed_at')->update(['unfreezed_at' => DB::raw('current_timestamp()')]);
+            $subscription->sales()->whereNull('disabled_at')->update(['disabled_at' => DB::raw('current_timestamp()')]);
 
             DB::commit();
             return true;

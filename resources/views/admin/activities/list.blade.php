@@ -21,7 +21,7 @@
                                     <div class="mb-2">
                                     <span class="text-job text-primary">{{$subscriptioncancel->created_at}}</span>
                                     <span class="bullet"></span>
-                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$subscriptioncancel->staff->full_name}}</a>
+                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$subscriptioncancel->staff->full_name ?? 'Sistem' }}</a>
 
                                     </div>
                                     <p>{{$subscriptioncancel->description}}</p>
@@ -39,7 +39,7 @@
                                     <div class="mb-2">
                                     <span class="text-job text-primary">{{$subscriptionchange->created_at}}</span>
                                     <span class="bullet"></span>
-                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$subscriptionchange->staff->full_name}}</a>
+                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$subscriptionchange->staff->full_name ?? 'Sistem' }}</a>
 
                                     </div>
                                     <p>{{$subscriptionchange->description}}</p>
@@ -57,7 +57,7 @@
                                     <div class="mb-2">
                                     <span class="text-job text-primary">{{$subscriptionfreeze->created_at}}</span>
                                     <span class="bullet"></span>
-                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$subscriptionfreeze->staff->full_name}}</a>
+                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$subscriptionfreeze->staff->full_name ?? 'Sistem' }}</a>
 
                                     </div>
                                     <p>{{$subscriptionfreeze->description}}</p>
@@ -65,7 +65,7 @@
                                     @if ($subscriptionfreeze!=Null)
                                     <div class="mb-2">
 
-                                        <p>Aboneliği yeniden açan kullanıcı: <b>{{$subscriptionfreeze->unfreezeStaff->full_name}}</b>  {{$subscriptionfreeze->unfreezed_at}}</p>
+                                        <p>Aboneliği yeniden açan kullanıcı: <b>{{$subscriptionfreeze->unfreezeStaff->full_name ?? 'Sistem' }}</b>  {{$subscriptionfreeze->unfreezed_at}}</p>
                                     </div>
                                     @endif
                                 </div>
@@ -82,7 +82,7 @@
                                     <div class="mb-2">
                                     <span class="text-job text-primary">{{$subscriptionprizeedit->created_at}}</span>
                                     <span class="bullet"></span>
-                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$subscriptionprizeedit->staff->full_name}}</a>
+                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$subscriptionprizeedit->staff->full_name ?? 'Sistem' }}</a>
 
                                     </div>
                                     <p>{{$subscriptionprizeedit->description}}</p>
@@ -105,7 +105,7 @@
                                     <div class="mb-2">
                                     <span class="text-job text-primary">{{$paymentcancel->created_at}}</span>
                                     <span class="bullet"></span>
-                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$paymentcancel->staff->full_name}}</a>
+                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$paymentcancel->staff->full_name ?? 'Sistem' }}</a>
 
                                     </div>
                                     <p>{{$paymentcancel->description}}</p>
@@ -146,7 +146,7 @@
                                     <div class="mb-2">
                                         <span class="text-job text-primary">{{$paymentcreate->created_at}}</span>
                                         <span class="bullet"></span>
-                                        <a class="text-job" >İşlemi Yapan Kullanıcı : {{$paymentcreate->staff->full_name}}</a>
+                                        <a class="text-job" >İşlemi Yapan Kullanıcı : {{$paymentcreate->staff->full_name ?? 'Sistem' }}</a>
                                     </div>
                                     <p>{{$paymentcreate->description}}</p>
                                     <div class="mb-2">
@@ -167,7 +167,7 @@
                                     <div class="mb-2">
                                     <span class="text-job text-primary">{{$paymentdelete->created_at}}</span>
                                     <span class="bullet"></span>
-                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$paymentdelete->staff->full_name}}</a>
+                                    <a class="text-job" >İşlemi Yapan Kullanıcı : {{$paymentdelete->staff->full_name ?? 'Sistem' }}</a>
 
                                     </div>
                                     <p>{{$paymentdelete->paymentdelete}}</p>
