@@ -12,11 +12,11 @@
                         <span>
                             <select id="slcStatus" class="custom-select">
                                 <option value="">Tümü</option>
-                                <option value="0">Onaylanmamış</option>
-                                <option value="1">Onaylandı</option>
-                                <option value="2">Hizmeti Değiştirildi</option>
-                                <option value="3">İptal Edildi</option>
-                                <option value="4">Donduruldu</option>
+                                <option value="0" @if ($status === 0) selected @endif>Onaylanmamış</option>
+                                <option value="1" @if ($status === 1) selected @endif>Aktif</option>
+                                <option value="2" @if ($status === 2) selected @endif>Tarife Değiştirilmiş</option>
+                                <option value="3" @if ($status === 3) selected @endif>İptal Edilmiş</option>
+                                <option value="4" @if ($status === 4) selected @endif>Dondurulmuş</option>
                             </select>
                         </span>
                         <a href="{{ route('admin.subscription.add') }}" class="btn btn-primary"><i
@@ -58,7 +58,7 @@
 
     <script>
         $(function() {
-            $("#dataTable").dataTable({
+            let table = $("#dataTable").dataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "/subscription/list",
@@ -76,11 +76,8 @@
                 initComplete: function() {
                     this.api().columns().every(function() {
                         var column = this;
-                        if (column[0][0] != 0 && column[0][0] != 1 && column[0][0] != 2 &&
-                            column[0][0] != 4 && column[0][0] != 5 && column[0][0] != 7 &&
-                            column[0][0] != 12) {
-                            var select = $('#slcStatus')
-                            .on('change', function() {
+                        if (column[0][0] == 3) {
+                            $('#slcStatus').on('change', function() {
                                 var val = $.fn.dataTable.util.escapeRegex(
                                     $(this).val()
                                 );
@@ -93,6 +90,8 @@
                     });
                 }
             });
+
+            table.api().columns(3).search('{{ $status }}', true, false).draw();
         })
     </script>
 @endpush

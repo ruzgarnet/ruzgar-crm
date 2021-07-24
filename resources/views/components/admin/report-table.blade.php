@@ -13,6 +13,16 @@
                                     @foreach ($chunk as $key => $value)
                                         @if ($type == 'types')
                                             <td>@lang("tables.payment.types.{$key}")</td>
+                                        @elseif ($type == 'subscriptions')
+                                            <td>
+                                                @if (is_numeric(trans("report.{$type}.status.{$key}")))
+                                                    <a target="_blank" href="{{ route('admin.subscriptions', ['status' => trans("report.{$type}.status.{$key}") ?? null]) }}">
+                                                        @lang("report.{$type}.{$key}")
+                                                    </a>
+                                                @else
+                                                    @lang("report.{$type}.{$key}")
+                                                @endif
+                                            </td>
                                         @else
                                             <td>@lang("report.{$type}.{$key}")</td>
                                         @endif

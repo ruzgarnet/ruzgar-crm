@@ -111,7 +111,7 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     // Message Routes End
 
     // Subscription Routes
-    Route::get('subscriptions', [App\Http\Controllers\Admin\SubscriptionController::class, 'index'])->name('subscriptions');
+    Route::get('subscriptions/{status?}', [App\Http\Controllers\Admin\SubscriptionController::class, 'index'])->where('status', '[0-9]+')->name('subscriptions');
     Route::get('subscription/list', [App\Http\Controllers\Admin\SubscriptionController::class, 'list'])->name('subscription.list');
     Route::get('subscription/add', [App\Http\Controllers\Admin\SubscriptionController::class, 'create'])->name('subscription.add');
     Route::post('subscription/add', [App\Http\Controllers\Admin\SubscriptionController::class, 'store'])->name('subscription.add.post');

@@ -32,12 +32,13 @@ class SubscriptionController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(int $status = null)
     {
         return view('admin.subscription.list', [
-            'subscriptions' => Subscription::orderBy('id', 'DESC')->get(),
+            'subscriptions' => Subscription::where('status', $status)->orderBy('id', 'DESC')->get(),
             'statuses' => trans('subscription.status'),
-            'services' => Service::select('id', 'name')->get()
+            'services' => Service::select('id', 'name')->get(),
+            'status' => $status
         ]);
     }
 

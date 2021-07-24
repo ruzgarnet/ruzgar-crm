@@ -32,7 +32,14 @@ return [
 		'active' => 'Aktif',
 		'changed' => 'Tarifesi Değiştirilmiş',
 		'canceled' => 'İptal Edilmiş',
-		'freezed' => 'Dondurulmuş'
+		'freezed' => 'Dondurulmuş',
+		'status' => [
+			'unapproved' => '0',
+			'active' => '1',
+			'changed' => '2',
+			'canceled' => '3',
+			'freezed' => '4',
+		] 
     ],
     'subscriptions_monthly' => [
     	'title' => 'Abonelikler (Aylık)',
