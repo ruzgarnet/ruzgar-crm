@@ -562,12 +562,12 @@ class APIController extends Controller
             if ($result) {
                 return response()->json([
                     'error' => false,
-                    'message' => "SMS mesajları başarılı bir şekilde gönderildi."
+                    'message' => "SMS'ler başarılı bir şekilde gönderildi."
                 ]);
             } else {
                 return response()->json([
                     'error' => true,
-                    'message' => "SMS mesajları gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyiniz."
+                    'message' => "SMS'ler gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyiniz."
                 ]);
             }
         } else {
@@ -736,7 +736,7 @@ class APIController extends Controller
             $moka = new Moka();
             foreach ($customer->subscriptions as $subscription) {
                 if ($payment = $subscription->currentPayment()) {
-                    if ($payment->mokaPayment) {
+                    if (!$payment->isPaid() && $payment->mokaPayment) {
 
                         $payment_detail = $moka->get_payment_detail_by_other_trx(
                             $payment->mokaPayment->trx_code
