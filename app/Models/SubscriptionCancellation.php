@@ -52,23 +52,21 @@ class SubscriptionCancellation extends Model
         try {
             self::create($data);
 
+            Reference::cancel($subscription, $data['staff_id']);
+
+            $subscription->payments()->where('status', '<>', 2)->delete();
+            $subscription->freezes()->whereNull('unfreezed_at')->update(['unfreezed_at' => DB::raw('current_timestamp()')]);
+            $subscription->sales()->whereNull('disabled_at')->update(['disabled_at' => DB::raw('current_timestamp()')]);
+
             $subscription->end_date = Carbon::now()->format('Y-m-d');
             $subscription->status = 3;
             $subscription->save();
-
-            Reference::cancel($subscription, $data['staff_id']);
-
-            Payment::where('subscription_id', $subscription->id)
-                ->whereNull('paid_at')
-                ->delete();
-
-            $subscription->freezes()->whereNull('unfreezed_at')->update(['unfreezed_at' => DB::raw('current_timestamp()')]);
-            $subscription->sales()->whereNull('disabled_at')->update(['disabled_at' => DB::raw('current_timestamp()')]);
 
             DB::commit();
             return true;
         } catch (Exception $e) {
             DB::rollBack();
+            Telegram::send('Test', 'sub-cancel ' . $e->getMessage());
             return false;
         }
     }
