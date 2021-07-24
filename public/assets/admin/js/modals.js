@@ -59,6 +59,22 @@ $(function () {
         modal.modal("show");
     });
 
+     /**
+     * Open cancel payment modal and change form action
+     */
+      $(document).on("click", ".cancel-payment-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            subscription = button.data("subscription"),
+            payment = button.data("payment"),
+            modal = $("#cancelPaymentModal");
+
+        $("#inpCancelPaymentModalSubscription").val(subscription);
+        $("#inpCancelPaymentModalPayment").val(payment);
+        $("#cancelPaymentForm").prop("action", action);
+        modal.modal("show");
+    });
+
     /**
      * Open edit payment price modal, change form action and price
      */

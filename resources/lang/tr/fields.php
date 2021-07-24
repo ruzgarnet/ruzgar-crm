@@ -57,6 +57,7 @@ return [
     'original_price' => 'Kampanyasız Fiyatı',
     'reference' => 'Referans',
     'referenced' => 'Referans Olunan',
+    'service_price' => 'Tarife Fiyatı',
     // Name Attributes End
 
     // Auth|User Attributes
@@ -112,6 +113,7 @@ return [
     // Subscription Attributes
     'subscription' => 'Abonelik',
     'bbk_code' => 'BBK Kodu',
+    'campaign_description' => 'Kampanya Bilgileri',
     // Comitment
     'commitment_period' => 'Taahhüt Süresi',
     'commitment' => 'Taahhüt',

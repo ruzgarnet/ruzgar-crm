@@ -63,7 +63,8 @@
                     </ul>
 
                     <div class="text-right">
-                        <a class="btn btn-primary" href="{{ route('activities', $customer) }}" role="button">Müşteri Hareketleri</a>
+                        <a class="btn btn-primary" href="/customer/edit/{{$customer->id}}" role="button">Müşteri Bilgileri Düzenle</a>
+                        <a class="btn btn-primary" href="/activities/{{$customer->id}}" role="button">Müşteri Hareketleri</a>
                     </div>
                 </div>
             </div>
@@ -284,6 +285,13 @@
                                             <div><b>@lang('fields.price')</b></div>
                                             <div>{{ $subscription->price_print }}</div>
                                         </li>
+                                        @if ($subscription->campaign_description)
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-gift"></i></span>
+                                                <div><b>@lang('fields.campaign_description')</b></div>
+                                                <div>{{ $subscription->campaign_description }}</div>
+                                            </li>
+                                        @endif
                                         @if ($subscription->payment != 0)
                                             <li>
                                                 <span class="fa-li"><i class="fas fa-receipt"></i></span>
@@ -333,6 +341,11 @@
                                 @if ($subscription->isAuto())
                                     <span class="badge badge-primary" style="margin-right: auto;">@lang('fields.auto_paymented')</span>
                                 @endif
+                                <a class="btn btn-primary ml-auto mr-3 create-payment-modal-btn"
+                                    data-action="{{ relative_route('admin.subscription.payment.add', $subscription) }}"
+                                    title="@lang('titles.subscription.create_payment')"
+                                    data-subscription="{{ $subscription->select_print }}"><i class="fas fa-sm fa-plus"></i>
+                                    @lang('tables.subscription.create_payment')</a>
                                 <h4>{{ $subscription->service->name }}
                                     ({{ $subscription->price_print }})</h4>
                             </div>
@@ -375,23 +388,7 @@
                                                     @endif
                                                     <td>
                                                         <div class="buttons">
-                                                            @if ($payment->paid_at == null)
-                                                                <button type="button" class="btn btn-primary edit-payment-modal-btn"
-                                                                    data-action="{{ relative_route('admin.payment.price.put', $payment) }}"
-                                                                    data-price="{{ $payment->price }}"
-                                                                    title="@lang('titles.edit_payment')">
-                                                                    <i class="fas fa-file-invoice-dollar"></i>
-                                                                </button>
-
-                                                                <button type="button" class="btn btn-primary confirm-modal-btn"
-                                                                    data-action="{{relative_route('admin.message.send.payment', $payment) }}"
-                                                                    data-modal="#approveMessage"
-                                                                    title="@lang('titles.send_payment_message')">
-                                                                    <i class="fas fa-envelope"></i>
-                                                                </button>
-                                                            @endif
-
-                                                            @if ($payment->status != 2)
+                                                            @if (!$payment->isPaid())
                                                                 <button type="button" class="btn btn-primary get-payment-modal-btn"
                                                                     data-action="{{ relative_route('admin.payment.received.post', $payment) }}"
                                                                     data-pre-auth-action="{{ relative_route('payment.pre.auth.create', $payment) }}"
@@ -401,13 +398,46 @@
                                                                 </button>
                                                             @endif
 
-                                                            <button type="button" class="btn btn-danger delete-payment-modal-btn"
-                                                                data-action="{{ relative_route('admin.subscription.payment.delete', $payment) }}"
-                                                                data-subscription="{{ $subscription->select_print }}"
-                                                                data-payment="{{ $payment->date_print }}"
-                                                                title="@lang('titles.delete_payment')">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
+                                                            <span class="dropdown">
+                                                                <button class="btn btn-info dropdown-toggle" type="button"
+                                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                                    aria-expanded="false">
+                                                                    @lang('fields.actions')
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-right"
+                                                                    aria-labelledby="dropdownMenuButton">
+
+                                                                    @if (!$payment->isPaid())
+                                                                        <button type="button" class="dropdown-item edit-payment-modal-btn"
+                                                                            data-action="{{ relative_route('admin.payment.price.put', $payment) }}"
+                                                                            data-price="{{ $payment->price }}">
+                                                                            <i class="dropdown-icon fas fa-file-invoice-dollar"></i>
+                                                                            @lang('titles.edit_payment')
+                                                                        </button>
+                                                                        <button type="button" class="dropdown-item confirm-modal-btn"
+                                                                            data-action="{{relative_route('admin.message.send.payment', $payment) }}"
+                                                                            data-modal="#approveMessage">
+                                                                            <i class="dropdown-icon fas fa-envelope"></i>
+                                                                            @lang('titles.send_payment_message')
+                                                                        </button>
+                                                                        <button type="button" class="dropdown-item delete-payment-modal-btn"
+                                                                            data-action="{{ relative_route('admin.subscription.payment.delete', $payment) }}"
+                                                                            data-subscription="{{ $subscription->select_print }}"
+                                                                            data-payment="{{ $payment->date_print }}">
+                                                                            <i class="dropdown-icon fas fa-times"></i>
+                                                                            @lang('titles.delete_payment')
+                                                                        </button>
+                                                                    @else
+                                                                        <button type="button" class="dropdown-item cancel-payment-modal-btn"
+                                                                            data-action="{{ relative_route('admin.subscription.payment.cancel', $payment) }}"
+                                                                            data-subscription="{{ $subscription->select_print }}"
+                                                                            data-payment="{{ $payment->date_print }}">
+                                                                            <i class="dropdown-icon fas fa-times"></i>
+                                                                            @lang('titles.cancel_payment')
+                                                                        </button>
+                                                                    @endif
+                                                                </div>
+                                                            </span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -457,6 +487,7 @@
     @include('admin.modals.freeze-subscription')
     @include('admin.modals.create-payment')
     @include('admin.modals.delete-payment')
+    @include('admin.modals.cancel-payment')
 
     <x-admin.confirm-modal
         id="delete"
@@ -475,6 +506,22 @@
         buttonType="success" />
 
     <x-admin.confirm-modal
+        id="approveMessage"
+        method="get"
+        :title="trans('titles.actions.approve.message')"
+        :message="trans('warnings.approve.message')"
+        :buttonText="trans('titles.approve')"
+        buttonType="success" />
+
+    {{-- <x-admin.confirm-modal
+        id="unApproveSubscription"
+        method="put"
+        :title="trans('titles.actions.reset.subscription')"
+        :message="trans('warnings.subscription.reset')"
+        :buttonText="trans('titles.reset')"
+        buttonType="danger" /> --}}
+
+    <x-admin.confirm-modal
         id="unFreezeSubscription"
         method="put"
         :title="trans('titles.actions.approve.subscription')"
@@ -487,14 +534,6 @@
         method="put"
         :title="trans('titles.cancel_auto_payment')"
         :message="trans('warnings.payment.cancel_auto_payment')"
-        :buttonText="trans('titles.approve')"
-        buttonType="success" />
-
-    <x-admin.confirm-modal
-        id="approveMessage"
-        method="get"
-        :title="trans('titles.actions.approve.message')"
-        :message="trans('warnings.approve.message')"
         :buttonText="trans('titles.approve')"
         buttonType="success" />
 @endpush

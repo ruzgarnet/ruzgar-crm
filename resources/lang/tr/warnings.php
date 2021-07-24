@@ -32,7 +32,8 @@ return [
         'freezed' => 'Dondurulumuş abonelikte bu işlemi gerçekleştiremezsiniz!',
         'not_freezed' => 'Bu abonelik dondurulmamış!',
         'reset' => 'Abonelik bilgilerini sıfırlamak, bu abenolikle ilişkili tüm verileri silecektir. Bu gerçekleştirilirse geri alınamaz!',
-        'cancel_auto_payment' => 'İptal etmek istediğinize emin misiniz ?'
+        'cancel_auto_payment' => 'İptal etmek istediğinize emin misiniz ?',
+        'campaign_description' => 'İlk :campaign_duration ay :campaign_price, sonraki aylarda :price.'
     ],
     'reference' => [
         'control_time' => 'Kontrol Edilebilir'
