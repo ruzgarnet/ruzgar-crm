@@ -1,5 +1,7 @@
 @extends('admin.layout.main')
 
+@section('title', meta_title('fields.report'))
+
 @section('content')
     <div class="section-header">
         <h1>Rapor</h1>

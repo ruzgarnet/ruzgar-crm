@@ -12,6 +12,7 @@ return [
     'reset' => 'Sıfırla',
     'not_active' => 'Aktif Değil',
     'campaing' => 'Kampanya',
+    'report' => 'Rapor',
     // Global Attributes End
 
     // Identity Attributes

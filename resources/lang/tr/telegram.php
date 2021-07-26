@@ -13,8 +13,8 @@ return [
     'application_subscription' => "Adı Soyadı :full_name \nTelefon Numarası : :telephone \n:username",
     'add_freeze' => "Yeni bir dondurma işlemi gerçekleştirildi. \nMüşteri : :full_name \nTarife : :subscription \nPersonel : :username",
     'unfreeze' => "Dondurulan abonelik aktif edildi. \nMüşteri : :full_name \nTarife : :subscription \nPersonel : :username",
-    'add_request_message' => " :username adlı kullanıcı tarafından :role yetkili kişiler için bir talep oluşturuldu. \nDurumu : :status ",
-    'edit_request_message' => " :username adlı kullanıcı tarafından açılan talepde :user adlı kişi işlem yaptı. \nDurumu : :status ",
+    'add_request_message' => " :username adlı kullanıcı tarafından :role yetkili kişiler için bir talep oluşturuldu.\n İçerik: :description \nDurumu : :status",
+    'edit_request_message' => " :username adlı kullanıcı tarafından açılan talepde :user adlı kişi işlem yaptı. \n İçerik: :description \nDurumu : :status",
     'edit_fault' => ":full_name adlı müşterimiz tarafından oluşturulan :serial_number seri numaralı arıza kaydının durumu :status olarak değiştirildi. \nDetay : :detail \nİşlemi Gerçekleştiren Kullanıcı : :username",
     'payment_received' => "Başarılı bir ödeme gerçekleştirildi. \nT.C. Kimlik Numarası : :id_no \nAdı Soyadı : :full_name \nTutar : :price TL \nMarka : :category"
 ];

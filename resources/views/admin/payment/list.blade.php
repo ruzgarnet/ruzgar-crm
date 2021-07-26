@@ -67,7 +67,7 @@
                         var column = this;
                         if (column[0][0] != 0 && column[0][0] != 1 && column[0][0] != 3 && column[0][0] != 5 && column[0][0] != 6 && column[0][0] != 4) {
                             var select = $(
-                                    '<select class="form-control" style="width:80px;"><option value="">Tümü</option></select>'
+                                    '<select class="form-control" style="width:110px;"><option value="">Tümü</option></select>'
                                     )
                                 .appendTo($(column.header()).empty())
                                 .on('change', function() {
@@ -100,7 +100,7 @@
                         }
                         if(column[0][0] == 2)
                         {
-                            var select = $('<select class="form-control" style="width:80px;"><option value="">Tümü</option></select>')
+                            var select = $('<select class="form-control" style="width:110px;"><option value="">Tümü</option></select>')
                                 .appendTo($(column.header()).empty())
                                 .on('change', function() {
                                     var val = $.fn.dataTable.util.escapeRegex(
@@ -118,7 +118,7 @@
                         }
                         if(column[0][0] == 5)
                         {
-                            var select = $('<select class="form-control" style="width:80px;"><option value="">Tümü</option></select>')
+                            var select = $('<select class="form-control" style="width:110px;"><option value="">Tümü</option></select>')
                                 .appendTo($(column.header()).empty())
                                 .on('change', function() {
                                     var val = $.fn.dataTable.util.escapeRegex(
@@ -137,7 +137,7 @@
                         if(column[0][0] == 6 )
                         {
                             var select = $(
-                                    '<select class="form-control" style="width:80px;"><option value="">Tümü</option></select>'
+                                    '<select class="form-control" style="width:110px;"><option value="">Tümü</option></select>'
                                     )
                                 .appendTo($(column.header()).empty())
                                 .on('change', function() {
