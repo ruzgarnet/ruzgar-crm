@@ -11,6 +11,7 @@ use App\Models\Attributes\PriceAttribute;
 use App\Models\Attributes\StartDateAttribute;
 use App\Models\Attributes\SubscriptionAddressAttribute;
 use App\Models\Attributes\SubscriptionCampaignDescriptionAttribute;
+use App\Models\Attributes\SubscriptionContractPathAttribute;
 use App\Models\Attributes\SubscriptionContractPrintAttribute;
 use App\Models\Attributes\SubscriptionReferencePrintAttribute;
 use App\Models\Attributes\SubscriptionSelectPrintAttribute;
@@ -37,7 +38,8 @@ class Subscription extends Model
         SubscriptionContractPrintAttribute,
         SubscriptionServicePrintAttribute,
         SubscriptionReferencePrintAttribute,
-        SubscriptionCampaignDescriptionAttribute;
+        SubscriptionCampaignDescriptionAttribute,
+        SubscriptionContractPathAttribute;
 
     /**
      * All fields fillable

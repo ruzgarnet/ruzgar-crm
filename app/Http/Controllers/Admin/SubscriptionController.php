@@ -113,7 +113,7 @@ class SubscriptionController extends Controller
 
             if (!$subscription->isChangedNew()) {
                 $html .= '<a target="_blank" class="dropdown-item"
-                    href="/contracts/' . md5($subscription->subscription_no) . '.pdf">
+                    href="/contracts/' . $subscription->contract_path . '">
                     <i class="dropdown-icon fas fa-file-contract"></i>
                     ' . trans('fields.contract') . '
                 </a>';
@@ -523,7 +523,7 @@ class SubscriptionController extends Controller
                 'barcode' => Generator::barcode($subscription->subscription_no),
                 'devices' => $subscription->getOption("devices") ?? []
             ]);
-            $path = "contracts/" . md5($subscription->subscription_no) . ".pdf";
+            $path = "contracts/" . $subscription->contract_path;
             if (!file_exists(public_path('contracts'))) {
                 mkdir(public_path('contracts'), 0755, true);
             }

@@ -170,7 +170,7 @@
 
                                                     @if(!$subscription->isChanged())
                                                         <a target="_blank" class="dropdown-item"
-                                                            href="/contracts/{{ md5($subscription->subscription_no) }}.pdf">
+                                                            href="/contracts/{{ $subscription->contract_path }}">
                                                             <i class="dropdown-icon fas fa-file-contract"></i>
                                                             @lang('fields.contract')
                                                         </a>
