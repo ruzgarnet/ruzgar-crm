@@ -42,6 +42,7 @@ return [
     'reset' => 'Sıfırla',
     'unapproved' => 'Onaylanmamış',
     'delete_payment' => 'Ödemeyi Sil',
+    'cancel_payment' => 'Ödemeyi İptal Et',
     'payment_pre_auth' => 'Provizyon',
     'cancel_auto_payment' => 'Otomatik Ödemeyi İptal Et',
     'details' => 'Detaylar',
@@ -79,7 +80,8 @@ return [
 
     'subscription' => [
         'create_payment' => 'Fatura Oluştur',
-        'delete_payment' => 'Ödemeyi Sil'
+        'delete_payment' => 'Ödemeyi Sil',
+        'cancel_payment' => 'Ödemeyi İptal Et'
     ],
 
     'customer_applications' => 'Başvurular',

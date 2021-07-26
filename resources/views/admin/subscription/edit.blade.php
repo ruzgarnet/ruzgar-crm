@@ -209,7 +209,7 @@
     <script src="/assets/admin/vendor/slugify/slugify.js"></script>
     <script src="/assets/admin/vendor/select2/js/select2.min.js"></script>
     <script src="/assets/admin/vendor/cleave/cleave.min.js"></script>
-    <script src="/assets/admin/vendor/vue/vue.js"></script>
+    <script src="/assets/admin/vendor/vue/vue.min.js"></script>
 
     <script>
         Vue.directive('selectpicker', {

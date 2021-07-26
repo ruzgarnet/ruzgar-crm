@@ -54,7 +54,7 @@ class SubscriptionCancellation extends Model
 
             Reference::cancel($subscription, $data['staff_id']);
 
-            $subscription->payments()->where('status', '<>', 2)->delete();
+            $subscription->payments()->where('status', 1)->delete();
             $subscription->freezes()->whereNull('unfreezed_at')->update(['unfreezed_at' => DB::raw('current_timestamp()')]);
             $subscription->sales()->whereNull('disabled_at')->update(['disabled_at' => DB::raw('current_timestamp()')]);
 
