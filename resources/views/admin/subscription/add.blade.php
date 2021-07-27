@@ -194,7 +194,6 @@
 @endpush
 
 @push('script')
-    <script src="/assets/admin/vendor/ckeditor/ckeditor.js"></script>
     <script src="/assets/admin/vendor/slugify/slugify.js"></script>
     <script src="/assets/admin/vendor/select2/js/select2.min.js"></script>
     <script src="/assets/admin/vendor/cleave/cleave.min.js"></script>

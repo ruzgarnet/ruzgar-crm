@@ -23,6 +23,12 @@
                                                     @lang("report.{$type}.{$key}")
                                                 @endif
                                             </td>
+                                        @elseif (in_array($key, ['penalty', 'penalty_paided', 'penalty_not_paided']))
+                                            <td>
+                                                <a target="_blank" href="{{ route('admin.payment.penalties') }}">
+                                                    @lang("report.{$type}.{$key}")
+                                                </a>
+                                            </td>
                                         @else
                                             <td>@lang("report.{$type}.{$key}")</td>
                                         @endif

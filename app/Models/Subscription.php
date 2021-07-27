@@ -169,6 +169,16 @@ class Subscription extends Model
     }
 
     /**
+     * Returns reference subscription
+     *
+     * @return int|null
+     */
+    public function getReferencedId()
+    {
+        return Reference::where('referenced_id', $this->id)->first()->reference_id ?? null;
+    }
+
+    /**
      * Get subscription status
      *
      * 0 => Unapproved  - Onaylanmamış
@@ -289,7 +299,7 @@ class Subscription extends Model
             // Set the first price after 25
             // 25'ten sonra aboneliği eklenirse ilk ay ücretini yarıya düş
             foreach ($payments as $index => $payment) {
-                if (date('d') >= 25 && $index == 0) {
+                if (date('d') >= 25 && $index == 0 && !$this->getOption('pre_payment')) {
                     $payment["price"] /= 2;
                 }
                 Payment::insert($payment);

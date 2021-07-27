@@ -176,21 +176,20 @@
                             </div>
                         </div>
 
-                        @if (in_array(Request::user()->role_id, [1]))
-                            <div class="form-group">
-                                <label for="slcReferences">@lang('fields.reference')</label>
-                                <select name="reference_id" id="slcReferences" class="custom-select selectpicker">
-                                    <option selected disabled>@lang('tables.reference.select')</option>
-                                    @foreach ($subscriptions as $subscription)
-                                        <option value="{{ $subscription->id }}">{{ $subscription->reference_print }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @endif
+                        <div class="form-group">
+                            <label for="slcReferences">@lang('fields.reference')</label>
+                            <select name="reference_id" id="slcReferences" class="custom-select selectpicker">
+                                <option value="">@lang('tables.reference.select')</option>
+                                @foreach ($subscriptions as $referenceSubscriptions)
+                                    <option value="{{ $referenceSubscriptions->id }}" 
+                                        @if ($subscription->getReferencedId() == $referenceSubscriptions->id) selected @endif
+                                        >{{ $referenceSubscriptions->reference_print }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="card-footer text-right">
-                        @if (!$subscription->approved_at)
+                        @if ($subscription->approved_at == null)
                             <button type="submit" class="btn btn-primary">@lang('fields.send')</button>
                         @endif
                     </div>
@@ -205,7 +204,6 @@
 @endpush
 
 @push('script')
-    <script src="/assets/admin/vendor/ckeditor/ckeditor.js"></script>
     <script src="/assets/admin/vendor/slugify/slugify.js"></script>
     <script src="/assets/admin/vendor/select2/js/select2.min.js"></script>
     <script src="/assets/admin/vendor/cleave/cleave.min.js"></script>

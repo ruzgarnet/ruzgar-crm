@@ -231,6 +231,11 @@ return [
         ],
         'received' => 'Ödeme Al',
         'price' => 'Ücret Düzenle',
+        'penalty' => 'Gecikmiş Ödemeler',
+        'penalty_status' => [
+            1 => 'Ödenmemiş',
+            2 => 'Ödenmiş',
+        ],
     ],
     // Payment Fields End
 

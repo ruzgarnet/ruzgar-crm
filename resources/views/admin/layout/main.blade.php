@@ -83,10 +83,10 @@
 
     <script src="/assets/admin/stisla/js/stisla.js"></script>
     <script src="/assets/admin/stisla/js/scripts.js"></script>
-    <script src="/assets/admin/js/plugins.js"></script>
-    <script src="/assets/admin/js/masks.js"></script>
-    <script src="/assets/admin/js/modals.js"></script>
-    <script src="/assets/admin/js/common.js"></script>
+    <script src="/assets/admin/js/plugins.js?v=1.1"></script>
+    <script src="/assets/admin/js/masks.js?v=1.1"></script>
+    <script src="/assets/admin/js/modals.js?v=1.1"></script>
+    <script src="/assets/admin/js/common.js?v=1.1"></script>
 </body>
 
 </html>

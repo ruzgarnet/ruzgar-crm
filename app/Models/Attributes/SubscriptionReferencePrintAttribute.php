@@ -14,6 +14,6 @@ trait SubscriptionReferencePrintAttribute
      */
     public function getReferencePrintAttribute()
     {
-        return "{$this->customer->reference_code} - {$this->customer->full_name} - {$this->service->name}";
+        return "{$this->customer->reference_code} - {$this->customer->full_name} - {$this->service->name} - {$this->price_print}";
     }
 }

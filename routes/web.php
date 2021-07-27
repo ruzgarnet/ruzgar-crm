@@ -26,6 +26,7 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     Route::get('infrastructure', [App\Http\Controllers\Admin\MainController::class, 'infrastructure'])->name('infrastructure');
     Route::get('/cant', [App\Http\Controllers\Admin\MainController::class, 'cant'])->name('cant');
     Route::get('/report', [App\Http\Controllers\Admin\MainController::class, 'report'])->name('report');
+    Route::get('excel', [App\Http\Controllers\Admin\MainController::class, 'excel'])->name('excel');
     // Main Routes End
 
     // Dealer Routes
@@ -111,7 +112,7 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     // Message Routes End
 
     // Subscription Routes
-    Route::get('subscriptions/{status?}', [App\Http\Controllers\Admin\SubscriptionController::class, 'index'])->where('status', '[0-9]+')->name('subscriptions');
+    Route::get('subscriptions/{status?}', [App\Http\Controllers\Admin\SubscriptionController::class, 'index'])->name('subscriptions')->where('status', '[0-9]+');
     Route::get('subscription/list', [App\Http\Controllers\Admin\SubscriptionController::class, 'list'])->name('subscription.list');
     Route::get('subscription/add', [App\Http\Controllers\Admin\SubscriptionController::class, 'create'])->name('subscription.add');
     Route::post('subscription/add', [App\Http\Controllers\Admin\SubscriptionController::class, 'store'])->name('subscription.add.post');
@@ -134,6 +135,7 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
 
     // Payment Routes
     Route::get('payments', [App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments');
+    Route::get('payment/penalties', [App\Http\Controllers\Admin\PaymentController::class, 'listPenalties'])->name('payment.penalties');
     Route::get('payment/list', [App\Http\Controllers\Admin\PaymentController::class, 'list'])->name('payment.list');
     Route::post('payment/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'received'])->name('payment.received.post');
     Route::post('payment/test/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'test_received'])->name('payment.test.received.post');
@@ -198,7 +200,7 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     Route::put('request_message/edit/{request_message}', [App\Http\Controllers\Admin\RequestMessageController::class, 'update'])->name('request.message.edit.put');
     Route::delete('request_message/delete/{request_message}', [App\Http\Controllers\Admin\RequestMessageController::class, 'destroy'])->name('request.message.delete');
     // RequestMessage Routes End
-    // 
+    //
     Route::get('test', [App\Http\Controllers\Admin\MainController::class, 'test'])->name('test');
 });
 

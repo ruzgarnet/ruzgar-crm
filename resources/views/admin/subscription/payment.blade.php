@@ -132,7 +132,7 @@
                                             <td data-sort="{{ $payment->price }}">{{ $payment->price_print }}</td>
                                             <td>@lang("tables.payment.status.{$payment->status}")</td>
                                             <td>
-                                                @if ($payment->type)
+                                                @if ($payment->isPaid())
                                                     <div>@lang("tables.payment.types.{$payment->type}")</div>
                                                     <div title="@lang('fields.paid_date')">{{ $payment->paid_at_print }}
                                                     </div>

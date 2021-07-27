@@ -40,13 +40,13 @@ class MainController extends Controller
             'total' => [
                 'customer' => Customer::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->count(),
                 'subscription' => Subscription::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->count(),
-                'faultRecord' => FaultRecord::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->count(),
+                'faultRecord' => FaultRecord::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->whereNotIn('status', [5, 6])->count(),
                 'payment' => Payment::where('status', '2')
                     ->where('type', '<>', 6)
                     ->whereBetween('date', [date('Y-m-01'), date('Y-m-t')])
                     ->sum('price'),
             ],
-            'subscriptions' => Subscription::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->limit(10)->get()
+            'subscriptions' => Subscription::whereRaw("DATE_FORMAT(created_at, '%Y-%m-%d')", date('Y-m-d'))->orderByDesc('approved_at')->limit(10)->get()
         ];
         return view('admin.dashboard', $data);
     }

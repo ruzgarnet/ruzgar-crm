@@ -31,10 +31,8 @@
                                             @if ($reference->status != 1)
                                                 <span class="reference-statuses reference-status-{{ $reference->status }}"
                                                     data-toggle="popover" data-html="true" data-content="<b>Tarih:</b>
-                                                                {{ convert_date($reference->decided_at, 'large') }}
-                                                                <br>
-                                                                <b>Personel</b>: {{ $reference->staff->full_name }}
-                                                                <br>
+                                                                {{ convert_date($reference->decided_at, 'large') }} <br>
+                                                                <b>Personel</b>: @if ($reference->staff) {{ $reference->staff->full_name }} @endif <br>
                                                                 <b>Açıklama</b>: @lang("tables.reference.status.descriptions.{$reference->status}")">
                                                     @lang("tables.reference.status.titles.{$reference->status}")
                                                 </span>
@@ -67,11 +65,7 @@
                                                 @endif
                                             </a>
                                         </td>
-                                        <td>
-                                            <span title="@lang('fields.date'): {{ convert_date($reference->created_at, 'large') }}">
-                                                {{ $reference->created_at->longAbsoluteDiffForHumans() }}
-                                            </span>
-                                        </td>
+                                        <td data-sort="{{ $reference->created_at }}">{{ convert_date($reference->created_at, 'large') }}</td>
                                         <td>
                                             @if ($reference->status == 1 && $reference->created_at->diffInMonths() > 1)
                                                 <span class="text-primary">@lang('warnings.reference.control_time')</span>
@@ -113,6 +107,9 @@
                 columnDefs: [{
                     "type": "num",
                     "targets": 0
+                }, {
+                    "type": "date",
+                    "targets": 4
                 }]
             });
         })

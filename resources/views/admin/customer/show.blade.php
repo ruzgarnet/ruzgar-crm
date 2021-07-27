@@ -304,27 +304,31 @@
                                                 </div>
                                             </li>
                                         @endif
-                                        <li>
-                                            <span class="fa-li"><i class="fas fa-network-wired"></i></span>
-                                            <a href="#setupDetails_{{ $subscription->id }}" data-toggle="collapse"
-                                                data-target="#setupDetails_{{ $subscription->id }}" aria-expanded="false"
-                                                aria-controls="setupDetails_{{ $subscription->id }}">
-                                                <div><b>@lang('fields.setup_informations')</b></div>
-                                            </a>
-                                        </li>
+                                        @if (count($subscription->option_values))
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-network-wired"></i></span>
+                                                <a href="#setupDetails_{{ $subscription->id }}" data-toggle="collapse"
+                                                    data-target="#setupDetails_{{ $subscription->id }}" aria-expanded="false"
+                                                    aria-controls="setupDetails_{{ $subscription->id }}">
+                                                    <div><b>@lang('fields.setup_informations')</b></div>
+                                                </a>
+                                            </li>
+                                        @endif
                                     </ul>
-                                    <div class="collapse" id="setupDetails_{{ $subscription->id }}">
-                                        <table class="table table-sm mb-0">
-                                            <tbody>
-                                                @foreach ($subscription->option_values as $key => $option)
-                                                    <tr>
-                                                        <td width="50%"><b>{{ $option['title'] }}</b></td>
-                                                        <td width="50%">{{ $option['value'] }}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    @if (count($subscription->option_values))
+                                        <div class="collapse" id="setupDetails_{{ $subscription->id }}">
+                                            <table class="table table-sm mb-0">
+                                                <tbody>
+                                                    @foreach ($subscription->option_values as $key => $option)
+                                                        <tr>
+                                                            <td width="50%"><b>{{ $option['title'] }}</b></td>
+                                                            <td width="50%">{{ $option['value'] }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
