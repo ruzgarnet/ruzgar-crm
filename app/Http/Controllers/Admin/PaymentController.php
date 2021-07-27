@@ -120,6 +120,22 @@ class PaymentController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function listPenalties()
+    {
+        $payments = Payment::whereDate('date', date('Y-m-15'))
+            ->whereRaw('`id` IN (SELECT `payment_id` FROM `payment_penalties`)')
+            ->get();
+
+        return view('admin.payment.penalties', [
+            'payments' => $payments
+        ]);
+    }
+
+    /**
      * Receives payment
      *
      * @param  \Illuminate\Http\Request  $request
