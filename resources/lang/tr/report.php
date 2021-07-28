@@ -9,7 +9,9 @@ return [
     	'auto' => 'Otomatik Ödeme',
     	'no_auto' => 'Normal Ödeme',
     	'avarage' => 'Abone Başına Ortalama Tutar',
-    	'penalty_price' => 'Gecikme Ücreti Tutarı'
+    	'penalty_price' => 'Gecikme Ücreti Tutarı',
+    	'penalty_price_paided' => 'Ödenmiş Gecikme Ücreti Tutarı',
+    	'penalty_price_not_paided' => 'Ödenmemiş Gecikme Ücreti Tutarı'
     ],
     'counts' => [
 		'title' => 'Ödemeler',
@@ -23,6 +25,9 @@ return [
     ],
     'types' => [
     	'title' => 'Ödeme Tiplerine Göre Tutarlar'
+    ],
+    'type_counts' => [
+    	'title' => 'Ödeme Tiplerine Göre Sayılar'
     ],
     'subscriptions' => [
     	'title' => 'Abonelikler',

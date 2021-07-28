@@ -104,15 +104,60 @@ class MainController extends Controller
         return view('admin.cant');
     }
 
+   /**
+     * excel
+     *
+     * @return void
+     */
+    public function excel()
+    {
+       $array = DB::select("
+    SELECT
+        categories.name AS Kategori,
+        CONCAT(
+            customers.first_name,
+            ' ',
+            customers.last_name
+        ) AS Isim,
+        services.name AS Hizmetler,
+        payments.price AS Ucret,
+        payments.date AS Tarih,
+        (
+            CASE WHEN payments.type IS NULL THEN 'Ödenmemiş'
+            WHEN payments.type = 1 THEN 'Nakit'
+            WHEN payments.type = 2 THEN 'Kredi/Banka Kartı (Pos)'
+            WHEN payments.type = 3 THEN 'Havale/EFT'
+            WHEN payments.type = 4 THEN 'Kredi/Banka Kartı (Online)'
+            WHEN payments.type = 5 THEN 'Otomatik Ödeme'
+        END
+    ) AS Durum
+    FROM
+        payments
+    INNER JOIN subscriptions ON subscriptions.id = payments.subscription_id
+    INNER JOIN customers ON customers.id = subscriptions.customer_id
+    INNER JOIN services ON services.id = subscriptions.service_id
+    INNER JOIN categories ON categories.id = services.category_id
+    WHERE
+        payments.type != 6 AND payments.date = '2021-07-15'
+    ORDER BY
+        categories.id,
+        payments.type
+        ");
+        return view('admin.excel', ['Payments' => $array]);
+    }
+
     /**
      * Report Page
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\View\View
      */
-    public function report()
+    public function report(Request $request)
     {
-        $start_date = date('Y-m-d H:i', strtotime('first day of this month'));
-        $end_date = date('Y-m-d H:i', strtotime('first day of next month'));
+        $date = Carbon::parse($request->input('date') ?? 'now');
+        $date_string = $date->toDateString();
+        $start_date = $date->startOfMonth()->toDateString();
+        $end_date = $date->endOfMonth()->toDateString();
 
         $dates = [$start_date, $end_date];
 
@@ -127,6 +172,8 @@ class MainController extends Controller
             'auto' => 0,
             'no_auto' => 0,
             'penalty_price' => 0,
+            'penalty_price_paided' => 0,
+            'penalty_price_not_paided' => 0,
         ];
 
         $subscriptions = [
@@ -177,6 +224,16 @@ class MainController extends Controller
             6 => 0
         ];
 
+        $type_counts = [
+            0 => 0,
+            1 => 0,
+            2 => 0,
+            3 => 0,
+            4 => 0,
+            5 => 0,
+            6 => 0
+        ];
+
         $categoryTemp = [
             'totals' => [
                 'price' => 0,
@@ -185,6 +242,8 @@ class MainController extends Controller
                 'auto' => 0,
                 'no_auto' => 0,
                 'penalty_price' => 0,
+                'penalty_price_paided' => 0,
+                'penalty_price_not_paided' => 0,
             ],
             'counts' => [
                 'payments' => 0,
@@ -196,6 +255,15 @@ class MainController extends Controller
                 'penalty_not_paided' => 0
             ],
             'types' => [
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0,
+                5 => 0,
+                6 => 0
+            ],
+            'type_counts' => [
                 0 => 0,
                 1 => 0,
                 2 => 0,
@@ -221,10 +289,13 @@ class MainController extends Controller
                     $counts['paided']++;
                     $categories[$category]['totals']['paided'] += $price;
                     $categories[$category]['counts']['paided']++;
+                    $categories[$category]['type_counts'][$type]++;
                 }
 
                 if ($payment->isPenalty()) {
+                    $totals['penalty_price_paided'] += $payment->penalty->penalty_price;
                     $counts['penalty_paided']++;
+                    $categories[$category]['totals']['penalty_price_paided'] += $payment->penalty->penalty_price;
                     $categories[$category]['counts']['penalty_paided']++;
                 }
             } else {
@@ -234,7 +305,9 @@ class MainController extends Controller
                 $categories[$category]['counts']['not_paided']++;
 
                 if ($payment->isPenalty()) {
+                    $totals['penalty_price_not_paided'] += $payment->penalty->penalty_price;
                     $counts['penalty_not_paided']++;
+                    $categories[$category]['totals']['penalty_price_not_paided'] += $payment->penalty->penalty_price;
                     $categories[$category]['counts']['penalty_not_paided']++;
                 }
             }
@@ -268,6 +341,8 @@ class MainController extends Controller
                 $categories[$category]['totals']['price'] += $price;
                 $categories[$category]['counts']['payments']++;
             }
+
+            $type_counts[$type]++;
         }
 
         foreach ($categories as $categoryKey => $values) {
@@ -299,8 +374,9 @@ class MainController extends Controller
         }
 
         return view('admin.report', [
-            'reports' => compact('totals', 'counts', 'types', 'subscriptions', 'subscriptions_monthly'),
-            'categories' => $categories
+            'reports' => compact('totals', 'counts', 'types', 'type_counts', 'subscriptions', 'subscriptions_monthly'),
+            'categories' => $categories,
+            'date' => $date_string
         ]);
     }
 }
