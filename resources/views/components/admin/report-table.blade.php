@@ -11,7 +11,7 @@
                             @foreach (array_chunk($report, 2, true) as $chunk)
                                 <tr>
                                     @foreach ($chunk as $key => $value)
-                                        @if ($type == 'types')
+                                        @if (in_array($type, ['types', 'type_counts']))
                                             <td>@lang("tables.payment.types.{$key}")</td>
                                         @elseif ($type == 'subscriptions')
                                             <td>

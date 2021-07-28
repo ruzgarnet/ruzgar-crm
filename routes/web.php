@@ -25,7 +25,7 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     Route::get('search', [App\Http\Controllers\Admin\MainController::class, 'search'])->name('search');
     Route::get('infrastructure', [App\Http\Controllers\Admin\MainController::class, 'infrastructure'])->name('infrastructure');
     Route::get('/cant', [App\Http\Controllers\Admin\MainController::class, 'cant'])->name('cant');
-    Route::get('/report', [App\Http\Controllers\Admin\MainController::class, 'report'])->name('report');
+    Route::match(['get', 'post'], '/report', [App\Http\Controllers\Admin\MainController::class, 'report'])->name('report');
     Route::get('excel', [App\Http\Controllers\Admin\MainController::class, 'excel'])->name('excel');
     // Main Routes End
 

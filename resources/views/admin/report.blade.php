@@ -4,7 +4,13 @@
 
 @section('content')
     <div class="section-header">
-        <h1>Rapor</h1>
+        <h1>Rapor [{{ convert_date($date, 'month_period') }}]</h1>
+
+        <form method="POST" action="{{ route('admin.report') }}" data-ajax="false" class="card-header-buttons ml-auto">
+            @csrf
+            <input type="date" name="date" name="dtDate" class="form-control" value="{{ $date ?? date('Y-m-15') }}">
+            <button type="submit" class="btn btn-primary">Listele</button>
+        </form>
     </div>
 
     <div class="row">
