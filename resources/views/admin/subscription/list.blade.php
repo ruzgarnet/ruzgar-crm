@@ -17,6 +17,7 @@
                                 <option value="2" @if ($status === 2) selected @endif>Tarife Değiştirilmiş</option>
                                 <option value="3" @if ($status === 3) selected @endif>İptal Edilmiş</option>
                                 <option value="4" @if ($status === 4) selected @endif>Dondurulmuş</option>
+                                <option value="5" @if ($status === 5) selected @endif>Taahhütü Bitecek</option>
                             </select>
                         </span>
                         <a href="{{ route('admin.subscription.add') }}" class="btn btn-primary"><i

@@ -134,8 +134,8 @@ return [
     'modem_serial' => 'Modem Seri Numarası',
     "modems" => [
         1 => "Yok",
-        2 => "ADSL (:price)",
-        3 => "VDSL (:price)",
+        2 => "ADSL",
+        3 => "VDSL",
         4 => "Fiber",
         5 => "Uydu Modem",
         6 => "3G veya 4.5G Modem"
@@ -156,7 +156,7 @@ return [
     'modem_model' => 'Modem Marka Ve Modeli',
     // Setup
     'setup' => 'Kurulum',
-    "setup_payment" => 'Kurulum/Aktivasyon Ücreti (:price) Ödeme Şekli',
+    "setup_payment" => 'Kurulum/Aktivasyon Ücreti Ödeme Şekli',
     "setup_payments" => [
         0 => "Yok",
         1 => "Peşin",

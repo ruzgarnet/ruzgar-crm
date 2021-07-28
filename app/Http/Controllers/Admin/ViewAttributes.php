@@ -54,7 +54,7 @@ trait ViewAttributes
             // Support Header
             [
                 'header' =>  trans('titles.support'),
-                'subRoutes' => ['customers_applications', 'fault_records']
+                'subRoutes' => ['messages', 'customers_applications', 'fault_records']
             ],
             // Support Header End
 
@@ -94,7 +94,7 @@ trait ViewAttributes
             // Payments Header
             [
                 'header' =>  trans('tables.payment.singular'),
-                'subRoutes' => ['payments']
+                'subRoutes' => ['payments', 'report']
             ],
             // Payments Header End
 
@@ -103,6 +103,16 @@ trait ViewAttributes
                 'title' => trans('tables.payment.plural'),
                 'route' => 'admin.payments',
                 'icon' => 'fas fa-lira-sign',
+            ],
+            [
+                'title' => trans('tables.payment.monthly'),
+                'route' => 'admin.payment.monthly',
+                'icon' => 'fas fa-calendar-alt',
+            ],
+            [
+                'title' => trans('tables.payment.penalty'),
+                'route' => 'admin.payment.penalties',
+                'icon' => 'fas fa-calendar-times',
             ],
             [
                 'title' => trans('tables.main.report'),
@@ -139,7 +149,7 @@ trait ViewAttributes
             // System Header
             [
                 'header' =>  trans('titles.system'),
-                'subRoutes' => ['customer_application_types', 'fault_types', 'messages']
+                'subRoutes' => ['customer_application_types', 'fault_types', 'messages', 'request_messages']
             ],
             // System Header End
 

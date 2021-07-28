@@ -68,7 +68,7 @@
                 },
                 columnDefs: [
                     {"type": "num", "targets": 0},
-                    {"orderable": false, "targets": [0, 1, 2, 3, 4, 5, 6, 7]}
+                    {"orderable": false, "targets": [1, 2, 3, 4, 5, 6, 7]}
                 ],
                 initComplete: function () {
                     this.api().columns().every( function () {

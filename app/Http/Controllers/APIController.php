@@ -110,6 +110,14 @@ class APIController extends Controller
                             "BizSiziArayalım",
                             $first_name . " " . $last_name . " adlı bir kullanıcı RüzgarFIBER hakkında bilgi almak istiyor. Telefon Numarası : " . $phone
                         );
+
+            			SentMessage::create(
+            			   [
+            				'phone' => $phone,
+            				'message' => Message::find(39)->message
+            			   ]
+            			);
+
                         return response()->json([
                             'error' => false,
                             'message' => "Başvuru kaydınız başarılı bir şekilde alınmıştır."
