@@ -14,7 +14,6 @@
                 </div>
                 <div class="card-body">
                     <div>
-                        <a class="btn btn-success" href="{{ route('admin.excel') }}" role="button">EXCEL</a>
                         <table class="table table-striped" id="dataTable">
                             <thead>
                                 <tr>
@@ -54,7 +53,7 @@
                 language: {
                     url: '/assets/admin/vendor/datatables/i18n/tr.json'
                 },
-                dom: 'ftipPr',
+                dom: 'lrtip',
                 columnDefs: [{
                     "type": "num",
                     "targets": 0
@@ -112,8 +111,8 @@
                                         .draw();
                                 });
 
-                                @foreach ($services as $service)
-                                    select.append('<option value="{{ $service->id }}">{{ $service->name }}</option>');
+                                @foreach ($categories as $category)
+                                    select.append('<option value="{{ $category->id }}">{{ $category->name }}</option>');
                                 @endforeach
                         }
                         if(column[0][0] == 5)
@@ -130,9 +129,8 @@
                                         .draw();
                                 });
 
-                                select.append('<option value="1">Sisteme Tanımlandı</option>');
-                                select.append('<option value="2">Ödeme Başarıyla Alındı</option>');
-                                select.append('<option value="3">Ödeme Alınırken Hata Oluştu</option>');
+                            select.append('<option value="1">Ödenmemiş</option>');
+                            select.append('<option value="2">Ödenmiş</option>');
                         }
                         if(column[0][0] == 6 )
                         {
@@ -150,12 +148,12 @@
                                         .draw();
                                 });
 
-                                select.append('<option value="1">Nakit</option>');
-                                select.append('<option value="2">Kredi/Banka Kartı (Pos)</option>');
-                                select.append('<option value="3">Havale/EFT</option>');
-                                select.append('<option value="4">Kredi/Banka Kartı (Online)</option>');
-                                select.append('<option value="5">Otomatik Ödeme</option>');
-                                select.append('<option value="6">Nakit (Ön Ödeme)</option>');
+                            select.append('<option value="1">Nakit</option>');
+                            select.append('<option value="2">Kredi/Banka Kartı (Pos)</option>');
+                            select.append('<option value="3">Havale/EFT</option>');
+                            select.append('<option value="4">Kredi/Banka Kartı (Online)</option>');
+                            select.append('<option value="5">Otomatik Ödeme</option>');
+                            select.append('<option value="6">Nakit (Ön Ödeme)</option>');
                         }
                     });
                 }

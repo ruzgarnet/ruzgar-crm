@@ -136,6 +136,7 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     // Payment Routes
     Route::get('payments', [App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments');
     Route::get('payment/penalties', [App\Http\Controllers\Admin\PaymentController::class, 'listPenalties'])->name('payment.penalties');
+    Route::match(['get', 'post'], 'payment/monthly', [App\Http\Controllers\Admin\PaymentController::class, 'listMonthly'])->name('payment.monthly');    
     Route::get('payment/list', [App\Http\Controllers\Admin\PaymentController::class, 'list'])->name('payment.list');
     Route::post('payment/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'received'])->name('payment.received.post');
     Route::post('payment/test/received/{payment}', [App\Http\Controllers\Admin\PaymentController::class, 'test_received'])->name('payment.test.received.post');

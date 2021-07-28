@@ -215,13 +215,12 @@ return [
         'list' => 'Ödemeleri Listele',
         'select' => 'Ödeme Seçiniz',
         'status' => [
-            1 => 'Sisteme Tanımlandı',
-            2 => 'Ödeme Başarıyla Alındı',
-            3 => 'Ödeme Alınırken Hata Oluştu'
+            1 => 'Ödenmemiş',
+            2 => 'Ödenmiş'
         ],
         'select_type' => 'Ödeme Tipini Seçiniz',
         'types' => [
-            0 => 'Ödenememiş',
+            0 => 'Ödenmemiş',
             1 => 'Nakit',
             2 => 'Kredi/Banka Kartı (Pos)',
             3 => 'Havale/EFT',
@@ -232,6 +231,7 @@ return [
         'received' => 'Ödeme Al',
         'price' => 'Ücret Düzenle',
         'penalty' => 'Gecikmiş Ödemeler',
+        'monthly' => 'Aylık Ödemeler',
         'penalty_status' => [
             1 => 'Ödenmemiş',
             2 => 'Ödenmiş',

@@ -94,13 +94,14 @@ class Payment extends Model
      * 3 => Transfer/EFT                - Havale/EFT
      * 4 => Credit/Bank Cart (Online)   - Kredi/Banka Kartı (Online)
      * 5 => Auto Payment                - Otomatik Ödeme
-     *
+     * 6 => Cash (Pre payment)          - Nakit (Ön ödeme)
+     * 
      * @param bool $implode
      * @return array|string
      */
     public static function getTypes($implode = false)
     {
-        $data = [1, 2, 3, 4, 5];
+        $data = [1, 2, 3, 4, 5, 6];
         return $implode ? implode(',', $data) : $data;
     }
 
@@ -110,14 +111,13 @@ class Payment extends Model
      *
      * 1 => Defined                 - Sisteme Tanımlandı
      * 2 => Receipted               - Ödeme Alındı
-     * 3 => Error While Receipting  - Ödeme Alınırken Hata Oluştu
      *
      * @param bool $implode
      * @return array
      */
     public static function getStatus($implode = false)
     {
-        $data = [1, 2, 3];
+        $data = [1, 2];
         return $implode ? implode(',', $data) : $data;
     }
 

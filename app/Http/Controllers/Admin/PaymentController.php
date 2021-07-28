@@ -6,6 +6,7 @@ use App\Classes\Moka;
 use App\Classes\Mutator;
 use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Message;
 use App\Models\MokaAutoPayment;
 use App\Models\MokaLog;
@@ -17,7 +18,6 @@ use App\Models\PaymentCancellation;
 use App\Models\PaymentCreate;
 use App\Models\PaymentDelete;
 use App\Models\SentMessage;
-use App\Models\Service;
 use App\Models\Subscription;
 use Exception;
 use Illuminate\Http\Request;
@@ -38,9 +38,29 @@ class PaymentController extends Controller
             'admin.payment.list',
             [
                 'statuses' => trans('tables.payment.status'),
-                'services' => Service::all()
+                'categories' => Category::all()
             ]
         );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function listMonthly(Request $request)
+    {
+        $date = Carbon::parse($request->input('date') ?? 'now');
+        $start_date = $date->startOfMonth()->toDateString();
+        $end_date = $date->endOfMonth()->toDateString();
+
+        $dates = [$start_date, $end_date];
+
+        return view('admin.payment.monthly', [
+            'payments' => Payment::whereBetween('date', $dates)->get(),
+            'date' => $date->toDateString()
+        ]);
     }
 
     /**
@@ -58,18 +78,19 @@ class PaymentController extends Controller
         $date = str_replace("\\", "", $request->input('columns.4.search.value'));
         $status = $request->input('columns.5.search.value');
         $type = $request->input('columns.6.search.value');
-        $service_id = $request->input('columns.2.search.value');
+        $category_id = $request->input('columns.2.search.value');
 
         $payments = Payment::selectRaw("payments.*")->orderBy('payments.id', 'desc');
         $no = Payment::selectRaw("payments.*")->orderBy('payments.id', 'desc');
 
-        if ($service_id != "") {
+        if ($category_id != "") {
             $payments = $payments
                 ->join('subscriptions', 'subscriptions.id', 'payments.subscription_id')
-                ->whereRaw("subscriptions.service_id = " . $service_id);
+                ->whereRaw("subscriptions.service_id IN (SELECT id FROM services WHERE category_id = {$category_id})");
+
             $no = $no
                 ->join('subscriptions', 'subscriptions.id', 'payments.subscription_id')
-                ->whereRaw("subscriptions.service_id = " . $service_id);
+                ->whereRaw("subscriptions.service_id IN (SELECT id FROM services WHERE category_id = {$category_id})");
         }
 
         if ($date != "") {

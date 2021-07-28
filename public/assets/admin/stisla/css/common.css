@@ -264,3 +264,9 @@ button.dropdown-item {
 .custom-checkbox {
     margin: 0 15px 5px;
 }
+
+.dataTableFlex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
