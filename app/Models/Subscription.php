@@ -387,9 +387,11 @@ class Subscription extends Model
     public function isActive()
     {
         return $this->approved_at != null &&
-            !($this->isChanged() ||
+            !(
+                $this->isChanged() ||
                 $this->isCanceled() ||
-                ($this->end_date != null && Carbon::parse($this->end_date)->isPast()));
+                ($this->end_date != null && Carbon::parse($this->end_date)->isPast())
+            );
     }
 
     /**

@@ -270,3 +270,21 @@ button.dropdown-item {
     align-items: center;
     justify-content: space-between;
 }
+
+@media print {
+    .main-navbar,
+    .main-sidebar,
+    .report.card-header-buttons {
+        display: none;
+    }
+    .main-content {
+        padding: 0;
+    }
+    .card {
+        margin-bottom: 10px;
+    }
+    .table td,
+    .table th {
+        height: 25px !important;
+    }
+}
