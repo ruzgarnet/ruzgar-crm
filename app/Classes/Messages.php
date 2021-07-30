@@ -27,9 +27,23 @@ class Messages
             {
                 $parameter = str_replace(["{", "}"], ["", ""], $parameter);
                 $temporary = $subscription;
-                foreach ($variables[$parameter] as $variable) {
-                    if($temporary != null)
-                        $temporary = $temporary->{$variable};
+                if (isset($variables[$parameter])) {
+                    foreach ($variables[$parameter] as $variable) {
+                        if($temporary != null)
+                            $temporary = $temporary->{$variable};
+                    }
+                }
+
+                if ($parameter == 'gun') {
+                    $temporary = date('d');
+                }
+
+                if ($parameter == 'ay') {
+                    $temporary = date('m');
+                }
+
+                if ($parameter == 'yil') {
+                    $temporary = date('Y');
                 }
 
                 if(!is_null($temporary) || is_string($temporary) || is_numeric($temporary))

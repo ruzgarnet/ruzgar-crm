@@ -18,7 +18,7 @@ class ReferenceController extends Controller
     public function index()
     {
         return view('admin.reference.list', [
-            'references' => Reference::orderBy('id', 'DESC')->get(),
+            'references' => Reference::orderBy('status', 'ASC')->orderBy('created_at', 'DESC')->get(),
             'referenceStatus' => Reference::getStatus()
         ]);
     }

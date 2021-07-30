@@ -86,7 +86,7 @@ class Reference extends Model
                     $reference_discount = 9.9;
                 }
 
-                $service_price = $subscription->getValue('service_price') ?? $subscription->price;
+                $service_price = $subscription->getValue('service_price', $subscription->price);
 
                 $reference_price = $payment->price - $service_price + $reference_discount;
                 if($reference_price <= 0)
@@ -97,7 +97,7 @@ class Reference extends Model
                     'staff_id' => $data['staff_id'],
                     'old_price' => $payment->price,
                     'new_price' => $reference_price,
-                    'description' => trans('response.system.referenced', ['price' => $service_price])
+                    'description' => trans('response.system.referenced', ['price' => $reference_price])
                 ]);
 
                 $payment->price = $reference_price;
@@ -109,18 +109,17 @@ class Reference extends Model
             $this->decided_at = DB::raw('current_timestamp()');
             $this->save();
 
-            SentMessage::insert(
-                [
-                    'customer_id' => $this->reference->reference_id,
-                    'message_id' => 17,
-                    'staff_id' => request()->user()->staff_id,
-                ],
-                [
-                    'customer_id' => $this->reference->referenced_id,
-                    'message_id' => 18,
-                    'staff_id' => request()->user()->staff_id,
-                ]
-            );
+            SentMessage::insert([
+                'customer_id' => $this->reference->customer_id,
+                'message_id' => 17,
+                'staff_id' => request()->user()->staff_id,
+            ]);
+
+            SentMessage::insert([
+                'customer_id' => $this->referenced->customer_id,
+                'message_id' => 18,
+                'staff_id' => request()->user()->staff_id,
+            ]);
 
             DB::commit();
             return true;

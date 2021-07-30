@@ -72,7 +72,7 @@
                     "targets": 0
                 }, {
                     "orderable": false,
-                    "targets": [0, 1, 2, 3, 4, 5, 6]
+                    "targets": [1, 2, 3, 4, 5, 6]
                 }],
                 initComplete: function() {
                     this.api().columns().every(function() {
