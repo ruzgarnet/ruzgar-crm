@@ -131,6 +131,8 @@ Route::middleware('admin.middleware')->name('admin.')->group(function () {
     Route::put('subscription/unfreeze/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'unFreeze'])->name('subscription.unfreeze.put');
     Route::put('subscription/cancel_auto_payment/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'cancel_auto_payment'])->name('subscription.cancel.auto.payment');
     Route::get('subscription/payments/{payment}', [App\Http\Controllers\Admin\SubscriptionController::class, 'get_payments'])->name('subscription.get_payments');
+    Route::put('subscription/renewal/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'renewal'])->name('subscription.renewal.put');
+    Route::put('subscription/end/commitment/{subscription}', [App\Http\Controllers\Admin\SubscriptionController::class, 'end_commitment'])->name('subscription.end.commitment.put');
     // Subscription Routes End
 
     // Payment Routes

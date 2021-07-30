@@ -33,7 +33,9 @@ return [
         'not_freezed' => 'Bu abonelik dondurulmamış!',
         'reset' => 'Abonelik bilgilerini sıfırlamak, bu abenolikle ilişkili tüm verileri silecektir. Bu gerçekleştirilirse geri alınamaz!',
         'cancel_auto_payment' => 'İptal etmek istediğinize emin misiniz ?',
-        'campaign_description' => 'İlk :campaign_duration ay :campaign_price, sonraki aylarda :price.'
+        'campaign_description' => 'İlk :campaign_duration ay :campaign_price, sonraki aylarda :price.',
+        'end_commitment' => 'Aboneliğin taahhütünü sonlandırmak üzeresiniz. Yapılan işlemler geri alınamaz, bu işlemi gerçekleştirmek istediğinizden emin misiniz?',
+        'commitment_end_last_ten_day' => 'Taahhüt bitirme işlemi, taahhüt bitiminden son 10 gün öncesi içerisinde yapılabilir.'
     ],
     'reference' => [
         'control_time' => 'Kontrol Edilebilir'

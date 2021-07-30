@@ -18,6 +18,7 @@ use App\Models\Service;
 use App\Models\Subscription;
 use App\Models\SubscriptionFreeze;
 use App\Models\SubscriptionPriceEdit;
+use App\Models\SubscriptionRenewal;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +58,12 @@ class SubscriptionController extends Controller
         if ($status == "") {
             $subscriptions = Subscription::offset($offset)->limit($limit)->orderBy('id', 'desc')->get();
             $no = Subscription::orderBy('id', 'desc')->get();
-        } else {
+        }
+        else if ($status == "5") {
+            $subscriptions = Subscription::offset($offset)->where("status", 1)->whereRaw('DATEDIFF(end_date,CURRENT_DATE()) <= 45')->limit($limit)->orderBy('id', 'desc')->get();
+            $no = Subscription::where("status", $status)->orderBy('id', 'desc')->get();
+        }
+        else {
             $subscriptions = Subscription::offset($offset)->where("status", $status)->limit($limit)->orderBy('id', 'desc')->get();
             $no = Subscription::where("status", $status)->orderBy('id', 'desc')->get();
         }
@@ -248,8 +254,8 @@ class SubscriptionController extends Controller
         $reference_id = null;
         if (isset($validated['reference_id']) && $validated['reference_id'] != null) {
             $reference_id = $validated['reference_id'];
-            unset($validated['reference_id']);
         }
+        unset($validated['reference_id']);
 
         $validated["subscription_no"] = Generator::subscriptionNo();
 
@@ -395,8 +401,8 @@ class SubscriptionController extends Controller
         $reference_id = null;
         if (isset($validated['reference_id']) && $validated['reference_id'] != null) {
             $reference_id = $validated['reference_id'];
-            unset($validated['reference_id']);
         }
+        unset($validated['reference_id']);
 
         if ($subscription->update($validated)) {
             if ($reference_id != null) {
@@ -853,10 +859,10 @@ class SubscriptionController extends Controller
 
         if (SubscriptionFreeze::freeze($subscription, $validated)) {
             Telegram::send(
-                'Test',
+                'AboneBilgileri',
                 trans('telegram.add_freeze', [
                     'full_name' => $subscription->customer->full_name,
-                    'subsciption' => $subscription->service->name,
+                    'subscription' => $subscription->service->name,
                     'username' => $request->user()->staff->full_name
                 ])
             );
@@ -919,10 +925,10 @@ class SubscriptionController extends Controller
 
         if (SubscriptionFreeze::unFreeze($subscription, $staff_id)) {
             Telegram::send(
-                'Test',
+                'AboneBilgileri',
                 trans('telegram.unfreeze', [
                     'full_name' => $subscription->customer->full_name,
-                    'subsciption' => $subscription->service->name,
+                    'subscription' => $subscription->service->name,
                     'username' => $request->user()->staff->full_name
                 ])
             );
@@ -984,6 +990,142 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Renewal subscription
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function renewal(Request $request, Subscription $subscription)
+    {
+        $error = null;
+
+        if ($subscription->approved_at == null)
+            $error = trans('warnings.subscription.not_approved');
+        if ($subscription->isCanceled())
+            $error = trans('warnings.subscription.canceled');
+        if ($subscription->isChanged())
+            $error = trans('warnings.subscription.changed');
+        if ($subscription->isEnded())
+            $error = trans('warnings.subscription.ended');
+
+        if ($error) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => $error
+                ]
+            ]);
+        }
+
+        $price = $request->validate(['price' => 'required|numeric'])['price'];
+        $staff_id = $request->user()->staff_id;
+
+        if (SubscriptionRenewal::renewal($subscription, $staff_id, $price)) {
+            Telegram::send(
+                'SözleşmesiSonaErecekler',
+                trans('telegram.subscription_renewal_price', [
+                    'full_name' => $subscription->customer->full_name,
+                    'id_no' => $subscription->customer->identification_number,
+                    'subscription' => $subscription->service->name,
+                    'staff' => $request->user()->staff->full_name,
+                    'price' => $price
+                ])
+            );
+
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.subscription.renewal.success')
+                ],
+                'reload' => true
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.subscription.renewal.error')
+            ]
+        ]);
+    }
+
+    /**
+     * End commitment of subscription
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function end_commitment(Request $request, Subscription $subscription)
+    {
+        $error = null;
+
+        if ($subscription->approved_at == null)
+            $error = trans('warnings.subscription.not_approved');
+        if ($subscription->isCanceled())
+            $error = trans('warnings.subscription.canceled');
+        if ($subscription->isChanged())
+            $error = trans('warnings.subscription.changed');
+        if ($subscription->isEnded())
+            $error = trans('warnings.subscription.ended');
+        if ($subscription->isEnding() > 10)
+            $error = trans('warnings.subscription.commitment_end_last_ten_day');
+
+        if ($error) {
+            return response()->json([
+                'error' => true,
+                'toastr' => [
+                    'type' => 'error',
+                    'title' => trans('response.title.error'),
+                    'message' => $error
+                ]
+            ]);
+        }
+
+        $subscription->status = 5;
+
+        if ($subscription->save()) {
+            $subscription->payments()->where('type', '!=', 2)->delete();
+            SubscriptionRenewal::where('status', 0)->where('subscription_id', $subscription->id)->update(['status' => 3]);
+            Telegram::send(
+                'SözleşmesiSonaErecekler',
+                trans('telegram.subscription_end_commitment', [
+                    'full_name' => $subscription->customer->full_name,
+                    'id_no' => $subscription->customer->identification_number,
+                    'subscription' => $subscription->service->name,
+                    'staff' => $request->user()->staff->full_name
+                ])
+            );
+
+            return response()->json([
+                'success' => true,
+                'toastr' => [
+                    'type' => 'success',
+                    'title' => trans('response.title.success'),
+                    'message' => trans('response.subscription.end_commitment.success')
+                ],
+                'reload' => true
+            ]);
+        }
+
+        return response()->json([
+            'error' => true,
+            'toastr' => [
+                'type' => 'error',
+                'title' => trans('response.title.error'),
+                'message' => trans('response.subscription.end_commitment.error')
+            ]
+        ]);
+    }
+
+    /**
      * Rules for validation
      *
      * @return array
@@ -1008,9 +1150,7 @@ class SubscriptionController extends Controller
             'options.address' => 'nullable|string|max:255',
             'reference_id' => [
                 'nullable',
-                Rule::exists('customers', 'reference_code')->where(function ($query) {
-                    return $query;
-                })
+                Rule::exists('subscriptions', 'id')
             ],
         ];
     }

@@ -53,6 +53,14 @@ return [
         'freeze' => [
             'success' => 'Abonelik başarıyla donduruldu.',
             'error' => 'Abonenin dondurulurken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
+        ],
+        'renewal' => [
+            'success' => 'Abonelik uzatma ücreti başarıyla tanımlandı.',
+            'error' => 'Abonelik uzatma ücreti tanımlanırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
+        ],
+        'end_commitment' => [
+            'success' => 'Abonelik taahhütü başarıyla sonlandırıldı.',
+            'error' => 'Abonelik taahhütü sonlandırılırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
         ]
     ],
 

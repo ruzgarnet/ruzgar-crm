@@ -182,7 +182,8 @@ return [
             1 => 'Aktif Abonelik',
             2 => 'Tarife Değiştirilmiş',
             3 => 'İptal Edilmiş',
-            4 => 'Dondurulmuş'
+            4 => 'Dondurulmuş',
+            5 => 'Taahhütü Biten'
         ],
         'create_payment' => 'Fatura Oluştur',
         'approve' => 'Abonelik Onayla',

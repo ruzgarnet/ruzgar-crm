@@ -155,4 +155,21 @@ $(function () {
         $("#inpFreezeSubscriptionModalCustomer").val(customer);
         $("#inpFreezeSubscriptionModalService").val(service);
     });
+
+    /**
+     * Open renewal subscription price modal, change form action and price
+     */
+    $(document).on("click", ".renewal-subscription-modal-btn", function () {
+        let button = $(this),
+            action = button.data("action"),
+            price = button.data("price"),
+            customer = button.data("customer"),
+            service = button.data("service");
+
+        $("#renewalSubscriptionForm").prop("action", action);
+        $("#renewalSubscriptionModal").modal("show");
+        $("#inpRenewalSubModalDefaultPrice").val(price);
+        $("#inpRenewalSubModalCustomer").val(customer);
+        $("#inpRenewalSubModalService").val(service);
+    });
 });

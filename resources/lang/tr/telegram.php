@@ -16,5 +16,9 @@ return [
     'add_request_message' => " :username adlı kullanıcı tarafından :role yetkili kişiler için bir talep oluşturuldu.\n İçerik: :description \nDurumu : :status",
     'edit_request_message' => " :username adlı kullanıcı tarafından açılan talepde :user adlı kişi işlem yaptı. \n İçerik: :description \nDurumu : :status",
     'edit_fault' => ":full_name adlı müşterimiz tarafından oluşturulan :serial_number seri numaralı arıza kaydının durumu :status olarak değiştirildi. \nDetay : :detail \nİşlemi Gerçekleştiren Kullanıcı : :username",
-    'payment_received' => "Başarılı bir ödeme gerçekleştirildi. \nT.C. Kimlik Numarası : :id_no \nAdı Soyadı : :full_name \nTutar : :price TL \nMarka : :category"
+    'payment_received' => "Başarılı bir ödeme gerçekleştirildi. \nT.C. Kimlik Numarası : :id_no \nAdı Soyadı : :full_name \nTutar : :price TL \nMarka : :category",
+    'subscription_ending_day' => "Abonemiz : :full_name - :id_no \n:subscription tarifesinin bitmesine :day gün vardır.",
+    'subscription_renewaled' => "Abonemiz : :full_name - :id_no \n:subscription tarifesi :month ay uzatılmış olup yeni ücreti :price TL'dir.",
+    'subscription_renewal_price' => "Abonemiz : :full_name - :id_no \n:subscription tarifesinin uzatılma ücreti :staff tarafından :price TL olarak belirlenmiştir.",
+    'subscription_end_commitment' => "Abonemiz : :full_name - :id_no \n:subscription tarifesinin sözleşmesi bitmiştir ve uzatma işlemi gerçekleştirmemiştir \nİşlemi gerçekleştiren kullanıcı : :staff."
 ];

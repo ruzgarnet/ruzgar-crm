@@ -184,6 +184,7 @@ return [
         'slug' => 'Slug',
         'content' => 'İçerik',
         'price' => 'Tutar',
+        'new_price' => 'Yeni tutar',
         'meta_title' => 'Meta başlığı',
         'meta_description' => 'Meta açıklaması',
         'meta_keywords' => 'Meta anahtar kelimeleri',

@@ -63,8 +63,8 @@
                     </ul>
 
                     <div class="text-right">
-                        <a class="btn btn-primary" href="/customer/edit/{{$customer->id}}" role="button">Müşteri Bilgileri Düzenle</a>
-                        <a class="btn btn-primary" href="/activities/{{$customer->id}}" role="button">Müşteri Hareketleri</a>
+                        <a class="btn btn-primary" href="/customer/edit/{{ $customer->id }}" role="button">Müşteri Bilgileri Düzenle</a>
+                        <a class="btn btn-primary" href="/activities/{{ $customer->id }}" role="button">Müşteri Hareketleri</a>
                     </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                         <ul class="nav nav-pills" id="subsTab" role="tablist">
                             @foreach ($customer->subscriptions()->orderBy('id', 'desc')->get() as $subscription)
                                 <li class="nav-item w-50 mb-2">
-                                    <a class="nav-link customer-subs-tab text-center @if ($loop->first) active @endif"
+                                    <a class="nav-link customer-subs-tab text-center customer-subs-tab-{{ $subscription->status }} @if ($loop->first) active @endif"
                                         id="subs-tab-{{ $subscription->id }}" data-toggle="tab"
                                         href="#subs-{{ $subscription->id }}" role="tab" aria-controls="subs"
                                         aria-selected="true" data-id="{{ $subscription->id }}">
@@ -193,6 +193,28 @@
                                                         @lang('titles.edit_subscription_price')
                                                     </button>
 
+                                                    @if ($subscription->status != 5 && $subscription->isEnding())
+                                                        <button type="button"
+                                                            class="dropdown-item text-danger renewal-subscription-modal-btn"
+                                                            data-action="{{ relative_route('admin.subscription.renewal.put', $subscription) }}"
+                                                            data-customer="{{ $subscription->customer->select_print }}"
+                                                            data-service="{{ $subscription->service_print }}"
+                                                            data-price="{{ $subscription->price_print }}">
+                                                            <i class="dropdown-icon fas fa-calendar-check"></i>
+                                                            @lang('titles.renewal_subscription')
+                                                        </button>
+                                                    @endif
+
+                                                    @if ($subscription->status != 5 && $subscription->isEnding() <= 10)
+                                                        <button type="button"
+                                                            class="dropdown-item text-danger confirm-modal-btn"
+                                                            data-action="{{ relative_route('admin.subscription.end.commitment.put', $subscription) }}"
+                                                            data-modal="#endCommitment">
+                                                            <i class="dropdown-icon fas fa-calendar-times"></i>
+                                                            @lang('titles.end_commitment')
+                                                        </button>
+                                                    @endif
+
                                                     @if ($subscription->isAuto())
                                                         <button type="button"
                                                             class="dropdown-item confirm-modal-btn"
@@ -244,11 +266,25 @@
                                         </div>
                                     </div>
                                     <ul class="fa-ul subscription-list mb-0">
+                                        @if ($subscription->status != 5 && $subscription->isEnding())
+                                            @php $renewal = $subscription->renewal(); @endphp
+                                            <li>
+                                                <span class="fa-li"><i class="fas fa-calendar-check text-danger"></i></span>
+                                                <div class="text-danger"><b>Sözleşme Bitmek Üzere</b></div>
+                                                <div>Sözleşmenin bitmesine {{ $subscription->isEnding() }} gün kalmıştır.</div>
+                                                <div>Sözleşme {{ $subscription->commitment }} aylığına, {{ print_money($renewal->new_price ?? $subscription->price) }} tutarında uzatılacaktır.</div>
+                                                @if ($renewal)
+                                                    <div>Yeni tutar {{ convert_date($renewal->created_at ?? date(), 'large') }} tarihinde {{ $renewal->staff->full_name ?? 'Sistem' }} tarafından belirlenmiştir.</div>
+                                                @else
+                                                    <div>Yeni tutar olarak aboneliğin şu anki ücreti baz alınacaktır.</div>
+                                                @endif
+                                            </li>
+                                        @endif
                                         @if ($subscription->bbk_code)
                                             <li>
                                                 <span class="fa-li"><i class="fas fa-map-marker-alt"></i></span>
                                                 <div><b>@lang('fields.bbk_code')</b></div>
-                                                <div>{{ $subscription->bbk_code }}<div>
+                                                <div>{{ $subscription->bbk_code }}</div>
                                             </li>
                                         @endif
                                         <li>
@@ -338,7 +374,7 @@
 
             <div class="col-lg-12">
                 @foreach ($customer->subscriptions()->orderBy('id', 'desc')->get() as $subscription)
-                    @if ($subscription->payments->count())
+                    @if ($subscription->payments)
                         <div class="card list subs-payments subs-{{ $subscription->id }}-payments">
                             <div class="card-header">
                                 <h4>@lang('tables.payment.title')</h4>
@@ -492,6 +528,7 @@
     @include('admin.modals.create-payment')
     @include('admin.modals.delete-payment')
     @include('admin.modals.cancel-payment')
+    @include('admin.modals.renewal-subscription')
 
     <x-admin.confirm-modal
         id="delete"
@@ -540,4 +577,12 @@
         :message="trans('warnings.payment.cancel_auto_payment')"
         :buttonText="trans('titles.approve')"
         buttonType="success" />
+
+    <x-admin.confirm-modal
+        id="endCommitment"
+        method="put"
+        :title="trans('titles.end_commitment')"
+        :message="trans('warnings.subscription.end_commitment')"
+        :buttonText="trans('titles.end_commitment')"
+        buttonType="warning" />
 @endpush

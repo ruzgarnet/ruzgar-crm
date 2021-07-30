@@ -50,6 +50,8 @@ return [
     'send_payment_message' => 'Mesaj Gönder',
     'yes' => 'Evet',
     'no' => 'Hayır',
+    'renewal_subscription' => 'Abonelik Uzatma',
+    'end_commitment' => 'Taahhütü Bitir',
 
     'accessibility' => [
         'collapse' => [

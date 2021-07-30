@@ -41,6 +41,7 @@ return [
     // Name Attributes
     'title' => 'Başlık',
     'price' => 'Tutar',
+    'new_price' => 'Yeni Tutar',
     'message' => 'Mesaj',
     'category' => 'Kategori',
     'model' => 'Model',

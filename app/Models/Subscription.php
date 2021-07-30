@@ -169,6 +169,29 @@ class Subscription extends Model
     }
 
     /**
+     * Subscription Renewal Relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function renewals()
+    {
+        return $this->hasMany(SubscriptionRenewal::class);
+    }
+
+    /**
+     * Subscription Renewal Relationship
+     *
+     * @return \App\Models\SubscriptionRenewal|null
+     */
+    public function renewal()
+    {
+        if ($this->renewals()->count()) {
+            return $this->renewals()->where('status', 0)->orderByDesc('id')->first();
+        }
+        return null;
+    }
+
+    /**
      * Returns reference subscription
      *
      * @return int|null
@@ -186,7 +209,8 @@ class Subscription extends Model
      * 2 => Changed     - Değiştirilmiş
      * 3 => Canceled    - İptal Edilmiş
      * 4 => Freezed     - Donmuş
-     *
+     * 5 => Ended       - Taahhütü Bitmiş
+     * 
      * @param boolean $implode
      * @return array|string
      */
@@ -299,7 +323,11 @@ class Subscription extends Model
             // Set the first price after 25
             // 25'ten sonra aboneliği eklenirse ilk ay ücretini yarıya düş
             foreach ($payments as $index => $payment) {
-                if (date('d') >= 25 && $index == 0 && !$this->getOption('pre_payment')) {
+                if (
+                    date('d') >= 25 && $index == 0 &&
+                    !$this->getOption('pre_payment') &&
+                    !in_array($this->service_id, [37, 38, 40, 41])
+                ) {
                     $payment["price"] /= 2;
                 }
                 Payment::insert($payment);
@@ -426,6 +454,20 @@ class Subscription extends Model
     public function isEnded()
     {
         return $this->end_date != null && Carbon::parse($this->end_date)->isPast();
+    }
+
+    /**
+     * Check this row ending
+     *
+     * @return int|boolean
+     */
+    public function isEnding()
+    {
+        if ($this->isActive() && $this->end_date != null) {
+            $diff = Carbon::parse($this->end_date)->diffInDays(Carbon::now());
+            return $diff <= 45 ? $diff : false;
+        }
+        return false;
     }
 
     /**
