@@ -46,6 +46,14 @@ trait SubscriptionPaymentGenerator
                 $data[] = $this->serviceOption();
                 $values["campaign_price"] = $service_option["price"];
                 $values["duration"] = $service_option["duration"];
+
+                if (in_array($this->service_id, [37, 38, 40, 41])) {
+                    $plaka = $this->customer->customerInfo->city->plaka;
+                    $values["campaign_price"] = $plaka;
+                    if ($plaka > 50) {
+                        $values["campaign_price"] = floor($plaka / 10) + ($plaka % 10);
+                    }
+                }
             }
 
             $values['service_price'] = $this->service->price;
@@ -190,6 +198,13 @@ trait SubscriptionPaymentGenerator
     public function serviceOption()
     {
         $options = $this->service->options;
+        if (in_array($this->service_id, [37, 38, 40, 41])) {
+            $plaka = $this->customer->customerInfo->city->plaka;
+            $options['price'] = $plaka;
+            if ($plaka > 50) {
+                $options['price'] = floor($plaka / 10) + ($plaka % 10);
+            }
+        }
         $data = [];
         if ($this->commitment != null && isset($options["commitment"])) {
             if ($this->commitment == $options["commitment"]) {
