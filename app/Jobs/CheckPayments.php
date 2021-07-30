@@ -37,7 +37,7 @@ class CheckPayments implements ShouldQueue
         if ($this->check('CheckPayments')) {
             $messages = [];
             $subscriptions = Subscription::whereNotNull('subscriptions.approved_at')
-                ->whereIn('subscriptions.status', [1, 2, 4])
+                ->whereIn('subscriptions.status', [1, 4])
                 ->whereRaw('(TIMESTAMPDIFF(MONTH, `approved_at`, NOW()) >= 1 OR DAYOFMONTH(`approved_at`) < 25)')
                 ->whereRaw('id IN (SELECT subscription_id FROM payments WHERE `date` = \''.date('Y-m-15').'\')')
                 ->get();

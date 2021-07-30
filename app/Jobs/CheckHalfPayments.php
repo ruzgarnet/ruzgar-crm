@@ -38,7 +38,7 @@ class CheckHalfPayments implements ShouldQueue
             $messages = [];
             $subscriptions = Subscription::join('payments', 'subscriptions.id', 'payments.subscription_id')
                 ->whereNotNull('subscriptions.approved_at')
-                ->whereIn('subscriptions.status', [1, 2, 4])
+                ->whereIn('subscriptions.status', [1, 4])
                 ->whereRaw('(TIMESTAMPDIFF(MONTH, `subscriptions`.`approved_at`, NOW()) < 1 AND DAYOFMONTH(`subscriptions`.`approved_at`) >= 25)')
                 ->where('payments.date', date('Y-m-15'))
                 ->get();
