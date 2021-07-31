@@ -61,8 +61,8 @@ class CheckCommitment extends Command
                 $messages[] = [
                     $subscription->customer->telephone,
                     $message_formatter->generate($message_45, [
-                        'full_name' => $subscription->customer->full_name,
-                        'subscription' => $subscription->service->name
+                        'ad_soyad' => $subscription->customer->full_name,
+                        'tarife' => $subscription->service->name
                     ])
                 ];
 
@@ -82,8 +82,8 @@ class CheckCommitment extends Command
                 $messages[] = [
                     $subscription->customer->telephone,
                     $message_formatter->generate($message_30, [
-                        'full_name' => $subscription->customer->full_name,
-                        'subscription' => $subscription->service->name
+                        'ad_soyad' => $subscription->customer->full_name,
+                        'tarife' => $subscription->service->name
                     ])
                 ];
 
@@ -108,9 +108,9 @@ class CheckCommitment extends Command
                 $messages[] = [
                     $subscription->customer->telephone,
                     $message_formatter->generate($message_15, [
-                        'full_name' => $subscription->customer->full_name,
-                        'subscription' => $subscription->service->name,
-                        'price' => $new_price
+                        'ad_soyad' => $subscription->customer->full_name,
+                        'tarife' => $subscription->service->name,
+                        'tutar' => $new_price
                     ])
                 ];
 
@@ -147,9 +147,9 @@ class CheckCommitment extends Command
                 $messages[] = [
                     $subscription->customer->telephone,
                     $message_formatter->generate($message_renewal, [
-                        'full_name' => $subscription->customer->full_name,
-                        'subscription' => $subscription->service->name,
-                        'price' => $new_price
+                        'ad_soyad' => $subscription->customer->full_name,
+                        'tarife' => $subscription->service->name,
+                        'tutar' => $new_price
                     ])
                 ];
 
