@@ -517,6 +517,8 @@ class Moka
      * Add payment plan
      *
      * @param int $sale_id
+     * @param string $payment
+     * @param float|int $amount
      * @return object|null
      */
     public function add_payment_plan(
@@ -532,6 +534,30 @@ class Moka
                 'DealerSaleId' => $sale_id,
                 'PaymentDate' => $payment_date,
                 'Amount' => $amount
+            ]
+        ];
+
+        return $this->send($request);
+    }
+
+    /**
+     * Add product
+     *
+     * @param string $product_code
+     * @param string $product_name
+     * @return object|null
+     */
+    public function add_product(
+        string $product_code,
+        string $product_name
+    ) {
+        $this->action = '/DealerSale/AddProduct';
+
+        $request = [
+            'DealerSaleAuthentication' => $this->auth,
+            'DealerSaleRequest' => [
+                'ProductCode' => $product_code,
+                'ProductName' => $product_name
             ]
         ];
 
