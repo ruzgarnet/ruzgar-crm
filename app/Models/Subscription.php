@@ -192,6 +192,16 @@ class Subscription extends Model
     }
 
     /**
+     * Auto Payment Penalty Relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function autoPenalty()
+    {
+        return $this->hasOne(MokaAutoPaymentDisable::class);
+    }
+
+    /**
      * Returns reference subscription
      *
      * @return int|null
@@ -267,6 +277,29 @@ class Subscription extends Model
     }
 
     /**
+     * Returns next payment
+     *
+     * @return \App\Models\Payment
+     */
+    public function nextMonthPayment()
+    {
+        $payment = Payment::where('subscription_id', $this->id)
+            ->whereNull('paid_at')
+            ->whereDate('date', '>', Carbon::now()->endOfMonth()->toDateString())
+            ->orderBy('date', 'ASC')
+            ->first();
+
+        if (!$payment) {
+            return Payment::create([
+                'subscription_id' => $this->id,
+                'price' => $this->price,
+                'date' => Carbon::now()->startOfMonth()->addMonth(1)->format('Y-m-15')
+            ]);
+        }
+        return $payment;
+    }
+
+    /**
      * Check auto payment information
      *
      * @return boolean
@@ -274,6 +307,16 @@ class Subscription extends Model
     public function isAuto()
     {
         return $this->sales()->whereNull("disabled_at")->count() > 0 ? true : false;
+    }
+
+    /**
+     * Check auto payment information
+     *
+     * @return boolean
+     */
+    public function isAutoPenalty()
+    {
+        return $this->autoPenalty()->count() > 0 ? true : false;
     }
 
     /**

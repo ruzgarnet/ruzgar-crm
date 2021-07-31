@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Message;
 use App\Models\MokaAutoPayment;
+use App\Models\MokaAutoPaymentDisable;
 use App\Models\MokaLog;
 use App\Models\MokaPayment;
 use App\Models\MokaRefund;
@@ -167,6 +168,30 @@ class PaymentController extends Controller
     {
         if (!$payment->isPaid()) {
             $rules = $this->rules();
+
+            $subscription = $payment->subscription;
+
+            if ($subscription->isAuto() && $request->input('type') != 5 && !$subscription->isAutoPenalty()) {
+                $next_payment = $subscription->nextMonthPayment();
+                $new_price = $next_payment->price + 9.9;
+
+                $data = [
+                    'payment_id' => $next_payment->id,
+                    'staff_id' => null,
+                    'old_price' => $next_payment->price,
+                    'new_price' => $new_price,
+                    'description' => trans('response.system.auto_payment_penalty', ['price' => $new_price])
+                ];
+
+                MokaAutoPaymentDisable::create([
+                    'subscription_id' => $subscription->id,
+                    'payment_id' => $next_payment->id,
+                    'old_price' => $next_payment->price,
+                    'new_price' => $new_price
+                ]);
+
+                $next_payment->edit_price($data);
+            }
 
             if (in_array($request->input('type'), [4, 5])) {
                 $rules["card.number"] = [
@@ -332,7 +357,7 @@ class PaymentController extends Controller
             'number' => $data["card"]['number'],
             'expire_month' => $expire[0],
             'expire_year' => $expire[1],
-            'amount' => $payment->price
+            'amount' => $payment->subscription->price
         ];
 
         $sale = MokaSale::where("subscription_id", $payment->subscription->id)->orderByDesc('id')->first();
@@ -362,7 +387,6 @@ class PaymentController extends Controller
             } else {
                 $error = str_replace('.', '_', $result->ResultCode);
                 $message = trans("moka.{$error}");
-
 
                 return response()->json([
                     'error' => true,
@@ -437,35 +461,33 @@ class PaymentController extends Controller
                 ->update([
                     'disabled_at' => DB::raw('current_timestamp()')
                 ]);
-
-            MokaSale::create([
-                'subscription_id' => $payment->subscription->id,
-                'moka_customer_id' => $customer_id,
-                'moka_sale_id' => $sale_id,
-                'moka_card_token' => $card_token
-            ]);
         }
 
         if (!$payment->subscription->isPreAuto()) {
-            $next_payment = $payment->subscription->nextPayment();
+            $next_payment = $payment->subscription->nextMonthPayment();
 
-            $auto_discount = setting('auto.define.price', 9.9);
-            if (!is_numeric($auto_discount)) {
-                $auto_discount = 9.9;
-            }
+            $auto_discount = 9.9;
+            $new_price = $next_payment->price - $auto_discount;
+            if ($new_price <= 0)
+                $new_price = $next_payment->price;
 
             $data = [
-                'payment_id' => $payment->id,
+                'payment_id' => $next_payment->id,
                 'staff_id' => null,
                 'old_price' => $next_payment->price,
-                'new_price' => $next_payment->price - $auto_discount,
+                'new_price' => $new_price,
                 'description' => trans('response.system.auto_payment_discount', ['price' => $auto_discount])
             ];
 
-            if (!$payment->isPaid()) {
-                $payment->edit_price($data);
-            }
+            $next_payment->edit_price($data);
         }
+
+        MokaSale::create([
+            'subscription_id' => $payment->subscription->id,
+            'moka_customer_id' => $customer_id,
+            'moka_sale_id' => $sale_id,
+            'moka_card_token' => $card_token
+        ]);
 
         SentMessage::insert(
             [
@@ -962,7 +984,7 @@ class PaymentController extends Controller
             'description' => 'required|string|max:511'
         ]);
 
-        $validated['subscription_id'] = $payment->id;
+        $validated['payment_id'] = $payment->id;
         $validated['staff_id'] = $request->user()->staff_id;
 
         if (PaymentCancellation::cancel($payment, $validated)) {

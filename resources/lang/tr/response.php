@@ -79,6 +79,7 @@ return [
         'price_freezed' => 'Dondurma işleminden dolayı ücreti düşürülmüştür. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
         'freezing' => 'Dondurma işlemi kaldırıldı. Bu mesaj sistem tarafından otomatik olarak tanımlanmıştır.',
         'penalty' => ':price TL gecikme ücreti yansıtılmıştır. Bu mesaj sistem tarafından olarak tanımlanmıştır.',
-        'auto_payment_discount' => ':price TL otomatik ödeme indirimi düşürülmüş. Bu mesaj sistem tarafından olarak tanımlanmıştır.'
+        'auto_payment_discount' => ':price TL otomatik ödeme indirimi düşürülmüş. Bu mesaj sistem tarafından olarak tanımlanmıştır.',
+        'auto_payment_penalty' => 'Otomatik ödeme iptalinden dolayı :price TL eklenmiştir. Bu mesaj sistem tarafından olarak tanımlanmıştır.'
     ]
 ];

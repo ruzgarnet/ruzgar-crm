@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\SubscriptionChange;
 use App\Models\Customer;
 use App\Models\Message;
+use App\Models\MokaAutoPaymentDisable;
 use App\Models\Payment;
 use App\Models\Reference;
 use App\Models\SentMessage;
@@ -316,6 +317,28 @@ class SubscriptionController extends Controller
         $moka->remove_card($auto_payment->moka_card_token);
 
         if ($auto_payment->save()) {
+            if (!$subscription->isAutoPenalty()) {
+                $next_payment = $subscription->nextMonthPayment();
+                $new_price = $next_payment->price + 9.9;
+
+                $data = [
+                    'payment_id' => $next_payment->id,
+                    'staff_id' => null,
+                    'old_price' => $next_payment->price,
+                    'new_price' => $new_price,
+                    'description' => trans('response.system.auto_payment_penalty', ['price' => $new_price])
+                ];
+
+                MokaAutoPaymentDisable::create([
+                    'subscription_id' => $subscription->id,
+                    'payment_id' => $next_payment->id,
+                    'old_price' => $next_payment->price,
+                    'new_price' => $new_price
+                ]);
+
+                $next_payment->edit_price($data);
+            }
+
             return response()->json([
                 'toastr' => [
                     'type' => 'success',
