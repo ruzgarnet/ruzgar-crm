@@ -29,6 +29,16 @@ class PaymentCancellation extends Model
     }
 
     /**
+     * Staff relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function staff()
+    {
+        return $this->belongsTo(Staff::class);
+    }
+
+    /**
      * Cancel payment
      *
      * @param \App\Models\Payment $payment

@@ -50,7 +50,7 @@ class Role extends Model
         }
 
         if ($this->abilities()->count() > 0) {
-            DB::table('ability_role')->where('subscription_id', $this->id)->delete();
+            DB::table('ability_role')->where('role_id', $this->id)->delete();
         }
 
         foreach ($abilities as $ability) {

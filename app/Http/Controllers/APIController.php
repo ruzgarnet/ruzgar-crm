@@ -111,12 +111,10 @@ class APIController extends Controller
                             $first_name . " " . $last_name . " adlı bir kullanıcı RüzgarFIBER hakkında bilgi almak istiyor. Telefon Numarası : " . $phone
                         );
 
-            			SentMessage::create(
-            			   [
-            				'phone' => $phone,
-            				'message' => Message::find(39)->message
-            			   ]
-            			);
+                        SentMessage::create([
+                            'phone' => $phone,
+                            'message' => Message::find(39)->message
+                        ]);
 
                         return response()->json([
                             'error' => false,
@@ -321,44 +319,53 @@ class APIController extends Controller
 
                 $message = Message::where("id", 20)->get();
 
-                if ($fault_record = FaultRecord::create($validated)) {
-                    SentMessage::insert(
-                        [
-                            'customer_id' => $customer[0]->id,
-                            'message' => (new Messages)->generate(
-                                $message[0]->message,
-                                [
-                                    'seri_numarasi' => $fault_record->serial_number
-                                ]
-                            ),
-                            'staff_id' => $customer[0]->staff->id
-                        ]
-                    );
+                $fault_count = FaultRecord::where('customer_id',$customer[0]->id)->where('status','!=', 5)->count();
 
-                    Telegram::send(
-                        "RüzgarTeknik",
-                        trans(
-                            'telegram.add_fault_record',
+                if($fault_count == 0){
+                    if ($fault_record = FaultRecord::create($validated)) {
+                        SentMessage::insert(
                             [
-                                'id_no' => $customer[0]->identification_number,
-                                'full_name' => $customer[0]->full_name,
-                                'telephone' => $customer[0]->telephone,
-                                'customer_staff' => $customer[0]->staff->full_name
+                                'customer_id' => $customer[0]->id,
+                                'message' => (new Messages)->generate(
+                                    $message[0]->message,
+                                    [
+                                        'seri_numarasi' => $fault_record->serial_number
+                                    ]
+                                ),
+                                'staff_id' => $customer[0]->staff->id
                             ]
-                        )
-                    );
-
-                    if (!empty($files)) {
-                        Telegram::send_photo(
-                            "RüzgarTeknik",
-                            $files[0]
                         );
-                    }
 
+                        Telegram::send(
+                            "RüzgarTeknik",
+                            trans(
+                                'telegram.add_fault_record',
+                                [
+                                    'id_no' => $customer[0]->identification_number,
+                                    'full_name' => $customer[0]->full_name,
+                                    'telephone' => $customer[0]->telephone,
+                                    'customer_staff' => $customer[0]->staff->full_name
+                                ]
+                            )
+                        );
+
+                        if (!empty($files)) {
+                            Telegram::send_photo(
+                                "RüzgarTeknik",
+                                $files[0]
+                            );
+                        }
+
+                        return response()->json([
+                            'error' => false,
+                            'message' => "",
+                            'serial_number' => Generator::serialNumber()
+                        ]);
+                    }
+                }else{
                     return response()->json([
-                        'error' => false,
-                        'message' => "",
-                        'serial_number' => Generator::serialNumber()
+                        'error' => true,
+                        'message' => "Aktif arıza kaydınız bulunurken yeni arıza kaydı açamazsınız."
                     ]);
                 }
 
@@ -696,11 +703,11 @@ class APIController extends Controller
                             'full_name' => $validated['credit_card_holder_name'],
                             'number' => $validated['credit_card_number'],
                             'expire_date' =>  $validated['month'] . '/' . $validated['year'],
-                            'amount' => $payment->price
+                            'amount' => $payment->subscription->price
                         ]
                     ];
 
-                    (new PaymentController)->define_auto_payment($payment, $auto_data, false);
+                    (new PaymentController)->define_auto_payment($payment, $auto_data);
                 }
 
                 return response()->json([
@@ -771,7 +778,7 @@ class APIController extends Controller
                     }
                 }
             }
-            
+
             $payments = Subscription::select('payments.id', 'payments.subscription_id', 'payments.price', 'payments.date', 'customers.first_name', 'customers.last_name', 'customers.telephone')
                     ->join('payments', 'subscriptions.id', 'payments.subscription_id')
                     ->join('customers', 'customers.id', 'subscriptions.customer_id')

@@ -33,7 +33,7 @@ class Mutator
     {
         $data = explode("/", $str);
 
-        if ($data[0] < 10 && strlen($str) == 1)
+        if ((int)$data[0] < 10 && strlen($str) == 1)
             $data[0] = '0' . $data[0];
 
         if (strlen($data[1]) == 2)
