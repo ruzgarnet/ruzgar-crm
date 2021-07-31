@@ -5,15 +5,9 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 ## Yapılacaklar
 
 - [ ] Ayarların düzenlenmesi
-- [ ] Abonelik uzatması
 - [ ] Müşteri temsilcileri sadece kendi müşterilerini görecek şekilde uyarlanacak
 - [ ] Site yönetimi için modül yapısının tasarlanması
 - [ ] Müşterilere özel notlar tutulabilmesi
-
-## Kontrol Edilecekler
-- [x] Ödenmemiş faturalara gecikme tutarı yansıtma
-- [x] Tarife değişiminde otomatik ödemenin uyarlanması
-- [ ] Hizmetlerde kampanya yapısı güncellendi
 
 ## Yapılanlar
 
@@ -41,10 +35,11 @@ RüzgarNET müşteri ve tahsilat takibini kolaylaştırma ve modernleştirme pro
 - [x] Hizmetlerde seçenek yapısının geliştirilmesi
 - [x] Rapor sayfaları
 - [x] Sistem içi talep/istek yapısı
+- [x] Abonelik uzatması
 
 ## Otomatize İşlemler
 
-- [ ] Süresi biten/bitime yaklaşan abonelikler
+- [x] Süresi biten/bitime yaklaşan abonelikler
 - [x] Ceza ücretlerinin eklenmesi
 - [x] Ödemelerin MOKA'ya aktarılması
 
