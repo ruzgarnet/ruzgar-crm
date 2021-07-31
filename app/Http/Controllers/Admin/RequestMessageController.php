@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\RequestMessage;
 use App\Classes\Telegram;
+use App\Models\Notification;
 use App\Models\Role;
 use App\Models\Staff;
 use Illuminate\Http\Request;
@@ -22,10 +23,8 @@ class RequestMessageController extends Controller
     {
         $userrole = request()->user()->role_id;
         return view('admin.request-message.list', [
-
             'requestMessages' => RequestMessage::where('role_id', $userrole)->get()
         ]);
-
     }
 
     /**
@@ -35,9 +34,7 @@ class RequestMessageController extends Controller
      */
     public function create()
     {
-        //
         return view('admin.request-message.add', [
-
             'roles' => Role::all()
         ]);
     }
@@ -50,17 +47,22 @@ class RequestMessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
-
         $validated = $request->validate($this->rules());
         $validated["staff_id"] = $request->user()->staff_id;
 
-        if (RequestMessage::create($validated)) {
-
+        if ($message = RequestMessage::create($validated)) {
 
             $username = Staff::find($validated["staff_id"]);
             $yetkili = Role::find($validated["role_id"]);
             $durum = trans('tables.request.message.status.1');
+            $description = $message->message;
+            Notification::insert([
+                'target_route' => 'request_message/edit/' . $message->id,
+                'target_id' => $message->id,
+                'description' => $username->full_name . ' tarafından yetki talep mesajı oluşturuldu.',
+                'status' => 1
+            ]);
+
             Telegram::send(
                 "YetkiTalep",
                 trans(
@@ -68,12 +70,11 @@ class RequestMessageController extends Controller
                     [
                         'username' => $username->full_name,
                         'role' => $yetkili->name,
+                        'description' => $description,
                         'status' => $durum
                     ]
                 )
             );
-
-
 
             return response()->json([
                 'success' => true,
@@ -98,17 +99,6 @@ class RequestMessageController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\RequestMessage  $requestMessage
-     * @return \Illuminate\Http\Response
-     */
-    public function show(RequestMessage $requestMessage)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\RequestMessage  $requestMessage
@@ -116,7 +106,6 @@ class RequestMessageController extends Controller
      */
     public function edit(RequestMessage $requestMessage)
     {
-        //
         return view('admin.request-message.edit', [
             'requestMessage' => $requestMessage,
             'roles' => Role::all()
@@ -132,15 +121,12 @@ class RequestMessageController extends Controller
      */
     public function update(Request $request, RequestMessage $requestMessage)
     {
-        //
-
         $validated = $request->validate(['status'=>'required']);
         if ($requestMessage->update($validated)) {
 
             $username = Staff::find($requestMessage["staff_id"]);
-
+            $message = $requestMessage["message"];
             $durum = trans('tables.request.message.status.'.$validated["status"]);
-
 
             Telegram::send(
                 "YetkiTalep",
@@ -149,6 +135,7 @@ class RequestMessageController extends Controller
                     [
                         'username' => $username->full_name,
                         'user' => $request->user()->staff->full_name,
+                        'description' => $message,
                         'status' => $durum
                     ]
                 )
@@ -174,18 +161,6 @@ class RequestMessageController extends Controller
             ]
         ]);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\RequestMessage  $requestMessage
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(RequestMessage $requestMessage)
-    {
-        //
-    }
-
 
     private function rules()
     {

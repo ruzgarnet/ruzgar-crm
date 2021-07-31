@@ -55,14 +55,12 @@ class MessageController extends Controller
         ]);
     }
 
-    /*
-        1 => 'Müşteri',
-        2 => 'Kategori',
-        3 => 'Tüm Aboneler',
-        4 => 'Ödemeyenler',
-        5 => 'Gecikme Ücreti Yansıyacaklar'
-    */
-
+    /**
+     * Send messages.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse|void|null
+     */
     public function submit(Request $request)
     {
         $validated = $request->validate([
@@ -176,6 +174,12 @@ class MessageController extends Controller
         ]);
     }
 
+    /**
+     * Send spesific message
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function send_sms_spesific(Request $request)
     {
         $validated = $request->validate(

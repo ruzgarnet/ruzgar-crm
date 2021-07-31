@@ -180,7 +180,7 @@ class PaymentController extends Controller
                     'staff_id' => null,
                     'old_price' => $next_payment->price,
                     'new_price' => $new_price,
-                    'description' => trans('response.system.auto_payment_penalty', ['price' => $new_price])
+                    'description' => trans('response.system.auto_payment_penalty', ['price' => 9.9])
                 ];
 
                 MokaAutoPaymentDisable::create([

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Classes\Generator;
+use App\Classes\Messages;
 use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\FaultRecord;
 use App\Models\FaultType;
+use App\Models\Message;
+use App\Models\SentMessage;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -46,12 +49,12 @@ class FaultRecordController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate($this->rules() + ['files.*' => 'required|file|image', 'description' => 'required|string']);
+        $validated = $request->validate($this->rules() + ['files' => 'required', 'files.*' => 'required|file|image', 'description' => 'required|string']);
         $files = [];
         $validated["serial_number"] = Generator::serialNumber();
 
-        if ($request->input('files')) {
-            foreach ($request->input('files') as $key => $file) {
+        if ($validated["files"]) {
+            foreach ($validated["files"] as $key => $file) {
                 $files[] = str_replace("public/", "", $request->file('files.' . $key)->store('public/files'));
             }
         }
@@ -90,7 +93,21 @@ class FaultRecordController extends Controller
 
         $validated["files"] = $files;
         $validated["solution_detail"] = "";
-        if (FaultRecord::create($validated)) {
+        if ($fault_record = FaultRecord::create($validated)) {
+            $message = Message::where("id", 20)->get();
+            SentMessage::insert(
+                [
+                    'customer_id' => $customer->id,
+                    'message' => (new Messages)->generate(
+                        $message[0]->message,
+                        [
+                            'seri_numarasi' => $fault_record->serial_number
+                        ]
+                    ),
+                    'staff_id' => $customer->staff->id
+                ]
+            );
+
             return response()->json([
                 'success' => true,
                 'toastr' => [

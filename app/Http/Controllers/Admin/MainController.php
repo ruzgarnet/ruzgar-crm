@@ -2,29 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Classes\Generator;
-use App\Classes\Messages;
-use App\Classes\Moka;
-use App\Classes\Telegram;
 use App\Http\Controllers\Controller;
-use App\Jobs\CheckAutoPayments;
-use App\Jobs\CreateAutoPayments;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\FaultRecord;
-use App\Models\Message;
-use App\Models\MokaAutoPayment;
-use App\Models\MokaPayment;
-use App\Models\MokaSale;
 use App\Models\Payment;
-use App\Models\SentMessage;
 use App\Models\Subscription;
 use App\Models\SubscriptionCancellation;
 use App\Models\SubscriptionChange;
 use App\Models\SubscriptionFreeze;
-use App\Models\User;
-use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class MainController extends Controller
@@ -102,48 +90,6 @@ class MainController extends Controller
     public function cant()
     {
         return view('admin.cant');
-    }
-
-   /**
-     * excel
-     *
-     * @return void
-     */
-    public function excel()
-    {
-       $array = DB::select("
-    SELECT
-        categories.name AS Kategori,
-        CONCAT(
-            customers.first_name,
-            ' ',
-            customers.last_name
-        ) AS Isim,
-        services.name AS Hizmetler,
-        payments.price AS Ucret,
-        payments.date AS Tarih,
-        (
-            CASE WHEN payments.type IS NULL THEN 'Ödenmemiş'
-            WHEN payments.type = 1 THEN 'Nakit'
-            WHEN payments.type = 2 THEN 'Kredi/Banka Kartı (Pos)'
-            WHEN payments.type = 3 THEN 'Havale/EFT'
-            WHEN payments.type = 4 THEN 'Kredi/Banka Kartı (Online)'
-            WHEN payments.type = 5 THEN 'Otomatik Ödeme'
-        END
-    ) AS Durum
-    FROM
-        payments
-    INNER JOIN subscriptions ON subscriptions.id = payments.subscription_id
-    INNER JOIN customers ON customers.id = subscriptions.customer_id
-    INNER JOIN services ON services.id = subscriptions.service_id
-    INNER JOIN categories ON categories.id = services.category_id
-    WHERE
-        payments.type != 6 AND payments.date = '2021-07-15'
-    ORDER BY
-        categories.id,
-        payments.type
-        ");
-        return view('admin.excel', ['Payments' => $array]);
     }
 
     /**
@@ -289,7 +235,6 @@ class MainController extends Controller
                     $counts['paided']++;
                     $categories[$category]['totals']['paided'] += $price;
                     $categories[$category]['counts']['paided']++;
-                    $categories[$category]['type_counts'][$type]++;
                 }
 
                 if ($payment->isPenalty()) {
@@ -343,6 +288,7 @@ class MainController extends Controller
             }
 
             $type_counts[$type]++;
+            $categories[$category]['type_counts'][$type]++;
         }
 
         foreach ($categories as $categoryKey => $values) {

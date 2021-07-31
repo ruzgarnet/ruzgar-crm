@@ -43,7 +43,7 @@
                                                     </span>
                                                 </a>
                                             @else
-                                            {{ $customer_application->information["first_name"]." ".$customer_application->information["last_name"] }}
+                                                {{ $customer_application->information["first_name"]." ".$customer_application->information["last_name"] }}
                                             @endif
                                         </td>
                                         <td>

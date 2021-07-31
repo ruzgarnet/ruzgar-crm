@@ -31,7 +31,7 @@
                             <label for="slcCustomer">@lang('fields.customer')</label>
                             <select name="customers[]" id="slcCustomer" class="custom-select selectpicker" multiple>
                                 @foreach ($customers as $customer)
-                                    <option value="{{ $customer->id }}">{{ $customer->full_name }}</option>
+                                    <option value="{{ $customer->id }}">{{ $customer->select_print }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -60,6 +60,35 @@
                 </div>
             </form>
         </div>
+
+        <div class="col-12">
+            <form id="messageForm" method="POST" action="{{ relative_route('admin.message.send.spesific') }}">
+                <div class="card form">
+                    <div class="card-header">
+                        <h4>Özel Mesaj Gönder</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="inpTelephone">@lang('fields.telephone')</label>
+                            <input type="text" name="telephone" id="inpTelephone" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="slcMessage">@lang('fields.message')</label>
+                            <select name="message_id" id="slcMessage" class="custom-select selectpicker">
+                                <option disabled selected>@lang('tables.message.select')</option>
+                                @foreach ($messages as $message)
+                                    <option value="{{ $message->id }}">{{ $message->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                        <button type="submit" class="btn btn-primary">@lang('fields.send')</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     </div>
 @endsection
 
